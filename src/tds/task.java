@@ -7,6 +7,9 @@ package tds;
 import java.util.Date;
 
 public class task {
+	public final static int FLAG_NULL = 0;
+	public final static int FLAG_DONE = 1;
+	
 	private String name;
 	private Date startTime;
 	private Date endTime;
@@ -44,6 +47,6 @@ public class task {
      * flag are set to null or zero.
      */	
 	public task(String name) {
-		this(name, null, null, 0);
+		this(name, null, null, FLAG_NULL);
 	}
 }
