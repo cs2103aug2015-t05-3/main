@@ -3,6 +3,8 @@ package command;
 
 public class CmdAdd extends Command {
 
+	private String temp;
+	
 	@Override
 	public String execute() {
 		// TODO Auto-generated method stub
