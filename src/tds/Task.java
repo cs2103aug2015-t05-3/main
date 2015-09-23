@@ -5,40 +5,25 @@
  */
 package tds;
 
-import java.util.Date;
-
 public class Task {
 	public final static int FLAG_NULL = 0;
 	public final static int FLAG_DONE = 1;
+	public final static int DATE_NULL = 0;
 
 	private String name;
-	private Date startTime;
-	private Date endTime;
+	private long startTime;
+	private long endTime;
 	private int flag;
 
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
 	 * name, starting time, ending time and the flag as the argument.
 	 */
-	public Task(String name, Date startTime, Date endTime, int flag) {
+	public Task(String name, long startTime, long endTime, int flag) {
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.flag = flag;
-	}
-
-	/**
-	 * Initializes a newly created {@code Task} object so that it store the
-	 * name, starting time, ending time and the flag as the argument. This
-	 * constructor will accept both starting time and ending time in
-	 * {@code long} format.
-	 */
-	public Task(String name, long startTimeSecond, long endTimeSecond, int flag) {
-		this(name, 
-			 new Date(startTimeSecond), 
-			 new Date(endTimeSecond), 
-			 flag
-		);
 	}
 
 	/**
@@ -47,7 +32,7 @@ public class Task {
 	 * and flag are set to null or zero.
 	 */
 	public Task(String name) {
-		this(name, null, null, FLAG_NULL);
+		this(name, DATE_NULL, DATE_NULL, FLAG_NULL);
 	}
 
 	/**
@@ -60,20 +45,20 @@ public class Task {
 	}
 
 	/**
-	 * Returns the start time of this task in {@code Date} object.
+	 * Returns the start time of this task in {@code long}.
 	 * 
 	 * @return the start time of this task.
 	 */
-	public Date getStartTime() {
+	public long getStartTime() {
 		return startTime;
 	}
 
 	/**
-	 * Returns the end time of this task in {@code Date} object.
+	 * Returns the end time of this task in {@code long}.
 	 * 
 	 * @return the end time of this task.
 	 */
-	public Date getEndTime() {
+	public long getEndTime() {
 		return endTime;
 	}
 
@@ -102,7 +87,7 @@ public class Task {
 	 * @param startTime
 	 *			the new start time for the task.
 	 */
-	public void setStartTime(Date startTime) {
+	public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 
@@ -112,7 +97,7 @@ public class Task {
 	 * @param endTime
 	 *			the new end time for the task.
 	 */
-	public void setEndTime(Date endTime) {
+	public void setEndTime(long endTime) {
 		this.endTime = endTime;
 	}
 
