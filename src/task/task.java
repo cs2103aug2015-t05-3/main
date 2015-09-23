@@ -1,5 +1,0 @@
-/**
- * 
- * @author amoshydra
- */
-package task;
