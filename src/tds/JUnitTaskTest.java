@@ -16,7 +16,7 @@ public class JUnitTaskTest {
 	private static final int HOUR = 3600;
 
 	@Test
-	public void testEqual() {
+	public void testEquals() {
 		
 		// Initializing task attributes
 		String taskName = "Buy Milk tonight";
@@ -33,12 +33,19 @@ public class JUnitTaskTest {
 		Task taskSame = new Task(taskName, startTime, endTime, flag);
 		Task taskLowerCase = new Task(taskName.toLowerCase(), startTime, endTime, flag);
 		Task taskIsDone = new Task(taskName, startTime, endTime, Task.FLAG_DONE);
-		Task taskDiff = new Task(taskNameDiff, startTime, endTime, flag);
+		Task taskDiffTime = new Task(taskNameDiff, startTime, startTime, flag);
+		Task taskDiffName = new Task(taskNameDiff, startTime, endTime, flag);
 		
 		// Setting up test cases
 		boolean testEqual, testDiffCase, testDiffName, testDiffTime, testDiffFlag;
-		testEqual = testDiffCase = testDiffFlag = testDiffTime = testDiffName = false;
 		
+		testEqual = taskOriginal.equals(taskSame);
+		testDiffCase = taskOriginal.equals(taskLowerCase); 
+		testDiffFlag = taskOriginal.equals(taskIsDone);
+		testDiffTime = taskOriginal.equals(taskDiffTime);
+		testDiffName = taskOriginal.equals(taskDiffName);
+			
+		// Evaluate test cases
 		assertTrue(testEqual);
 		assertFalse(testDiffCase);
 		assertFalse(testDiffName);
