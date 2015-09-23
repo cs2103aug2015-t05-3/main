@@ -111,4 +111,29 @@ public class Task {
 		this.flag = flag;
 	}
 
+	/**
+	 * Determines whether or not two task are equal. 
+	 * The two tasks are equal if the values name, start time,
+	 * end time and flag are equal.
+	 * 
+	 * @param obj
+	 * 		an object to be compared with this {@code Task}
+	 * 
+	 * @return
+	 * 		{@code true} if the object to be compared is an 
+	 * 		instance of Task and has the same values; false 
+	 * 		otherwise.
+	 */
+    public boolean equals(Object obj) {
+       if (!(obj instanceof Task))
+            return false;
+        if (obj == this)
+            return true;
+
+        Task rhs = (Task) obj;
+        return (name.equals(rhs.name)) &&
+            (startTime == rhs.startTime) &&
+            (endTime == rhs.endTime) &&
+            (flag == rhs.flag);
+    }
 }
