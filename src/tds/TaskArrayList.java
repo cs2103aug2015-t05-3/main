@@ -98,7 +98,7 @@ public class TaskArrayList implements TaskCollection<Task> {
 		return resultList;
 	}
 	
-	private int getClosestMatchIndex(ArrayList<Task> list, long value) {
+	public int getClosestMatchIndex(ArrayList<Task> list, long value) {
 		return getClosestMatchIndex(list, value, 0, list.size() - 1);
 	}
 	
