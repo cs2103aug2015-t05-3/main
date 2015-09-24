@@ -46,7 +46,7 @@ public class TaskTree implements TaskCollection<Task> {
 	}
 
 	@Override
-	public void update(Task task) {
+	public void replace(Task taskOld, Task taskNew) {
 		// TODO Auto-generated method stub
 		
 	}
