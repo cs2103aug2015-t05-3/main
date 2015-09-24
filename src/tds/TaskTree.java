@@ -40,15 +40,16 @@ public class TaskTree implements TaskCollection<Task> {
 	}
 
 	@Override
-	public void remove(Task task) {
+	public Task remove(Task task) {
 		// TODO Auto-generated method stub
 		decreaseTaskListSize();
+		return null;
 	}
 
 	@Override
-	public void replace(Task taskOld, Task taskNew) {
+	public Task replace(Task taskOld, Task taskNew) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
