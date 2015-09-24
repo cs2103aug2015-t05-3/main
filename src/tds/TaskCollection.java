@@ -16,8 +16,8 @@ interface TaskCollection<E> {
 	public E remove(E task);
 	public E replace(E taskOld, E taskNew);
 	public List<E> searchName(String searchTerm);
-	public List<E> searchStartTime(long startTimeSearch);
-	public List<E> searchEndTime(long endTimeSearch);
+	public List<E> queryStartTime(long startTimeUpperBound, long startTimeLowerBound);
+	public List<E> queryEndTime(long endTimeSearchUpperBound, long endTimeSearchLowerBound);
 	public List<E> searchFlag(int flagSearch);
 	public List<E> sortName();
 	public List<E> sortStartTime();
