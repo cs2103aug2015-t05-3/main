@@ -17,5 +17,9 @@ interface TaskCollection<E> {
 	public List<E> searchStartTime(long startTimeSearch);
 	public List<E> searchEndTime(long endTimeSearch);
 	public List<E> searchFlag(int flagSearch);
+	public List<E> sortName();
+	public List<E> sortStartTime();
+	public List<E> sortEndTime();
+	public List<E> sortFlag();
 	public int size();
 }
