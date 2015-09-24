@@ -12,6 +12,7 @@ import java.util.Date;
 
 public class JUnitTaskTest {
 	
+	@SuppressWarnings("unused")
 	private static final int MINUTE = 60;
 	private static final int HOUR = 3600;
 
@@ -33,6 +34,7 @@ public class JUnitTaskTest {
 	private static final int TASK_IS_DONE = 3;
 	private static final int TASK_DIFF_TIME = 4;
 	private static final int TASK_DIFF_NAME = 5;
+	@SuppressWarnings("unused")
 	private static final int TASK_ARRAY_SIZE = 6;
 	
 	Task[] tasks = {new Task(taskName, startTime, endTime, flag),
