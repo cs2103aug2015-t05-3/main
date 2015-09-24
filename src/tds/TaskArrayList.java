@@ -1,32 +1,41 @@
 package tds;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class TaskArrayList implements TaskCollection<Task> {
 
+	private int taskTreeSize;
+	private ArrayList<Task> taskList;
+	
+	public TaskArrayList() {
+		taskList = new ArrayList<Task>();
+		taskTreeSize = 0;
+	}
+	
 	@Override
 	public void addAll(Collection<Task> collection) {
-		// TODO Auto-generated method stub
-		
+		taskList.addAll(collection);
 	}
 	
 	@Override
 	public void add(Task task) {
-		// TODO Auto-generated method stub
-		
+		taskList.add(task);
 	}
 
 	@Override
-	public void remove(Task task) {
-		// TODO Auto-generated method stub
-		
+	public Task remove(Task task) {
+		Task temp = task;
+		taskList.remove(task);
+		return temp;
 	}
 
 	@Override
-	public void update(Task task) {
-		// TODO Auto-generated method stub
-		
+	public Task replace(Task taskOld, Task taskNew) {
+		Task temp = taskOld;
+		taskOld = taskNew;
+		return temp;
 	}
 
 	@Override
