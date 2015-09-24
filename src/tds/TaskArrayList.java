@@ -62,14 +62,70 @@ public class TaskArrayList implements TaskCollection<Task> {
 
 	@Override
 	public List<Task> queryStartTime(long startTimeUpperBound, long startTimeLowerBound) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		// check for invalid bounds
+		if (startTimeUpperBound < startTimeLowerBound) {
+			return null;
+		}
+		
+		ArrayList<Task> sortedList;
+		sortedList = new ArrayList<Task>(getSortedList(new StartTimeComparator()));
+		
+		int fromIndex = getClosestMatchIndex(sortedList, startTimeLowerBound);
+		int toIndex = getClosestMatchIndex(sortedList, startTimeUpperBound);
+		
+		ArrayList<Task> resultList;
+		resultList = new ArrayList<Task>(sortedList.subList(fromIndex, toIndex));
+		return resultList;
 	}
 
 	@Override
 	public List<Task> queryEndTime(long endTimeUpperBound, long endTimeLowerBound) {
-		// TODO Auto-generated method stub
-		return null;
+		// check for invalid bounds
+		if (endTimeUpperBound < endTimeLowerBound) {
+			return null;
+		}
+		
+		ArrayList<Task> sortedList;
+		sortedList = new ArrayList<Task>(getSortedList(new EndTimeComparator()));
+		
+		//TODO This method does not work for endTime yet.
+		int fromIndex = getClosestMatchIndex(sortedList, endTimeLowerBound);
+		int toIndex = getClosestMatchIndex(sortedList, endTimeUpperBound);
+		
+		ArrayList<Task> resultList;
+		resultList = new ArrayList<Task>(sortedList.subList(fromIndex, toIndex));
+		return resultList;
+	}
+	
+	private int getClosestMatchIndex(ArrayList<Task> list, long value) {
+		return getClosestMatchIndex(list, value, 0, list.size() - 1);
+	}
+	
+	private int getClosestMatchIndex(ArrayList<Task> list, long checkValue, int startIndex, int endIndex) {
+		if (endIndex <= startIndex) {
+			return startIndex;
+		} else {
+			// calculate midpoint to cut set in half
+			int midIndex = getMidPoint(startIndex, endIndex);
+			long midValue = list.get(midIndex).getStartTime();
+			
+			// three-way comparison
+			if (midValue > checkValue)
+				// key is in lower subset
+				return getClosestMatchIndex(list, checkValue, startIndex, midIndex - 1);
+			else if (midValue < checkValue)
+				// key is in upper subset
+				return getClosestMatchIndex(list, checkValue, midIndex + 1, endIndex);
+			else
+				// key has been found
+				return midIndex;
+		}
+	}
+	
+	private int getMidPoint(int start, int end) {
+		int mid = (start + end)/2; 
+		return mid;
 	}
 
 	@Override
