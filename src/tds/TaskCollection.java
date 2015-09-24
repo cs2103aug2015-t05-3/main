@@ -14,7 +14,7 @@ interface TaskCollection<E> {
 	public void addAll(Collection<E> collection);
 	public void add(Task task);
 	public void remove(Task task);
-	public void update(Task task);
+	public void replace(Task taskOld, Task taskNew);
 	public List<E> searchName(String searchTerm);
 	public List<E> searchStartTime(long startTimeSearch);
 	public List<E> searchEndTime(long endTimeSearch);
