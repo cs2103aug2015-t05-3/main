@@ -197,7 +197,7 @@ public class Task {
 			if (this.startTime == rhs.startTime) {
 				if (this.endTime == rhs.endTime) {
 					if (this.flag == rhs.flag) {
-						return comparePriority(rhs);
+						return comparePriorityTo(rhs);
 					} else {
 						return compareFlagTo(rhs);
 					}
@@ -291,7 +291,7 @@ public class Task {
 	 *         than 0 this priority is numerically greater than the argument
 	 *         priority.
 	 */
-	public int comparePriority(Task rhs) {
+	public int comparePriorityTo(Task rhs) {
 		return this.priority - rhs.priority;
 	}
 }
