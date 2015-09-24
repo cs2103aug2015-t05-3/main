@@ -53,4 +53,22 @@ public class JUnitTaskTest {
 		assertFalse(testDiffTime);
 		assertFalse(testDiffFlag);
 	}
+
+	@Test
+	public void testCompares() {
+		
+		// Setting up test cases
+		boolean testSameTask, testDiffName, testDiffTime, testDiffFlag;
+		
+		testSameTask = (true);
+		testDiffName = (true);
+		testDiffTime = (true);
+		testDiffFlag = (true);
+		
+		// Evaluate test cases
+		assertTrue(testSameTask);
+		assertTrue(testDiffName);
+		assertTrue(testDiffTime);
+		assertTrue(testDiffFlag);
+	}
 }
