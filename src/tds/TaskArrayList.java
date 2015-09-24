@@ -60,7 +60,7 @@ public class TaskArrayList implements TaskCollection<Task> {
 		}
 	}
 	
-	public List<Task> queryTime(ArrayList<Task> sortedList, long upperBound, long lowerBound, long option) {
+	List<Task> queryTime(ArrayList<Task> sortedList, long upperBound, long lowerBound, long option) {
 		
 		// check for invalid bounds
 		if (upperBound < lowerBound) {
