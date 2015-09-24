@@ -61,69 +61,67 @@ public class TaskArrayList implements TaskCollection<Task> {
 	}
 
 	@Override
-	public List<Task> queryStartTime(long startTimeUpperBound, long startTimeLowerBound) {
+	public List<Task> queryTime(long upperBound, long lowerBound, long option) {
 		
 		// check for invalid bounds
-		if (startTimeUpperBound < startTimeLowerBound) {
+		if (upperBound < lowerBound) {
 			return null;
 		}
 		
 		ArrayList<Task> sortedList;
-		sortedList = new ArrayList<Task>(getSortedList(new StartTimeComparator()));
+		if (option == Task.GET_VALUE_START_TIME) {
+			sortedList = new ArrayList<Task>(getSortedList(new StartTimeComparator()));
+		} else if (option == Task.GET_VALUE_END_TIME) {
+			sortedList = new ArrayList<Task>(getSortedList(new EndTimeComparator()));
+		} else {
+			return null;
+		}
 		
-		int fromIndex = getClosestMatchIndex(sortedList, startTimeLowerBound);
-		int toIndex = getClosestMatchIndex(sortedList, startTimeUpperBound);
+		int fromIndex = getClosestMatchIndex(sortedList, lowerBound, option);
+		int toIndex = getClosestMatchIndex(sortedList, upperBound, option);
 		
 		ArrayList<Task> resultList;
 		resultList = new ArrayList<Task>(sortedList.subList(fromIndex, toIndex));
 		return resultList;
 	}
-
+	
+	@Override
+	public List<Task> queryStartTime(long startTimeUpperBound, long startTimeLowerBound) {
+		return queryTime(startTimeUpperBound, startTimeLowerBound, Task.GET_VALUE_START_TIME);
+	}
+	
 	@Override
 	public List<Task> queryEndTime(long endTimeUpperBound, long endTimeLowerBound) {
-		// check for invalid bounds
-		if (endTimeUpperBound < endTimeLowerBound) {
-			return null;
-		}
-		
-		ArrayList<Task> sortedList;
-		sortedList = new ArrayList<Task>(getSortedList(new EndTimeComparator()));
-		
-		//TODO This method does not work for endTime yet.
-		int fromIndex = getClosestMatchIndex(sortedList, endTimeLowerBound);
-		int toIndex = getClosestMatchIndex(sortedList, endTimeUpperBound);
-		
-		ArrayList<Task> resultList;
-		resultList = new ArrayList<Task>(sortedList.subList(fromIndex, toIndex));
-		return resultList;
+		return queryTime(endTimeUpperBound, endTimeLowerBound, Task.GET_VALUE_END_TIME);
 	}
 	
-	public int getClosestMatchIndex(ArrayList<Task> list, long value) {
-		return getClosestMatchIndex(list, value, 0, list.size() - 1);
+	static int getClosestMatchIndex(ArrayList<Task> list, long value, long option) {
+		return getClosestMatchIndex(list, value, option, 0, list.size() - 1);
 	}
 	
-	private int getClosestMatchIndex(ArrayList<Task> list, long checkValue, int startIndex, int endIndex) {
-		if (endIndex <= startIndex) {
+	static int getClosestMatchIndex(ArrayList<Task> list, long checkValue, long option, int startIndex, int endIndex) {
+		if (endIndex < startIndex) {
 			return startIndex;
 		} else {
 			// calculate midpoint to cut set in half
 			int midIndex = getMidPoint(startIndex, endIndex);
-			long midValue = list.get(midIndex).getStartTime();
+			long midValue = list.get(midIndex).getValue(option);
 			
 			// three-way comparison
-			if (midValue > checkValue)
+			if (midValue > checkValue) {
 				// key is in lower subset
-				return getClosestMatchIndex(list, checkValue, startIndex, midIndex - 1);
-			else if (midValue < checkValue)
+				return getClosestMatchIndex(list, checkValue, option, startIndex, midIndex - 1);
+			} else if (midValue < checkValue) {
 				// key is in upper subset
-				return getClosestMatchIndex(list, checkValue, midIndex + 1, endIndex);
-			else
+				return getClosestMatchIndex(list, checkValue, option, midIndex + 1, endIndex);
+			} else {
 				// key has been found
 				return midIndex;
+			}
 		}
 	}
 	
-	private int getMidPoint(int start, int end) {
+	private static int getMidPoint(int start, int end) {
 		int mid = (start + end)/2; 
 		return mid;
 	}
