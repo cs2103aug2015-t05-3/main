@@ -66,12 +66,6 @@ public class TaskTree implements TaskCollection<Task> {
 	}
 
 	@Override
-	public List<Task> queryTime(long upperBound, long lowerBound, long option) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
 	public List<Task> queryStartTime(long startTimeUpperBound, long startTimeLowerBound) {
 		// TODO Auto-generated method stub
 		return null;

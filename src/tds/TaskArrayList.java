@@ -59,21 +59,11 @@ public class TaskArrayList implements TaskCollection<Task> {
 			return resultList;
 		}
 	}
-
-	@Override
-	public List<Task> queryTime(long upperBound, long lowerBound, long option) {
+	
+	public List<Task> queryTime(ArrayList<Task> sortedList, long upperBound, long lowerBound, long option) {
 		
 		// check for invalid bounds
 		if (upperBound < lowerBound) {
-			return null;
-		}
-		
-		ArrayList<Task> sortedList;
-		if (option == Task.GET_VALUE_START_TIME) {
-			sortedList = new ArrayList<Task>(getSortedList(new StartTimeComparator()));
-		} else if (option == Task.GET_VALUE_END_TIME) {
-			sortedList = new ArrayList<Task>(getSortedList(new EndTimeComparator()));
-		} else {
 			return null;
 		}
 		
@@ -87,12 +77,18 @@ public class TaskArrayList implements TaskCollection<Task> {
 	
 	@Override
 	public List<Task> queryStartTime(long startTimeUpperBound, long startTimeLowerBound) {
-		return queryTime(startTimeUpperBound, startTimeLowerBound, Task.GET_VALUE_START_TIME);
+		ArrayList<Task> sortedList;
+		sortedList = new ArrayList<Task>(getSortedList(new StartTimeComparator()));
+
+		return queryTime(sortedList, startTimeUpperBound, startTimeLowerBound, Task.GET_VALUE_START_TIME);
 	}
 	
 	@Override
 	public List<Task> queryEndTime(long endTimeUpperBound, long endTimeLowerBound) {
-		return queryTime(endTimeUpperBound, endTimeLowerBound, Task.GET_VALUE_END_TIME);
+		ArrayList<Task> sortedList;
+		sortedList = new ArrayList<Task>(getSortedList(new EndTimeComparator()));
+		
+		return queryTime(sortedList, endTimeUpperBound, endTimeLowerBound, Task.GET_VALUE_END_TIME);
 	}
 	
 	static int getClosestMatchIndex(ArrayList<Task> list, long value, long option) {
@@ -126,11 +122,10 @@ public class TaskArrayList implements TaskCollection<Task> {
 		return mid;
 	}
 
-	@Override
-	public List<Task> searchFlag(int flagSearch) {
+	public List<Task> search(int searchKey, int option) {
 		ArrayList<Task> resultList = new ArrayList<Task>();
 		for (Task task : taskList) {
-			if (task.getFlag() == (flagSearch)) {
+			if (task.getValue(option) == (searchKey)) {
 				resultList.add(task);
 			}
 		}
@@ -140,20 +135,15 @@ public class TaskArrayList implements TaskCollection<Task> {
 			return resultList;
 		}
 	}
+	
+	@Override
+	public List<Task> searchFlag(int flagSearch) {
+		return search(flagSearch, Task.GET_VALUE_FLAG);
+	}
 
 	@Override
 	public List<Task> searchPriority(int prioritySearch) {
-		ArrayList<Task> resultList = new ArrayList<Task>();
-		for (Task task : taskList) {
-			if (task.getFlag() == (prioritySearch)) {
-				resultList.add(task);
-			}
-		}
-		if (resultList.isEmpty()) {
-			return null;
-		} else {
-			return resultList;
-		}
+		return search(prioritySearch, Task.GET_VALUE_PRIORITY);
 	}
 	
 	@Override
