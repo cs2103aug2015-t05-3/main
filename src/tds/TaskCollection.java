@@ -7,6 +7,7 @@
  */
 package tds;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 interface TaskCollection<E> {
@@ -19,9 +20,7 @@ interface TaskCollection<E> {
 	public List<E> queryStartTime(long startTimeUpperBound, long startTimeLowerBound);
 	public List<E> queryEndTime(long endTimeSearchUpperBound, long endTimeSearchLowerBound);
 	public List<E> searchFlag(int flagSearch);
-	public List<E> sortName();
-	public List<E> sortStartTime();
-	public List<E> sortEndTime();
-	public List<E> sortFlag();
+	public List<E> searchPriority(int prioritySearch);
+	public List<E> getSortedList(Comparator<E> comparator);
 	public int size();
 }
