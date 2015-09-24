@@ -5,19 +5,37 @@
 package tds;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class TaskTree implements TaskCollection<Task> {
 
-	private int taskListSize;
+	private int taskTreeSize;
+	private HashSet<Task> taskHash;
+	private TreeSet<Task> taskNameTree;
+	private TreeSet<Task> taskStartTimeTree;
+	private TreeSet<Task> taskEndTimeTree;
+	private TreeSet<Task> taskFlagTree;
 	
 	public TaskTree() {
-		TreeSet<Task> taskTree = new TreeSet<Task>();
-		taskListSize = 0;
+		taskHash = new HashSet<Task>();
+		taskNameTree = new TreeSet<Task>();
+		taskStartTimeTree = new TreeSet<Task>();
+		taskEndTimeTree = new TreeSet<Task>();
+		taskFlagTree = new TreeSet<Task>();
+		taskTreeSize = 0;
+	}
+
+	@Override
+	public void addAll(Collection<Task> collection) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	@Override
 	public void add(Task task) {
-		// TODO Auto-generated method stub
+		taskHash.add(task);
+		
 		increaseTaskListSize();
 	}
 
@@ -60,7 +78,7 @@ public class TaskTree implements TaskCollection<Task> {
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
-		return 0;
+		return taskTreeSize;
 	}
 
 	@Override
@@ -89,9 +107,9 @@ public class TaskTree implements TaskCollection<Task> {
 
 
 	private void increaseTaskListSize() {
-		taskListSize += 1;
+		taskTreeSize += 1;
 	}
 	private void decreaseTaskListSize() {
-		taskListSize -= 1;
+		taskTreeSize -= 1;
 	}
 }
