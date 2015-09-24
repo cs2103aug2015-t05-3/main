@@ -55,13 +55,13 @@ public class TaskArrayList implements TaskCollection<Task> {
 	}
 
 	@Override
-	public List<Task> searchStartTime(long startTimeSearch) {
+	public List<Task> queryStartTime(long startTimeUpperBound, long startTimeLowerBound) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Task> searchEndTime(long endTimeSearch) {
+	public List<Task> queryEndTime(long endTimeUpperBound, long endTimeLowerBound) {
 		// TODO Auto-generated method stub
 		return null;
 	}
