@@ -15,7 +15,8 @@ public class TaskArrayList implements TaskCollection<Task> {
 	}
 	
 	@Override
-	public void addAll(Collection<Task> collection) {
+	public void rebuild(Collection<Task> collection) {
+		taskList.clear();
 		taskList.addAll(collection);
 	}
 	

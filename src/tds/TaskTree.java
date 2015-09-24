@@ -33,7 +33,7 @@ public class TaskTree implements TaskCollection<Task> {
 	}
 
 	@Override
-	public void addAll(Collection<Task> collection) {
+	public void rebuild(Collection<Task> collection) {
 		// TODO Auto-generated method stub
 		
 	}
