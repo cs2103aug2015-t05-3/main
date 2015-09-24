@@ -6,12 +6,12 @@ import java.util.List;
 
 public class TaskArrayList implements TaskCollection<Task> {
 
-	private int taskTreeSize;
+	private int taskListSize;
 	private ArrayList<Task> taskList;
 	
 	public TaskArrayList() {
 		taskList = new ArrayList<Task>();
-		taskTreeSize = 0;
+		taskListSize = 0;
 	}
 	
 	@Override
@@ -40,8 +40,18 @@ public class TaskArrayList implements TaskCollection<Task> {
 
 	@Override
 	public List<Task> searchName(String searchTerm) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Task> resultList = new ArrayList<Task>();
+		for (Task task : taskList) {
+			if (task.getName().contains(searchTerm)) {
+				resultList.add(task);
+			}
+		}
+		
+		if (resultList.isEmpty()) {
+			return null;
+		} else {
+			return resultList;
+		}
 	}
 
 	@Override
@@ -58,8 +68,17 @@ public class TaskArrayList implements TaskCollection<Task> {
 
 	@Override
 	public List<Task> searchFlag(int flagSearch) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Task> resultList = new ArrayList<Task>();
+		for (Task task : taskList) {
+			if (task.getFlag() == (flagSearch)) {
+				resultList.add(task);
+			}
+		}
+		if (resultList.isEmpty()) {
+			return null;
+		} else {
+			return resultList;
+		}
 	}
 
 	@Override
@@ -88,8 +107,7 @@ public class TaskArrayList implements TaskCollection<Task> {
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return taskListSize;
 	}
 
 }
