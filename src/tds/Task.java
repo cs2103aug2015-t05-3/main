@@ -8,12 +8,22 @@ package tds;
 public class Task {
 	public final static int FLAG_NULL = 0;
 	public final static int FLAG_DONE = 1;
+
 	public final static int DATE_NULL = 0;
 
+	public final static int PRIORITY_VERY_HIGH = 0;
+	public final static int PRIORITY_HIGH = 1;
+	public final static int PRIORITY_ABOVE_NORMAL = 2;
+	public final static int PRIORITY_NORMAL = 3;
+	public final static int PRIORITY_BELOW_NORMAL = 4;
+	public final static int PRIORITY_LOW = 5;
+	public final static int PRIORITY_VERY_LOW = 6;
+	
 	private String name;
 	private long startTime;
 	private long endTime;
 	private int flag;
+	private int priority;
 
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
@@ -24,6 +34,7 @@ public class Task {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.flag = flag;
+		this.priority = PRIORITY_NORMAL;
 	}
 
 	/**
@@ -72,6 +83,15 @@ public class Task {
 	}
 
 	/**
+	 * Returns the priority of this task in {@code int}.
+	 * 
+	 * @return the priority of this task.
+	 */
+	public int getPriority() {
+		return priority;
+	}
+	
+	/**
 	 * Change the name or description of this task.
 	 * 
 	 * @param name
@@ -112,9 +132,19 @@ public class Task {
 	}
 
 	/**
+	 * Change the priority of this task.
+	 * 
+	 * @param priority
+	 *			the new priority for the task.
+	 */
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+	
+	/**
 	 * Determines whether or not two task are equal. 
 	 * The two tasks are equal if the values name, start time,
-	 * end time and flag are equal.
+	 * end time, flag and priority are equal.
 	 * 
 	 * @param obj
 	 * 		an object to be compared with this {@code Task}
@@ -134,7 +164,8 @@ public class Task {
         return (name.equals(rhs.name)) &&
             (startTime == rhs.startTime) &&
             (endTime == rhs.endTime) &&
-            (flag == rhs.flag);
+            (flag == rhs.flag) && 
+            (priority == rhs.priority);
     }
     
 	/**
@@ -147,6 +178,7 @@ public class Task {
 	 * {@code this.compareStartTimeTo(rhs)}
 	 * {@code this.compareEndTimeTo(rhs)}
 	 * {@code this.compareFlagTo(rhs)}
+	 * {@code this.comparePriorityTo(rhs)}
 	 * </pre>
 	 * 
 	 * @param rhs
@@ -159,12 +191,16 @@ public class Task {
 	 *         lexicographically or numerically greater than the argument
 	 *         {@code Task}.
 	 */
-    public int compareTo(Task rhs) {
-    	
+	public int compareTo(Task rhs) {
+
 		if (this.name.equals(rhs.name)) {
 			if (this.startTime == rhs.startTime) {
 				if (this.endTime == rhs.endTime) {
-					return compareFlagTo(rhs);
+					if (this.flag == rhs.flag) {
+						return comparePriority(rhs);
+					} else {
+						return compareFlagTo(rhs);
+					}
 				} else {
 					return compareEndTimeTo(rhs);
 				}
@@ -174,7 +210,7 @@ public class Task {
 		} else {
 			return compareNameTo(rhs);
 		}
-    }
+	}
     
 	/**
 	 * Compares the name of this {@code Task} instance with another.
@@ -188,10 +224,10 @@ public class Task {
 	 *         than 0 if this name is lexicographically greater than the
 	 *         argument name.
 	 */
-    public int compareNameTo(Task rhs) {
-    	return this.name.compareTo(rhs.name);
-    }
-    
+	public int compareNameTo(Task rhs) {
+		return this.name.compareTo(rhs.name);
+	}
+
 	/**
 	 * Compares the starting time of this {@code Task} instance with another.
 	 * 
@@ -204,12 +240,12 @@ public class Task {
 	 *         greater than 0 this starting time is numerically greater than the
 	 *         argument starting time.
 	 */
-    public int compareStartTimeTo(Task rhs) {
-    	Long startTimeLongThis = new Long(this.startTime);
-		Long startTimeLongRhs= new Long(rhs.startTime);
+	public int compareStartTimeTo(Task rhs) {
+		Long startTimeLongThis = new Long(this.startTime);
+		Long startTimeLongRhs = new Long(rhs.startTime);
 		return startTimeLongThis.compareTo(startTimeLongRhs);
-    }
-    
+	}
+
 	/**
 	 * Compares the ending time of this {@code Task} instance with another.
 	 * 
@@ -222,12 +258,12 @@ public class Task {
 	 *         greater than 0 this ending time is numerically greater than the
 	 *         argument ending time.
 	 */
-    public int compareEndTimeTo(Task rhs) {
-    	Long endTimeLongThis = new Long(this.endTime);
-		Long endTimeLongRhs= new Long(rhs.endTime);
+	public int compareEndTimeTo(Task rhs) {
+		Long endTimeLongThis = new Long(this.endTime);
+		Long endTimeLongRhs = new Long(rhs.endTime);
 		return endTimeLongThis.compareTo(endTimeLongRhs);
-    }
-    
+	}
+
 	/**
 	 * Compares the flag of this {@code Task} instance with another.
 	 * 
@@ -239,7 +275,23 @@ public class Task {
 	 *         numerically less than the argument flag; a value greater than 0
 	 *         this flag is numerically greater than the argument flag.
 	 */
-    public int compareFlagTo(Task rhs) {
-    	return this.flag - rhs.flag;
-    }
+	public int compareFlagTo(Task rhs) {
+		return this.flag - rhs.flag;
+	}
+
+	/**
+	 * Compares the priority of this {@code Task} instance with another.
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * 
+	 * @return the value 0 if the priority of this {@code Task} is equal to the
+	 *         argument {@code Task}; a value less than 0 if this priority time
+	 *         is numerically less than the argument priority; a value greater
+	 *         than 0 this priority is numerically greater than the argument
+	 *         priority.
+	 */
+	public int comparePriority(Task rhs) {
+		return this.priority - rhs.priority;
+	}
 }
