@@ -26,6 +26,7 @@ public class JUnitTaskTest {
 	private long endTime	= startTime + (2 * HOUR);
 	
 	private int flag = Task.FLAG_NULL;
+	private int priority = Task.PRIORITY_NORMAL;
 	
 	// Setting up different task conditions
 	private static final int TASK_ORIGINAL = 0;
@@ -34,28 +35,31 @@ public class JUnitTaskTest {
 	private static final int TASK_IS_DONE = 3;
 	private static final int TASK_DIFF_TIME = 4;
 	private static final int TASK_DIFF_NAME = 5;
+	private static final int TASK_DIFF_PRIORITY = 6;
 	@SuppressWarnings("unused")
-	private static final int TASK_ARRAY_SIZE = 6;
+	private static final int TASK_ARRAY_SIZE = 7;
 	
-	Task[] tasks = {new Task(taskName, startTime, endTime, flag),
-			new Task(taskName, startTime, endTime, flag),
-			new Task(taskNameLowCase, startTime, endTime, flag),
-			new Task(taskName, startTime, endTime, Task.FLAG_DONE),
-			new Task(taskNameDiff, startTime, startTime, flag),
-			new Task(taskNameDiff, startTime, endTime, flag)
+	Task[] tasks = {new Task(taskName, startTime, endTime, flag, priority),
+			new Task(taskName, startTime, endTime, flag, priority),
+			new Task(taskNameLowCase, startTime, endTime, flag, priority),
+			new Task(taskName, startTime, endTime, Task.FLAG_DONE, priority),
+			new Task(taskNameDiff, startTime, startTime, flag, priority),
+			new Task(taskNameDiff, startTime, endTime, flag, priority),
+			new Task(taskNameDiff, startTime, endTime, flag, Task.PRIORITY_VERY_HIGH)
 			};
 	
 	@Test
 	public void testEquals() {
 		
 		// Setting up test cases
-		boolean testEqual, testDiffCase, testDiffName, testDiffTime, testDiffFlag;
+		boolean testEqual, testDiffCase, testDiffName, testDiffTime, testDiffFlag, testDiffPriority;
 		
 		testEqual = 	tasks[TASK_ORIGINAL].equals(tasks[TASK_SAME_TASK]);
 		testDiffCase =	tasks[TASK_ORIGINAL].equals(tasks[TASK_LOW_CASE]); 
-		testDiffFlag =	tasks[TASK_ORIGINAL].equals(tasks[TASK_IS_DONE]);
-		testDiffTime =	tasks[TASK_ORIGINAL].equals(tasks[TASK_DIFF_TIME]);
 		testDiffName =	tasks[TASK_ORIGINAL].equals(tasks[TASK_DIFF_NAME]);
+		testDiffTime =	tasks[TASK_ORIGINAL].equals(tasks[TASK_DIFF_TIME]);
+		testDiffFlag =	tasks[TASK_ORIGINAL].equals(tasks[TASK_IS_DONE]);
+		testDiffPriority =	tasks[TASK_ORIGINAL].equals(tasks[TASK_DIFF_PRIORITY]);
 			
 		// Evaluate test cases
 		assertTrue(testEqual);
@@ -63,25 +67,28 @@ public class JUnitTaskTest {
 		assertFalse(testDiffName);
 		assertFalse(testDiffTime);
 		assertFalse(testDiffFlag);
+		assertFalse(testDiffPriority);
 	}
 
 	@Test
 	public void testCompares() {
 		
 		// Setting up test cases
-		int testSameTask, testDiffCase, testDiffName, testDiffTime, testDiffFlag;
+		int testSameTask, testDiffCase, testDiffName, testDiffTime, testDiffFlag, testDiffPriority;
 		
 		testSameTask = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_SAME_TASK]);
 		testDiffCase = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_LOW_CASE]);
 		testDiffName = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_DIFF_NAME]);
-		testDiffTime = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_DIFF_TIME]);;
+		testDiffTime = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_DIFF_TIME]);
 		testDiffFlag = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_IS_DONE]);
+		testDiffPriority = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_DIFF_PRIORITY]);
 		
 		// Evaluate test cases
 		assertTrue(testSameTask == 0);
-		assertTrue(testDiffCase < 0);	// "Buy Milk tonight" is smaller than "buy milk tomorrow"
-		assertTrue(testDiffName > 0);	// "Buy Milk tonight" is greater than "Buy Milk tomorrow"
-		assertTrue(testDiffTime > 0);	// "2 * HOUR" is greater than "0"
-		assertTrue(testDiffFlag < 0);	// "IS_NULL" is smaller than "IS_DONE"
+		assertTrue(testDiffCase < 0);		// "Buy Milk tonight" is smaller than "buy milk tomorrow"
+		assertTrue(testDiffName > 0);		// "Buy Milk tonight" is greater than "Buy Milk tomorrow"
+		assertTrue(testDiffTime > 0);		// "2 * HOUR" is greater than "0"
+		assertTrue(testDiffFlag < 0);		// "IS_NULL" is smaller than "IS_DONE"
+		assertTrue(testDiffPriority > 0);	// "NORMAL" is greater than "VERY_HIGH"
 	}
 }
