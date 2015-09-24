@@ -27,23 +27,23 @@ public class Task {
 
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
-	 * name, starting time, ending time and the flag as the argument.
+	 * name, starting time, ending time, flag and priority as the argument.
 	 */
-	public Task(String name, long startTime, long endTime, int flag) {
+	public Task(String name, long startTime, long endTime, int flag, int priority) {
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.flag = flag;
-		this.priority = PRIORITY_NORMAL;
+		this.priority = priority;
 	}
 
 	/**
 	 * Initializes a newly created {@code Task} object which contain only the
 	 * name or description of the task. The value of starting time, ending time
-	 * and flag are set to null or zero.
+	 * and flag are set to null or zero. Priority will be initialized to normal.
 	 */
 	public Task(String name) {
-		this(name, DATE_NULL, DATE_NULL, FLAG_NULL);
+		this(name, DATE_NULL, DATE_NULL, FLAG_NULL, PRIORITY_NORMAL);
 	}
 
 	/**
