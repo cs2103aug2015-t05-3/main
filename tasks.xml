@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tasklist>
+	<task>
+		<title>Buy Milk from Supermarket</title>
+		<startDate>22/09/2015</startDate>
+		<startTime>00:00</startTime>
+		<endDate>26/09/2015</endDate>
+		<endTime>23:59</endTime>	
+		<flag>1</flag>
+		<priority>3</priority>
+	</task>
+	<task>
+		<title>CS2103T Surprise Quiz</title>
+		<startDate>1/10/2015</startDate>
+		<startTime>14:00</startTime>
+		<endDate>1/10/2015</endDate>
+		<endTime>15:00</endTime>
+		<flag>0</flag>
+		<priority>0</priority>
+	</task>
+	<task>
+		<title>Delete the Task Program</title>
+		<startDate>1/12/2015</startDate>
+		<startTime>12:00</startTime>
+		<endDate>1/12/2015</endDate>
+		<endTime>12:05</endTime>
+		<flag>0</flag>
+		<priority>2</priority>
+	</task>
+	<task>
+		<title>Run Around the Campus 10 Times</title>
+		<startDate>31/10/2015</startDate>
+		<startTime>12:00</startTime>
+		<endDate>31/10/2015</endDate>
+		<endTime>20:05</endTime>
+		<flag>0</flag>
+		<priority>6</priority>
+	</task>
+</tasklist>
