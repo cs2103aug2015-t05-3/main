@@ -2,7 +2,9 @@ package tds;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import tds.comparators.*;
 
 public class TaskArrayList implements TaskCollection<Task> {
 
@@ -16,6 +18,7 @@ public class TaskArrayList implements TaskCollection<Task> {
 	
 	@Override
 	public void rebuild(Collection<Task> collection) {
+		taskListSize = collection.size();
 		taskList.clear();
 		taskList.addAll(collection);
 	}
@@ -23,12 +26,14 @@ public class TaskArrayList implements TaskCollection<Task> {
 	@Override
 	public void add(Task task) {
 		taskList.add(task);
+		increaseTaskListSize();
 	}
 
 	@Override
 	public Task remove(Task task) {
 		Task temp = task;
 		taskList.remove(task);
+		decreaseTaskListSize();
 		return temp;
 	}
 
@@ -83,32 +88,37 @@ public class TaskArrayList implements TaskCollection<Task> {
 	}
 
 	@Override
-	public List<Task> sortName() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Task> searchPriority(int prioritySearch) {
+		ArrayList<Task> resultList = new ArrayList<Task>();
+		for (Task task : taskList) {
+			if (task.getFlag() == (prioritySearch)) {
+				resultList.add(task);
+			}
+		}
+		if (resultList.isEmpty()) {
+			return null;
+		} else {
+			return resultList;
+		}
 	}
-
+	
 	@Override
-	public List<Task> sortStartTime() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Task> getSortedList(Comparator<Task> comparator) {
+		ArrayList<Task> sortedList = new ArrayList<Task>(taskList);
+		sortedList.sort(new NameComparator());
+		return sortedList;
 	}
-
-	@Override
-	public List<Task> sortEndTime() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Task> sortFlag() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public int size() {
 		return taskListSize;
 	}
 
+	private void increaseTaskListSize() {
+		taskListSize += 1;
+	}
+	private void decreaseTaskListSize() {
+		taskListSize -= 1;
+	}
+	
 }
