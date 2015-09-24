@@ -6,10 +6,12 @@
  * 
  */
 package tds;
+import java.util.Collection;
 import java.util.List;
 
 interface TaskCollection<E> {
 	
+	public void addAll(Collection<E> collection);
 	public void add(Task task);
 	public void remove(Task task);
 	public void update(Task task);
