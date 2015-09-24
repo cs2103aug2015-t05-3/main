@@ -6,6 +6,7 @@ package tds;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 
 public class TaskTree implements TaskCollection<Task> {
@@ -83,35 +84,22 @@ public class TaskTree implements TaskCollection<Task> {
 	}
 
 	@Override
+	public List<Task> searchPriority(int prioritySearch) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public List<Task> getSortedList(Comparator<Task> comparator) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public int size() {
 		// TODO Auto-generated method stub
 		return taskTreeSize;
 	}
-
-	@Override
-	public List<Task> sortName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Task> sortStartTime() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Task> sortEndTime() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Task> sortFlag() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	private void increaseTaskListSize() {
 		taskTreeSize += 1;
