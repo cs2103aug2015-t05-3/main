@@ -47,7 +47,8 @@ public class TaskFileHandler {
 				System.out.println("Title   : " + eElement.getElementsByTagName("title").item(0).getTextContent());
 				System.out.println("Start   : " + eElement.getElementsByTagName("startDate").item(0).getTextContent() + " " + eElement.getElementsByTagName("startTime").item(0).getTextContent());
 				System.out.println("End     : " + eElement.getElementsByTagName("endDate").item(0).getTextContent() + " " + eElement.getElementsByTagName("endTime").item(0).getTextContent());
-				System.out.println("Done?   : " + eElement.getElementsByTagName("done").item(0).getTextContent());
+				System.out.println("Done?   : " + eElement.getElementsByTagName("flag").item(0).getTextContent());
+				System.out.println("Priority: " + eElement.getElementsByTagName("priority").item(0).getTextContent());
 			}
 		}
 	}
