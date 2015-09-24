@@ -1,21 +1,21 @@
 /**
- * The {@code TaskCollection} class is an abstract class that 
+ * The {@code TaskCollection} class is an interface that 
  * provides methods for storing and manipulating {@code Task}. 
  *
  * @author amoshydra
  * 
  */
 package tds;
+import java.util.List;
 
-abstract class TaskCollection {
+interface TaskCollection<E> {
 	
-	private int size;
-	
-	public abstract void add(Task task);
-	public abstract void remove(Task task);
-	public abstract void update(Task task);
-	public abstract Task search(String searchTerm);	
-	public int size() {
-		return this.size;
-	}
+	public void add(Task task);
+	public void remove(Task task);
+	public void update(Task task);
+	public List<E> searchName(String searchTerm);
+	public List<E> searchStartTime(long startTimeSearch);
+	public List<E> searchEndTime(long endTimeSearch);
+	public List<E> searchFlag(int flagSearch);
+	public int size();
 }
