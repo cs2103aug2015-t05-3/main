@@ -1,6 +1,6 @@
 /**
  * @author amoshydra
- *
+ * 
  */
 package tds;
 import java.util.List;
@@ -10,11 +10,17 @@ import java.util.HashSet;
 
 public class TaskTree implements TaskCollection<Task> {
 
+	// TODO remove suppress warning
+
 	private int taskTreeSize;
 	private HashSet<Task> taskHash;
+	@SuppressWarnings("unused")
 	private TreeSet<Task> taskNameTree;
+	@SuppressWarnings("unused")
 	private TreeSet<Task> taskStartTimeTree;
+	@SuppressWarnings("unused")
 	private TreeSet<Task> taskEndTimeTree;
+	@SuppressWarnings("unused")
 	private TreeSet<Task> taskFlagTree;
 	
 	public TaskTree() {
