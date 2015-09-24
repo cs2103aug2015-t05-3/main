@@ -136,4 +136,110 @@ public class Task {
             (endTime == rhs.endTime) &&
             (flag == rhs.flag);
     }
+    
+	/**
+	 * Compares this {@code Task} instance with another lexicographically and
+	 * numerically. The value returned is determined by the first difference in
+	 * value returned by:
+	 * 
+	 * <pre>
+	 * {@code this.compareNameTo(rhs)}
+	 * {@code this.compareStartTimeTo(rhs)}
+	 * {@code this.compareEndTimeTo(rhs)}
+	 * {@code this.compareFlagTo(rhs)}
+	 * </pre>
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * 
+	 * @return the value 0 if this {@code Task} is equal to the argument
+	 *         {@code Task}; a value less than 0 if this {@code Task} is
+	 *         lexicographically or numerically less than the argument
+	 *         {@code Task}; and a value greater than 0 if this {@code Task} is
+	 *         lexicographically or numerically greater than the argument
+	 *         {@code Task}.
+	 */
+    public int compareTo(Task rhs) {
+    	
+		if (this.name.equals(rhs.name)) {
+			if (this.startTime == rhs.startTime) {
+				if (this.endTime == rhs.endTime) {
+					return compareFlagTo(rhs);
+				} else {
+					return compareEndTimeTo(rhs);
+				}
+			} else {
+				return compareStartTimeTo(rhs);
+			}
+		} else {
+			return compareNameTo(rhs);
+		}
+    }
+    
+	/**
+	 * Compares the name of this {@code Task} instance with another.
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * 
+	 * @return the value 0 if the name of this {@code Task} is equal to the
+	 *         argument {@code Task}; a value less than 0 if this name is
+	 *         lexicographically less than the argument name; a value greater
+	 *         than 0 if this name is lexicographically greater than the
+	 *         argument name.
+	 */
+    public int compareNameTo(Task rhs) {
+    	return this.name.compareTo(rhs.name);
+    }
+    
+	/**
+	 * Compares the starting time of this {@code Task} instance with another.
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * 
+	 * @return the value 0 if the starting time of this {@code Task} is equal to
+	 *         the argument {@code Task}; a value less than 0 if this starting
+	 *         time is numerically less than the argument starting time; a value
+	 *         greater than 0 this starting time is numerically greater than the
+	 *         argument starting time.
+	 */
+    public int compareStartTimeTo(Task rhs) {
+    	Long startTimeLongThis = new Long(this.startTime);
+		Long startTimeLongRhs= new Long(rhs.startTime);
+		return startTimeLongThis.compareTo(startTimeLongRhs);
+    }
+    
+	/**
+	 * Compares the ending time of this {@code Task} instance with another.
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * 
+	 * @return the value 0 if the ending time of this {@code Task} is equal to
+	 *         the argument {@code Task}; a value less than 0 if this ending
+	 *         time is numerically less than the argument ending time; a value
+	 *         greater than 0 this ending time is numerically greater than the
+	 *         argument ending time.
+	 */
+    public int compareEndTimeTo(Task rhs) {
+    	Long endTimeLongThis = new Long(this.endTime);
+		Long endTimeLongRhs= new Long(rhs.endTime);
+		return endTimeLongThis.compareTo(endTimeLongRhs);
+    }
+    
+	/**
+	 * Compares the flag of this {@code Task} instance with another.
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * 
+	 * @return the value 0 if the flag of this {@code Task} is equal to the
+	 *         argument {@code Task}; a value less than 0 if this flag time is
+	 *         numerically less than the argument flag; a value greater than 0
+	 *         this flag is numerically greater than the argument flag.
+	 */
+    public int compareFlagTo(Task rhs) {
+    	return this.flag - rhs.flag;
+    }
 }
