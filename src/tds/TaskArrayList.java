@@ -1,15 +1,16 @@
 package tds;
 
+import java.util.Collection;
 import java.util.List;
 
 public class TaskArrayList implements TaskCollection<Task> {
 
 	@Override
-	public void buildCollection(List<Task> collection) {
+	public void addAll(Collection<Task> collection) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void add(Task task) {
 		// TODO Auto-generated method stub
