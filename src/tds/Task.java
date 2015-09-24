@@ -19,6 +19,14 @@ public class Task {
 	public final static int PRIORITY_LOW = 5;
 	public final static int PRIORITY_VERY_LOW = 6;
 	
+	public final static int GET_VALUE_INVALID = -1;
+	public final static Object GET_VALUE_NULL = null;
+	public final static String GET_VALUE_NAME = "1";
+	public final static long GET_VALUE_START_TIME = 2;
+	public final static long GET_VALUE_END_TIME = 3;
+	public final static int GET_VALUE_FLAG = 4;
+	public final static int GET_VALUE_PRIORITY = 5;
+	
 	private String name;
 	private long startTime;
 	private long endTime;
@@ -46,6 +54,49 @@ public class Task {
 		this(name, DATE_NULL, DATE_NULL, FLAG_NULL, PRIORITY_NORMAL);
 	}
 
+	/**
+	 * Returns the value of the given option field.
+	 * 
+	 * @return the value of the given option field.
+	 */
+	public long getValue(long option) {
+		if (option == GET_VALUE_START_TIME) {
+			return getStartTime();
+		} else if (option == GET_VALUE_END_TIME) {
+			return getEndTime();
+		} else {
+			return GET_VALUE_INVALID;
+		}
+	}
+	
+	/**
+	 * Returns the value of the given option field.
+	 * 
+	 * @return the value of the given option field.
+	 */
+	public String getValue(String option) {
+		if (option.equals(GET_VALUE_NAME)) {
+			return getName();
+		} else {
+			return (String) GET_VALUE_NULL;
+		}
+	}
+	
+	/**
+	 * Returns the value of the given option field.
+	 * 
+	 * @return the value of the given option field.
+	 */
+	public int getValue(int option) {
+		if (option == GET_VALUE_FLAG) {
+			return getFlag();
+		} else if (option == GET_VALUE_PRIORITY) {
+			return getPriority();
+		} else {
+			return GET_VALUE_INVALID;
+		}
+	}
+	
 	/**
 	 * Returns the name or description of this task in {@code String}.
 	 * 
