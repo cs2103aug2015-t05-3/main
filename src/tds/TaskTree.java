@@ -20,7 +20,7 @@ public class TaskTree implements TaskCollection<Task> {
 	private static final int TASK_FLAG_TREE 		= TaskAttributeConstants.FLAG;
 	private static final int TASK_PRIORITY_TREE 	= TaskAttributeConstants.PRIORITY;
 	private static final int TASK_CREATE_TIME_TREE 	= TaskAttributeConstants.CREATE_TIME;
-	private static final int SIZE_OF_TASK_TREES = 5;
+	private static final int SIZE_OF_TASK_TREES = 6;
 	
 	private ArrayList <TreeSet<Task>> taskTrees;
 	private int taskTreeSize;
@@ -165,7 +165,7 @@ public class TaskTree implements TaskCollection<Task> {
 		String buffer = "";
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(treeIndex));
 		for (Task task : resultList) {
-			buffer = "" + task + "\n";
+			buffer += "" + task + "\n";
 		}
 		return buffer;
 	}
