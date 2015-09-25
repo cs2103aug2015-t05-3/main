@@ -387,7 +387,7 @@ public class Task {
 	 *         greater than 0 this create time is numerically greater than the
 	 *         argument create time.
 	 */
-	private int compareCreateTime(Task rhs) {
+	public int compareCreateTimeTo(Task rhs) {
 		Long createTimeLongThis = new Long(this.createTime);
 		Long createTimeLongRhs = new Long(rhs.createTime);
 		return createTimeLongThis.compareTo(createTimeLongRhs);
@@ -407,7 +407,7 @@ public class Task {
 	 */
 	private int handleDuplicatedAttributes(Task rhs, int result) {
 		if (result == 0) {
-			return compareCreateTime(rhs);
+			return compareCreateTimeTo(rhs);
 		} else {
 			return result;
 		}
