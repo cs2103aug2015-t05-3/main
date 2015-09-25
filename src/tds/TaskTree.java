@@ -5,92 +5,159 @@
 package tds;
 import java.util.List;
 import java.util.TreeSet;
+
+import tds.comparators.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
+import tds.TaskAttributeConstants;
 
 public class TaskTree implements TaskCollection<Task> {
-
-	// TODO remove suppress warning
-
+	
+	private static final int TASK_NAME_TREE 		= TaskAttributeConstants.NAME;
+	private static final int TASK_START_TIME_TREE 	= TaskAttributeConstants.START_TIME;
+	private static final int TASK_END_TIME_TREE 	= TaskAttributeConstants.END_TIME;
+	private static final int TASK_FLAG_TREE 		= TaskAttributeConstants.FLAG;
+	private static final int TASK_PRIORITY_TREE 	= TaskAttributeConstants.PRIORITY;
+	private static final int SIZE_OF_TASK_TREES = 5;
+	
+	private ArrayList <TreeSet<Task>> taskTrees;
 	private int taskTreeSize;
-	private HashSet<Task> taskHash;
-	@SuppressWarnings("unused")
-	private TreeSet<Task> taskNameTree;
-	@SuppressWarnings("unused")
-	private TreeSet<Task> taskStartTimeTree;
-	@SuppressWarnings("unused")
-	private TreeSet<Task> taskEndTimeTree;
-	@SuppressWarnings("unused")
-	private TreeSet<Task> taskFlagTree;
 	
 	public TaskTree() {
-		taskHash = new HashSet<Task>();
-		taskNameTree = new TreeSet<Task>();
-		taskStartTimeTree = new TreeSet<Task>();
-		taskEndTimeTree = new TreeSet<Task>();
-		taskFlagTree = new TreeSet<Task>();
 		taskTreeSize = 0;
+		taskTrees = new ArrayList<TreeSet<Task>>(SIZE_OF_TASK_TREES);
+		
+		taskTrees.add(TASK_NAME_TREE, new TreeSet<Task>(new NameComparator()));
+		taskTrees.add(TASK_START_TIME_TREE, new TreeSet<Task>(new StartTimeComparator()));
+		taskTrees.add(TASK_END_TIME_TREE, new TreeSet<Task>(new EndTimeComparator()));
+		taskTrees.add(TASK_FLAG_TREE, new TreeSet<Task>(new FlagComparator()));
+		taskTrees.add(TASK_PRIORITY_TREE, new TreeSet<Task>(new PriorityComparator()));
+	}
+	
+	public TaskTree(Collection<Task> collection) {
+		this();
+		for (TreeSet<Task> tree : taskTrees) {
+			tree.addAll(collection);
+		}
 	}
 
 	@Override
 	public void add(Task task) {
-		taskHash.add(task);
-		
+		for (TreeSet<Task> tree : taskTrees) {
+			tree.add(task);
+		}		
 		increaseTaskListSize();
 	}
 
 	@Override
 	public Task remove(Task task) {
-		// TODO Auto-generated method stub
+		Task temp = task;
+		for (TreeSet<Task> tree : taskTrees) {
+			tree.remove(task);
+		}
 		decreaseTaskListSize();
-		return null;
+		return temp;
 	}
 
 	@Override
 	public Task replace(Task taskOld, Task taskNew) {
-		// TODO Auto-generated method stub
-		return null;
+		Task temp = taskOld;
+		remove(taskOld);
+		add(taskNew);
+		return temp;
 	}
 
 	@Override
 	public List<Task> searchName(String searchTerm) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
+		
+		boolean isCaseInsensitive = isLowercase(searchTerm);
+		String checkString;
+		
+		for (Task task : taskTrees.get(TASK_NAME_TREE)) {
+			
+			checkString = task.getName();
+			if (isCaseInsensitive) {
+				checkString = checkString.toLowerCase();
+			}
+			
+			if (checkString.contains(searchTerm)) {
+				resultList.add(task);
+			}
+		}
+		return resultList;
 	}
 
+	private boolean isLowercase(String text) {
+		int textLength = text.length();
+		char charInText;
+		
+		for (int i = 0; i < textLength; i++) {
+			charInText = text.charAt(i);
+			if (charInText >= 'A' && charInText <= 'Z') {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	@Override
 	public List<Task> queryStartTime(long startTimeUpperBound, long startTimeLowerBound) {
-		// TODO Auto-generated method stub
-		return null;
+		return query(taskTrees.get(TASK_START_TIME_TREE), startTimeUpperBound, startTimeLowerBound);
 	}
 
 	@Override
 	public List<Task> queryEndTime(long endTimeUpperBound, long endTimeLowerBound) {
-		// TODO Auto-generated method stub
-		return null;
+		return query(taskTrees.get(TASK_END_TIME_TREE), endTimeUpperBound, endTimeLowerBound);
 	}
 
+	public List<Task> query(TreeSet<Task> taskTree, long longLowerBound, long longUpperBound) {
+		Task lowerBound = new Task("lower",longLowerBound,longLowerBound,0,0);
+		Task upperBound = new Task("upper",longUpperBound,longUpperBound,0,0);
+		
+		taskTree.floor(lowerBound);
+		taskTree.ceiling(upperBound);
+		
+		return new ArrayList<Task>(taskTree.subSet(lowerBound, upperBound));
+	}
+	
 	@Override
 	public List<Task> searchFlag(int flagSearch) {
-		// TODO Auto-generated method stub
-		return null;
+		return search(taskTrees.get(TASK_FLAG_TREE), flagSearch);
 	}
 
 	@Override
 	public List<Task> searchPriority(int prioritySearch) {
-		// TODO Auto-generated method stub
-		return null;
+		return search(taskTrees.get(TASK_PRIORITY_TREE), prioritySearch);
+	}
+	
+	public List<Task> search(TreeSet<Task> taskTree, int integerSearch) {
+		Task lowerBound = new Task("lower",0,0,integerSearch,integerSearch);
+		Task upperBound = new Task("upper",0,0,integerSearch+1,integerSearch+1);
+		
+		taskTree.floor(lowerBound);
+		taskTree.ceiling(upperBound);
+		
+		return new ArrayList<Task>(taskTree.subSet(lowerBound, upperBound));
 	}
 	
 	@Override
 	public List<Task> getSortedList(Comparator<Task> comparator) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<Task> getSortedList(TreeSet<Task> taskTree) {
+		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
+		for (Task task : taskTree) {
+			resultList.add(task);
+		}
+		return resultList;
 	}
 	
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
 		return taskTreeSize;
 	}
 
