@@ -4,8 +4,11 @@
  * @author amoshydra
  */
 
-package tds;
+package tds.junit;
 import org.junit.Test;
+
+import tds.Task;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import java.util.Date;
