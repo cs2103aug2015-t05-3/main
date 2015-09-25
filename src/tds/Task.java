@@ -23,12 +23,12 @@ public class Task {
 
 	public final static int GET_VALUE_INVALID = -1;
 	public final static Object GET_VALUE_NULL = null;
-	public final static long GET_VALUE_CREATE_TIME = 1;
-	public final static long GET_VALUE_START_TIME = 2;
-	public final static long GET_VALUE_END_TIME = 3;
-	public final static int GET_VALUE_FLAG = 4;
-	public final static int GET_VALUE_PRIORITY = 5;
-	public final static String GET_VALUE_NAME = "6";
+	public final static long GET_VALUE_CREATE_TIME = TaskAttributeConstants.CREATE_TIME;
+	public final static long GET_VALUE_START_TIME = TaskAttributeConstants.START_TIME;
+	public final static long GET_VALUE_END_TIME = TaskAttributeConstants.END_TIME;
+	public final static int GET_VALUE_FLAG = TaskAttributeConstants.FLAG;
+	public final static int GET_VALUE_PRIORITY = TaskAttributeConstants.PRIORITY;
+	public final static String GET_VALUE_NAME = TaskAttributeConstants.NAME_TYPE_STRING;
 
 	public final static String TO_STRING_DELIMETER = "|";
 
