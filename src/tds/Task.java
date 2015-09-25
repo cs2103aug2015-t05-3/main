@@ -238,8 +238,11 @@ public class Task {
 			return true;
 
 		Task rhs = (Task) obj;
-		return (name.equals(rhs.name)) && (startTime == rhs.startTime) && (endTime == rhs.endTime) && (flag == rhs.flag)
-				&& (priority == rhs.priority);
+		return (name.equals(rhs.name)) && 
+				(startTime == rhs.startTime) && 
+				(endTime == rhs.endTime) && 
+				(flag == rhs.flag) && 
+				(priority == rhs.priority);
 	}
 
 	//TODO Check for removal of this method.
