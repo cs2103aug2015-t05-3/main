@@ -5,7 +5,6 @@
 package tds;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 
@@ -33,12 +32,6 @@ public class TaskTree implements TaskCollection<Task> {
 		taskTreeSize = 0;
 	}
 
-	@Override
-	public void rebuild(Collection<Task> collection) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	@Override
 	public void add(Task task) {
 		taskHash.add(task);

@@ -6,13 +6,11 @@
  * 
  */
 package tds;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
 interface TaskCollection<E> {
 	
-	public void rebuild(Collection<E> collection);
 	public void add(E task);
 	public E remove(E task);
 	public E replace(E taskOld, E taskNew);

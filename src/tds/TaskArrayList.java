@@ -7,7 +7,7 @@ import java.util.List;
 import tds.comparators.*;
 
 public class TaskArrayList implements TaskCollection<Task> {
-
+	
 	private int taskListSize;
 	private ArrayList<Task> taskList;
 	
@@ -16,13 +16,11 @@ public class TaskArrayList implements TaskCollection<Task> {
 		taskListSize = 0;
 	}
 	
-	@Override
-	public void rebuild(Collection<Task> collection) {
-		taskListSize = collection.size();
-		taskList.clear();
-		taskList.addAll(collection);
+	public TaskArrayList(Collection<Task> collection) {
+		taskList = new ArrayList<Task>(collection);
+		taskListSize = taskList.size();
 	}
-	
+		
 	@Override
 	public void add(Task task) {
 		taskList.add(task);
@@ -62,13 +60,14 @@ public class TaskArrayList implements TaskCollection<Task> {
 	
 	List<Task> queryTime(ArrayList<Task> sortedList, long upperBound, long lowerBound, long option) {
 		
-		// check for invalid bounds
-		if (upperBound < lowerBound) {
-			return null;
-		}
+		int fromIndex, toIndex;
 		
-		int fromIndex = getClosestMatchIndex(sortedList, lowerBound, option);
-		int toIndex = getClosestMatchIndex(sortedList, upperBound, option);
+		if (upperBound < lowerBound) { // invalid bounds, create empty list
+			fromIndex = toIndex = 0;
+		} else {
+			fromIndex = getClosestMatchIndex(sortedList, lowerBound, option);
+			toIndex = getClosestMatchIndex(sortedList, upperBound, option);
+		}
 		
 		ArrayList<Task> resultList;
 		resultList = new ArrayList<Task>(sortedList.subList(fromIndex, toIndex));
@@ -149,7 +148,7 @@ public class TaskArrayList implements TaskCollection<Task> {
 	@Override
 	public List<Task> getSortedList(Comparator<Task> comparator) {
 		ArrayList<Task> sortedList = new ArrayList<Task>(taskList);
-		sortedList.sort(new NameComparator());
+		sortedList.sort(comparator);
 		return sortedList;
 	}
 	
@@ -165,4 +164,12 @@ public class TaskArrayList implements TaskCollection<Task> {
 		taskListSize -= 1;
 	}
 	
+	@Override
+	public String toString() {
+		String buffer = "";
+		for (Task task : taskList) {
+			buffer += task + "\n";
+		}
+		return buffer;
+	}
 }
