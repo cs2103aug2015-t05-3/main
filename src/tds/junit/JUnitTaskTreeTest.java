@@ -1,17 +1,19 @@
 package tds.junit;
+import tds.Task;
+import tds.TaskTree;
+
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-
-import tds.Task;
-import tds.TaskAttributeConstants;
-import tds.TaskTree;
 
 public class JUnitTaskTreeTest {
 	private static final int FIRST_ELEMENT = 0;
+	@SuppressWarnings("unused")
 	private static final int LAST_ELEMENT = 4;
 	private static final int NUM_OF_ITEMS = 5;
-	private static final int FIVE_SECONDS = 5000;
 	private String[] names = {
 			"Buy mushroom", 
 			"Buy milk", 
@@ -21,10 +23,10 @@ public class JUnitTaskTreeTest {
 			};
 	private long[] startTimes = {
 			0L,
-			0L,
-			0L,
-			0L,
-			0L
+			1L,
+			2L,
+			3L,
+			4L
 			};
 	private long[] endTimes = {
 			0L,			// floating task
@@ -48,20 +50,90 @@ public class JUnitTaskTreeTest {
 			Task.PRIORITY_NORMAL
 			};
 
+	private void testAddElementsToTree(TaskTree taskTree, ArrayList<Task> checkList) {
+		Task temp;
+		for (int i = 0; i < NUM_OF_ITEMS; i++) {
+			temp = new Task(names[i], startTimes[i], endTimes[i], flags[i], priorities[i]);
+			taskTree.add(temp);
+			checkList.add(temp);
+		}
+	}
+	
 	@Test
 	public void testAddElementsToTree () {
-		TaskTree list = new TaskTree();
+		TaskTree taskTree = new TaskTree();
+		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS);
+		testAddElementsToTree(taskTree, checkList);
 		
-		for (int i = 0; i < NUM_OF_ITEMS; i++) {
-			list.add(new Task(names[i], startTimes[i], endTimes[i], flags[i], priorities[i]));
+		String checkString = "";
+		for (Task task : checkList) {
+			checkString += task + "\n";
 		}
+		String resultString = "" + taskTree;
 		
-		System.out.println(new ArrayList<Task>(list.getSortedList(TaskAttributeConstants.NAME)));
-		System.out.println(new ArrayList<Task>(list.getSortedList(TaskAttributeConstants.FLAG)));
-		System.out.println(new ArrayList<Task>(list.getSortedList(TaskAttributeConstants.END_TIME)));
-		System.out.println(new ArrayList<Task>(list.getSortedList(TaskAttributeConstants.ID)));
-		System.out.println(list.toString(TaskAttributeConstants.END_TIME));
-		System.out.println(list);
+		assertEquals(resultString, checkString);
+		assertTrue(checkList.equals(new ArrayList<Task>(taskTree.getList())));
 	}
 
+	@Test
+	public void testRemoveElementsToTree () {
+		TaskTree taskTree = new TaskTree();
+		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS);
+		testAddElementsToTree(taskTree, checkList);
+		
+		int listSize = taskTree.size();
+		ArrayList<Task> returnList;
+		String searchTerm;
+		
+		// Get original list
+		searchTerm = "Buy";
+		returnList = new ArrayList<Task>(taskTree.searchName(searchTerm));
+		assertEquals(taskTree.size(), listSize);
+		
+		// Remove last element
+		taskTree.remove(returnList.get(returnList.size() - 1));
+		searchTerm = "Buy";
+		returnList = new ArrayList<Task>(taskTree.searchName(searchTerm));
+		assertEquals(taskTree.size(), listSize -= 1);
+	
+		// Remove second element
+		taskTree.remove(returnList.get(FIRST_ELEMENT + 1));
+		searchTerm = "Buy";
+		returnList = new ArrayList<Task>(taskTree.searchName(searchTerm));
+		assertEquals(taskTree.size(), listSize -= 1);
+		
+		// Remove last element
+		taskTree.remove(returnList.get(FIRST_ELEMENT));
+		searchTerm = "Buy";
+		returnList = new ArrayList<Task>(taskTree.searchName(searchTerm));
+		assertEquals(taskTree.size(), listSize -= 1);
+		
+		// Remove non-existing element
+		assertFalse(taskTree.remove(new Task("Dummy")));
+	}
+	
+	@SuppressWarnings("unused")
+	private void printList(ArrayList<Task> returnList) {
+		int index;
+		if (returnList.isEmpty()) {
+			System.out.println("No item in list");
+		} else {
+			for (int i = 0; i < returnList.size(); i++) {
+				index = i + 1;
+				System.out.println("" + index + ". " + returnList.get(i));
+			}
+		}
+	}
+
+	@Test
+	public void testBuildTreeFromCollection () {
+		Task temp;
+		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS); 
+		for (int i = 0; i < NUM_OF_ITEMS; i++) {
+			temp = new Task(names[i], startTimes[i], endTimes[i], flags[i], priorities[i]);
+			checkList.add(temp);
+		}
+		TaskTree taskTree = new TaskTree(checkList);
+		assertEquals(taskTree.getList(), checkList);
+	}
 }
