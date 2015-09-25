@@ -306,11 +306,11 @@ public class Task {
 	public boolean[] getAttributesDiff(Task rhs) {
 		boolean[] checkBits = new boolean[TaskAttributeConstants.NUM_OF_ATTRIBUTES];
 		
-		checkBits[TaskAttributeConstants.NAME]		= (this.compareNameTo(rhs) == 0);
-		checkBits[TaskAttributeConstants.START_TIME]= (this.compareStartTimeTo(rhs) == 0);
-		checkBits[TaskAttributeConstants.END_TIME]	= (this.compareEndTimeTo(rhs) == 0);
-		checkBits[TaskAttributeConstants.FLAG]		= (this.compareFlagTo(rhs) == 0);
-		checkBits[TaskAttributeConstants.PRIORITY]	= (this.comparePriorityTo(rhs) == 0);
+		checkBits[TaskAttributeConstants.NAME]		= (this.name.equals(rhs.name));
+		checkBits[TaskAttributeConstants.START_TIME]= (this.startTime - rhs.startTime == 0);
+		checkBits[TaskAttributeConstants.END_TIME]	= (this.endTime - rhs.endTime == 0);
+		checkBits[TaskAttributeConstants.FLAG]		= (this.flag - rhs.flag == 0);
+		checkBits[TaskAttributeConstants.PRIORITY]	= (this.priority - rhs.priority == 0);
 		checkBits[TaskAttributeConstants.ID] 		= (this.compareIdTo(rhs) == 0);
 		
 		return checkBits;
