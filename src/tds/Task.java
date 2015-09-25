@@ -6,7 +6,7 @@
 package tds;
 
 public class Task {
-	private static int taskNumber;
+	private static int taskNumber = 1;
 	
 	public final static int FLAG_NULL = 0;
 	public final static int FLAG_DONE = 1;
@@ -391,11 +391,7 @@ public class Task {
 	 *         argument ID.
 	 */
 	public int compareIdTo(Task rhs) {
-		int result = this.id - rhs.id;
-		if (result == 0) {
-			System.out.println("" + this.id + " == " + rhs.id);
-		}
-		return result;
+		return this.id - rhs.id;
 	}
 
 	/**
@@ -430,7 +426,6 @@ public class Task {
 				startTime + TO_STRING_DELIMETER + 
 				endTime + TO_STRING_DELIMETER + 
 				flag + TO_STRING_DELIMETER + 
-				priority + TO_STRING_DELIMETER + 
-				id;
+				priority;
 	}
 }
