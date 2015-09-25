@@ -75,12 +75,15 @@ public class TaskTree implements TaskCollection<Task> {
 
 	@Override
 	public boolean replace(Task taskOld, Task taskNew) {
-		boolean isReplaced;
+		boolean[] checkBit = taskOld.getAttributesDiff(taskNew);
+		boolean isReplaced = true;
 		
-		boolean isRemoved = remove(taskOld);
-		boolean isAdded = add(taskNew);
-		
-		isReplaced = isRemoved && isAdded;
+		for (int i = 0; i < SIZE_OF_TASK_TREES; i++) {
+			if (checkBit[i] == false) {
+				isReplaced &= taskTrees.get(i).remove(taskOld);
+				isReplaced &= taskTrees.get(i).add(taskNew);
+			}
+		}
 		return isReplaced;
 	}
 
