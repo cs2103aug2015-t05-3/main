@@ -140,34 +140,41 @@ public class TaskTree implements TaskCollection<Task> {
 		
 		TreeSet<Task> taskTree = taskTrees.get(treeIndex);
 		ArrayList<Task> emptyList = new ArrayList<Task>(); 
+		boolean isToInclusive;
+		Task upperBoundHBuffer;
 		
 		if (longUpperBound < longLowerBound) {
 			return emptyList;
 		} else {
 			if (longUpperBound == longLowerBound) {
 				longUpperBound += 1;
+				upperBoundHBuffer = upperBoundHandler;
+				isToInclusive = false;
+			} else {
+				upperBoundHBuffer = new Task("");
+				isToInclusive = true;
 			}
-			switch (treeIndex) {
+			switch (treeIndex) {			
 				case TASK_END_TIME_TREE:
 					lowerBoundHandler.setEndTime(longLowerBound);
-					upperBoundHandler.setEndTime(longUpperBound);
+					upperBoundHBuffer.setEndTime(longUpperBound);
 					break;
 				case TASK_START_TIME_TREE:
 					lowerBoundHandler.setStartTime(longLowerBound);
-					upperBoundHandler.setStartTime(longUpperBound);
+					upperBoundHBuffer.setStartTime(longUpperBound);
 					break;
 				case TASK_PRIORITY_TREE:
 					lowerBoundHandler.setPriority((int)longLowerBound);
-					upperBoundHandler.setPriority((int)longUpperBound);
+					upperBoundHBuffer.setPriority((int)longUpperBound);
 					break;
 				case TASK_FLAG_TREE:
 					lowerBoundHandler.setFlag((int)longLowerBound);
-					upperBoundHandler.setFlag((int)longUpperBound);
+					upperBoundHBuffer.setFlag((int)longUpperBound);
 					break;
 				default:
 					return emptyList;
 			}
-			return new ArrayList<Task>(taskTree.subSet(lowerBoundHandler, upperBoundHandler));
+			return new ArrayList<Task>(taskTree.subSet(lowerBoundHandler, true, upperBoundHBuffer, isToInclusive));
 		}
 	}
 	
