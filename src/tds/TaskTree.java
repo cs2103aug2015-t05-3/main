@@ -24,6 +24,8 @@ public class TaskTree implements TaskCollection<Task> {
 	
 	private ArrayList <TreeSet<Task>> taskTrees;
 	private int taskTreeSize;
+	private Task lowerBoundHandler;
+	private Task upperBoundHandler;
 	
 	public TaskTree() {
 		taskTreeSize = 0;
@@ -35,6 +37,9 @@ public class TaskTree implements TaskCollection<Task> {
 		taskTrees.add(TASK_FLAG_TREE, new TreeSet<Task>(new FlagComparator()));
 		taskTrees.add(TASK_PRIORITY_TREE, new TreeSet<Task>(new PriorityComparator()));
 		taskTrees.add(TASK_CREATE_TIME_TREE, new TreeSet<Task>(new IdComparator()));
+		
+		lowerBoundHandler = new Task("");
+		upperBoundHandler = new Task("");
 	}
 	
 	public TaskTree(Collection<Task> collection) {
@@ -115,43 +120,72 @@ public class TaskTree implements TaskCollection<Task> {
 	
 	@Override
 	public List<Task> queryStartTime(long startTimeUpperBound, long startTimeLowerBound) {
-		return query(taskTrees.get(TASK_START_TIME_TREE), startTimeUpperBound, startTimeLowerBound);
+		return query(TASK_START_TIME_TREE, startTimeUpperBound, startTimeLowerBound);
 	}
 
 	@Override
 	public List<Task> queryEndTime(long endTimeUpperBound, long endTimeLowerBound) {
-		return query(taskTrees.get(TASK_END_TIME_TREE), endTimeUpperBound, endTimeLowerBound);
+		return query(TASK_END_TIME_TREE, endTimeUpperBound, endTimeLowerBound);
 	}
 
-	public List<Task> query(TreeSet<Task> taskTree, long longLowerBound, long longUpperBound) {
-		Task lowerBound = new Task("lower",longLowerBound,longLowerBound,0,0);
-		Task upperBound = new Task("upper",longUpperBound,longUpperBound,0,0);
-		
-		taskTree.floor(lowerBound);
-		taskTree.ceiling(upperBound);
-		
-		return new ArrayList<Task>(taskTree.subSet(lowerBound, upperBound));
+	public List<Task> queryFlag(int lowerBound, int upperBound) {
+		return query(TASK_FLAG_TREE, lowerBound, upperBound);
 	}
+	
+	public List<Task> queryPriority(int lowerBound, int upperBound) {
+		return query(TASK_PRIORITY_TREE, lowerBound, upperBound);
+	}
+	
+	public List<Task> query(int treeIndex, long longLowerBound, long longUpperBound) {		
+		
+		TreeSet<Task> taskTree = taskTrees.get(treeIndex);
+		ArrayList<Task> emptyList = new ArrayList<Task>(); 
+		
+		if (longUpperBound < longLowerBound) {
+			return emptyList;
+		} else {
+			if (longUpperBound == longLowerBound) {
+				longUpperBound += 1;
+			}
+			switch (treeIndex) {
+				case TASK_END_TIME_TREE:
+					lowerBoundHandler.setEndTime(longLowerBound);
+					upperBoundHandler.setEndTime(longUpperBound);
+					break;
+				case TASK_START_TIME_TREE:
+					lowerBoundHandler.setStartTime(longLowerBound);
+					upperBoundHandler.setStartTime(longUpperBound);
+					break;
+				case TASK_PRIORITY_TREE:
+					lowerBoundHandler.setPriority((int)longLowerBound);
+					upperBoundHandler.setPriority((int)longUpperBound);
+					break;
+				case TASK_FLAG_TREE:
+					lowerBoundHandler.setFlag((int)longLowerBound);
+					upperBoundHandler.setFlag((int)longUpperBound);
+					break;
+				default:
+					return emptyList;
+			}
+			return new ArrayList<Task>(taskTree.subSet(lowerBoundHandler, upperBoundHandler));
+		}
+	}
+	
 	
 	@Override
 	public List<Task> searchFlag(int flagSearch) {
-		return search(taskTrees.get(TASK_FLAG_TREE), flagSearch);
+		return query(TASK_FLAG_TREE, flagSearch, flagSearch);
 	}
 
 	@Override
 	public List<Task> searchPriority(int prioritySearch) {
-		return search(taskTrees.get(TASK_PRIORITY_TREE), prioritySearch);
+		return query(TASK_PRIORITY_TREE, prioritySearch, prioritySearch);
 	}
 	
-	public List<Task> search(TreeSet<Task> taskTree, int integerSearch) {
-		Task lowerBound = new Task("lower",0,0,integerSearch,integerSearch);
-		Task upperBound = new Task("upper",0,0,integerSearch+1,integerSearch+1);
-		
-		taskTree.floor(lowerBound);
-		taskTree.ceiling(upperBound);
-		
-		return new ArrayList<Task>(taskTree.subSet(lowerBound, upperBound));
-	}
+
+	
+
+	
 	
 	public List<Task> getList() {
 		return getSortedList(taskTrees.get(TaskAttributeConstants.ID));
