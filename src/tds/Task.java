@@ -166,7 +166,7 @@ public class Task {
 	 * @param name
 	 *            the new name or description for the task.
 	 */
-	public void setName(String name) {
+	void setName(String name) {
 		this.name = name;
 	}
 
@@ -176,7 +176,7 @@ public class Task {
 	 * @param startTime
 	 *            the new start time for the task.
 	 */
-	public void setStartTime(long startTime) {
+	void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 
@@ -186,7 +186,7 @@ public class Task {
 	 * @param endTime
 	 *            the new end time for the task.
 	 */
-	public void setEndTime(long endTime) {
+	void setEndTime(long endTime) {
 		this.endTime = endTime;
 	}
 
@@ -196,7 +196,7 @@ public class Task {
 	 * @param flag
 	 *            the new flag for the task.
 	 */
-	public void setFlag(int flag) {
+	void setFlag(int flag) {
 		this.flag = flag;
 	}
 
@@ -206,7 +206,7 @@ public class Task {
 	 * @param priority
 	 *            the new priority for the task.
 	 */
-	public void setPriority(int priority) {
+	void setPriority(int priority) {
 		this.priority = priority;
 	}
 
