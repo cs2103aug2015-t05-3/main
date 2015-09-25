@@ -345,4 +345,19 @@ public class Task {
 	public int comparePriorityTo(Task rhs) {
 		return this.priority - rhs.priority;
 	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "" + name + 
+				"|" + startTime + 
+				"|" + endTime + 
+				"|" + flag + 
+				"|" + priority;
+	}
+
+	
 }
