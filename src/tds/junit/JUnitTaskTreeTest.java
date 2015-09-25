@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -124,6 +125,51 @@ public class JUnitTaskTreeTest {
 		
 		// Remove non-existing element
 		assertFalse(taskTree.remove(new Task("Dummy")));
+	}
+	
+	@Test
+	public void testReplaceElementsFromTree () {
+		TaskTree taskTree = new TaskTree();
+		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS);
+		testAddElementsToTree(taskTree, checkList);
+		
+		ArrayList<Task> returnList, originalList;
+		Task taskOld, taskNew;
+		String checkString, resultString, replaceTerm;
+		
+		// Get original list
+		originalList = new ArrayList<Task>(taskTree.getList());
+		returnList = new ArrayList<Task>(taskTree.getList());
+		assertEquals(taskTree.size(), returnList.size());
+		
+		// Check task replace method; task id will be changed
+		originalList = new ArrayList<Task>(returnList);
+		replaceTerm = "Buy giant mushroom";
+		
+		taskOld = returnList.get(FIRST_ELEMENT);
+		taskNew = new Task(replaceTerm, taskOld.getStartTime(), taskOld.getEndTime(), taskOld.getFlag(), taskOld.getPriority());
+		taskTree.replace(taskOld, taskNew);
+		returnList = new ArrayList<Task>(taskTree.getList());
+		assertEquals(returnList.get(LAST_ELEMENT).getName(), replaceTerm);
+		
+		// Check update name; only the name of this task will be changed
+		originalList = new ArrayList<Task>(returnList);
+		replaceTerm = "Milk is delicious";
+		
+		taskOld = returnList.get(FIRST_ELEMENT);
+		checkString = taskOld.getName();
+		taskTree.updateName(taskOld, replaceTerm);
+		returnList = new ArrayList<Task>(taskTree.getList());
+		assertNotEquals(checkString, replaceTerm);
+		
+		// Check update end time; only the end time of this task will be changed
+		originalList = new ArrayList<Task>(returnList);
+		checkString = originalList.toString();
+		for (int i = 0; i < NUM_OF_ITEMS; i++) {
+			taskTree.updateEndTime(returnList.get(i), 0);
+		}
+		resultString = returnList.toString();
+		assertNotEquals(resultString, checkString);
 	}
 	
 	@Test
