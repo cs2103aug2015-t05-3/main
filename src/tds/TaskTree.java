@@ -19,6 +19,7 @@ public class TaskTree implements TaskCollection<Task> {
 	private static final int TASK_END_TIME_TREE 	= TaskAttributeConstants.END_TIME;
 	private static final int TASK_FLAG_TREE 		= TaskAttributeConstants.FLAG;
 	private static final int TASK_PRIORITY_TREE 	= TaskAttributeConstants.PRIORITY;
+	private static final int TASK_CREATE_TIME_TREE 	= TaskAttributeConstants.CREATE_TIME;
 	private static final int SIZE_OF_TASK_TREES = 5;
 	
 	private ArrayList <TreeSet<Task>> taskTrees;
@@ -33,6 +34,7 @@ public class TaskTree implements TaskCollection<Task> {
 		taskTrees.add(TASK_END_TIME_TREE, new TreeSet<Task>(new EndTimeComparator()));
 		taskTrees.add(TASK_FLAG_TREE, new TreeSet<Task>(new FlagComparator()));
 		taskTrees.add(TASK_PRIORITY_TREE, new TreeSet<Task>(new PriorityComparator()));
+		taskTrees.add(TASK_CREATE_TIME_TREE, new TreeSet<Task>(new CreateTimeComparator()));
 	}
 	
 	public TaskTree(Collection<Task> collection) {
@@ -152,6 +154,20 @@ public class TaskTree implements TaskCollection<Task> {
 			resultList.add(task);
 		}
 		return resultList;
+	}
+
+	@Override
+	public String toString() {
+		return toString(TaskAttributeConstants.CREATE_TIME);
+	}
+	
+	public String toString (int treeIndex) {
+		String buffer = "";
+		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(treeIndex));
+		for (Task task : resultList) {
+			buffer = "" + task + "\n";
+		}
+		return buffer;
 	}
 	
 	@Override
