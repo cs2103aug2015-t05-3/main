@@ -10,7 +10,6 @@ import tds.comparators.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import tds.TaskAttributeConstants;
 
 public class TaskTree implements TaskCollection<Task> {
@@ -143,9 +142,8 @@ public class TaskTree implements TaskCollection<Task> {
 		return new ArrayList<Task>(taskTree.subSet(lowerBound, upperBound));
 	}
 	
-	@Override
-	public List<Task> getSortedList(Comparator<Task> comparator) {
-		return null;
+	public List<Task> getSortedList(int treeIndex) {
+		return getSortedList(taskTrees.get(treeIndex));
 	}
 	
 	public List<Task> getSortedList(TreeSet<Task> taskTree) {
