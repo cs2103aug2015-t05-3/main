@@ -62,6 +62,7 @@ public class Task {
 		this(name, DATE_NULL, DATE_NULL, FLAG_NULL, PRIORITY_NORMAL);
 	}
 
+	
 	/**
 	 * Returns the value of the given option field.
 	 * 
@@ -76,7 +77,7 @@ public class Task {
 			return GET_VALUE_INVALID;
 		}
 	}
-
+	
 	/**
 	 * Returns the value of the given option field.
 	 * 
@@ -291,6 +292,31 @@ public class Task {
 	}
 
 	/**
+	 * Compares this {@code Task} instance with another to generate an array of
+	 * check bits.
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * 
+	 * @return a boolean array with all element as {@code true} if the
+	 *         {@code Task} is identical to the other; A difference in
+	 *         attributes between two task will cause a boolean in the array to
+	 *         become false.
+	 */
+	public boolean[] getAttributesDiff(Task rhs) {
+		boolean[] checkBits = new boolean[TaskAttributeConstants.NUM_OF_ATTRIBUTES];
+		
+		checkBits[TaskAttributeConstants.NAME]		= (this.compareNameTo(rhs) == 0);
+		checkBits[TaskAttributeConstants.START_TIME]= (this.compareStartTimeTo(rhs) == 0);
+		checkBits[TaskAttributeConstants.END_TIME]	= (this.compareEndTimeTo(rhs) == 0);
+		checkBits[TaskAttributeConstants.FLAG]		= (this.compareFlagTo(rhs) == 0);
+		checkBits[TaskAttributeConstants.PRIORITY]	= (this.comparePriorityTo(rhs) == 0);
+		checkBits[TaskAttributeConstants.ID] 		= (this.compareIdTo(rhs) == 0);
+		
+		return checkBits;
+	}
+	
+	/**
 	 * Compares the name of this {@code Task} instance with another.
 	 * 
 	 * @param rhs
@@ -391,7 +417,7 @@ public class Task {
 	 *         argument ID.
 	 */
 	public int compareIdTo(Task rhs) {
-		return this.id - rhs.id;
+		return (this.id - rhs.id);
 	}
 
 	/**
