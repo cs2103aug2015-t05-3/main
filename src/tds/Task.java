@@ -4,6 +4,7 @@
  * @author amoshydra
  */
 package tds;
+import java.util.Date;
 
 public class Task {
 	public final static int FLAG_NULL = 0;
@@ -21,12 +22,16 @@ public class Task {
 	
 	public final static int GET_VALUE_INVALID = -1;
 	public final static Object GET_VALUE_NULL = null;
-	public final static String GET_VALUE_NAME = "1";
+	public final static long GET_VALUE_CREATE_TIME = 1;
 	public final static long GET_VALUE_START_TIME = 2;
 	public final static long GET_VALUE_END_TIME = 3;
 	public final static int GET_VALUE_FLAG = 4;
 	public final static int GET_VALUE_PRIORITY = 5;
+	public final static String GET_VALUE_NAME = "6";
 	
+	public final static String TO_STRING_DELIMETER = "|";
+	
+	private long createTime; 
 	private String name;
 	private long startTime;
 	private long endTime;
@@ -36,8 +41,10 @@ public class Task {
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
 	 * name, starting time, ending time, flag and priority as the argument.
+	 * Time which task is created will be used to differentiate duplicated value.
 	 */
 	public Task(String name, long startTime, long endTime, int flag, int priority) {
+		this.createTime = (new Date()).getTime();
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -104,6 +111,15 @@ public class Task {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Returns the create time of this task in {@code long}.
+	 * 
+	 * @return the createTime
+	 */
+	public long getCreateTime() {
+		return createTime;
 	}
 
 	/**
@@ -276,7 +292,8 @@ public class Task {
 	 *         argument name.
 	 */
 	public int compareNameTo(Task rhs) {
-		return this.name.compareTo(rhs.name);
+		int result = this.name.compareTo(rhs.name);
+		return checkForDuplication(rhs, result);
 	}
 
 	/**
@@ -294,7 +311,8 @@ public class Task {
 	public int compareStartTimeTo(Task rhs) {
 		Long startTimeLongThis = new Long(this.startTime);
 		Long startTimeLongRhs = new Long(rhs.startTime);
-		return startTimeLongThis.compareTo(startTimeLongRhs);
+		int result = startTimeLongThis.compareTo(startTimeLongRhs);
+		return checkForDuplication(rhs, result);
 	}
 
 	/**
@@ -312,7 +330,8 @@ public class Task {
 	public int compareEndTimeTo(Task rhs) {
 		Long endTimeLongThis = new Long(this.endTime);
 		Long endTimeLongRhs = new Long(rhs.endTime);
-		return endTimeLongThis.compareTo(endTimeLongRhs);
+		int result = endTimeLongThis.compareTo(endTimeLongRhs);
+		return checkForDuplication(rhs, result);
 	}
 
 	/**
@@ -327,7 +346,8 @@ public class Task {
 	 *         this flag is numerically greater than the argument flag.
 	 */
 	public int compareFlagTo(Task rhs) {
-		return this.flag - rhs.flag;
+		int result = this.flag - rhs.flag;
+		return checkForDuplication(rhs, result);
 	}
 
 	/**
@@ -343,21 +363,48 @@ public class Task {
 	 *         priority.
 	 */
 	public int comparePriorityTo(Task rhs) {
-		return this.priority - rhs.priority;
+		int result = this.priority - rhs.priority;
+		return checkForDuplication(rhs, result);
 	}
 
+	/**
+	 * Compares the create time of this {@code Task} instance with another.
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * 
+	 * @return the value 0 if the create time of this {@code Task} is equal to
+	 *         the argument {@code Task}; a value less than 0 if this create
+	 *         time is numerically less than the argument create time; a value
+	 *         greater than 0 this create time is numerically greater than the
+	 *         argument create time.
+	 */
+	private int compareCreateTime(Task rhs) {
+		Long createTimeLongThis = new Long(this.createTime);
+		Long createTimeLongRhs = new Long(rhs.createTime);
+		return createTimeLongThis.compareTo(createTimeLongRhs);
+	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	private int checkForDuplication(Task rhs, int result) {
+		if (result == 0) {
+			return compareCreateTime(rhs);
+		} else {
+			return result;
+		}
+	}
+	
+	/**
+	 * Represent this {@code Task} into a {@code String} format 
+	 * 
+	 * @return a format such as {@code name|startTime|endTime|flag|priority}
+	 * 
 	 */
 	@Override
 	public String toString() {
 		return "" + name + 
-				"|" + startTime + 
-				"|" + endTime + 
-				"|" + flag + 
-				"|" + priority;
+				TO_STRING_DELIMETER + startTime + 
+				TO_STRING_DELIMETER + endTime + 
+				TO_STRING_DELIMETER + flag + 
+				TO_STRING_DELIMETER + priority;
 	}
-
-	
 }
