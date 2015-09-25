@@ -14,4 +14,6 @@ public class TaskAttributeConstants {
 	public final static int PRIORITY = 4;
 
 	public final static int ID = 5;
+
+	public final static int NUM_OF_ATTRIBUTES = 6;
 }
