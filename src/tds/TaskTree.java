@@ -75,18 +75,56 @@ public class TaskTree implements TaskCollection<Task> {
 
 	@Override
 	public boolean replace(Task taskOld, Task taskNew) {
-		boolean[] checkBit = taskOld.getAttributesDiff(taskNew);
+		
+		boolean[] checkBits = taskOld.getAttributesDiff(taskNew);
 		boolean isReplaced = true;
 		
+		// Re-insert task based on its modified attributes
 		for (int i = 0; i < SIZE_OF_TASK_TREES; i++) {
-			if (checkBit[i] == false) {
-				isReplaced &= taskTrees.get(i).remove(taskOld);
-				isReplaced &= taskTrees.get(i).add(taskNew);
+			if (checkBits[i] == false) {
+				isReplaced &= updateAttributeTree(taskOld, taskNew, i);
 			}
 		}
+		// Replace old task with new task for the remaining tree; 
+		taskOld = taskNew;
+		
 		return isReplaced;
 	}
 
+	public boolean updateName(Task taskOld, String newValue) {
+		taskOld.setName(newValue);
+		return updateAttributeTree(taskOld, taskOld, TaskAttributeConstants.NAME);
+	}
+	
+	public boolean updateStartTime(Task taskOld, long newValue) {
+		taskOld.setStartTime(newValue);
+		return updateAttributeTree(taskOld, taskOld, TaskAttributeConstants.START_TIME);
+	}
+	
+	public boolean updateEndTime(Task taskOld, long newValue) {
+		taskOld.setEndTime(newValue);
+		return updateAttributeTree(taskOld, taskOld, TaskAttributeConstants.END_TIME);
+	}
+	
+	public boolean updateFlag(Task taskOld, int newValue) {
+		taskOld.setFlag(newValue);
+		return updateAttributeTree(taskOld, taskOld, TaskAttributeConstants.FLAG);
+	}
+	
+	public boolean updatePriority(Task taskOld, int newValue) {
+		taskOld.setPriority(newValue);
+		return updateAttributeTree(taskOld, taskOld, TaskAttributeConstants.PRIORITY);
+	}
+	
+	private boolean updateAttributeTree(Task taskOld, Task taskNew, int treeIndex) {
+		boolean isReplaced = true;
+		
+		isReplaced &= taskTrees.get(treeIndex).remove(taskOld);
+		isReplaced &= taskTrees.get(treeIndex).add(taskNew);
+		
+		return isReplaced;
+	}
+	
 	@Override
 	public List<Task> searchName(String searchTerm) {
 		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
