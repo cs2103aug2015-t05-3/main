@@ -4,6 +4,7 @@
  * @author amoshydra
  */
 package tds;
+
 import java.util.Date;
 
 public class Task {
@@ -19,7 +20,7 @@ public class Task {
 	public final static int PRIORITY_BELOW_NORMAL = 4;
 	public final static int PRIORITY_LOW = 5;
 	public final static int PRIORITY_VERY_LOW = 6;
-	
+
 	public final static int GET_VALUE_INVALID = -1;
 	public final static Object GET_VALUE_NULL = null;
 	public final static long GET_VALUE_CREATE_TIME = 1;
@@ -28,10 +29,10 @@ public class Task {
 	public final static int GET_VALUE_FLAG = 4;
 	public final static int GET_VALUE_PRIORITY = 5;
 	public final static String GET_VALUE_NAME = "6";
-	
+
 	public final static String TO_STRING_DELIMETER = "|";
-	
-	private long createTime; 
+
+	private long createTime;
 	private String name;
 	private long startTime;
 	private long endTime;
@@ -40,8 +41,8 @@ public class Task {
 
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
-	 * name, starting time, ending time, flag and priority as the argument.
-	 * Time which task is created will be used to differentiate duplicated value.
+	 * name, starting time, ending time, flag and priority as the argument. Time
+	 * which task is created will be used to differentiate duplicated value.
 	 */
 	public Task(String name, long startTime, long endTime, int flag, int priority) {
 		this.createTime = (new Date()).getTime();
@@ -75,7 +76,7 @@ public class Task {
 			return GET_VALUE_INVALID;
 		}
 	}
-	
+
 	/**
 	 * Returns the value of the given option field.
 	 * 
@@ -88,7 +89,7 @@ public class Task {
 			return (String) GET_VALUE_NULL;
 		}
 	}
-	
+
 	/**
 	 * Returns the value of the given option field.
 	 * 
@@ -103,7 +104,7 @@ public class Task {
 			return GET_VALUE_INVALID;
 		}
 	}
-	
+
 	/**
 	 * Returns the name or description of this task in {@code String}.
 	 * 
@@ -157,12 +158,12 @@ public class Task {
 	public int getPriority() {
 		return priority;
 	}
-	
+
 	/**
 	 * Change the name or description of this task.
 	 * 
 	 * @param name
-	 *			the new name or description for the task.
+	 *            the new name or description for the task.
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -172,7 +173,7 @@ public class Task {
 	 * Change the start time of this task.
 	 * 
 	 * @param startTime
-	 *			the new start time for the task.
+	 *            the new start time for the task.
 	 */
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
@@ -182,7 +183,7 @@ public class Task {
 	 * Change the end time of this task.
 	 * 
 	 * @param endTime
-	 *			the new end time for the task.
+	 *            the new end time for the task.
 	 */
 	public void setEndTime(long endTime) {
 		this.endTime = endTime;
@@ -192,7 +193,7 @@ public class Task {
 	 * Change the flag of this task.
 	 * 
 	 * @param flag
-	 *			the new flag for the task.
+	 *            the new flag for the task.
 	 */
 	public void setFlag(int flag) {
 		this.flag = flag;
@@ -202,39 +203,33 @@ public class Task {
 	 * Change the priority of this task.
 	 * 
 	 * @param priority
-	 *			the new priority for the task.
+	 *            the new priority for the task.
 	 */
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	
+
 	/**
-	 * Determines whether or not two task are equal. 
-	 * The two tasks are equal if the values name, start time,
-	 * end time, flag and priority are equal.
+	 * Determines whether or not two task are equal. The two tasks are equal if
+	 * the values name, start time, end time, flag and priority are equal.
 	 * 
 	 * @param obj
-	 * 		an object to be compared with this {@code Task}
+	 *            an object to be compared with this {@code Task}
 	 * 
-	 * @return
-	 * 		{@code true} if the object to be compared is an 
-	 * 		instance of Task and has the same values; false 
-	 * 		otherwise.
+	 * @return {@code true} if the object to be compared is an instance of Task
+	 *         and has the same values; false otherwise.
 	 */
-    public boolean equals(Object obj) {
-       if (!(obj instanceof Task))
-            return false;
-        if (obj == this)
-            return true;
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Task))
+			return false;
+		if (obj == this)
+			return true;
 
-        Task rhs = (Task) obj;
-        return (name.equals(rhs.name)) &&
-            (startTime == rhs.startTime) &&
-            (endTime == rhs.endTime) &&
-            (flag == rhs.flag) && 
-            (priority == rhs.priority);
-    }
-    
+		Task rhs = (Task) obj;
+		return (name.equals(rhs.name)) && (startTime == rhs.startTime) && (endTime == rhs.endTime) && (flag == rhs.flag)
+				&& (priority == rhs.priority);
+	}
+
 	/**
 	 * Compares this {@code Task} instance with another lexicographically and
 	 * numerically. The value returned is determined by the first difference in
@@ -278,7 +273,7 @@ public class Task {
 			return compareNameTo(rhs);
 		}
 	}
-    
+
 	/**
 	 * Compares the name of this {@code Task} instance with another.
 	 * 
@@ -293,7 +288,7 @@ public class Task {
 	 */
 	public int compareNameTo(Task rhs) {
 		int result = this.name.compareTo(rhs.name);
-		return checkForDuplication(rhs, result);
+		return handleDuplicatedAttributes(rhs, result);
 	}
 
 	/**
@@ -312,7 +307,7 @@ public class Task {
 		Long startTimeLongThis = new Long(this.startTime);
 		Long startTimeLongRhs = new Long(rhs.startTime);
 		int result = startTimeLongThis.compareTo(startTimeLongRhs);
-		return checkForDuplication(rhs, result);
+		return handleDuplicatedAttributes(rhs, result);
 	}
 
 	/**
@@ -331,7 +326,7 @@ public class Task {
 		Long endTimeLongThis = new Long(this.endTime);
 		Long endTimeLongRhs = new Long(rhs.endTime);
 		int result = endTimeLongThis.compareTo(endTimeLongRhs);
-		return checkForDuplication(rhs, result);
+		return handleDuplicatedAttributes(rhs, result);
 	}
 
 	/**
@@ -347,7 +342,7 @@ public class Task {
 	 */
 	public int compareFlagTo(Task rhs) {
 		int result = this.flag - rhs.flag;
-		return checkForDuplication(rhs, result);
+		return handleDuplicatedAttributes(rhs, result);
 	}
 
 	/**
@@ -364,7 +359,7 @@ public class Task {
 	 */
 	public int comparePriorityTo(Task rhs) {
 		int result = this.priority - rhs.priority;
-		return checkForDuplication(rhs, result);
+		return handleDuplicatedAttributes(rhs, result);
 	}
 
 	/**
@@ -385,26 +380,35 @@ public class Task {
 		return createTimeLongThis.compareTo(createTimeLongRhs);
 	}
 
-	private int checkForDuplication(Task rhs, int result) {
+	/**
+	 * Allow comparator to differentiate two duplicated attributes via its time
+	 * of creation
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * @param result
+	 *            result obtained from previous comparison
+	 * 
+	 * @return the original result if it is already different. Otherwise,
+	 *         difference in create time is returned
+	 */
+	private int handleDuplicatedAttributes(Task rhs, int result) {
 		if (result == 0) {
 			return compareCreateTime(rhs);
 		} else {
 			return result;
 		}
 	}
-	
+
 	/**
-	 * Represent this {@code Task} into a {@code String} format 
+	 * Represent this {@code Task} into a {@code String} format
 	 * 
 	 * @return a format such as {@code name|startTime|endTime|flag|priority}
 	 * 
 	 */
 	@Override
 	public String toString() {
-		return "" + name + 
-				TO_STRING_DELIMETER + startTime + 
-				TO_STRING_DELIMETER + endTime + 
-				TO_STRING_DELIMETER + flag + 
-				TO_STRING_DELIMETER + priority;
+		return "" + name + TO_STRING_DELIMETER + startTime + TO_STRING_DELIMETER + endTime + TO_STRING_DELIMETER + flag
+				+ TO_STRING_DELIMETER + priority;
 	}
 }
