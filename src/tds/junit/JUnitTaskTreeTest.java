@@ -3,6 +3,7 @@ import tds.Task;
 import tds.TaskTree;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -14,6 +15,7 @@ public class JUnitTaskTreeTest {
 	@SuppressWarnings("unused")
 	private static final int LAST_ELEMENT = 4;
 	private static final int NUM_OF_ITEMS = 5;
+	private static final int FIVE_SECONDS = 5000;
 	private String[] names = {
 			"Buy mushroom", 
 			"Buy milk", 
@@ -76,7 +78,19 @@ public class JUnitTaskTreeTest {
 	}
 
 	@Test
-	public void testRemoveElementsToTree () {
+	public void testBuildTreeFromCollection () {
+		Task temp;
+		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS); 
+		for (int i = 0; i < NUM_OF_ITEMS; i++) {
+			temp = new Task(names[i], startTimes[i], endTimes[i], flags[i], priorities[i]);
+			checkList.add(temp);
+		}
+		TaskTree taskTree = new TaskTree(checkList);
+		assertEquals(taskTree.getList(), checkList);
+	}
+	
+	@Test
+	public void testRemoveElementsFromTree () {
 		TaskTree taskTree = new TaskTree();
 		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS);
 		testAddElementsToTree(taskTree, checkList);
@@ -112,8 +126,84 @@ public class JUnitTaskTreeTest {
 		assertFalse(taskTree.remove(new Task("Dummy")));
 	}
 	
+	@Test
+	public void testQueryTime() {
+		TaskTree taskTree = new TaskTree();
+		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS);
+		testAddElementsToTree(taskTree, checkList);
+		
+		long lowerBound;
+		long upperBound;
+		ArrayList<Task> resultList;
+		
+		// Setting up test cases
+		// first item (inclusive) to more than last element (inclusive)
+		lowerBound = endTimes[FIRST_ELEMENT];
+		upperBound = endTimes[LAST_ELEMENT] + FIVE_SECONDS;
+		resultList = new ArrayList<Task>(taskTree.queryEndTime(lowerBound, upperBound));
+		assertTrue(resultList.size() == NUM_OF_ITEMS);
+		
+		// first item (inclusive) to last element (inclusive)
+		lowerBound = endTimes[FIRST_ELEMENT];
+		upperBound = endTimes[LAST_ELEMENT];
+		resultList = new ArrayList<Task>(taskTree.queryEndTime(lowerBound, upperBound));
+		assertTrue(resultList.size() == NUM_OF_ITEMS);
+		
+		
+		// lowerBound > upperBound
+		lowerBound = endTimes[LAST_ELEMENT];
+		upperBound = endTimes[FIRST_ELEMENT];
+		resultList = new ArrayList<Task>(taskTree.queryEndTime(lowerBound, upperBound));
+		assertTrue(resultList.size() == 0);
+		
+		// item less than first element (inclusive) to first item (inclusive)
+		lowerBound = endTimes[LAST_ELEMENT] - FIVE_SECONDS;
+		upperBound = endTimes[LAST_ELEMENT];
+		resultList = new ArrayList<Task>(taskTree.queryEndTime(lowerBound, upperBound));
+		assertTrue(resultList.size() == 1);
+	}
+	
+	@Test
+	public void testSearchFlagAndPriority() {
+		TaskTree taskTree = new TaskTree();
+		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS);
+		testAddElementsToTree(taskTree, checkList);
+		
+		int searchInt;
+		long lowerBound;
+		long upperBound;
+		ArrayList<Task> returnList;
+		
+		// Get done flag
+		searchInt = Task.FLAG_DONE;
+		returnList = new ArrayList<Task>(taskTree.searchFlag(searchInt));
+		assertEquals(returnList.size(), 1);
+		
+		// Get done flag
+		searchInt = Task.FLAG_NULL;
+		returnList = new ArrayList<Task>(taskTree.searchFlag(searchInt));
+		assertEquals(returnList.size(), 4);
+		
+		// Query done flag
+		lowerBound = Task.FLAG_NULL;
+		upperBound = Task.FLAG_DONE;
+		returnList = new ArrayList<Task>(taskTree.queryFlag((int)lowerBound,(int)upperBound));
+		assertEquals(returnList.size(), 5);
+		
+		// Query done flag
+		searchInt = Task.PRIORITY_HIGH;
+		returnList = new ArrayList<Task>(taskTree.queryPriority(searchInt,searchInt));
+		assertEquals(returnList.size(), 1);
+		
+		// Query priority normal
+		searchInt = Task.PRIORITY_NORMAL;
+		returnList = new ArrayList<Task>(taskTree.searchPriority(searchInt));
+		assertEquals(returnList.size(), 3);		
+	}
+	
+	
 	@SuppressWarnings("unused")
-	private void printList(ArrayList<Task> returnList) {
+	private void printList(List<Task> returnList) {
 		int index;
 		if (returnList.isEmpty()) {
 			System.out.println("No item in list");
@@ -123,17 +213,7 @@ public class JUnitTaskTreeTest {
 				System.out.println("" + index + ". " + returnList.get(i));
 			}
 		}
+		System.out.println();
 	}
 
-	@Test
-	public void testBuildTreeFromCollection () {
-		Task temp;
-		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS); 
-		for (int i = 0; i < NUM_OF_ITEMS; i++) {
-			temp = new Task(names[i], startTimes[i], endTimes[i], flags[i], priorities[i]);
-			checkList.add(temp);
-		}
-		TaskTree taskTree = new TaskTree(checkList);
-		assertEquals(taskTree.getList(), checkList);
-	}
 }
