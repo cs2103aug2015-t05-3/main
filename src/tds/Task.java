@@ -5,9 +5,9 @@
  */
 package tds;
 
-import java.util.Date;
-
 public class Task {
+	private static int taskNumber;
+	
 	public final static int FLAG_NULL = 0;
 	public final static int FLAG_DONE = 1;
 
@@ -45,7 +45,7 @@ public class Task {
 	 * which task is created will be used to differentiate duplicated value.
 	 */
 	public Task(String name, long startTime, long endTime, int flag, int priority) {
-		this.createTime = (new Date()).getTime();
+		this.createTime = taskNumber++;
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -301,7 +301,7 @@ public class Task {
 	 */
 	public int compareNameTo(Task rhs) {
 		int result = this.name.compareTo(rhs.name);
-		return handleDuplicatedAttributes(rhs, result);
+		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
 	/**
@@ -320,7 +320,7 @@ public class Task {
 		Long startTimeLongThis = new Long(this.startTime);
 		Long startTimeLongRhs = new Long(rhs.startTime);
 		int result = startTimeLongThis.compareTo(startTimeLongRhs);
-		return handleDuplicatedAttributes(rhs, result);
+		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
 	/**
@@ -339,7 +339,7 @@ public class Task {
 		Long endTimeLongThis = new Long(this.endTime);
 		Long endTimeLongRhs = new Long(rhs.endTime);
 		int result = endTimeLongThis.compareTo(endTimeLongRhs);
-		return handleDuplicatedAttributes(rhs, result);
+		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
 	/**
@@ -355,7 +355,7 @@ public class Task {
 	 */
 	public int compareFlagTo(Task rhs) {
 		int result = this.flag - rhs.flag;
-		return handleDuplicatedAttributes(rhs, result);
+		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
 	/**
@@ -372,7 +372,7 @@ public class Task {
 	 */
 	public int comparePriorityTo(Task rhs) {
 		int result = this.priority - rhs.priority;
-		return handleDuplicatedAttributes(rhs, result);
+		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
 	/**
@@ -390,7 +390,11 @@ public class Task {
 	public int compareCreateTimeTo(Task rhs) {
 		Long createTimeLongThis = new Long(this.createTime);
 		Long createTimeLongRhs = new Long(rhs.createTime);
-		return createTimeLongThis.compareTo(createTimeLongRhs);
+		int result = createTimeLongThis.compareTo(createTimeLongRhs);
+		if (result == 0) {
+			System.out.println("" + createTimeLongThis + " == " + createTimeLongRhs);
+		}
+		return result;
 	}
 
 	/**
@@ -405,9 +409,9 @@ public class Task {
 	 * @return the original result if it is already different. Otherwise,
 	 *         difference in create time is returned
 	 */
-	private int handleDuplicatedAttributes(Task rhs, int result) {
+	private static int handleDuplicatedAttributes(Task lhs, Task rhs, int result) {
 		if (result == 0) {
-			return compareCreateTimeTo(rhs);
+			return lhs.compareCreateTimeTo(rhs);
 		} else {
 			return result;
 		}
@@ -421,7 +425,11 @@ public class Task {
 	 */
 	@Override
 	public String toString() {
-		return "" + name + TO_STRING_DELIMETER + startTime + TO_STRING_DELIMETER + endTime + TO_STRING_DELIMETER + flag
-				+ TO_STRING_DELIMETER + priority;
+		return "" + name + TO_STRING_DELIMETER + 
+				startTime + TO_STRING_DELIMETER + 
+				endTime + TO_STRING_DELIMETER + 
+				flag + TO_STRING_DELIMETER + 
+				priority + TO_STRING_DELIMETER + 
+				createTime;
 	}
 }
