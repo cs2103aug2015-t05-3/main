@@ -1,7 +1,11 @@
 package tds.junit;
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 import tds.Task;
+import tds.TaskAttributeConstants;
+import tds.TaskTree;
 
 public class JUnitTaskTreeTest {
 	private static final int FIRST_ELEMENT = 0;
@@ -46,7 +50,18 @@ public class JUnitTaskTreeTest {
 
 	@Test
 	public void testAddElementsToTree () {
+		TaskTree list = new TaskTree();
 		
+		for (int i = 0; i < NUM_OF_ITEMS; i++) {
+			list.add(new Task(names[i], startTimes[i], endTimes[i], flags[i], priorities[i]));
+		}
+		
+		System.out.println(new ArrayList<Task>(list.getSortedList(TaskAttributeConstants.NAME)));
+		System.out.println(new ArrayList<Task>(list.getSortedList(TaskAttributeConstants.FLAG)));
+		System.out.println(new ArrayList<Task>(list.getSortedList(TaskAttributeConstants.END_TIME)));
+		System.out.println(new ArrayList<Task>(list.getSortedList(TaskAttributeConstants.ID)));
+		System.out.println(list.toString(TaskAttributeConstants.END_TIME));
+		System.out.println(list);
 	}
 
 }

@@ -23,7 +23,7 @@ public class Task {
 
 	public final static int GET_VALUE_INVALID = -1;
 	public final static Object GET_VALUE_NULL = null;
-	public final static long GET_VALUE_CREATE_TIME = TaskAttributeConstants.CREATE_TIME;
+	public final static long GET_VALUE_ID = TaskAttributeConstants.ID;
 	public final static long GET_VALUE_START_TIME = TaskAttributeConstants.START_TIME;
 	public final static long GET_VALUE_END_TIME = TaskAttributeConstants.END_TIME;
 	public final static int GET_VALUE_FLAG = TaskAttributeConstants.FLAG;
@@ -32,7 +32,7 @@ public class Task {
 
 	public final static String TO_STRING_DELIMETER = "|";
 
-	private long createTime;
+	private int id;
 	private String name;
 	private long startTime;
 	private long endTime;
@@ -41,11 +41,11 @@ public class Task {
 
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
-	 * name, starting time, ending time, flag and priority as the argument. Time
-	 * which task is created will be used to differentiate duplicated value.
+	 * name, starting time, ending time, flag and priority as the argument. An
+	 * internal id will be used to differentiate duplicated value.
 	 */
 	public Task(String name, long startTime, long endTime, int flag, int priority) {
-		this.createTime = taskNumber++;
+		this.id = taskNumber++;
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -115,12 +115,12 @@ public class Task {
 	}
 
 	/**
-	 * Returns the create time of this task in {@code long}.
+	 * Returns the id of this task in {@code long}.
 	 * 
-	 * @return the createTime
+	 * @return the id
 	 */
-	public long getCreateTime() {
-		return createTime;
+	public long getId() {
+		return id;
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class Task {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (createTime ^ (createTime >>> 32));
+		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 
@@ -376,29 +376,27 @@ public class Task {
 	}
 
 	/**
-	 * Compares the create time of this {@code Task} instance with another.
+	 * Compares the ID of this {@code Task} instance with another.
 	 * 
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
 	 * 
-	 * @return the value 0 if the create time of this {@code Task} is equal to
-	 *         the argument {@code Task}; a value less than 0 if this create
-	 *         time is numerically less than the argument create time; a value
-	 *         greater than 0 this create time is numerically greater than the
-	 *         argument create time.
+	 * @return the value 0 if the ID of this {@code Task} is equal to
+	 *         the argument {@code Task}; a value less than 0 if this ID
+	 *         is numerically less than the argument ID; a value
+	 *         greater than 0 this ID is numerically greater than the
+	 *         argument ID.
 	 */
-	public int compareCreateTimeTo(Task rhs) {
-		Long createTimeLongThis = new Long(this.createTime);
-		Long createTimeLongRhs = new Long(rhs.createTime);
-		int result = createTimeLongThis.compareTo(createTimeLongRhs);
+	public int compareIdTo(Task rhs) {
+		int result = this.id - rhs.id;
 		if (result == 0) {
-			System.out.println("" + createTimeLongThis + " == " + createTimeLongRhs);
+			System.out.println("" + this.id + " == " + rhs.id);
 		}
 		return result;
 	}
 
 	/**
-	 * Allow comparator to differentiate two duplicated attributes via its time
+	 * Allow comparator to differentiate two duplicated attributes via its ID
 	 * of creation
 	 * 
 	 * @param rhs
@@ -407,11 +405,11 @@ public class Task {
 	 *            result obtained from previous comparison
 	 * 
 	 * @return the original result if it is already different. Otherwise,
-	 *         difference in create time is returned
+	 *         the difference in ID is returned
 	 */
 	private static int handleDuplicatedAttributes(Task lhs, Task rhs, int result) {
 		if (result == 0) {
-			return lhs.compareCreateTimeTo(rhs);
+			return lhs.compareIdTo(rhs);
 		} else {
 			return result;
 		}
@@ -430,6 +428,6 @@ public class Task {
 				endTime + TO_STRING_DELIMETER + 
 				flag + TO_STRING_DELIMETER + 
 				priority + TO_STRING_DELIMETER + 
-				createTime;
+				id;
 	}
 }
