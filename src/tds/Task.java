@@ -209,6 +209,17 @@ public class Task {
 		this.priority = priority;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (createTime ^ (createTime >>> 32));
+		return result;
+	}
+
 	/**
 	 * Determines whether or not two task are equal. The two tasks are equal if
 	 * the values name, start time, end time, flag and priority are equal.
@@ -219,6 +230,7 @@ public class Task {
 	 * @return {@code true} if the object to be compared is an instance of Task
 	 *         and has the same values; false otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Task))
 			return false;
@@ -230,6 +242,7 @@ public class Task {
 				&& (priority == rhs.priority);
 	}
 
+	//TODO Check for removal of this method.
 	/**
 	 * Compares this {@code Task} instance with another lexicographically and
 	 * numerically. The value returned is determined by the first difference in
