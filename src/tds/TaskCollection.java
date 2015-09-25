@@ -10,9 +10,9 @@ import java.util.List;
 
 interface TaskCollection<E> {
 	
-	public void add(E task);
-	public E remove(E task);
-	public E replace(E taskOld, E taskNew);
+	public boolean add(E task);
+	public boolean remove(E task);
+	public boolean replace(E taskOld, E taskNew);
 	public List<E> searchName(String searchTerm);
 	public List<E> queryStartTime(long startTimeUpperBound, long startTimeLowerBound);
 	public List<E> queryEndTime(long endTimeUpperBound, long endTimeLowerBound);

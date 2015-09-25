@@ -45,36 +45,45 @@ public class TaskTree implements TaskCollection<Task> {
 	}
 
 	@Override
-	public void add(Task task) {
+	public boolean add(Task task) {
+		boolean isAdded = true;
 		for (TreeSet<Task> tree : taskTrees) {
-			tree.add(task);
+			if (!tree.add(task)) {
+				isAdded = false;
+			}
 		}		
 		increaseTaskListSize();
+		return isAdded;
 	}
 
 	@Override
-	public Task remove(Task task) {
-		Task temp = task;
+	public boolean remove(Task task) {
+		boolean isRemoved = true;
 		for (TreeSet<Task> tree : taskTrees) {
-			tree.remove(task);
+			if (!tree.remove(task)) {
+				isRemoved = false;
+			}
 		}
 		decreaseTaskListSize();
-		return temp;
+		return isRemoved;
 	}
 
 	@Override
-	public Task replace(Task taskOld, Task taskNew) {
-		Task temp = taskOld;
-		remove(taskOld);
-		add(taskNew);
-		return temp;
+	public boolean replace(Task taskOld, Task taskNew) {
+		boolean isReplaced;
+		
+		boolean isRemoved = remove(taskOld);
+		boolean isAdded = add(taskNew);
+		
+		isReplaced = isRemoved && isAdded;
+		return isReplaced;
 	}
 
 	@Override
 	public List<Task> searchName(String searchTerm) {
 		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
 		
-		boolean isCaseInsensitive = isLowercase(searchTerm);
+		boolean isCaseInsensitive = checkLowercase(searchTerm);
 		String checkString;
 		
 		for (Task task : taskTrees.get(TASK_NAME_TREE)) {
@@ -91,7 +100,7 @@ public class TaskTree implements TaskCollection<Task> {
 		return resultList;
 	}
 
-	private boolean isLowercase(String text) {
+	private boolean checkLowercase(String text) {
 		int textLength = text.length();
 		char charInText;
 		
@@ -142,6 +151,10 @@ public class TaskTree implements TaskCollection<Task> {
 		taskTree.ceiling(upperBound);
 		
 		return new ArrayList<Task>(taskTree.subSet(lowerBound, upperBound));
+	}
+	
+	public List<Task> getList() {
+		return getSortedList(taskTrees.get(TaskAttributeConstants.ID));
 	}
 	
 	public List<Task> getSortedList(int treeIndex) {
