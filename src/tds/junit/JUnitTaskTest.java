@@ -2,6 +2,8 @@ package tds.junit;
 import org.junit.Test;
 
 import tds.Task;
+import tds.Task.FLAG_TYPE;
+import tds.Task.PRIORITY_TYPE;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -27,8 +29,8 @@ public class JUnitTaskTest {
 	private long startTime	= nowTime.getTime() % 1000;
 	private long endTime	= startTime + (2 * HOUR);
 	
-	private int flag = Task.FLAG_NULL;
-	private int priority = Task.PRIORITY_NORMAL;
+	private FLAG_TYPE flag = Task.FLAG_TYPE.NULL;
+	private PRIORITY_TYPE priority = Task.PRIORITY_TYPE.NORMAL;
 	
 	// Setting up different task conditions
 	private static final int TASK_ORIGINAL = 0;
@@ -44,10 +46,10 @@ public class JUnitTaskTest {
 	Task[] tasks = {new Task(taskName, startTime, endTime, flag, priority),
 			new Task(taskName, startTime, endTime, flag, priority),
 			new Task(taskNameLowCase, startTime, endTime, flag, priority),
-			new Task(taskName, startTime, endTime, Task.FLAG_DONE, priority),
+			new Task(taskName, startTime, endTime, Task.FLAG_TYPE.DONE, priority),
 			new Task(taskNameDiff, startTime, startTime, flag, priority),
 			new Task(taskNameDiff, startTime, endTime, flag, priority),
-			new Task(taskNameDiff, startTime, endTime, flag, Task.PRIORITY_VERY_HIGH)
+			new Task(taskNameDiff, startTime, endTime, flag, Task.PRIORITY_TYPE.VERY_HIGH)
 			};
 	
 	@Test
@@ -79,14 +81,14 @@ public class JUnitTaskTest {
 		int testSameTask, testDiffCase, testDiffName, testDiffTime, testDiffFlag, testDiffPriority;
 		
 		testSameTask = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_SAME_TASK]);
-		testDiffCase = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_LOW_CASE]);
-		testDiffName = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_DIFF_NAME]);
-		testDiffTime = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_DIFF_TIME]);
-		testDiffFlag = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_IS_DONE]);
-		testDiffPriority = tasks[TASK_ORIGINAL].compareTo(tasks[TASK_DIFF_PRIORITY]);
+		testDiffCase = tasks[TASK_ORIGINAL].compareNameTo(tasks[TASK_LOW_CASE]);
+		testDiffName = tasks[TASK_ORIGINAL].compareNameTo(tasks[TASK_DIFF_NAME]);
+		testDiffTime = tasks[TASK_ORIGINAL].compareEndTimeTo(tasks[TASK_DIFF_TIME]);
+		testDiffFlag = tasks[TASK_ORIGINAL].compareFlagTo(tasks[TASK_IS_DONE]);
+		testDiffPriority = tasks[TASK_ORIGINAL].comparePriorityTo(tasks[TASK_DIFF_PRIORITY]);
 		
 		// Evaluate test cases
-		assertTrue(testSameTask == 0);
+		assertTrue(testSameTask < 0);		// "TASK_ORIGINAL is created earlier than TASK_SAME_TASK"
 		assertTrue(testDiffCase < 0);		// "Buy Milk tonight" is smaller than "buy milk tomorrow"
 		assertTrue(testDiffName > 0);		// "Buy Milk tonight" is greater than "Buy Milk tomorrow"
 		assertTrue(testDiffTime > 0);		// "2 * HOUR" is greater than "0"

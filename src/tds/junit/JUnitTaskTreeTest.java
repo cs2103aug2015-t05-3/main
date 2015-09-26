@@ -1,5 +1,7 @@
 package tds.junit;
 import tds.Task;
+import tds.Task.FLAG_TYPE;
+import tds.Task.PRIORITY_TYPE;
 import tds.TaskTree;
 
 import java.util.ArrayList;
@@ -42,19 +44,19 @@ public class JUnitTaskTreeTest {
 			1443112320000L, // 24 Sep 2015 16:32:00
 			1444059228000L	// 05 Oct 2015 15:33:48
 			};
-	private int[] flags = {
-			Task.FLAG_DONE,
-			Task.FLAG_NULL,
-			Task.FLAG_NULL,
-			Task.FLAG_NULL,
-			Task.FLAG_NULL
+	private FLAG_TYPE[] flags = {
+			Task.FLAG_TYPE.DONE,
+			Task.FLAG_TYPE.NULL,
+			Task.FLAG_TYPE.NULL,
+			Task.FLAG_TYPE.NULL,
+			Task.FLAG_TYPE.NULL
 			};
-	private int[] priorities = {
-			Task.PRIORITY_NORMAL,
-			Task.PRIORITY_HIGH,
-			Task.PRIORITY_NORMAL,
-			Task.PRIORITY_VERY_HIGH,
-			Task.PRIORITY_NORMAL
+	private PRIORITY_TYPE[] priorities = {
+			Task.PRIORITY_TYPE.NORMAL,
+			Task.PRIORITY_TYPE.HIGH,
+			Task.PRIORITY_TYPE.NORMAL,
+			Task.PRIORITY_TYPE.VERY_HIGH,
+			Task.PRIORITY_TYPE.NORMAL
 			};
 
 	private void testAddElementsToTree(TaskTree taskTree, ArrayList<Task> checkList) {
@@ -219,35 +221,37 @@ public class JUnitTaskTreeTest {
 		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS);
 		testAddElementsToTree(taskTree, checkList);
 		
-		int searchInt;
-		long lowerBound;
-		long upperBound;
+		FLAG_TYPE searchFlag;
+		FLAG_TYPE lowerBoundFlag;
+		FLAG_TYPE upperBoundFlag;
+		
+		PRIORITY_TYPE searchPriority;
 		ArrayList<Task> returnList;
 		
 		// Get done flag
-		searchInt = Task.FLAG_DONE;
-		returnList = new ArrayList<Task>(taskTree.searchFlag(searchInt));
+		searchFlag = Task.FLAG_TYPE.DONE;
+		returnList = new ArrayList<Task>(taskTree.searchFlag(searchFlag));
 		assertEquals(returnList.size(), 1);
 		
 		// Get done flag
-		searchInt = Task.FLAG_NULL;
-		returnList = new ArrayList<Task>(taskTree.searchFlag(searchInt));
+		searchFlag = Task.FLAG_TYPE.NULL;
+		returnList = new ArrayList<Task>(taskTree.searchFlag(searchFlag));
 		assertEquals(returnList.size(), 4);
 		
 		// Query done flag
-		lowerBound = Task.FLAG_NULL;
-		upperBound = Task.FLAG_DONE;
-		returnList = new ArrayList<Task>(taskTree.queryFlag((int)lowerBound,(int)upperBound));
+		lowerBoundFlag = Task.FLAG_TYPE.NULL;
+		upperBoundFlag = Task.FLAG_TYPE.DONE;
+		returnList = new ArrayList<Task>(taskTree.queryFlag(lowerBoundFlag,upperBoundFlag));
 		assertEquals(returnList.size(), 5);
 		
 		// Query done flag
-		searchInt = Task.PRIORITY_HIGH;
-		returnList = new ArrayList<Task>(taskTree.queryPriority(searchInt,searchInt));
+		searchPriority = Task.PRIORITY_TYPE.HIGH;
+		returnList = new ArrayList<Task>(taskTree.queryPriority(searchPriority,searchPriority));
 		assertEquals(returnList.size(), 1);
 		
 		// Query priority normal
-		searchInt = Task.PRIORITY_NORMAL;
-		returnList = new ArrayList<Task>(taskTree.searchPriority(searchInt));
+		searchPriority = Task.PRIORITY_TYPE.NORMAL;
+		returnList = new ArrayList<Task>(taskTree.searchPriority(searchPriority));
 		assertEquals(returnList.size(), 3);		
 	}
 	
