@@ -115,6 +115,8 @@ public class TaskTree implements TaskCollection<Task> {
 	 * 
 	 * @param task
 	 *            to be modified from this collection
+	 * @param newValue
+	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
 	public boolean updateName(Task task, String newValue) {
@@ -127,6 +129,8 @@ public class TaskTree implements TaskCollection<Task> {
 	 * 
 	 * @param task
 	 *            to be modified from this collection
+	 * @param newValue
+	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
 	public boolean updateStartTime(Task task, long newValue) {
@@ -139,6 +143,8 @@ public class TaskTree implements TaskCollection<Task> {
 	 * 
 	 * @param task
 	 *            to be modified from this collection
+	 * @param newValue
+	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
 	public boolean updateEndTime(Task task, long newValue) {
@@ -151,6 +157,8 @@ public class TaskTree implements TaskCollection<Task> {
 	 * 
 	 * @param task
 	 *            to be modified from this collection
+	 * @param newValue
+	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
 	public boolean updateFlag(Task task, int newValue) {
@@ -163,6 +171,8 @@ public class TaskTree implements TaskCollection<Task> {
 	 * 
 	 * @param task
 	 *            to be modified from this collection
+	 * @param newValue
+	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
 	public boolean updatePriority(Task task, int newValue) {
