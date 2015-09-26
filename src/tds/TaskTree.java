@@ -27,10 +27,12 @@ public class TaskTree {
 	private static final int TASK_FLAG_TREE = Attributes.TYPE.FLAG.getValue();
 	private static final int TASK_PRIORITY_TREE = Attributes.TYPE.PRIORITY.getValue();
 	private static final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
-	private static final int SIZE_OF_TASK_TREES = 6;
+	private static final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
 
 	private static ArrayList<TreeSet<Task>> taskTrees;
 	private static int taskTreeSize;
+
+	// For managing comparable argument during query
 	private static Task fromValueHandler;
 
 	private static final String TO_STRING_OPEN = "[";
@@ -38,8 +40,8 @@ public class TaskTree {
 	private static final String TO_STRING_DELIMETER = ",";
 
 	/**
-	 * Initialize a new, empty tree set, sorted according to the ordering of each
-	 * attributes in the task.
+	 * Initialize a new, empty tree set, sorted according to the ordering of
+	 * each attributes in the task.
 	 */
 	public static void init() {
 		taskTreeSize = 0;
@@ -53,12 +55,15 @@ public class TaskTree {
 		taskTrees.add(TASK_CREATE_TIME_TREE, new TreeSet<Task>(new IdComparator()));
 
 		fromValueHandler = new Task("");
+
+		// Fill TaskTree from file storage
+		pullFromStorage();
 	}
 
 	/**
-	 * Initialize new tree sets containing the {@code Task} objects in the specified
-	 * {@code TaskTree}, sorted according according to the ordering of each attributes
-	 * in the task.
+	 * Initialize new tree sets containing the {@code Task} objects in the
+	 * specified {@code TaskTree}, sorted according according to the ordering of
+	 * each attributes in the task.
 	 * 
 	 * @param collection
 	 *            whose {@code Task} objects will comprise the new set
@@ -73,10 +78,10 @@ public class TaskTree {
 	/**
 	 * Adds the specified {@code Task} object to this {@code TaskTree}
 	 * 
-	 * @param {@code Task} object
+	 * @param task
 	 *            to be added to this {@code TaskTree}
-	 * @return true if this {@code TaskTree} did not already contain the specified
-	 *         {@code Task} object
+	 * @return true if this {@code TaskTree} did not already contain the
+	 *         specified {@code Task} object
 	 */
 	public static boolean add(Task task) {
 		boolean isAdded = true;
@@ -86,15 +91,17 @@ public class TaskTree {
 			}
 		}
 		increaseTaskListSize();
+		pushToStorage();
 		return isAdded;
 	}
 
 	/**
 	 * Removes the specified {@code Task} object to this {@code TaskTree}
 	 * 
-	 * @param {@code Task} object
+	 * @param task
 	 *            to be removed from this {@code TaskTree}
-	 * @return true if this {@code TaskTree} contained the specified {@code Task} object
+	 * @return true if this {@code TaskTree} contained the specified
+	 *         {@code Task} object
 	 */
 	public static boolean remove(Task task) {
 		boolean isRemoved = true;
@@ -104,20 +111,22 @@ public class TaskTree {
 			}
 		}
 		decreaseTaskListSize();
+		pushToStorage();
 		return isRemoved;
 	}
 
 	/**
-	 * Replace an old {@code Task} object from this {@code TaskTree} with a new {@code Task} object. The new
-	 * {@code Task} object will be treated as a newly created task.
+	 * Replace an old {@code Task} object from this {@code TaskTree} with a new
+	 * {@code Task} object. The new {@code Task} object will be treated as a
+	 * newly created task.
 	 * 
-	 * @param oldE
+	 * @param oldTask
 	 *            to be replaced from this {@code TaskTree}
-	 * @param newE
+	 * @param newTask
 	 *            to replace the old {@code Task} object
 	 * 
-	 * @return true if this {@code TaskTree} contained the old {@code Task} object and can be
-	 *         replaced by the new {@code Task} object
+	 * @return true if this {@code TaskTree} contained the old {@code Task}
+	 *         object and can be replaced by the new {@code Task} object
 	 */
 	public static boolean replace(Task oldTask, Task newTask) {
 
@@ -137,14 +146,15 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given new name or
-	 * description
+	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * new name or description
 	 * 
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
 	 *            to update this task
-	 * @return true if this {@code TaskTree} contained the task and can be modified
+	 * @return true if this {@code TaskTree} contained the task and can be
+	 *         modified
 	 */
 	public static boolean updateName(Task task, String newValue) {
 		task.setName(newValue);
@@ -152,13 +162,15 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given new start time
+	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * new start time
 	 * 
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
 	 *            to update this task
-	 * @return true if this {@code TaskTree} contained the task and can be modified
+	 * @return true if this {@code TaskTree} contained the task and can be
+	 *         modified
 	 */
 	public static boolean updateStartTime(Task task, long newValue) {
 		task.setStartTime(newValue);
@@ -166,13 +178,15 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given new end time
+	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * new end time
 	 * 
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
 	 *            to update this task
-	 * @return true if this {@code TaskTree} contained the task and can be modified
+	 * @return true if this {@code TaskTree} contained the task and can be
+	 *         modified
 	 */
 	public static boolean updateEndTime(Task task, long newValue) {
 		task.setEndTime(newValue);
@@ -180,13 +194,15 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given new flag
+	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * new flag
 	 * 
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
 	 *            to update this task
-	 * @return true if this {@code TaskTree} contained the task and can be modified
+	 * @return true if this {@code TaskTree} contained the task and can be
+	 *         modified
 	 */
 	public static boolean updateFlag(Task task, FLAG_TYPE newValue) {
 		task.setFlag(newValue);
@@ -194,13 +210,15 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given new priority
+	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * new priority
 	 * 
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
 	 *            to update this task
-	 * @return true if this {@code TaskTree} contained the task and can be modified
+	 * @return true if this {@code TaskTree} contained the task and can be
+	 *         modified
 	 */
 	public static boolean updatePriority(Task task, PRIORITY_TYPE newValue) {
 		task.setPriority(newValue);
@@ -211,23 +229,24 @@ public class TaskTree {
 		boolean isReplaced = true;
 
 		int treeType = taskAttributeType.getValue();
-		
+
 		isReplaced &= taskTrees.get(treeType).remove(oldTask);
 		isReplaced &= taskTrees.get(treeType).add(newTask);
 
+		pushToStorage();
 		return isReplaced;
 	}
 
 	/**
-	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task} objects contain
-	 * the {@code searchTerm}. The returned {@code List} is backed by this
-	 * {@code TaskTree}, so changes in the returned {@code List} are reflected in this
-	 * {@code TaskTree}, and vice-versa.
+	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
+	 * objects contain the {@code searchTerm}. The returned {@code List} is
+	 * backed by this {@code TaskTree}, so changes in the returned {@code List}
+	 * are reflected in this {@code TaskTree}, and vice-versa.
 	 *
-	 * @param str
+	 * @param searchTerm
 	 *            the sequence to search for
-	 * @return a view of the portion of this {@code TaskTree} whose {@code Task} object contain
-	 *         the {@code searchTerm}
+	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
+	 *         object contain the {@code searchTerm}
 	 */
 	public static List<Task> searchName(String searchTerm) {
 		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
@@ -263,100 +282,107 @@ public class TaskTree {
 	}
 
 	/**
-	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 * from {@code fromStartTime}, inclusive, to {@code toStartTime}, inclusive.
-	 * (If {@code fromStartTime} and {@code toStartTime} are equal, the returned
-	 * {@code List} contains {@code Task} object that matches {@code fromEndTime}.) The
-	 * returned {@code List} is backed by this {@code TaskTree}, so changes in the
-	 * returned {@code List} are reflected in this {@code TaskTree}, and vice-versa.
+	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
+	 * objects range from {@code fromStartTime}, inclusive, to
+	 * {@code toStartTime}, inclusive. (If {@code fromStartTime} and
+	 * {@code toStartTime} are equal, the returned {@code List} contains
+	 * {@code Task} object that matches {@code fromEndTime}.) The returned
+	 * {@code List} is backed by this {@code TaskTree}, so changes in the
+	 * returned {@code List} are reflected in this {@code TaskTree}, and
+	 * vice-versa.
 	 * 
 	 * @param fromStartTime
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toStartTime
 	 *            high endpoint (inclusive) of the returned list
-	 * @return a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 *         from {@code fromStartTime}, inclusive, to {@code toStartTime},
-	 *         inclusive
+	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
+	 *         objects range from {@code fromStartTime}, inclusive, to
+	 *         {@code toStartTime}, inclusive
 	 */
 	public static List<Task> queryStartTime(long fromStartTime, long toStartTime) {
 		return query(TYPE.START_TIME, fromStartTime, toStartTime);
 	}
 
 	/**
-	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 * from {@code fromEndTime}, inclusive, to {@code toEnd}Time, inclusive. (If
-	 * {@code fromEndTime} and {@code toEndTime} are equal, the returned
-	 * {@code List} contains {@code Task} object that matches {@code fromEndTime} only.) The
-	 * returned {@code List} is backed by this {@code TaskTree}, so changes in the
-	 * returned {@code List} are reflected in this {@code TaskTree}, and vice-versa.
+	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
+	 * objects range from {@code fromEndTime}, inclusive, to {@code toEnd}Time,
+	 * inclusive. (If {@code fromEndTime} and {@code toEndTime} are equal, the
+	 * returned {@code List} contains {@code Task} object that matches
+	 * {@code fromEndTime} only.) The returned {@code List} is backed by this
+	 * {@code TaskTree}, so changes in the returned {@code List} are reflected
+	 * in this {@code TaskTree}, and vice-versa.
 	 * 
 	 * @param fromEndTime
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toEndTime
 	 *            high endpoint (inclusive) of the returned list
-	 * @return a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 *         from {@code fromEndTime}, inclusive, to {@code toEndTime},
-	 *         inclusive
+	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
+	 *         objects range from {@code fromEndTime}, inclusive, to
+	 *         {@code toEndTime}, inclusive
 	 */
 	public static List<Task> queryEndTime(long fromEndTime, long toEndTime) {
 		return query(TYPE.END_TIME, fromEndTime, toEndTime);
 	}
 
 	/**
-	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 * from {@code fromFlag}, inclusive, to {@code toFlag}, inclusive. (If
-	 * {@code fromFlag} and {@code toFlag} are equal, the returned {@code List}
-	 * contains {@code Task} object that matches {@code fromFlag} only.) The returned
-	 * {@code List} is backed by this {@code TaskTree}, so changes in the returned
-	 * {@code List} are reflected in this {@code TaskTree}, and vice-versa.
+	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
+	 * objects range from {@code fromFlag}, inclusive, to {@code toFlag},
+	 * inclusive. (If {@code fromFlag} and {@code toFlag} are equal, the
+	 * returned {@code List} contains {@code Task} object that matches
+	 * {@code fromFlag} only.) The returned {@code List} is backed by this
+	 * {@code TaskTree}, so changes in the returned {@code List} are reflected
+	 * in this {@code TaskTree}, and vice-versa.
 	 * 
 	 * @param fromFlag
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toFlag
 	 *            high endpoint (inclusive) of the returned list
-	 * @return a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 *         from {@code fromFlag}, inclusive, to {@code toFlag}, inclusive
+	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
+	 *         objects range from {@code fromFlag}, inclusive, to {@code toFlag}
+	 *         , inclusive
 	 */
 	public static List<Task> queryFlag(FLAG_TYPE fromFlag, FLAG_TYPE toFlag) {
-		
+
 		int fromValue = fromFlag.getValue();
 		int toValue = toFlag.getValue();
-		
+
 		return query(TYPE.FLAG, fromValue, toValue);
 	}
 
 	/**
-	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 * from {@code fromPriority}, inclusive, to {@code toPriority}, inclusive.
-	 * (If {@code fromPriority} and {@code toPriority} are equal, the returned
-	 * {@code List} contains {@code Task} object that matches {@code fromPriority} only.)
-	 * The returned {@code List} is backed by this {@code TaskTree}, so changes in the
-	 * returned {@code List} are reflected in this {@code TaskTree}, and vice-versa.
+	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
+	 * objects range from {@code fromPriority}, inclusive, to {@code toPriority}
+	 * , inclusive. (If {@code fromPriority} and {@code toPriority} are equal,
+	 * the returned {@code List} contains {@code Task} object that matches
+	 * {@code fromPriority} only.) The returned {@code List} is backed by this
+	 * {@code TaskTree}, so changes in the returned {@code List} are reflected
+	 * in this {@code TaskTree}, and vice-versa.
 	 * 
 	 * @param fromPriority
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toPriority
 	 *            high endpoint (inclusive) of the returned list
-	 * @return a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 *         from {@code fromPriority}, inclusive, to {@code toPriority},
-	 *         inclusive
+	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
+	 *         objects range from {@code fromPriority}, inclusive, to
+	 *         {@code toPriority}, inclusive
 	 */
 	public static List<Task> queryPriority(PRIORITY_TYPE fromPriority, PRIORITY_TYPE toPriority) {
-		
+
 		int fromValue = fromPriority.getValue();
 		int toValue = toPriority.getValue();
-		
+
 		return query(TYPE.PRIORITY, fromValue, toValue);
 	}
 
 	/**
-	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 * from {@code fromValueL}, inclusive, to {@code toValueL}, inclusive given
-	 * the specified {@code taskAttributeType}. (If {@code fromValueL} and
-	 * {@code toValueL} are equal, the returned {@code List} contains {@code Task} object
-	 * that matches {@code fromValueL} only.) The returned {@code List} is
-	 * backed by this {@code TaskTree}, so changes in the returned {@code List} are
-	 * reflected in this {@code TaskTree}, and vice-versa.
+	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
+	 * objects range from {@code fromValueL}, inclusive, to {@code toValueL},
+	 * inclusive given the specified {@code taskAttributeType}. (If
+	 * {@code fromValueL} and {@code toValueL} are equal, the returned
+	 * {@code List} contains {@code Task} object that matches {@code fromValueL}
+	 * only.) The returned {@code List} is backed by this {@code TaskTree}, so
+	 * changes in the returned {@code List} are reflected in this
+	 * {@code TaskTree}, and vice-versa.
 	 * 
 	 * @param taskAttributeType
 	 *            the attribute type to be query with.
@@ -364,14 +390,14 @@ public class TaskTree {
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toValueL
 	 *            high endpoint (inclusive) of the returned list
-	 * @return a view of the portion of this {@code TaskTree} whose {@code Task} objects range
-	 *         from {@code fromValueL}, inclusive, to {@code toValueL},
-	 *         inclusive
+	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
+	 *         objects range from {@code fromValueL}, inclusive, to
+	 *         {@code toValueL}, inclusive
 	 */
 	public static List<Task> query(TYPE taskAttributeType, long fromValueL, long toValueL) {
 
 		int treeType = taskAttributeType.getValue();
-		
+
 		TreeSet<Task> taskTree = taskTrees.get(treeType);
 		ArrayList<Task> emptyList = new ArrayList<Task>();
 		boolean isToInclusive;
@@ -409,50 +435,50 @@ public class TaskTree {
 			return new ArrayList<Task>(taskTree.subSet(fromValueHandler, true, toValueHdlBuffer, isToInclusive));
 		}
 	}
-	
+
 	/**
-	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task} objects matches
-	 * the {@code flagSearch}. The returned {@code List} is backed by this
-	 * {@code TaskTree}, so changes in the returned {@code List} are reflected in this
-	 * {@code TaskTree}, and vice-versa.
+	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
+	 * objects matches the {@code flagSearch}. The returned {@code List} is
+	 * backed by this {@code TaskTree}, so changes in the returned {@code List}
+	 * are reflected in this {@code TaskTree}, and vice-versa.
 	 *
-	 * @param flagIndex
+	 * @param type
 	 *            to search for
-	 * @return a view of the portion of this {@code TaskTree} whose {@code Task} objects match the
-	 *         {@code flagSearch}
+	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
+	 *         objects match the {@code flagSearch}
 	 * @see tds.Task
 	 * 
 	 */
 	public static List<Task> searchFlag(FLAG_TYPE type) {
 		int flagValue = type.getValue();
-		
+
 		return query(TYPE.FLAG, flagValue, flagValue);
 	}
 
 	/**
-	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task} objects matches
-	 * the {@code prioritySearch}. The returned {@code List} is backed by this
-	 * {@code TaskTree}, so changes in the returned {@code List} are reflected in this
-	 * {@code TaskTree}, and vice-versa.
+	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
+	 * objects matches the {@code prioritySearch}. The returned {@code List} is
+	 * backed by this {@code TaskTree}, so changes in the returned {@code List}
+	 * are reflected in this {@code TaskTree}, and vice-versa.
 	 *
-	 * @param priorityIndex
+	 * @param type
 	 *            to search for
-	 * @return a view of the portion of this {@code TaskTree} whose {@code Task} objects match the
-	 *         {@code prioritySearch}
+	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
+	 *         objects match the {@code prioritySearch}
 	 * @see tds.Task
 	 * 
 	 */
 	public static List<Task> searchPriority(PRIORITY_TYPE type) {
 		int priorityValue = type.getValue();
-		
+
 		return query(TYPE.PRIORITY, priorityValue, priorityValue);
 	}
-	
+
 	/**
-	 * Returns a view of this {@code TaskTree} whose {@code Task} objects are sorted according to
-	 * order it is created. The returned {@code List} is backed by this
-	 * {@code TaskTree}, so changes in the returned {@code List} are reflected in this
-	 * {@code TaskTree}, and vice-versa.
+	 * Returns a view of this {@code TaskTree} whose {@code Task} objects are
+	 * sorted according to order it is created. The returned {@code List} is
+	 * backed by this {@code TaskTree}, so changes in the returned {@code List}
+	 * are reflected in this {@code TaskTree}, and vice-versa.
 	 *
 	 * @return a view of this {@code TaskTree}.
 	 */
@@ -462,19 +488,20 @@ public class TaskTree {
 	}
 
 	/**
-	 * Returns a view of this {@code TaskTree} whose {@code Task} objects are sorted according to
-	 * its specified attribute type. The returned {@code List} is backed by this
-	 * {@code TaskTree}, so changes in the returned {@code List} are reflected in this
-	 * {@code TaskTree}, and vice-versa.
+	 * Returns a view of this {@code TaskTree} whose {@code Task} objects are
+	 * sorted according to its specified attribute type. The returned
+	 * {@code List} is backed by this {@code TaskTree}, so changes in the
+	 * returned {@code List} are reflected in this {@code TaskTree}, and
+	 * vice-versa.
 	 *
 	 * @param taskAttributeType
 	 *            the attribute type to be sorted with.
-	 * @return a view of this {@code TaskTree} whose {@code Task} objects are sorted according to
-	 *         its specified attribute type.
+	 * @return a view of this {@code TaskTree} whose {@code Task} objects are
+	 *         sorted according to its specified attribute type.
 	 * @see tds.Attributes
 	 */
 	public static List<Task> getSortedList(TYPE taskAttributeType) {
-		
+
 		return getSortedList(taskTrees.get(taskAttributeType.getValue()));
 	}
 
@@ -487,37 +514,36 @@ public class TaskTree {
 	}
 
 	/**
-	 * Return a string representation of this task tree in a list.
+	 * Returns a string representation of this {@code TaskTree}. The string
+	 * representation consists of a list of the {@code TaskTree}'s {@code Task}
+	 * objects in the order they are returned by its iterator, enclosed in
+	 * square brackets ("[]"). Adjacent {@code Task} objects are separated by
+	 * the characters ", " (comma and space). {@code Task} objects are converted
+	 * to strings as by String.toString(Object).
 	 * 
 	 * @return a string representation of this task tree in a list.
-	 */
-
-	/**
-	 * Returns a string representation of this {@code TaskTree}. The string
-	 * representation consists of a list of the {@code TaskTree}'s {@code Task} objects in the
-	 * order they are returned by its iterator, enclosed in square brackets
-	 * ("[]"). Adjacent {@code Task} objects are separated by the characters ", " (comma and
-	 * space). {@code Task} objects are converted to strings as by String.toString(Object).
+	 * 
 	 */
 	public static String getString() {
 		return getString(Attributes.TYPE.ID);
 	}
 
 	/**
-	 * Return a string representation of this {@code TaskTree} sorted in order of the
-	 * specified {@code taskAttributeType}. The string representation consists
-	 * of a list of the {@code TaskTree}'s {@code Task} objects in the order they are returned by
-	 * its iterator, enclosed in square brackets ("[]"). Adjacent {@code Task} objects are
-	 * separated by the characters ", " (comma and space). {@code Task} objects are
-	 * converted to strings as by String.toString(Object).
+	 * Return a string representation of this {@code TaskTree} sorted in order
+	 * of the specified {@code taskAttributeType}. The string representation
+	 * consists of a list of the {@code TaskTree}'s {@code Task} objects in the
+	 * order they are returned by its iterator, enclosed in square brackets
+	 * ("[]"). Adjacent {@code Task} objects are separated by the characters
+	 * ", " (comma and space). {@code Task} objects are converted to strings as
+	 * by String.toString(Object).
 	 * 
 	 * @param taskAttributeType
 	 *            the attribute type to be printed.
 	 * @return a string representation of this task tree in a list.
 	 */
-	
+
 	public static String getString(TYPE taskAttributeType) {
-		
+
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(taskAttributeType));
 		int listSize = resultList.size();
 		int lastIndex = listSize - 1;
@@ -531,7 +557,6 @@ public class TaskTree {
 		return buffer;
 	}
 
-	
 	public static int size() {
 		return taskTreeSize;
 	}
@@ -542,5 +567,25 @@ public class TaskTree {
 
 	private static void decreaseTaskListSize() {
 		taskTreeSize -= 1;
+	}
+
+	/**
+	 * To update and store the Task file. This method is called if an operation
+	 * may cause changes in the {@code TaskTree} data structure. These
+	 * operations are {@code add, remove, update} and {@code replace}
+	 */
+	private static void pushToStorage() {
+		// TODO Generate task list from TaskTree
+		// ArrayList<Task> list = new ArrayList<Task>(getList());
+		// TODO Deliver task list to fileProcessor
+	}
+
+	/**
+	 * To retrieve task list the Task file. This method is called upon the
+	 * starting of this program.
+	 */
+	private static void pullFromStorage() {
+		// TODO Get task list from fileProcessor
+		// TODO Construct TaskTree with the given list
 	}
 }
