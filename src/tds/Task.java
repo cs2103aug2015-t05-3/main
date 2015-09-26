@@ -1,55 +1,77 @@
 package tds;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A task object used to store task name, time and different attributes.
+ * 
  * @author amoshydra
  */
 public class Task implements Comparable<Task> {
 	private static int taskNumber = 1;
 
 	/**
-	 * Field value for flag attribute indicating an unmarked flag.
+	 * Field value constant for flag attribute.
 	 */
-	public final static int FLAG_NULL = 0;
+	public enum FLAG_TYPE {
+		NULL(0), DONE(1);
+
+		private final int value;
+		
+		private FLAG_TYPE(int value) {
+			this.value = value;
+		}
+
+		int getValue() {
+			return value;
+		}
+		
+		private static final Map<Integer, FLAG_TYPE> lookup = new HashMap<Integer, FLAG_TYPE>();
+		static {
+			for (FLAG_TYPE f : EnumSet.allOf(FLAG_TYPE.class))
+				lookup.put(f.getValue(), f);
+		}
+
+		static FLAG_TYPE get(int value) {
+			return lookup.get(value);
+		}
+	};
+
 	/**
-	 * Field value for flag attribute indicating a marked done flag.
+	 * Field value constant for priority attribute.
 	 */
-	public final static int FLAG_DONE = 1;
+	public enum PRIORITY_TYPE {
+		VERY_HIGH(0), HIGH(1), ABOVE_NORMAL(2), NORMAL(3), BELOW_NORMAL(4), LOW(5), VERY_LOW(6);
+
+		private final int value;
+		
+		private PRIORITY_TYPE(int value) {
+			this.value = value;
+		}
+
+		int getValue() {
+			return value;
+		}
+		
+		private static final Map<Integer, PRIORITY_TYPE> lookup = new HashMap<Integer, PRIORITY_TYPE>();
+
+		static {
+			for (PRIORITY_TYPE p : EnumSet.allOf(PRIORITY_TYPE.class))
+				lookup.put(p.getValue(), p);
+		}
+
+		static PRIORITY_TYPE get(int value) {
+			return lookup.get(value);
+		}
+	};
 
 	/**
 	 * Field value for start time or end time attribute indicating an empty
 	 * date.
 	 */
 	public final static int DATE_NULL = 0;
-
-	/**
-	 * Field value for priority attribute indicating very high priority.
-	 */
-	public final static int PRIORITY_VERY_HIGH = 0;
-	/**
-	 * Field value for priority attribute indicating high priority.
-	 */
-	public final static int PRIORITY_HIGH = 1;
-	/**
-	 * Field value for priority attribute indicating above normal priority.
-	 */
-	public final static int PRIORITY_ABOVE_NORMAL = 2;
-	/**
-	 * Field value for priority attribute indicating normal priority.
-	 */
-	public final static int PRIORITY_NORMAL = 3;
-	/**
-	 * Field value for priority attribute indicating below normal priority.
-	 */
-	public final static int PRIORITY_BELOW_NORMAL = 4;
-	/**
-	 * Field value for priority attribute indicating low priority.
-	 */
-	public final static int PRIORITY_LOW = 5;
-	/**
-	 * Field value for priority attribute indicating very low priority.
-	 */
-	public final static int PRIORITY_VERY_LOW = 6;
 
 	/**
 	 * Field option for {@code getValue} to retrieve the ID of a {@code Task}.
@@ -88,8 +110,8 @@ public class Task implements Comparable<Task> {
 	private String name;
 	private long startTime;
 	private long endTime;
-	private int flag;
-	private int priority;
+	private FLAG_TYPE flag;
+	private PRIORITY_TYPE priority;
 
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
@@ -111,7 +133,7 @@ public class Task implements Comparable<Task> {
 	 *            the given priority field;
 	 * 
 	 */
-	public Task(String name, long startTime, long endTime, int flag, int priority) {
+	public Task(String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		this.id = taskNumber++;
 		this.name = name;
 		this.startTime = startTime;
@@ -129,7 +151,7 @@ public class Task implements Comparable<Task> {
 	 *            the name or description of the newly constructed {@code Task}
 	 */
 	public Task(String name) {
-		this(name, DATE_NULL, DATE_NULL, FLAG_NULL, PRIORITY_NORMAL);
+		this(name, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
 	}
 
 	/**
@@ -163,24 +185,6 @@ public class Task implements Comparable<Task> {
 			return getName();
 		} else {
 			return (String) RETURN_VALUE_NULL;
-		}
-	}
-
-	/**
-	 * Returns the value of the given option field.
-	 * 
-	 * @param option
-	 *            the given option field.
-	 * 
-	 * @return the value of the given option field.
-	 */
-	public int getValue(int option) {
-		if (option == GET_VALUE_FLAG) {
-			return getFlag();
-		} else if (option == GET_VALUE_PRIORITY) {
-			return getPriority();
-		} else {
-			return RETURN_VALUE_INVALID;
 		}
 	}
 
@@ -225,7 +229,7 @@ public class Task implements Comparable<Task> {
 	 * 
 	 * @return the flag of this task.
 	 */
-	public int getFlag() {
+	public FLAG_TYPE getFlag() {
 		return flag;
 	}
 
@@ -234,7 +238,7 @@ public class Task implements Comparable<Task> {
 	 * 
 	 * @return the priority of this task.
 	 */
-	public int getPriority() {
+	public PRIORITY_TYPE getPriority() {
 		return priority;
 	}
 
@@ -274,7 +278,7 @@ public class Task implements Comparable<Task> {
 	 * @param flag
 	 *            the new flag for the task.
 	 */
-	void setFlag(int flag) {
+	void setFlag(FLAG_TYPE flag) {
 		this.flag = flag;
 	}
 
@@ -284,7 +288,7 @@ public class Task implements Comparable<Task> {
 	 * @param priority
 	 *            the new priority for the task.
 	 */
-	void setPriority(int priority) {
+	void setPriority(PRIORITY_TYPE priority) {
 		this.priority = priority;
 	}
 
@@ -352,8 +356,8 @@ public class Task implements Comparable<Task> {
 		checkBits[TaskAttributeConstants.NAME] = (this.name.equals(rhs.name));
 		checkBits[TaskAttributeConstants.START_TIME] = (this.startTime - rhs.startTime == 0);
 		checkBits[TaskAttributeConstants.END_TIME] = (this.endTime - rhs.endTime == 0);
-		checkBits[TaskAttributeConstants.FLAG] = (this.flag - rhs.flag == 0);
-		checkBits[TaskAttributeConstants.PRIORITY] = (this.priority - rhs.priority == 0);
+		checkBits[TaskAttributeConstants.FLAG] = (this.flag.value - rhs.flag.value == 0);
+		checkBits[TaskAttributeConstants.PRIORITY] = (this.priority.value - rhs.priority.value == 0);
 		checkBits[TaskAttributeConstants.ID] = (this.compareIdTo(rhs) == 0);
 
 		return checkBits;
@@ -426,7 +430,7 @@ public class Task implements Comparable<Task> {
 	 *         this flag is numerically greater than the argument flag.
 	 */
 	public int compareFlagTo(Task rhs) {
-		int result = this.flag - rhs.flag;
+		int result = this.flag.value - rhs.flag.value;
 		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
@@ -443,7 +447,7 @@ public class Task implements Comparable<Task> {
 	 *         priority.
 	 */
 	public int comparePriorityTo(Task rhs) {
-		int result = this.priority - rhs.priority;
+		int result = this.priority.value - rhs.priority.value;
 		return handleDuplicatedAttributes(this, rhs, result);
 	}
 

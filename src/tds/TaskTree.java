@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.ArrayList;
 import tds.comparators.*;
+import tds.Task.FLAG_TYPE;
+import tds.Task.PRIORITY_TYPE;
 import tds.TaskAttributeConstants;
 
 /**
@@ -163,7 +165,7 @@ public class TaskTree implements TaskCollection<Task> {
 	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
-	public boolean updateFlag(Task task, int newValue) {
+	public boolean updateFlag(Task task, FLAG_TYPE newValue) {
 		task.setFlag(newValue);
 		return updateAttributeTree(task, task, TaskAttributeConstants.FLAG);
 	}
@@ -177,7 +179,7 @@ public class TaskTree implements TaskCollection<Task> {
 	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
-	public boolean updatePriority(Task task, int newValue) {
+	public boolean updatePriority(Task task, PRIORITY_TYPE newValue) {
 		task.setPriority(newValue);
 		return updateAttributeTree(task, task, TaskAttributeConstants.PRIORITY);
 	}
@@ -250,8 +252,12 @@ public class TaskTree implements TaskCollection<Task> {
 	 * @return a view of the portion of this collection whose elements range
 	 *         from {@code fromFlag}, inclusive, to {@code toFlag}, inclusive
 	 */
-	public List<Task> queryFlag(int fromFlag, int toFlag) {
-		return query(TASK_FLAG_TREE, fromFlag, toFlag);
+	public List<Task> queryFlag(FLAG_TYPE fromFlag, FLAG_TYPE toFlag) {
+		
+		int fromValue = fromFlag.getValue();
+		int toValue = toFlag.getValue();
+		
+		return query(TASK_FLAG_TREE, fromValue, toValue);
 	}
 
 	/**
@@ -270,8 +276,12 @@ public class TaskTree implements TaskCollection<Task> {
 	 *         from {@code fromPriority}, inclusive, to {@code toPriority},
 	 *         inclusive
 	 */
-	public List<Task> queryPriority(int fromPriority, int toPriority) {
-		return query(TASK_PRIORITY_TREE, fromPriority, toPriority);
+	public List<Task> queryPriority(PRIORITY_TYPE fromPriority, PRIORITY_TYPE toPriority) {
+		
+		int fromValue = fromPriority.getValue();
+		int toValue = toPriority.getValue();
+		
+		return query(TASK_PRIORITY_TREE, fromValue, toValue);
 	}
 
 	/**
@@ -321,12 +331,12 @@ public class TaskTree implements TaskCollection<Task> {
 				toValueHdlBuffer.setStartTime(toValueL);
 				break;
 			case TASK_PRIORITY_TREE:
-				fromValueHandler.setPriority((int) fromValueL);
-				toValueHdlBuffer.setPriority((int) toValueL);
+				fromValueHandler.setPriority(PRIORITY_TYPE.get((int) fromValueL));
+				toValueHdlBuffer.setPriority(PRIORITY_TYPE.get((int) toValueL));
 				break;
 			case TASK_FLAG_TREE:
-				fromValueHandler.setFlag((int) fromValueL);
-				toValueHdlBuffer.setFlag((int) toValueL);
+				fromValueHandler.setFlag(FLAG_TYPE.get((int) fromValueL));
+				toValueHdlBuffer.setFlag(FLAG_TYPE.get((int) toValueL));
 				break;
 			default:
 				return emptyList;
@@ -334,15 +344,19 @@ public class TaskTree implements TaskCollection<Task> {
 			return new ArrayList<Task>(taskTree.subSet(fromValueHandler, true, toValueHdlBuffer, isToInclusive));
 		}
 	}
-
+	
 	@Override
-	public List<Task> searchFlag(int flagSearch) {
-		return query(TASK_FLAG_TREE, flagSearch, flagSearch);
+	public List<Task> searchFlag(FLAG_TYPE type) {
+		int flagValue = type.getValue();
+		
+		return query(TASK_FLAG_TREE, flagValue, flagValue);
 	}
 
 	@Override
-	public List<Task> searchPriority(int prioritySearch) {
-		return query(TASK_PRIORITY_TREE, prioritySearch, prioritySearch);
+	public List<Task> searchPriority(PRIORITY_TYPE type) {
+		int priorityValue = type.getValue();
+		
+		return query(TASK_PRIORITY_TREE, priorityValue, priorityValue);
 	}
 
 	public List<Task> getList() {

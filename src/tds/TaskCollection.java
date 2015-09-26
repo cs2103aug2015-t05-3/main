@@ -2,6 +2,9 @@ package tds;
 
 import java.util.List;
 
+import tds.Task.FLAG_TYPE;
+import tds.Task.PRIORITY_TYPE;
+
 /**
  * The {@code TaskCollection} class is an interface that provides methods for
  * storing and manipulating {@code Task}.
@@ -109,7 +112,7 @@ interface TaskCollection<E> {
 	 * @see tds.Task
 	 * 
 	 */
-	public List<E> searchFlag(int flagIndex);
+	public List<E> searchFlag(FLAG_TYPE flagIndex);
 
 	/**
 	 * Returns a view of the portion of this collection whose elements matches
@@ -124,7 +127,7 @@ interface TaskCollection<E> {
 	 * @see tds.Task
 	 * 
 	 */
-	public List<E> searchPriority(int priorityIndex);
+	public List<E> searchPriority(PRIORITY_TYPE priorityIndex);
 
 	/**
 	 * Returns a view of this collection whose elements are sorted according to
