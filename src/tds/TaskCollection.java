@@ -16,7 +16,8 @@ interface TaskCollection<E> {
 	 * 
 	 * @param element
 	 *            to be added to this collection
-	 * @return true if this collection did not already contain the specified element
+	 * @return true if this collection did not already contain the specified
+	 *         element
 	 */
 	public boolean add(E element);
 
@@ -49,7 +50,7 @@ interface TaskCollection<E> {
 	 * collection, and vice-versa.
 	 *
 	 * @param str
-	 *             the sequence to search for
+	 *            the sequence to search for
 	 * @return a view of the portion of this collection whose element contain
 	 *         the {@code searchTerm}
 	 */
@@ -58,7 +59,7 @@ interface TaskCollection<E> {
 	/**
 	 * Returns a view of the portion of this collection whose elements range
 	 * from {@code fromStartTime}, inclusive, to {@code toStartTime}, inclusive.
-	 * (If {@code fromElement} and {@code toElement} are equal, the returned
+	 * (If {@code fromStartTime} and {@code toStartTime} are equal, the returned
 	 * {@code List} contains element that matches {@code fromEndTime}.) The
 	 * returned {@code List} is backed by this collection, so changes in the
 	 * returned {@code List} are reflected in this collection, and vice-versa.
@@ -68,24 +69,26 @@ interface TaskCollection<E> {
 	 * @param toStartTime
 	 *            high endpoint (inclusive) of the returned list
 	 * @return a view of the portion of this collection whose elements range
-	 *         from {@code fromStartTime}, inclusive, to {@code toStartTime}, inclusive
+	 *         from {@code fromStartTime}, inclusive, to {@code toStartTime},
+	 *         inclusive
 	 */
 	public List<E> queryStartTime(long fromStartTime, long toStartTime);
 
 	/**
 	 * Returns a view of the portion of this collection whose elements range
-	 * from fromEndTime, inclusive, to toEndTime, inclusive. (If fromElement and
-	 * toElement are equal, the returned {@code List} contains element that
-	 * matches fromEndTime only.) The returned {@code List} is backed by this
-	 * collection, so changes in the returned {@code List} are reflected in this
-	 * collection, and vice-versa.
+	 * from {@code fromEndTime}, inclusive, to {@code toEnd}Time, inclusive. (If
+	 * {@code fromEndTime} and {@code toEndTime} are equal, the returned {@code List} contains
+	 * element that matches {@code fromEndTime} only.) The returned {@code List} is
+	 * backed by this collection, so changes in the returned {@code List} are
+	 * reflected in this collection, and vice-versa.
 	 * 
 	 * @param fromEndTime
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toEndTime
 	 *            high endpoint (inclusive) of the returned list
 	 * @return a view of the portion of this collection whose elements range
-	 *         from {@code fromEndTime}, inclusive, to {@code toEndTime}, inclusive
+	 *         from {@code fromEndTime}, inclusive, to {@code toEndTime},
+	 *         inclusive
 	 */
 	public List<E> queryEndTime(long fromEndTime, long toEndTime);
 
