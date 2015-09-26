@@ -13,6 +13,7 @@ import java.util.List;
  * @see Task
  * @see TaskAttributeConstants
  * 
+ * @author amoshydra
  */
 interface TaskCollection<E> {
 

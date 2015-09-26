@@ -1,10 +1,8 @@
-/**  
- * @author amoshydra
- */
 package tds;
 
 /**
  * A task object used to store task name, time and different attributes.
+ * @author amoshydra
  */
 public class Task implements Comparable<Task> {
 	private static int taskNumber = 1;

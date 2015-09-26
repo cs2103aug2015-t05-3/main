@@ -1,6 +1,3 @@
-/**  
- * @author amoshydra
- */
 package tds;
 
 /**
@@ -12,6 +9,7 @@ package tds;
  * @see TaskTree
  * @see Task
  * 
+ * @author amoshydra 
  */
 public class TaskAttributeConstants {
 

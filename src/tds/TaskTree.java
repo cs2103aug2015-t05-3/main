@@ -1,6 +1,3 @@
-/**
- * @author amoshydra
- */
 package tds;
 
 import java.util.Collection;
@@ -18,6 +15,8 @@ import tds.TaskAttributeConstants;
  * @see TaskCollection
  * @see Task
  * @see TaskAttributeConstants
+ * 
+ * @author amoshydra
  */
 public class TaskTree implements TaskCollection<Task> {
 
