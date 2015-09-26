@@ -11,9 +11,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
+/**
+ * Provide a JUnit test for the {@code TaskTree.java}.  
+ *
+ * @author amoshydra
+ */
 public class JUnitTaskTreeTest {
 	private static final int FIRST_ELEMENT = 0;
-	@SuppressWarnings("unused")
 	private static final int LAST_ELEMENT = 4;
 	private static final int NUM_OF_ITEMS = 5;
 	private static final int FIVE_SECONDS = 5000;
@@ -246,7 +250,6 @@ public class JUnitTaskTreeTest {
 		returnList = new ArrayList<Task>(taskTree.searchPriority(searchInt));
 		assertEquals(returnList.size(), 3);		
 	}
-	
 	
 	@SuppressWarnings("unused")
 	private void printList(List<Task> returnList) {
