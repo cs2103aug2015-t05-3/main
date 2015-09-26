@@ -14,28 +14,28 @@ interface TaskCollection<E> {
 	/**
 	 * Adds the specified element to this collection
 	 * 
-	 * @param task
-	 *            element to be added to this collection
+	 * @param element
+	 *            to be added to this collection
 	 * @return true if this set did not already contain the specified element
 	 */
-	public boolean add(E task);
+	public boolean add(E element);
 
 	/**
 	 * Removes the specified element to this collection
 	 * 
-	 * @param task
-	 *            element to be removed from this collection
+	 * @param element
+	 *            to be removed from this collection
 	 * @return true if this set contained the specified element
 	 */
-	public boolean remove(E task);
+	public boolean remove(E element);
 
 	/**
 	 * Replace an old element from this collection with a new element
 	 * 
 	 * @param oldE
-	 *            old element to be replaced from this collection
+	 *            to be replaced from this collection
 	 * @param newE
-	 *            new element to replace the old element
+	 *            to replace the old element
 	 * 
 	 * @return true if this collection contained the old element and can be
 	 *         replaced by the new element
@@ -48,12 +48,12 @@ interface TaskCollection<E> {
 	 * collection, so changes in the returned {@code List} are reflected in this
 	 * collection, and vice-versa.
 	 *
-	 * @param searchTerm
-	 *            character sequences to be searched.
+	 * @param str
+	 *             the sequence to search for
 	 * @return a view of the portion of this collection whose element contain
 	 *         the {@code searchTerm}
 	 */
-	public List<E> searchName(String searchTerm);
+	public List<E> searchName(String str);
 
 	/**
 	 * Returns a view of the portion of this collection whose elements range
@@ -68,9 +68,9 @@ interface TaskCollection<E> {
 	 * @param toStartTime
 	 *            high endpoint (inclusive) of the returned list
 	 * @return a view of the portion of this collection whose elements range
-	 *         from fromStartTime, inclusive, to toStartTime, inclusive
+	 *         from {@code fromStartTime}, inclusive, to {@code toStartTime}, inclusive
 	 */
-	public List<E> queryStartTime(long toStartTime, long fromStartTime);
+	public List<E> queryStartTime(long fromStartTime, long toStartTime);
 
 	/**
 	 * Returns a view of the portion of this collection whose elements range
@@ -85,9 +85,9 @@ interface TaskCollection<E> {
 	 * @param toEndTime
 	 *            high endpoint (inclusive) of the returned list
 	 * @return a view of the portion of this collection whose elements range
-	 *         from toEndTime, inclusive, to fromEndTime, inclusive
+	 *         from {@code fromEndTime}, inclusive, to {@code toEndTime}, inclusive
 	 */
-	public List<E> queryEndTime(long toEndTime, long fromEndTime);
+	public List<E> queryEndTime(long fromEndTime, long toEndTime);
 
 	/**
 	 * Returns a view of the portion of this collection whose elements matches
@@ -95,14 +95,14 @@ interface TaskCollection<E> {
 	 * collection, so changes in the returned {@code List} are reflected in this
 	 * collection, and vice-versa.
 	 *
-	 * @param flagSearch
-	 *            flag to be searched.
+	 * @param flagIndex
+	 *            to search for
 	 * @return a view of the portion of this collection whose elements match the
 	 *         {@code flagSearch}
 	 * @see tds.Task
 	 * 
 	 */
-	public List<E> searchFlag(int flagSearch);
+	public List<E> searchFlag(int flagIndex);
 
 	/**
 	 * Returns a view of the portion of this collection whose elements matches
@@ -110,14 +110,14 @@ interface TaskCollection<E> {
 	 * collection, so changes in the returned {@code List} are reflected in this
 	 * collection, and vice-versa.
 	 *
-	 * @param prioritySearch
-	 *            priority to be searched.
+	 * @param priorityIndex
+	 *            to search for
 	 * @return a view of the portion of this collection whose elements match the
 	 *         {@code prioritySearch}
 	 * @see tds.Task
 	 * 
 	 */
-	public List<E> searchPriority(int prioritySearch);
+	public List<E> searchPriority(int priorityIndex);
 
 	/**
 	 * Returns a view of this collection whose elements are sorted according to
@@ -126,7 +126,7 @@ interface TaskCollection<E> {
 	 * collection, and vice-versa.
 	 *
 	 * @param taskAttributeType
-	 *            attribute type to be sorted with.
+	 *            the attribute type to be sorted with.
 	 * @return a view of this collection whose elements are sorted according to
 	 *         its specified attribute type.
 	 * @see tds.TaskAttributeConstants
