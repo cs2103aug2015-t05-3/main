@@ -271,51 +271,6 @@ public class Task {
 				&& (priority == rhs.priority);
 	}
 
-	// TODO Check for removal of this method.
-	/**
-	 * Compares this {@code Task} instance with another lexicographically and
-	 * numerically. The value returned is determined by the first difference in
-	 * value returned by:
-	 * 
-	 * <pre>
-	 * {@code this.compareNameTo(rhs)}
-	 * {@code this.compareStartTimeTo(rhs)}
-	 * {@code this.compareEndTimeTo(rhs)}
-	 * {@code this.compareFlagTo(rhs)}
-	 * {@code this.comparePriorityTo(rhs)}
-	 * </pre>
-	 * 
-	 * @param rhs
-	 *            a {@code Task} to be compared with this {@code Task}
-	 * 
-	 * @return the value 0 if this {@code Task} is equal to the argument
-	 *         {@code Task}; a value less than 0 if this {@code Task} is
-	 *         lexicographically or numerically less than the argument
-	 *         {@code Task}; and a value greater than 0 if this {@code Task} is
-	 *         lexicographically or numerically greater than the argument
-	 *         {@code Task}.
-	 */
-	public int compareTo(Task rhs) {
-
-		if (this.name.equals(rhs.name)) {
-			if (this.startTime == rhs.startTime) {
-				if (this.endTime == rhs.endTime) {
-					if (this.flag == rhs.flag) {
-						return comparePriorityTo(rhs);
-					} else {
-						return compareFlagTo(rhs);
-					}
-				} else {
-					return compareEndTimeTo(rhs);
-				}
-			} else {
-				return compareStartTimeTo(rhs);
-			}
-		} else {
-			return compareNameTo(rhs);
-		}
-	}
-
 	/**
 	 * Compares this {@code Task} instance with another to generate an array of
 	 * check bits.
