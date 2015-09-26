@@ -72,9 +72,6 @@ public class Task implements Comparable<Task> {
 	 * date.
 	 */
 	public final static int DATE_NULL = 0;
-
-	private final static int RETURN_VALUE_INVALID = -1;
-	private final static Object RETURN_VALUE_NULL = null;
 	private final static String TO_STRING_DELIMETER = "|";
 
 	private int id;
@@ -290,12 +287,12 @@ public class Task implements Comparable<Task> {
 	public boolean[] getAttributesDiff(Task rhs) {
 		boolean[] checkBits = new boolean[TaskAttributeConstants.NUM_OF_ATTRIBUTES];
 
-		checkBits[TaskAttributeConstants.NAME] = (this.name.equals(rhs.name));
-		checkBits[TaskAttributeConstants.START_TIME] = (this.startTime - rhs.startTime == 0);
-		checkBits[TaskAttributeConstants.END_TIME] = (this.endTime - rhs.endTime == 0);
-		checkBits[TaskAttributeConstants.FLAG] = (this.flag.value - rhs.flag.value == 0);
-		checkBits[TaskAttributeConstants.PRIORITY] = (this.priority.value - rhs.priority.value == 0);
-		checkBits[TaskAttributeConstants.ID] = (this.compareIdTo(rhs) == 0);
+		checkBits[TaskAttributeConstants.TREE_TYPE.NAME.getValue()] = (this.name.equals(rhs.name));
+		checkBits[TaskAttributeConstants.TREE_TYPE.START_TIME.getValue()] = (this.startTime - rhs.startTime == 0);
+		checkBits[TaskAttributeConstants.TREE_TYPE.END_TIME.getValue()] = (this.endTime - rhs.endTime == 0);
+		checkBits[TaskAttributeConstants.TREE_TYPE.FLAG.getValue()] = (this.flag.value - rhs.flag.value == 0);
+		checkBits[TaskAttributeConstants.TREE_TYPE.PRIORITY.getValue()] = (this.priority.value - rhs.priority.value == 0);
+		checkBits[TaskAttributeConstants.TREE_TYPE.ID.getValue()] = (this.compareIdTo(rhs) == 0);
 
 		return checkBits;
 	}

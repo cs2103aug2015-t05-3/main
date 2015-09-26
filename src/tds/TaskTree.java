@@ -21,12 +21,12 @@ import tds.TaskAttributeConstants.TREE_TYPE;
  */
 public class TaskTree {
 
-	private static final int TASK_NAME_TREE = TaskAttributeConstants.NAME;
-	private static final int TASK_START_TIME_TREE = TaskAttributeConstants.START_TIME;
-	private static final int TASK_END_TIME_TREE = TaskAttributeConstants.END_TIME;
-	private static final int TASK_FLAG_TREE = TaskAttributeConstants.FLAG;
-	private static final int TASK_PRIORITY_TREE = TaskAttributeConstants.PRIORITY;
-	private static final int TASK_CREATE_TIME_TREE = TaskAttributeConstants.ID;
+	private static final int TASK_NAME_TREE = TaskAttributeConstants.TREE_TYPE.NAME.getValue();
+	private static final int TASK_START_TIME_TREE = TaskAttributeConstants.TREE_TYPE.START_TIME.getValue();
+	private static final int TASK_END_TIME_TREE = TaskAttributeConstants.TREE_TYPE.END_TIME.getValue();
+	private static final int TASK_FLAG_TREE = TaskAttributeConstants.TREE_TYPE.FLAG.getValue();
+	private static final int TASK_PRIORITY_TREE = TaskAttributeConstants.TREE_TYPE.PRIORITY.getValue();
+	private static final int TASK_CREATE_TIME_TREE = TaskAttributeConstants.TREE_TYPE.ID.getValue();
 	private static final int SIZE_OF_TASK_TREES = 6;
 
 	private static ArrayList<TreeSet<Task>> taskTrees;
@@ -457,7 +457,8 @@ public class TaskTree {
 	 * @return a view of this {@code TaskTree}.
 	 */
 	public static List<Task> getList() {
-		return getSortedList(taskTrees.get(TaskAttributeConstants.ID));
+		int treeType = TaskAttributeConstants.TREE_TYPE.ID.getValue();
+		return getSortedList(taskTrees.get(treeType));
 	}
 
 	/**

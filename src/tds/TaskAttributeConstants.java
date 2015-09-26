@@ -40,20 +40,6 @@ public final class TaskAttributeConstants {
 			return lookup.get(value);
 		}
 	};
-	
-	
-	final static int NAME = 0;
-	final static String NAME_TYPE_STRING = "0";
-
-	final static int START_TIME = 1;
-
-	final static int END_TIME = 2;
-
-	final static int FLAG = 3;
-
-	final static int PRIORITY = 4;
-
-	final static int ID = 5;
 
 	final static int NUM_OF_ATTRIBUTES = 6;
 }
