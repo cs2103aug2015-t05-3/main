@@ -31,6 +31,10 @@ public class TaskTree implements TaskCollection<Task> {
 	private Task fromValueHandler;
 	private Task toValueHandler;
 
+	private static final String TO_STRING_OPEN = "[";
+	private static final String TO_STRING_CLOSE = "]";
+	private static final String TO_STRING_DELIMETER = ",";
+
 	/**
 	 * Constructs new, empty tree set, sorted according to the ordering of each
 	 * attributes in the task.
@@ -280,7 +284,7 @@ public class TaskTree implements TaskCollection<Task> {
 	 * reflected in this collection, and vice-versa.
 	 * 
 	 * @param taskAttributeType
-	 *            the attribute type to be sorted with.
+	 *            the attribute type to be query with.
 	 * @param fromValueL
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toValueL
@@ -363,25 +367,42 @@ public class TaskTree implements TaskCollection<Task> {
 	 * @return a string representation of this task tree in a list.
 	 */
 
+	/**
+	 * Returns a string representation of this collection. The string
+	 * representation consists of a list of the collection's elements in the
+	 * order they are returned by its iterator, enclosed in square brackets
+	 * ("[]"). Adjacent elements are separated by the characters ", " (comma and
+	 * space). Elements are converted to strings as by String.toString(Object).
+	 */
 	@Override
 	public String toString() {
 		return toString(TaskAttributeConstants.ID);
 	}
 
 	/**
-	 * Return a string representation of this task tree in a list given the
-	 * specific {@code taskAttributeType}.
+	 * Return a string representation of this collection sorted in order of the
+	 * specified {@code taskAttributeType}. The string representation consists
+	 * of a list of the collection's elements in the order they are returned by
+	 * its iterator, enclosed in square brackets ("[]"). Adjacent elements are
+	 * separated by the characters ", " (comma and space). Elements are
+	 * converted to strings as by String.toString(Object).
 	 * 
 	 * @param taskAttributeType
-	 *            the attribute type to be sorted with.
+	 *            the attribute type to be printed.
 	 * @return a string representation of this task tree in a list.
 	 */
 	public String toString(int taskAttributeType) {
-		String buffer = "";
+
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(taskAttributeType));
-		for (Task task : resultList) {
-			buffer += "" + task + "\n";
+		int listSize = resultList.size();
+		int lastIndex = listSize - 1;
+
+		String buffer = TO_STRING_OPEN;
+		for (int i = 0; i < lastIndex; i++) {
+			buffer += resultList.get(i) + TO_STRING_DELIMETER;
 		}
+		buffer += resultList.get(lastIndex) + TO_STRING_CLOSE;
+
 		return buffer;
 	}
 
