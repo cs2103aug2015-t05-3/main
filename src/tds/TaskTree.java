@@ -39,6 +39,9 @@ public class TaskTree {
 	private static final String TO_STRING_CLOSE = "]";
 	private static final String TO_STRING_DELIMETER = ",";
 
+	// Prevent instantiation of this constructor 
+	private TaskTree() {}
+	
 	/**
 	 * Initialize a new, empty tree set, sorted according to the ordering of
 	 * each attributes in the task.
@@ -382,7 +385,8 @@ public class TaskTree {
 	 * {@code List} contains {@code Task} object that matches {@code fromValueL}
 	 * only.) The returned {@code List} is backed by this {@code TaskTree}, so
 	 * changes in the returned {@code List} are reflected in this
-	 * {@code TaskTree}, and vice-versa.
+	 * {@code TaskTree}, and vice-versa. To query flag and priority, please use
+	 * its respective query method.
 	 * 
 	 * @param taskAttributeType
 	 *            the attribute type to be query with.
