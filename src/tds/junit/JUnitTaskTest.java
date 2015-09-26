@@ -1,9 +1,3 @@
-/**
- * Provide a JUnit test for the {@code Task.java}.  
- *
- * @author amoshydra
- */
-
 package tds.junit;
 import org.junit.Test;
 
@@ -13,6 +7,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import java.util.Date;
 
+/**
+ * Provide a JUnit test for the {@code Task.java}.  
+ *
+ * @author amoshydra
+ */
 public class JUnitTaskTest {
 	
 	@SuppressWarnings("unused")

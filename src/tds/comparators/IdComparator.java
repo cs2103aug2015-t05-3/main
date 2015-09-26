@@ -1,12 +1,16 @@
 package tds.comparators;
 
 import java.util.Comparator;
-
 import tds.Task;
 
+/**
+ * Provide {@code tds.Task} a comparator for the ID attribute  
+ * 
+ * @author amoshydra
+ */
 public class IdComparator implements Comparator<Task> {
 	@Override
-    public int compare(Task lhs, Task rhs) {
+	public int compare(Task lhs, Task rhs) {
 		return lhs.compareIdTo(rhs);
-    }
+	}
 }

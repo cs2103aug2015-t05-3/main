@@ -1,6 +1,3 @@
-/**
- * @author amoshydra
- */
 package tds;
 
 import java.util.List;
