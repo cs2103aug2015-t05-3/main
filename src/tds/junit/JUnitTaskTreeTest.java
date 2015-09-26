@@ -74,10 +74,13 @@ public class JUnitTaskTreeTest {
 		ArrayList<Task> checkList = new ArrayList<Task>(NUM_OF_ITEMS);
 		testAddElementsToTree(taskTree, checkList);
 		
-		String checkString = "";
+		String checkString = "[";
 		for (Task task : checkList) {
-			checkString += task + "\n";
+			checkString += task + ",";
 		}
+		checkString = checkString.substring(0, checkString.length() - 1);
+		checkString += "]";
+		
 		String resultString = "" + taskTree;
 		
 		assertEquals(resultString, checkString);

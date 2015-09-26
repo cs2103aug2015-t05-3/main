@@ -4,6 +4,7 @@ import java.util.List;
 
 import tds.Task.FLAG_TYPE;
 import tds.Task.PRIORITY_TYPE;
+import tds.TaskAttributeConstants.TREE_TYPE;
 
 /**
  * The {@code TaskCollection} class is an interface that provides methods for
@@ -151,7 +152,7 @@ interface TaskCollection<E> {
 	 *         its specified attribute type.
 	 * @see tds.TaskAttributeConstants
 	 */
-	public List<E> getSortedList(int taskAttributeType);
+	public List<E> getSortedList(TREE_TYPE taskAttributeType);
 
 	/**
 	 * Returns the number of elements in this collection (its cardinality).
