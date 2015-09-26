@@ -16,6 +16,9 @@ import java.util.Map;
  */
 public final class Attributes {
 
+	/**
+	 * Attribute type constants used for attributes identification  
+	 */
 	public enum TYPE {
 		NAME(0), START_TIME(1), END_TIME(2), FLAG(3), PRIORITY(4), ID(5);
 
