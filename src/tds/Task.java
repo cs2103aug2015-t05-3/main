@@ -18,7 +18,8 @@ public class Task implements Comparable<Task> {
 	public final static int FLAG_DONE = 1;
 
 	/**
-	 * Field value for start time or end time attribute indicating an empty date.
+	 * Field value for start time or end time attribute indicating an empty
+	 * date.
 	 */
 	public final static int DATE_NULL = 0;
 
@@ -51,15 +52,37 @@ public class Task implements Comparable<Task> {
 	 */
 	public final static int PRIORITY_VERY_LOW = 6;
 
-	public final static int GET_VALUE_INVALID = -1;
-	public final static Object GET_VALUE_NULL = null;
+	/**
+	 * Field option for {@code getValue} to retrieve the ID of a {@code Task}.
+	 */
 	public final static long GET_VALUE_ID = TaskAttributeConstants.ID;
+	/**
+	 * Field option for {@code getValue} to retrieve the start time of a
+	 * {@code Task}.
+	 */
 	public final static long GET_VALUE_START_TIME = TaskAttributeConstants.START_TIME;
+	/**
+	 * Field option for {@code getValue} to retrieve the end time of a
+	 * {@code Task}.
+	 */
 	public final static long GET_VALUE_END_TIME = TaskAttributeConstants.END_TIME;
+	/**
+	 * Field option for {@code getValue} to retrieve the flag of a {@code Task}.
+	 */
 	public final static int GET_VALUE_FLAG = TaskAttributeConstants.FLAG;
+	/**
+	 * Field option for {@code getValue} to retrieve the priority of a
+	 * {@code Task}.
+	 */
 	public final static int GET_VALUE_PRIORITY = TaskAttributeConstants.PRIORITY;
+	/**
+	 * Field option for {@code getValue} to retrieve the name or description of
+	 * a {@code Task}.
+	 */
 	public final static String GET_VALUE_NAME = TaskAttributeConstants.NAME_TYPE_STRING;
 
+	private final static int RETURN_VALUE_INVALID = -1;
+	private final static Object RETURN_VALUE_NULL = null;
 	private final static String TO_STRING_DELIMETER = "|";
 
 	private int id;
@@ -124,7 +147,7 @@ public class Task implements Comparable<Task> {
 		} else if (option == GET_VALUE_END_TIME) {
 			return getEndTime();
 		} else {
-			return GET_VALUE_INVALID;
+			return RETURN_VALUE_INVALID;
 		}
 	}
 
@@ -140,7 +163,7 @@ public class Task implements Comparable<Task> {
 		if (option.equals(GET_VALUE_NAME)) {
 			return getName();
 		} else {
-			return (String) GET_VALUE_NULL;
+			return (String) RETURN_VALUE_NULL;
 		}
 	}
 
@@ -158,7 +181,7 @@ public class Task implements Comparable<Task> {
 		} else if (option == GET_VALUE_PRIORITY) {
 			return getPriority();
 		} else {
-			return GET_VALUE_INVALID;
+			return RETURN_VALUE_INVALID;
 		}
 	}
 
@@ -466,7 +489,7 @@ public class Task implements Comparable<Task> {
 	 * @return a string representation of this task in the format such as:
 	 * 
 	 *         <pre>
-	 *         name|startTime|endTime|flag|priority
+	 *         name | startTime | endTime | flag | priority
 	 *         </pre>
 	 */
 	@Override
