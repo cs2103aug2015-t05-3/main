@@ -19,7 +19,7 @@ import tds.TaskAttributeConstants.TREE_TYPE;
  * 
  * @author amoshydra
  */
-public class TaskTree implements TaskCollection<Task> {
+public class TaskTree {
 
 	private static final int TASK_NAME_TREE = TaskAttributeConstants.NAME;
 	private static final int TASK_START_TIME_TREE = TaskAttributeConstants.START_TIME;
@@ -70,7 +70,7 @@ public class TaskTree implements TaskCollection<Task> {
 		}
 	}
 
-	@Override
+	
 	public boolean add(Task task) {
 		boolean isAdded = true;
 		for (TreeSet<Task> tree : taskTrees) {
@@ -82,7 +82,7 @@ public class TaskTree implements TaskCollection<Task> {
 		return isAdded;
 	}
 
-	@Override
+	
 	public boolean remove(Task task) {
 		boolean isRemoved = true;
 		for (TreeSet<Task> tree : taskTrees) {
@@ -94,7 +94,7 @@ public class TaskTree implements TaskCollection<Task> {
 		return isRemoved;
 	}
 
-	@Override
+	
 	public boolean replace(Task oldTask, Task newTask) {
 
 		boolean[] checkBits = oldTask.getAttributesDiff(newTask);
@@ -194,7 +194,7 @@ public class TaskTree implements TaskCollection<Task> {
 		return isReplaced;
 	}
 
-	@Override
+	
 	public List<Task> searchName(String searchTerm) {
 		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
 
@@ -228,12 +228,12 @@ public class TaskTree implements TaskCollection<Task> {
 		return true;
 	}
 
-	@Override
+	
 	public List<Task> queryStartTime(long fromStartTime, long toStartTime) {
 		return query(TREE_TYPE.START_TIME, fromStartTime, toStartTime);
 	}
 
-	@Override
+	
 	public List<Task> queryEndTime(long fromEndTime, long toEndTime) {
 		return query(TREE_TYPE.END_TIME, fromEndTime, toEndTime);
 	}
@@ -346,14 +346,14 @@ public class TaskTree implements TaskCollection<Task> {
 		}
 	}
 	
-	@Override
+	
 	public List<Task> searchFlag(FLAG_TYPE type) {
 		int flagValue = type.getValue();
 		
 		return query(TREE_TYPE.FLAG, flagValue, flagValue);
 	}
 
-	@Override
+	
 	public List<Task> searchPriority(PRIORITY_TYPE type) {
 		int priorityValue = type.getValue();
 		
@@ -407,6 +407,7 @@ public class TaskTree implements TaskCollection<Task> {
 	 *            the attribute type to be printed.
 	 * @return a string representation of this task tree in a list.
 	 */
+	
 	public String toString(TREE_TYPE taskAttributeType) {
 		
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(taskAttributeType));
@@ -422,7 +423,7 @@ public class TaskTree implements TaskCollection<Task> {
 		return buffer;
 	}
 
-	@Override
+	
 	public int size() {
 		return taskTreeSize;
 	}
