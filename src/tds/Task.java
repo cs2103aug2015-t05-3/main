@@ -285,14 +285,14 @@ public class Task implements Comparable<Task> {
 	 *         become false.
 	 */
 	public boolean[] getAttributesDiff(Task rhs) {
-		boolean[] checkBits = new boolean[TaskAttributeConstants.NUM_OF_ATTRIBUTES];
+		boolean[] checkBits = new boolean[Attributes.NUM_OF_ATTRIBUTES];
 
-		checkBits[TaskAttributeConstants.TREE_TYPE.NAME.getValue()] = (this.name.equals(rhs.name));
-		checkBits[TaskAttributeConstants.TREE_TYPE.START_TIME.getValue()] = (this.startTime - rhs.startTime == 0);
-		checkBits[TaskAttributeConstants.TREE_TYPE.END_TIME.getValue()] = (this.endTime - rhs.endTime == 0);
-		checkBits[TaskAttributeConstants.TREE_TYPE.FLAG.getValue()] = (this.flag.value - rhs.flag.value == 0);
-		checkBits[TaskAttributeConstants.TREE_TYPE.PRIORITY.getValue()] = (this.priority.value - rhs.priority.value == 0);
-		checkBits[TaskAttributeConstants.TREE_TYPE.ID.getValue()] = (this.compareIdTo(rhs) == 0);
+		checkBits[Attributes.TYPE.NAME.getValue()] = (this.name.equals(rhs.name));
+		checkBits[Attributes.TYPE.START_TIME.getValue()] = (this.startTime - rhs.startTime == 0);
+		checkBits[Attributes.TYPE.END_TIME.getValue()] = (this.endTime - rhs.endTime == 0);
+		checkBits[Attributes.TYPE.FLAG.getValue()] = (this.flag.value - rhs.flag.value == 0);
+		checkBits[Attributes.TYPE.PRIORITY.getValue()] = (this.priority.value - rhs.priority.value == 0);
+		checkBits[Attributes.TYPE.ID.getValue()] = (this.compareIdTo(rhs) == 0);
 
 		return checkBits;
 	}

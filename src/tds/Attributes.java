@@ -14,14 +14,14 @@ import java.util.Map;
  * 
  * @author amoshydra 
  */
-public final class TaskAttributeConstants {
+public final class Attributes {
 
-	public enum TREE_TYPE {
+	public enum TYPE {
 		NAME(0), START_TIME(1), END_TIME(2), FLAG(3), PRIORITY(4), ID(5);
 
 		private final int value;
 		
-		private TREE_TYPE(int value) {
+		private TYPE(int value) {
 			this.value = value;
 		}
 
@@ -29,14 +29,14 @@ public final class TaskAttributeConstants {
 			return value;
 		}
 		
-		private static final Map<Integer, TREE_TYPE> lookup = new HashMap<Integer, TREE_TYPE>();
+		private static final Map<Integer, TYPE> lookup = new HashMap<Integer, TYPE>();
 
 		static {
-			for (TREE_TYPE t : EnumSet.allOf(TREE_TYPE.class))
+			for (TYPE t : EnumSet.allOf(TYPE.class))
 				lookup.put(t.getValue(), t);
 		}
 
-		static TREE_TYPE get(int value) {
+		static TYPE get(int value) {
 			return lookup.get(value);
 		}
 	};

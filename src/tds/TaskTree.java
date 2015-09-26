@@ -7,26 +7,26 @@ import java.util.ArrayList;
 import tds.comparators.*;
 import tds.Task.FLAG_TYPE;
 import tds.Task.PRIORITY_TYPE;
-import tds.TaskAttributeConstants;
-import tds.TaskAttributeConstants.TREE_TYPE;
+import tds.Attributes;
+import tds.Attributes.TYPE;
 
 /**
  * Provides methods for storing and manipulating {@code Task} via
  * {@code TreeSet}.
  * 
  * @see Task
- * @see TaskAttributeConstants
+ * @see Attributes
  * 
  * @author amoshydra
  */
 public class TaskTree {
 
-	private static final int TASK_NAME_TREE = TaskAttributeConstants.TREE_TYPE.NAME.getValue();
-	private static final int TASK_START_TIME_TREE = TaskAttributeConstants.TREE_TYPE.START_TIME.getValue();
-	private static final int TASK_END_TIME_TREE = TaskAttributeConstants.TREE_TYPE.END_TIME.getValue();
-	private static final int TASK_FLAG_TREE = TaskAttributeConstants.TREE_TYPE.FLAG.getValue();
-	private static final int TASK_PRIORITY_TREE = TaskAttributeConstants.TREE_TYPE.PRIORITY.getValue();
-	private static final int TASK_CREATE_TIME_TREE = TaskAttributeConstants.TREE_TYPE.ID.getValue();
+	private static final int TASK_NAME_TREE = Attributes.TYPE.NAME.getValue();
+	private static final int TASK_START_TIME_TREE = Attributes.TYPE.START_TIME.getValue();
+	private static final int TASK_END_TIME_TREE = Attributes.TYPE.END_TIME.getValue();
+	private static final int TASK_FLAG_TREE = Attributes.TYPE.FLAG.getValue();
+	private static final int TASK_PRIORITY_TREE = Attributes.TYPE.PRIORITY.getValue();
+	private static final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
 	private static final int SIZE_OF_TASK_TREES = 6;
 
 	private static ArrayList<TreeSet<Task>> taskTrees;
@@ -127,7 +127,7 @@ public class TaskTree {
 		// Re-insert task based on its modified attributes
 		for (int i = 0; i < SIZE_OF_TASK_TREES; i++) {
 			if (checkBits[i] == false) {
-				isReplaced &= updateAttributeTree(oldTask, newTask, TREE_TYPE.get(i));
+				isReplaced &= updateAttributeTree(oldTask, newTask, TYPE.get(i));
 			}
 		}
 		// Replace old task with new task for the remaining tree;
@@ -148,7 +148,7 @@ public class TaskTree {
 	 */
 	public static boolean updateName(Task task, String newValue) {
 		task.setName(newValue);
-		return updateAttributeTree(task, task, TREE_TYPE.NAME);
+		return updateAttributeTree(task, task, TYPE.NAME);
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class TaskTree {
 	 */
 	public static boolean updateStartTime(Task task, long newValue) {
 		task.setStartTime(newValue);
-		return updateAttributeTree(task, task, TREE_TYPE.START_TIME);
+		return updateAttributeTree(task, task, TYPE.START_TIME);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class TaskTree {
 	 */
 	public static boolean updateEndTime(Task task, long newValue) {
 		task.setEndTime(newValue);
-		return updateAttributeTree(task, task, TREE_TYPE.END_TIME);
+		return updateAttributeTree(task, task, TYPE.END_TIME);
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class TaskTree {
 	 */
 	public static boolean updateFlag(Task task, FLAG_TYPE newValue) {
 		task.setFlag(newValue);
-		return updateAttributeTree(task, task, TREE_TYPE.FLAG);
+		return updateAttributeTree(task, task, TYPE.FLAG);
 	}
 
 	/**
@@ -204,10 +204,10 @@ public class TaskTree {
 	 */
 	public static boolean updatePriority(Task task, PRIORITY_TYPE newValue) {
 		task.setPriority(newValue);
-		return updateAttributeTree(task, task, TREE_TYPE.PRIORITY);
+		return updateAttributeTree(task, task, TYPE.PRIORITY);
 	}
 
-	private static boolean updateAttributeTree(Task oldTask, Task newTask, TREE_TYPE taskAttributeType) {
+	private static boolean updateAttributeTree(Task oldTask, Task newTask, TYPE taskAttributeType) {
 		boolean isReplaced = true;
 
 		int treeType = taskAttributeType.getValue();
@@ -279,7 +279,7 @@ public class TaskTree {
 	 *         inclusive
 	 */
 	public static List<Task> queryStartTime(long fromStartTime, long toStartTime) {
-		return query(TREE_TYPE.START_TIME, fromStartTime, toStartTime);
+		return query(TYPE.START_TIME, fromStartTime, toStartTime);
 	}
 
 	/**
@@ -299,7 +299,7 @@ public class TaskTree {
 	 *         inclusive
 	 */
 	public static List<Task> queryEndTime(long fromEndTime, long toEndTime) {
-		return query(TREE_TYPE.END_TIME, fromEndTime, toEndTime);
+		return query(TYPE.END_TIME, fromEndTime, toEndTime);
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class TaskTree {
 		int fromValue = fromFlag.getValue();
 		int toValue = toFlag.getValue();
 		
-		return query(TREE_TYPE.FLAG, fromValue, toValue);
+		return query(TYPE.FLAG, fromValue, toValue);
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class TaskTree {
 		int fromValue = fromPriority.getValue();
 		int toValue = toPriority.getValue();
 		
-		return query(TREE_TYPE.PRIORITY, fromValue, toValue);
+		return query(TYPE.PRIORITY, fromValue, toValue);
 	}
 
 	/**
@@ -368,7 +368,7 @@ public class TaskTree {
 	 *         from {@code fromValueL}, inclusive, to {@code toValueL},
 	 *         inclusive
 	 */
-	public static List<Task> query(TREE_TYPE taskAttributeType, long fromValueL, long toValueL) {
+	public static List<Task> query(TYPE taskAttributeType, long fromValueL, long toValueL) {
 
 		int treeType = taskAttributeType.getValue();
 		
@@ -426,7 +426,7 @@ public class TaskTree {
 	public static List<Task> searchFlag(FLAG_TYPE type) {
 		int flagValue = type.getValue();
 		
-		return query(TREE_TYPE.FLAG, flagValue, flagValue);
+		return query(TYPE.FLAG, flagValue, flagValue);
 	}
 
 	/**
@@ -445,7 +445,7 @@ public class TaskTree {
 	public static List<Task> searchPriority(PRIORITY_TYPE type) {
 		int priorityValue = type.getValue();
 		
-		return query(TREE_TYPE.PRIORITY, priorityValue, priorityValue);
+		return query(TYPE.PRIORITY, priorityValue, priorityValue);
 	}
 	
 	/**
@@ -457,7 +457,7 @@ public class TaskTree {
 	 * @return a view of this {@code TaskTree}.
 	 */
 	public static List<Task> getList() {
-		int treeType = TaskAttributeConstants.TREE_TYPE.ID.getValue();
+		int treeType = Attributes.TYPE.ID.getValue();
 		return getSortedList(taskTrees.get(treeType));
 	}
 
@@ -471,9 +471,9 @@ public class TaskTree {
 	 *            the attribute type to be sorted with.
 	 * @return a view of this {@code TaskTree} whose {@code Task} objects are sorted according to
 	 *         its specified attribute type.
-	 * @see tds.TaskAttributeConstants
+	 * @see tds.Attributes
 	 */
-	public static List<Task> getSortedList(TREE_TYPE taskAttributeType) {
+	public static List<Task> getSortedList(TYPE taskAttributeType) {
 		
 		return getSortedList(taskTrees.get(taskAttributeType.getValue()));
 	}
@@ -500,7 +500,7 @@ public class TaskTree {
 	 * space). {@code Task} objects are converted to strings as by String.toString(Object).
 	 */
 	public static String getString() {
-		return getString(TaskAttributeConstants.TREE_TYPE.ID);
+		return getString(Attributes.TYPE.ID);
 	}
 
 	/**
@@ -516,7 +516,7 @@ public class TaskTree {
 	 * @return a string representation of this task tree in a list.
 	 */
 	
-	public static String getString(TREE_TYPE taskAttributeType) {
+	public static String getString(TYPE taskAttributeType) {
 		
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(taskAttributeType));
 		int listSize = resultList.size();
