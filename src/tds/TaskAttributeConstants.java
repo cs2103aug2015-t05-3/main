@@ -5,13 +5,12 @@ package tds;
  * constants are used for differentiating {@code treeType} for
  * {@code TaskCollection} and {@code TaskTree}.
  * 
- * @see TaskCollection
  * @see TaskTree
  * @see Task
  * 
  * @author amoshydra 
  */
-public class TaskAttributeConstants {
+public final class TaskAttributeConstants {
 
 	public final static int NAME = 0;
 	public final static String NAME_TYPE_STRING = "0";

@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.ArrayList;
-
 import tds.comparators.*;
 import tds.TaskAttributeConstants;
 
@@ -12,7 +11,6 @@ import tds.TaskAttributeConstants;
  * Provides methods for storing and manipulating {@code Task} via
  * {@code TreeSet}.
  * 
- * @see TaskCollection
  * @see Task
  * @see TaskAttributeConstants
  * 
