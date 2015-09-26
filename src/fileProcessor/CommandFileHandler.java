@@ -66,7 +66,7 @@ public class CommandFileHandler {
 		HashMap<String, String> sample = runC.getCmdTable();
 		for (HashMap.Entry<String, String> entry : sample.entrySet()) {
 			   System.out.println("key=" + entry.getKey() + ", value=" + entry.getValue());
-			}
+		}
 	}
 
 }
