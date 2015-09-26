@@ -5,20 +5,50 @@
  */
 package tds;
 
-public class Task {
+public class Task implements Comparable<Task> {
 	private static int taskNumber = 1;
 
+	/**
+	 * Field value for flag attribute indicating an unmarked flag.
+	 */
 	public final static int FLAG_NULL = 0;
+	/**
+	 * Field value for flag attribute indicating a marked done flag.
+	 */
 	public final static int FLAG_DONE = 1;
 
+	/**
+	 * Field value for start time or end time attribute indicating an empty date.
+	 */
 	public final static int DATE_NULL = 0;
 
+	/**
+	 * Field value for priority attribute indicating very high priority.
+	 */
 	public final static int PRIORITY_VERY_HIGH = 0;
+	/**
+	 * Field value for priority attribute indicating high priority.
+	 */
 	public final static int PRIORITY_HIGH = 1;
+	/**
+	 * Field value for priority attribute indicating above normal priority.
+	 */
 	public final static int PRIORITY_ABOVE_NORMAL = 2;
+	/**
+	 * Field value for priority attribute indicating normal priority.
+	 */
 	public final static int PRIORITY_NORMAL = 3;
+	/**
+	 * Field value for priority attribute indicating below normal priority.
+	 */
 	public final static int PRIORITY_BELOW_NORMAL = 4;
+	/**
+	 * Field value for priority attribute indicating low priority.
+	 */
 	public final static int PRIORITY_LOW = 5;
+	/**
+	 * Field value for priority attribute indicating very low priority.
+	 */
 	public final static int PRIORITY_VERY_LOW = 6;
 
 	public final static int GET_VALUE_INVALID = -1;
@@ -30,7 +60,7 @@ public class Task {
 	public final static int GET_VALUE_PRIORITY = TaskAttributeConstants.PRIORITY;
 	public final static String GET_VALUE_NAME = TaskAttributeConstants.NAME_TYPE_STRING;
 
-	public final static String TO_STRING_DELIMETER = "|";
+	private final static String TO_STRING_DELIMETER = "|";
 
 	private int id;
 	private String name;
@@ -236,10 +266,9 @@ public class Task {
 		this.priority = priority;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * @return a hash code value for this object enumerated using the ID of this
+	 *         {@code Task}.
 	 */
 	@Override
 	public int hashCode() {
@@ -253,11 +282,8 @@ public class Task {
 	 * Determines whether or not two task are equal. The two tasks are equal if
 	 * the values name, start time, end time, flag and priority are equal.
 	 * 
-	 * @param obj
-	 *            an object to be compared with this {@code Task}
-	 * 
 	 * @return {@code true} if the object to be compared is an instance of Task
-	 *         and has the same values; false otherwise.
+	 *         and has the same attributes; false otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -271,49 +297,19 @@ public class Task {
 				&& (priority == rhs.priority);
 	}
 
-	// TODO Check for removal of this method.
 	/**
-	 * Compares this {@code Task} instance with another lexicographically and
-	 * numerically. The value returned is determined by the first difference in
-	 * value returned by:
-	 * 
-	 * <pre>
-	 * {@code this.compareNameTo(rhs)}
-	 * {@code this.compareStartTimeTo(rhs)}
-	 * {@code this.compareEndTimeTo(rhs)}
-	 * {@code this.compareFlagTo(rhs)}
-	 * {@code this.comparePriorityTo(rhs)}
-	 * </pre>
-	 * 
-	 * @param rhs
-	 *            a {@code Task} to be compared with this {@code Task}
+	 * Compares this {@code Task} instance with another based on the order they
+	 * are created.
 	 * 
 	 * @return the value 0 if this {@code Task} is equal to the argument
-	 *         {@code Task}; a value less than 0 if this {@code Task} is
-	 *         lexicographically or numerically less than the argument
-	 *         {@code Task}; and a value greater than 0 if this {@code Task} is
-	 *         lexicographically or numerically greater than the argument
+	 *         {@code Task}; a value less than 0 if this {@code Task} is created
+	 *         earlier than the argument {@code Task}; and a value greater than
+	 *         0 if this {@code Task} is created later than the argument
 	 *         {@code Task}.
 	 */
+	@Override
 	public int compareTo(Task rhs) {
-
-		if (this.name.equals(rhs.name)) {
-			if (this.startTime == rhs.startTime) {
-				if (this.endTime == rhs.endTime) {
-					if (this.flag == rhs.flag) {
-						return comparePriorityTo(rhs);
-					} else {
-						return compareFlagTo(rhs);
-					}
-				} else {
-					return compareEndTimeTo(rhs);
-				}
-			} else {
-				return compareStartTimeTo(rhs);
-			}
-		} else {
-			return compareNameTo(rhs);
-		}
+		return this.compareIdTo(rhs);
 	}
 
 	/**
@@ -467,8 +463,11 @@ public class Task {
 	/**
 	 * Represent this {@code Task} into a {@code String} format
 	 * 
-	 * @return a format such as {@code name|startTime|endTime|flag|priority}
+	 * @return a string representation of this task in the format such as:
 	 * 
+	 *         <pre>
+	 *         name|startTime|endTime|flag|priority
+	 *         </pre>
 	 */
 	@Override
 	public String toString() {
