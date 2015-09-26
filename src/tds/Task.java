@@ -72,38 +72,6 @@ public class Task implements Comparable<Task> {
 	 * date.
 	 */
 	public final static int DATE_NULL = 0;
-
-	/**
-	 * Field option for {@code getValue} to retrieve the ID of a {@code Task}.
-	 */
-	public final static long GET_VALUE_ID = TaskAttributeConstants.ID;
-	/**
-	 * Field option for {@code getValue} to retrieve the start time of a
-	 * {@code Task}.
-	 */
-	public final static long GET_VALUE_START_TIME = TaskAttributeConstants.START_TIME;
-	/**
-	 * Field option for {@code getValue} to retrieve the end time of a
-	 * {@code Task}.
-	 */
-	public final static long GET_VALUE_END_TIME = TaskAttributeConstants.END_TIME;
-	/**
-	 * Field option for {@code getValue} to retrieve the flag of a {@code Task}.
-	 */
-	public final static int GET_VALUE_FLAG = TaskAttributeConstants.FLAG;
-	/**
-	 * Field option for {@code getValue} to retrieve the priority of a
-	 * {@code Task}.
-	 */
-	public final static int GET_VALUE_PRIORITY = TaskAttributeConstants.PRIORITY;
-	/**
-	 * Field option for {@code getValue} to retrieve the name or description of
-	 * a {@code Task}.
-	 */
-	public final static String GET_VALUE_NAME = TaskAttributeConstants.NAME_TYPE_STRING;
-
-	private final static int RETURN_VALUE_INVALID = -1;
-	private final static Object RETURN_VALUE_NULL = null;
 	private final static String TO_STRING_DELIMETER = "|";
 
 	private int id;
@@ -152,40 +120,6 @@ public class Task implements Comparable<Task> {
 	 */
 	public Task(String name) {
 		this(name, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
-	}
-
-	/**
-	 * Returns the value of the given option field.
-	 * 
-	 * @param option
-	 *            the given option field.
-	 * 
-	 * @return the value of the given option field.
-	 */
-	public long getValue(long option) {
-		if (option == GET_VALUE_START_TIME) {
-			return getStartTime();
-		} else if (option == GET_VALUE_END_TIME) {
-			return getEndTime();
-		} else {
-			return RETURN_VALUE_INVALID;
-		}
-	}
-
-	/**
-	 * Returns the value of the given option field.
-	 * 
-	 * @param option
-	 *            the given option field.
-	 * 
-	 * @return the value of the given option field.
-	 */
-	public String getValue(String option) {
-		if (option.equals(GET_VALUE_NAME)) {
-			return getName();
-		} else {
-			return (String) RETURN_VALUE_NULL;
-		}
 	}
 
 	/**
@@ -351,14 +285,14 @@ public class Task implements Comparable<Task> {
 	 *         become false.
 	 */
 	public boolean[] getAttributesDiff(Task rhs) {
-		boolean[] checkBits = new boolean[TaskAttributeConstants.NUM_OF_ATTRIBUTES];
+		boolean[] checkBits = new boolean[Attributes.NUM_OF_ATTRIBUTES];
 
-		checkBits[TaskAttributeConstants.NAME] = (this.name.equals(rhs.name));
-		checkBits[TaskAttributeConstants.START_TIME] = (this.startTime - rhs.startTime == 0);
-		checkBits[TaskAttributeConstants.END_TIME] = (this.endTime - rhs.endTime == 0);
-		checkBits[TaskAttributeConstants.FLAG] = (this.flag.value - rhs.flag.value == 0);
-		checkBits[TaskAttributeConstants.PRIORITY] = (this.priority.value - rhs.priority.value == 0);
-		checkBits[TaskAttributeConstants.ID] = (this.compareIdTo(rhs) == 0);
+		checkBits[Attributes.TYPE.NAME.getValue()] = (this.name.equals(rhs.name));
+		checkBits[Attributes.TYPE.START_TIME.getValue()] = (this.startTime - rhs.startTime == 0);
+		checkBits[Attributes.TYPE.END_TIME.getValue()] = (this.endTime - rhs.endTime == 0);
+		checkBits[Attributes.TYPE.FLAG.getValue()] = (this.flag.value - rhs.flag.value == 0);
+		checkBits[Attributes.TYPE.PRIORITY.getValue()] = (this.priority.value - rhs.priority.value == 0);
+		checkBits[Attributes.TYPE.ID.getValue()] = (this.compareIdTo(rhs) == 0);
 
 		return checkBits;
 	}
