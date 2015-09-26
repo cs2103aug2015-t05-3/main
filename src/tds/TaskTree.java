@@ -29,9 +29,9 @@ public class TaskTree {
 	private static final int TASK_CREATE_TIME_TREE = TaskAttributeConstants.ID;
 	private static final int SIZE_OF_TASK_TREES = 6;
 
-	private ArrayList<TreeSet<Task>> taskTrees;
-	private int taskTreeSize;
-	private Task fromValueHandler;
+	private static ArrayList<TreeSet<Task>> taskTrees;
+	private static int taskTreeSize;
+	private static Task fromValueHandler;
 
 	private static final String TO_STRING_OPEN = "[";
 	private static final String TO_STRING_CLOSE = "]";
@@ -41,7 +41,7 @@ public class TaskTree {
 	 * Constructs new, empty tree set, sorted according to the ordering of each
 	 * attributes in the task.
 	 */
-	public TaskTree() {
+	public static void init() {
 		taskTreeSize = 0;
 		taskTrees = new ArrayList<TreeSet<Task>>(SIZE_OF_TASK_TREES);
 
@@ -63,15 +63,15 @@ public class TaskTree {
 	 * @param collection
 	 *            whose elements will comprise the new set
 	 */
-	public TaskTree(Collection<Task> collection) {
-		this();
+	public static void init(Collection<Task> collection) {
+		init();
 		for (TreeSet<Task> tree : taskTrees) {
 			tree.addAll(collection);
 		}
 	}
 
 	
-	public boolean add(Task task) {
+	public static boolean add(Task task) {
 		boolean isAdded = true;
 		for (TreeSet<Task> tree : taskTrees) {
 			if (!tree.add(task)) {
@@ -83,7 +83,7 @@ public class TaskTree {
 	}
 
 	
-	public boolean remove(Task task) {
+	public static boolean remove(Task task) {
 		boolean isRemoved = true;
 		for (TreeSet<Task> tree : taskTrees) {
 			if (!tree.remove(task)) {
@@ -95,7 +95,7 @@ public class TaskTree {
 	}
 
 	
-	public boolean replace(Task oldTask, Task newTask) {
+	public static boolean replace(Task oldTask, Task newTask) {
 
 		boolean[] checkBits = oldTask.getAttributesDiff(newTask);
 		boolean isReplaced = true;
@@ -122,7 +122,7 @@ public class TaskTree {
 	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
-	public boolean updateName(Task task, String newValue) {
+	public static boolean updateName(Task task, String newValue) {
 		task.setName(newValue);
 		return updateAttributeTree(task, task, TREE_TYPE.NAME);
 	}
@@ -136,7 +136,7 @@ public class TaskTree {
 	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
-	public boolean updateStartTime(Task task, long newValue) {
+	public static boolean updateStartTime(Task task, long newValue) {
 		task.setStartTime(newValue);
 		return updateAttributeTree(task, task, TREE_TYPE.START_TIME);
 	}
@@ -150,7 +150,7 @@ public class TaskTree {
 	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
-	public boolean updateEndTime(Task task, long newValue) {
+	public static boolean updateEndTime(Task task, long newValue) {
 		task.setEndTime(newValue);
 		return updateAttributeTree(task, task, TREE_TYPE.END_TIME);
 	}
@@ -164,7 +164,7 @@ public class TaskTree {
 	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
-	public boolean updateFlag(Task task, FLAG_TYPE newValue) {
+	public static boolean updateFlag(Task task, FLAG_TYPE newValue) {
 		task.setFlag(newValue);
 		return updateAttributeTree(task, task, TREE_TYPE.FLAG);
 	}
@@ -178,12 +178,12 @@ public class TaskTree {
 	 *            to update this task
 	 * @return true if this collection contained the task and can be modified
 	 */
-	public boolean updatePriority(Task task, PRIORITY_TYPE newValue) {
+	public static boolean updatePriority(Task task, PRIORITY_TYPE newValue) {
 		task.setPriority(newValue);
 		return updateAttributeTree(task, task, TREE_TYPE.PRIORITY);
 	}
 
-	private boolean updateAttributeTree(Task oldTask, Task newTask, TREE_TYPE taskAttributeType) {
+	private static boolean updateAttributeTree(Task oldTask, Task newTask, TREE_TYPE taskAttributeType) {
 		boolean isReplaced = true;
 
 		int treeType = taskAttributeType.getValue();
@@ -195,7 +195,7 @@ public class TaskTree {
 	}
 
 	
-	public List<Task> searchName(String searchTerm) {
+	public static List<Task> searchName(String searchTerm) {
 		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
 
 		boolean isCaseInsensitive = checkLowercase(searchTerm);
@@ -215,7 +215,7 @@ public class TaskTree {
 		return resultList;
 	}
 
-	private boolean checkLowercase(String text) {
+	private static boolean checkLowercase(String text) {
 		int textLength = text.length();
 		char charInText;
 
@@ -229,12 +229,12 @@ public class TaskTree {
 	}
 
 	
-	public List<Task> queryStartTime(long fromStartTime, long toStartTime) {
+	public static List<Task> queryStartTime(long fromStartTime, long toStartTime) {
 		return query(TREE_TYPE.START_TIME, fromStartTime, toStartTime);
 	}
 
 	
-	public List<Task> queryEndTime(long fromEndTime, long toEndTime) {
+	public static List<Task> queryEndTime(long fromEndTime, long toEndTime) {
 		return query(TREE_TYPE.END_TIME, fromEndTime, toEndTime);
 	}
 
@@ -253,7 +253,7 @@ public class TaskTree {
 	 * @return a view of the portion of this collection whose elements range
 	 *         from {@code fromFlag}, inclusive, to {@code toFlag}, inclusive
 	 */
-	public List<Task> queryFlag(FLAG_TYPE fromFlag, FLAG_TYPE toFlag) {
+	public static List<Task> queryFlag(FLAG_TYPE fromFlag, FLAG_TYPE toFlag) {
 		
 		int fromValue = fromFlag.getValue();
 		int toValue = toFlag.getValue();
@@ -277,7 +277,7 @@ public class TaskTree {
 	 *         from {@code fromPriority}, inclusive, to {@code toPriority},
 	 *         inclusive
 	 */
-	public List<Task> queryPriority(PRIORITY_TYPE fromPriority, PRIORITY_TYPE toPriority) {
+	public static List<Task> queryPriority(PRIORITY_TYPE fromPriority, PRIORITY_TYPE toPriority) {
 		
 		int fromValue = fromPriority.getValue();
 		int toValue = toPriority.getValue();
@@ -304,7 +304,7 @@ public class TaskTree {
 	 *         from {@code fromValueL}, inclusive, to {@code toValueL},
 	 *         inclusive
 	 */
-	public List<Task> query(TREE_TYPE taskAttributeType, long fromValueL, long toValueL) {
+	public static List<Task> query(TREE_TYPE taskAttributeType, long fromValueL, long toValueL) {
 
 		int treeType = taskAttributeType.getValue();
 		
@@ -347,29 +347,29 @@ public class TaskTree {
 	}
 	
 	
-	public List<Task> searchFlag(FLAG_TYPE type) {
+	public static List<Task> searchFlag(FLAG_TYPE type) {
 		int flagValue = type.getValue();
 		
 		return query(TREE_TYPE.FLAG, flagValue, flagValue);
 	}
 
 	
-	public List<Task> searchPriority(PRIORITY_TYPE type) {
+	public static List<Task> searchPriority(PRIORITY_TYPE type) {
 		int priorityValue = type.getValue();
 		
 		return query(TREE_TYPE.PRIORITY, priorityValue, priorityValue);
 	}
 
-	public List<Task> getList() {
+	public static List<Task> getList() {
 		return getSortedList(taskTrees.get(TaskAttributeConstants.ID));
 	}
 
-	public List<Task> getSortedList(TREE_TYPE taskAttributeType) {
+	public static List<Task> getSortedList(TREE_TYPE taskAttributeType) {
 		
 		return getSortedList(taskTrees.get(taskAttributeType.getValue()));
 	}
 
-	private List<Task> getSortedList(TreeSet<Task> taskTree) {
+	private static List<Task> getSortedList(TreeSet<Task> taskTree) {
 		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
 		for (Task task : taskTree) {
 			resultList.add(task);
@@ -408,7 +408,7 @@ public class TaskTree {
 	 * @return a string representation of this task tree in a list.
 	 */
 	
-	public String toString(TREE_TYPE taskAttributeType) {
+	public static String toString(TREE_TYPE taskAttributeType) {
 		
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(taskAttributeType));
 		int listSize = resultList.size();
@@ -424,15 +424,15 @@ public class TaskTree {
 	}
 
 	
-	public int size() {
+	public static int size() {
 		return taskTreeSize;
 	}
 
-	private void increaseTaskListSize() {
+	private static void increaseTaskListSize() {
 		taskTreeSize += 1;
 	}
 
-	private void decreaseTaskListSize() {
+	private static void decreaseTaskListSize() {
 		taskTreeSize -= 1;
 	}
 }
