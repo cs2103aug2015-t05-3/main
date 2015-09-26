@@ -390,9 +390,8 @@ public class TaskTree {
 	 * ("[]"). Adjacent elements are separated by the characters ", " (comma and
 	 * space). Elements are converted to strings as by String.toString(Object).
 	 */
-	@Override
-	public String toString() {
-		return toString(TaskAttributeConstants.TREE_TYPE.ID);
+	public static String getString() {
+		return getString(TaskAttributeConstants.TREE_TYPE.ID);
 	}
 
 	/**
@@ -408,7 +407,7 @@ public class TaskTree {
 	 * @return a string representation of this task tree in a list.
 	 */
 	
-	public static String toString(TREE_TYPE taskAttributeType) {
+	public static String getString(TREE_TYPE taskAttributeType) {
 		
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(taskAttributeType));
 		int listSize = resultList.size();
