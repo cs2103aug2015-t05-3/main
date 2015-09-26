@@ -7,7 +7,7 @@ package tds;
 
 public class Task {
 	private static int taskNumber = 1;
-	
+
 	public final static int FLAG_NULL = 0;
 	public final static int FLAG_DONE = 1;
 
@@ -42,7 +42,22 @@ public class Task {
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
 	 * name, starting time, ending time, flag and priority as the argument. An
-	 * internal id will be used to differentiate duplicated value.
+	 * internal ID will be used to differentiate duplicated value.
+	 * 
+	 * @param name
+	 *            the name or description of the newly constructed {@code Task}
+	 * @param startTime
+	 *            the starting time of the newly constructed {@code Task} in
+	 *            UNIX format
+	 * @param endTime
+	 *            the ending time of the newly constructed {@code Task} in UNIX
+	 *            format
+	 * @param flag
+	 *            the given flag field; Task marked as done is specified with
+	 *            this flag.
+	 * @param priority
+	 *            the given priority field;
+	 * 
 	 */
 	public Task(String name, long startTime, long endTime, int flag, int priority) {
 		this.id = taskNumber++;
@@ -57,14 +72,19 @@ public class Task {
 	 * Initializes a newly created {@code Task} object which contain only the
 	 * name or description of the task. The value of starting time, ending time
 	 * and flag are set to null or zero. Priority will be initialized to normal.
+	 * 
+	 * @param name
+	 *            the name or description of the newly constructed {@code Task}
 	 */
 	public Task(String name) {
 		this(name, DATE_NULL, DATE_NULL, FLAG_NULL, PRIORITY_NORMAL);
 	}
 
-	
 	/**
 	 * Returns the value of the given option field.
+	 * 
+	 * @param option
+	 *            the given option field.
 	 * 
 	 * @return the value of the given option field.
 	 */
@@ -77,9 +97,12 @@ public class Task {
 			return GET_VALUE_INVALID;
 		}
 	}
-	
+
 	/**
 	 * Returns the value of the given option field.
+	 * 
+	 * @param option
+	 *            the given option field.
 	 * 
 	 * @return the value of the given option field.
 	 */
@@ -93,6 +116,9 @@ public class Task {
 
 	/**
 	 * Returns the value of the given option field.
+	 * 
+	 * @param option
+	 *            the given option field.
 	 * 
 	 * @return the value of the given option field.
 	 */
@@ -210,7 +236,9 @@ public class Task {
 		this.priority = priority;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -239,14 +267,11 @@ public class Task {
 			return true;
 
 		Task rhs = (Task) obj;
-		return (name.equals(rhs.name)) && 
-				(startTime == rhs.startTime) && 
-				(endTime == rhs.endTime) && 
-				(flag == rhs.flag) && 
-				(priority == rhs.priority);
+		return (name.equals(rhs.name)) && (startTime == rhs.startTime) && (endTime == rhs.endTime) && (flag == rhs.flag)
+				&& (priority == rhs.priority);
 	}
 
-	//TODO Check for removal of this method.
+	// TODO Check for removal of this method.
 	/**
 	 * Compares this {@code Task} instance with another lexicographically and
 	 * numerically. The value returned is determined by the first difference in
@@ -305,17 +330,17 @@ public class Task {
 	 */
 	public boolean[] getAttributesDiff(Task rhs) {
 		boolean[] checkBits = new boolean[TaskAttributeConstants.NUM_OF_ATTRIBUTES];
-		
-		checkBits[TaskAttributeConstants.NAME]		= (this.name.equals(rhs.name));
-		checkBits[TaskAttributeConstants.START_TIME]= (this.startTime - rhs.startTime == 0);
-		checkBits[TaskAttributeConstants.END_TIME]	= (this.endTime - rhs.endTime == 0);
-		checkBits[TaskAttributeConstants.FLAG]		= (this.flag - rhs.flag == 0);
-		checkBits[TaskAttributeConstants.PRIORITY]	= (this.priority - rhs.priority == 0);
-		checkBits[TaskAttributeConstants.ID] 		= (this.compareIdTo(rhs) == 0);
-		
+
+		checkBits[TaskAttributeConstants.NAME] = (this.name.equals(rhs.name));
+		checkBits[TaskAttributeConstants.START_TIME] = (this.startTime - rhs.startTime == 0);
+		checkBits[TaskAttributeConstants.END_TIME] = (this.endTime - rhs.endTime == 0);
+		checkBits[TaskAttributeConstants.FLAG] = (this.flag - rhs.flag == 0);
+		checkBits[TaskAttributeConstants.PRIORITY] = (this.priority - rhs.priority == 0);
+		checkBits[TaskAttributeConstants.ID] = (this.compareIdTo(rhs) == 0);
+
 		return checkBits;
 	}
-	
+
 	/**
 	 * Compares the name of this {@code Task} instance with another.
 	 * 
@@ -410,27 +435,26 @@ public class Task {
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
 	 * 
-	 * @return the value 0 if the ID of this {@code Task} is equal to
-	 *         the argument {@code Task}; a value less than 0 if this ID
-	 *         is numerically less than the argument ID; a value
-	 *         greater than 0 this ID is numerically greater than the
-	 *         argument ID.
+	 * @return the value 0 if the ID of this {@code Task} is equal to the
+	 *         argument {@code Task}; a value less than 0 if this ID is
+	 *         numerically less than the argument ID; a value greater than 0
+	 *         this ID is numerically greater than the argument ID.
 	 */
 	public int compareIdTo(Task rhs) {
 		return (this.id - rhs.id);
 	}
 
 	/**
-	 * Allow comparator to differentiate two duplicated attributes via its ID
-	 * of creation
+	 * Allow comparator to differentiate two duplicated attributes via its ID of
+	 * creation
 	 * 
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
 	 * @param result
 	 *            result obtained from previous comparison
 	 * 
-	 * @return the original result if it is already different. Otherwise,
-	 *         the difference in ID is returned
+	 * @return the original result if it is already different. Otherwise, the
+	 *         difference in ID is returned
 	 */
 	private static int handleDuplicatedAttributes(Task lhs, Task rhs, int result) {
 		if (result == 0) {
@@ -448,10 +472,7 @@ public class Task {
 	 */
 	@Override
 	public String toString() {
-		return "" + name + TO_STRING_DELIMETER + 
-				startTime + TO_STRING_DELIMETER + 
-				endTime + TO_STRING_DELIMETER + 
-				flag + TO_STRING_DELIMETER + 
-				priority;
+		return "" + name + TO_STRING_DELIMETER + startTime + TO_STRING_DELIMETER + endTime + TO_STRING_DELIMETER + flag
+				+ TO_STRING_DELIMETER + priority;
 	}
 }
