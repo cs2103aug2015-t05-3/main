@@ -16,7 +16,7 @@ interface TaskCollection<E> {
 	 * 
 	 * @param element
 	 *            to be added to this collection
-	 * @return true if this set did not already contain the specified element
+	 * @return true if this collection did not already contain the specified element
 	 */
 	public boolean add(E element);
 
@@ -25,7 +25,7 @@ interface TaskCollection<E> {
 	 * 
 	 * @param element
 	 *            to be removed from this collection
-	 * @return true if this set contained the specified element
+	 * @return true if this collection contained the specified element
 	 */
 	public boolean remove(E element);
 
