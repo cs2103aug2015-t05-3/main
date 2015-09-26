@@ -73,35 +73,6 @@ public class Task implements Comparable<Task> {
 	 */
 	public final static int DATE_NULL = 0;
 
-	/**
-	 * Field option for {@code getValue} to retrieve the ID of a {@code Task}.
-	 */
-	public final static long GET_VALUE_ID = TaskAttributeConstants.ID;
-	/**
-	 * Field option for {@code getValue} to retrieve the start time of a
-	 * {@code Task}.
-	 */
-	public final static long GET_VALUE_START_TIME = TaskAttributeConstants.START_TIME;
-	/**
-	 * Field option for {@code getValue} to retrieve the end time of a
-	 * {@code Task}.
-	 */
-	public final static long GET_VALUE_END_TIME = TaskAttributeConstants.END_TIME;
-	/**
-	 * Field option for {@code getValue} to retrieve the flag of a {@code Task}.
-	 */
-	public final static int GET_VALUE_FLAG = TaskAttributeConstants.FLAG;
-	/**
-	 * Field option for {@code getValue} to retrieve the priority of a
-	 * {@code Task}.
-	 */
-	public final static int GET_VALUE_PRIORITY = TaskAttributeConstants.PRIORITY;
-	/**
-	 * Field option for {@code getValue} to retrieve the name or description of
-	 * a {@code Task}.
-	 */
-	public final static String GET_VALUE_NAME = TaskAttributeConstants.NAME_TYPE_STRING;
-
 	private final static int RETURN_VALUE_INVALID = -1;
 	private final static Object RETURN_VALUE_NULL = null;
 	private final static String TO_STRING_DELIMETER = "|";
@@ -152,40 +123,6 @@ public class Task implements Comparable<Task> {
 	 */
 	public Task(String name) {
 		this(name, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
-	}
-
-	/**
-	 * Returns the value of the given option field.
-	 * 
-	 * @param option
-	 *            the given option field.
-	 * 
-	 * @return the value of the given option field.
-	 */
-	public long getValue(long option) {
-		if (option == GET_VALUE_START_TIME) {
-			return getStartTime();
-		} else if (option == GET_VALUE_END_TIME) {
-			return getEndTime();
-		} else {
-			return RETURN_VALUE_INVALID;
-		}
-	}
-
-	/**
-	 * Returns the value of the given option field.
-	 * 
-	 * @param option
-	 *            the given option field.
-	 * 
-	 * @return the value of the given option field.
-	 */
-	public String getValue(String option) {
-		if (option.equals(GET_VALUE_NAME)) {
-			return getName();
-		} else {
-			return (String) RETURN_VALUE_NULL;
-		}
 	}
 
 	/**
