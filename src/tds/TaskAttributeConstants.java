@@ -1,5 +1,18 @@
+/**  
+ * @author amoshydra
+ */
 package tds;
 
+/**
+ * A list of constants used to identify a specify attribute type. These
+ * constants are used for differentiating {@code treeType} for
+ * {@code TaskCollection} and {@code TaskTree}.
+ * 
+ * @see TaskCollection
+ * @see TaskTree
+ * @see Task
+ * 
+ */
 public class TaskAttributeConstants {
 
 	public final static int NAME = 0;

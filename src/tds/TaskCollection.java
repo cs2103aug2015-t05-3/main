@@ -1,14 +1,19 @@
 /**
- * The {@code TaskCollection} class is an interface that 
- * provides methods for storing and manipulating {@code Task}. 
- *
  * @author amoshydra
- * 
  */
 package tds;
 
 import java.util.List;
 
+/**
+ * The {@code TaskCollection} class is an interface that provides methods for
+ * storing and manipulating {@code Task}.
+ * 
+ * @see TaskTree
+ * @see Task
+ * @see TaskAttributeConstants
+ * 
+ */
 interface TaskCollection<E> {
 
 	/**
@@ -31,7 +36,8 @@ interface TaskCollection<E> {
 	public boolean remove(E element);
 
 	/**
-	 * Replace an old element from this collection with a new element
+	 * Replace an old element from this collection with a new element. The new
+	 * element will be treated as a newly created task.
 	 * 
 	 * @param oldE
 	 *            to be replaced from this collection
@@ -77,10 +83,10 @@ interface TaskCollection<E> {
 	/**
 	 * Returns a view of the portion of this collection whose elements range
 	 * from {@code fromEndTime}, inclusive, to {@code toEnd}Time, inclusive. (If
-	 * {@code fromEndTime} and {@code toEndTime} are equal, the returned {@code List} contains
-	 * element that matches {@code fromEndTime} only.) The returned {@code List} is
-	 * backed by this collection, so changes in the returned {@code List} are
-	 * reflected in this collection, and vice-versa.
+	 * {@code fromEndTime} and {@code toEndTime} are equal, the returned
+	 * {@code List} contains element that matches {@code fromEndTime} only.) The
+	 * returned {@code List} is backed by this collection, so changes in the
+	 * returned {@code List} are reflected in this collection, and vice-versa.
 	 * 
 	 * @param fromEndTime
 	 *            low endpoint (inclusive) of the returned list
@@ -121,6 +127,16 @@ interface TaskCollection<E> {
 	 * 
 	 */
 	public List<E> searchPriority(int priorityIndex);
+
+	/**
+	 * Returns a view of this collection whose elements are sorted according to
+	 * order it is created. The returned {@code List} is backed by this
+	 * collection, so changes in the returned {@code List} are reflected in this
+	 * collection, and vice-versa.
+	 *
+	 * @return a view of this collection.
+	 */
+	public List<E> getList();
 
 	/**
 	 * Returns a view of this collection whose elements are sorted according to
