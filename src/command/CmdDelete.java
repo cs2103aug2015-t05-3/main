@@ -13,5 +13,10 @@ public class CmdDelete extends Command{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean isManipulative() {
+		return true;
+	}
 	
 }
