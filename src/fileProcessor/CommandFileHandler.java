@@ -28,8 +28,8 @@ public class CommandFileHandler {
 	NodeList nList;
 	
 	// Can modify this to specify filename
-	public CommandFileHandler() throws Exception {
-		xmlFile = new File("commands.xml");
+	public CommandFileHandler(String fileName) throws Exception {
+		xmlFile = new File(fileName);
 		dbFactory = DocumentBuilderFactory.newInstance();
 		dBuilder = dbFactory.newDocumentBuilder();
 		doc = dBuilder.parse(xmlFile);
@@ -61,12 +61,12 @@ public class CommandFileHandler {
 	}
 	
 
-	public static void main(String[] args) throws Exception {
-		CommandFileHandler runC = new CommandFileHandler();
+	/*public static void main(String[] args) throws Exception {
+		CommandFileHandler runC = new CommandFileHandler("commands.xml");
 		HashMap<String, String> sample = runC.getCmdTable();
 		for (HashMap.Entry<String, String> entry : sample.entrySet()) {
 			   System.out.println("key=" + entry.getKey() + ", value=" + entry.getValue());
 		}
-	}
+	}*/
 
 }

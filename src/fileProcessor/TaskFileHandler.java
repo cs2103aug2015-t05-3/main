@@ -25,9 +25,8 @@ public class TaskFileHandler {
 	Node nNode;
 	NodeList nList;
 	
-	// Can modify this to specify filename
-	public TaskFileHandler() throws Exception {
-		xmlFile = new File("tasks.xml");
+	public TaskFileHandler(String fileName) throws Exception {
+		xmlFile = new File(fileName);
 		dbFactory = DocumentBuilderFactory.newInstance();
 		dBuilder = dbFactory.newDocumentBuilder();
 		doc = dBuilder.parse(xmlFile);
@@ -54,7 +53,7 @@ public class TaskFileHandler {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		TaskFileHandler runT = new TaskFileHandler();
+		TaskFileHandler runT = new TaskFileHandler("tasks.xml");
 		runT.parseTask();
 	}
 }
