@@ -4,13 +4,13 @@ import java.util.Comparator;
 import tds.Task;
 
 /**
- * Provide {@code tds.Task} a comparator for the end time attribute
+ * Provide {@code tds.Task} a comparator for the ID attribute  
  * 
  * @author amoshydra
  */
-public class FlagComparator implements Comparator<Task> {
+public class IdComparator implements Comparator<Task> {
 	@Override
 	public int compare(Task lhs, Task rhs) {
-		return lhs.compareFlagTo(rhs);
+		return lhs.compareIdTo(rhs);
 	}
 }

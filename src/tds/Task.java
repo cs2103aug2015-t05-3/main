@@ -1,49 +1,191 @@
-/**
- * A task object used to store task name, time and different attributes.  
- *
- * @author amoshydra
- */
 package tds;
 
-public class Task {
-	public final static int FLAG_NULL = 0;
-	public final static int FLAG_DONE = 1;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
+/**
+ * A task object used to store task name, time and different attributes.
+ * 
+ * @author amoshydra
+ */
+public class Task implements Comparable<Task> {
+	private static int taskNumber = 1;
+
+	/**
+	 * Field value constant for flag attribute.
+	 */
+	public enum FLAG_TYPE {
+		NULL(0), DONE(1);
+
+		private final int value;
+		
+		private FLAG_TYPE(int value) {
+			this.value = value;
+		}
+
+		int getValue() {
+			return value;
+		}
+		
+		private static final Map<Integer, FLAG_TYPE> lookup = new HashMap<Integer, FLAG_TYPE>();
+		static {
+			for (FLAG_TYPE f : EnumSet.allOf(FLAG_TYPE.class))
+				lookup.put(f.getValue(), f);
+		}
+
+		static FLAG_TYPE get(int value) {
+			return lookup.get(value);
+		}
+	};
+
+	/**
+	 * Field value constant for priority attribute.
+	 */
+	public enum PRIORITY_TYPE {
+		VERY_HIGH(0), HIGH(1), ABOVE_NORMAL(2), NORMAL(3), BELOW_NORMAL(4), LOW(5), VERY_LOW(6);
+
+		private final int value;
+		
+		private PRIORITY_TYPE(int value) {
+			this.value = value;
+		}
+
+		int getValue() {
+			return value;
+		}
+		
+		private static final Map<Integer, PRIORITY_TYPE> lookup = new HashMap<Integer, PRIORITY_TYPE>();
+
+		static {
+			for (PRIORITY_TYPE p : EnumSet.allOf(PRIORITY_TYPE.class))
+				lookup.put(p.getValue(), p);
+		}
+
+		static PRIORITY_TYPE get(int value) {
+			return lookup.get(value);
+		}
+	};
+
+	/**
+	 * Field value for start time or end time attribute indicating an empty
+	 * date.
+	 */
 	public final static int DATE_NULL = 0;
 
-	public final static int PRIORITY_VERY_HIGH = 0;
-	public final static int PRIORITY_HIGH = 1;
-	public final static int PRIORITY_ABOVE_NORMAL = 2;
-	public final static int PRIORITY_NORMAL = 3;
-	public final static int PRIORITY_BELOW_NORMAL = 4;
-	public final static int PRIORITY_LOW = 5;
-	public final static int PRIORITY_VERY_LOW = 6;
-	
+	/**
+	 * Field option for {@code getValue} to retrieve the ID of a {@code Task}.
+	 */
+	public final static long GET_VALUE_ID = TaskAttributeConstants.ID;
+	/**
+	 * Field option for {@code getValue} to retrieve the start time of a
+	 * {@code Task}.
+	 */
+	public final static long GET_VALUE_START_TIME = TaskAttributeConstants.START_TIME;
+	/**
+	 * Field option for {@code getValue} to retrieve the end time of a
+	 * {@code Task}.
+	 */
+	public final static long GET_VALUE_END_TIME = TaskAttributeConstants.END_TIME;
+	/**
+	 * Field option for {@code getValue} to retrieve the flag of a {@code Task}.
+	 */
+	public final static int GET_VALUE_FLAG = TaskAttributeConstants.FLAG;
+	/**
+	 * Field option for {@code getValue} to retrieve the priority of a
+	 * {@code Task}.
+	 */
+	public final static int GET_VALUE_PRIORITY = TaskAttributeConstants.PRIORITY;
+	/**
+	 * Field option for {@code getValue} to retrieve the name or description of
+	 * a {@code Task}.
+	 */
+	public final static String GET_VALUE_NAME = TaskAttributeConstants.NAME_TYPE_STRING;
+
+	private final static int RETURN_VALUE_INVALID = -1;
+	private final static Object RETURN_VALUE_NULL = null;
+	private final static String TO_STRING_DELIMETER = "|";
+
+	private int id;
 	private String name;
 	private long startTime;
 	private long endTime;
-	private int flag;
-	private int priority;
+	private FLAG_TYPE flag;
+	private PRIORITY_TYPE priority;
 
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
-	 * name, starting time, ending time and the flag as the argument.
+	 * name, starting time, ending time, flag and priority as the argument. An
+	 * internal ID will be used to differentiate duplicated value.
+	 * 
+	 * @param name
+	 *            the name or description of the newly constructed {@code Task}
+	 * @param startTime
+	 *            the starting time of the newly constructed {@code Task} in
+	 *            UNIX format
+	 * @param endTime
+	 *            the ending time of the newly constructed {@code Task} in UNIX
+	 *            format
+	 * @param flag
+	 *            the given flag field; Task marked as done is specified with
+	 *            this flag.
+	 * @param priority
+	 *            the given priority field;
+	 * 
 	 */
-	public Task(String name, long startTime, long endTime, int flag) {
+	public Task(String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
+		this.id = taskNumber++;
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.flag = flag;
-		this.priority = PRIORITY_NORMAL;
+		this.priority = priority;
 	}
 
 	/**
 	 * Initializes a newly created {@code Task} object which contain only the
 	 * name or description of the task. The value of starting time, ending time
-	 * and flag are set to null or zero.
+	 * and flag are set to null or zero. Priority will be initialized to normal.
+	 * 
+	 * @param name
+	 *            the name or description of the newly constructed {@code Task}
 	 */
 	public Task(String name) {
-		this(name, DATE_NULL, DATE_NULL, FLAG_NULL);
+		this(name, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
+	}
+
+	/**
+	 * Returns the value of the given option field.
+	 * 
+	 * @param option
+	 *            the given option field.
+	 * 
+	 * @return the value of the given option field.
+	 */
+	public long getValue(long option) {
+		if (option == GET_VALUE_START_TIME) {
+			return getStartTime();
+		} else if (option == GET_VALUE_END_TIME) {
+			return getEndTime();
+		} else {
+			return RETURN_VALUE_INVALID;
+		}
+	}
+
+	/**
+	 * Returns the value of the given option field.
+	 * 
+	 * @param option
+	 *            the given option field.
+	 * 
+	 * @return the value of the given option field.
+	 */
+	public String getValue(String option) {
+		if (option.equals(GET_VALUE_NAME)) {
+			return getName();
+		} else {
+			return (String) RETURN_VALUE_NULL;
+		}
 	}
 
 	/**
@@ -53,6 +195,15 @@ public class Task {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Returns the id of this task in {@code long}.
+	 * 
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
 	}
 
 	/**
@@ -78,7 +229,7 @@ public class Task {
 	 * 
 	 * @return the flag of this task.
 	 */
-	public int getFlag() {
+	public FLAG_TYPE getFlag() {
 		return flag;
 	}
 
@@ -87,17 +238,17 @@ public class Task {
 	 * 
 	 * @return the priority of this task.
 	 */
-	public int getPriority() {
+	public PRIORITY_TYPE getPriority() {
 		return priority;
 	}
-	
+
 	/**
 	 * Change the name or description of this task.
 	 * 
 	 * @param name
-	 *			the new name or description for the task.
+	 *            the new name or description for the task.
 	 */
-	public void setName(String name) {
+	void setName(String name) {
 		this.name = name;
 	}
 
@@ -105,9 +256,9 @@ public class Task {
 	 * Change the start time of this task.
 	 * 
 	 * @param startTime
-	 *			the new start time for the task.
+	 *            the new start time for the task.
 	 */
-	public void setStartTime(long startTime) {
+	void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 
@@ -115,9 +266,9 @@ public class Task {
 	 * Change the end time of this task.
 	 * 
 	 * @param endTime
-	 *			the new end time for the task.
+	 *            the new end time for the task.
 	 */
-	public void setEndTime(long endTime) {
+	void setEndTime(long endTime) {
 		this.endTime = endTime;
 	}
 
@@ -125,9 +276,9 @@ public class Task {
 	 * Change the flag of this task.
 	 * 
 	 * @param flag
-	 *			the new flag for the task.
+	 *            the new flag for the task.
 	 */
-	public void setFlag(int flag) {
+	void setFlag(FLAG_TYPE flag) {
 		this.flag = flag;
 	}
 
@@ -135,83 +286,83 @@ public class Task {
 	 * Change the priority of this task.
 	 * 
 	 * @param priority
-	 *			the new priority for the task.
+	 *            the new priority for the task.
 	 */
-	public void setPriority(int priority) {
+	void setPriority(PRIORITY_TYPE priority) {
 		this.priority = priority;
 	}
-	
-	/**
-	 * Determines whether or not two task are equal. 
-	 * The two tasks are equal if the values name, start time,
-	 * end time, flag and priority are equal.
-	 * 
-	 * @param obj
-	 * 		an object to be compared with this {@code Task}
-	 * 
-	 * @return
-	 * 		{@code true} if the object to be compared is an 
-	 * 		instance of Task and has the same values; false 
-	 * 		otherwise.
-	 */
-    public boolean equals(Object obj) {
-       if (!(obj instanceof Task))
-            return false;
-        if (obj == this)
-            return true;
 
-        Task rhs = (Task) obj;
-        return (name.equals(rhs.name)) &&
-            (startTime == rhs.startTime) &&
-            (endTime == rhs.endTime) &&
-            (flag == rhs.flag) && 
-            (priority == rhs.priority);
-    }
-    
 	/**
-	 * Compares this {@code Task} instance with another lexicographically and
-	 * numerically. The value returned is determined by the first difference in
-	 * value returned by:
+	 * @return a hash code value for this object enumerated using the ID of this
+	 *         {@code Task}.
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	/**
+	 * Determines whether or not two task are equal. The two tasks are equal if
+	 * the values name, start time, end time, flag and priority are equal.
 	 * 
-	 * <pre>
-	 * {@code this.compareNameTo(rhs)}
-	 * {@code this.compareStartTimeTo(rhs)}
-	 * {@code this.compareEndTimeTo(rhs)}
-	 * {@code this.compareFlagTo(rhs)}
-	 * {@code this.comparePriorityTo(rhs)}
-	 * </pre>
+	 * @return {@code true} if the object to be compared is an instance of Task
+	 *         and has the same attributes; false otherwise.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Task))
+			return false;
+		if (obj == this)
+			return true;
+
+		Task rhs = (Task) obj;
+		return (name.equals(rhs.name)) && (startTime == rhs.startTime) && (endTime == rhs.endTime) && (flag == rhs.flag)
+				&& (priority == rhs.priority);
+	}
+
+	/**
+	 * Compares this {@code Task} instance with another based on the order they
+	 * are created.
+	 * 
+	 * @return the value 0 if this {@code Task} is equal to the argument
+	 *         {@code Task}; a value less than 0 if this {@code Task} is created
+	 *         earlier than the argument {@code Task}; and a value greater than
+	 *         0 if this {@code Task} is created later than the argument
+	 *         {@code Task}.
+	 */
+	@Override
+	public int compareTo(Task rhs) {
+		return this.compareIdTo(rhs);
+	}
+
+	/**
+	 * Compares this {@code Task} instance with another to generate an array of
+	 * check bits.
 	 * 
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
 	 * 
-	 * @return the value 0 if this {@code Task} is equal to the argument
-	 *         {@code Task}; a value less than 0 if this {@code Task} is
-	 *         lexicographically or numerically less than the argument
-	 *         {@code Task}; and a value greater than 0 if this {@code Task} is
-	 *         lexicographically or numerically greater than the argument
-	 *         {@code Task}.
+	 * @return a boolean array with all element as {@code true} if the
+	 *         {@code Task} is identical to the other; A difference in
+	 *         attributes between two task will cause a boolean in the array to
+	 *         become false.
 	 */
-	public int compareTo(Task rhs) {
+	public boolean[] getAttributesDiff(Task rhs) {
+		boolean[] checkBits = new boolean[TaskAttributeConstants.NUM_OF_ATTRIBUTES];
 
-		if (this.name.equals(rhs.name)) {
-			if (this.startTime == rhs.startTime) {
-				if (this.endTime == rhs.endTime) {
-					if (this.flag == rhs.flag) {
-						return comparePriorityTo(rhs);
-					} else {
-						return compareFlagTo(rhs);
-					}
-				} else {
-					return compareEndTimeTo(rhs);
-				}
-			} else {
-				return compareStartTimeTo(rhs);
-			}
-		} else {
-			return compareNameTo(rhs);
-		}
+		checkBits[TaskAttributeConstants.NAME] = (this.name.equals(rhs.name));
+		checkBits[TaskAttributeConstants.START_TIME] = (this.startTime - rhs.startTime == 0);
+		checkBits[TaskAttributeConstants.END_TIME] = (this.endTime - rhs.endTime == 0);
+		checkBits[TaskAttributeConstants.FLAG] = (this.flag.value - rhs.flag.value == 0);
+		checkBits[TaskAttributeConstants.PRIORITY] = (this.priority.value - rhs.priority.value == 0);
+		checkBits[TaskAttributeConstants.ID] = (this.compareIdTo(rhs) == 0);
+
+		return checkBits;
 	}
-    
+
 	/**
 	 * Compares the name of this {@code Task} instance with another.
 	 * 
@@ -225,7 +376,8 @@ public class Task {
 	 *         argument name.
 	 */
 	public int compareNameTo(Task rhs) {
-		return this.name.compareTo(rhs.name);
+		int result = this.name.compareTo(rhs.name);
+		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
 	/**
@@ -243,7 +395,8 @@ public class Task {
 	public int compareStartTimeTo(Task rhs) {
 		Long startTimeLongThis = new Long(this.startTime);
 		Long startTimeLongRhs = new Long(rhs.startTime);
-		return startTimeLongThis.compareTo(startTimeLongRhs);
+		int result = startTimeLongThis.compareTo(startTimeLongRhs);
+		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
 	/**
@@ -261,7 +414,8 @@ public class Task {
 	public int compareEndTimeTo(Task rhs) {
 		Long endTimeLongThis = new Long(this.endTime);
 		Long endTimeLongRhs = new Long(rhs.endTime);
-		return endTimeLongThis.compareTo(endTimeLongRhs);
+		int result = endTimeLongThis.compareTo(endTimeLongRhs);
+		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
 	/**
@@ -276,7 +430,8 @@ public class Task {
 	 *         this flag is numerically greater than the argument flag.
 	 */
 	public int compareFlagTo(Task rhs) {
-		return this.flag - rhs.flag;
+		int result = this.flag.value - rhs.flag.value;
+		return handleDuplicatedAttributes(this, rhs, result);
 	}
 
 	/**
@@ -292,6 +447,57 @@ public class Task {
 	 *         priority.
 	 */
 	public int comparePriorityTo(Task rhs) {
-		return this.priority - rhs.priority;
+		int result = this.priority.value - rhs.priority.value;
+		return handleDuplicatedAttributes(this, rhs, result);
+	}
+
+	/**
+	 * Compares the ID of this {@code Task} instance with another.
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * 
+	 * @return the value 0 if the ID of this {@code Task} is equal to the
+	 *         argument {@code Task}; a value less than 0 if this ID is
+	 *         numerically less than the argument ID; a value greater than 0
+	 *         this ID is numerically greater than the argument ID.
+	 */
+	public int compareIdTo(Task rhs) {
+		return (this.id - rhs.id);
+	}
+
+	/**
+	 * Allow comparator to differentiate two duplicated attributes via its ID of
+	 * creation
+	 * 
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 * @param result
+	 *            result obtained from previous comparison
+	 * 
+	 * @return the original result if it is already different. Otherwise, the
+	 *         difference in ID is returned
+	 */
+	private static int handleDuplicatedAttributes(Task lhs, Task rhs, int result) {
+		if (result == 0) {
+			return lhs.compareIdTo(rhs);
+		} else {
+			return result;
+		}
+	}
+
+	/**
+	 * Represent this {@code Task} into a {@code String} format
+	 * 
+	 * @return a string representation of this task in the format such as:
+	 * 
+	 *         <pre>
+	 *         name | startTime | endTime | flag | priority
+	 *         </pre>
+	 */
+	@Override
+	public String toString() {
+		return "" + name + TO_STRING_DELIMETER + startTime + TO_STRING_DELIMETER + endTime + TO_STRING_DELIMETER + flag
+				+ TO_STRING_DELIMETER + priority;
 	}
 }
