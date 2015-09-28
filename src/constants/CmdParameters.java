@@ -1,7 +1,7 @@
 /**
  * Keeps a list of parameter constants to be resolved by both LanguageProcessor and Command
  * 
- * @author Yan Chan Min Oo
+ * @author Yan Chan Min Oo 
  */
 package constants;
 

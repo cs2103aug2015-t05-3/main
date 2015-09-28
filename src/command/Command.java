@@ -89,7 +89,7 @@ public abstract class Command {
 	
 	/**
 	 * Add a command to the list of history. To be called after successfully executing a 
-	 * manipulation command
+	 * manipulation command 
 	 * @param toAdd 
 	 * 				The command to add to the list of history
 	 */

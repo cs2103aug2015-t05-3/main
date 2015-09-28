@@ -10,7 +10,7 @@ import tds.TaskTree;
 public class TaskBuddy {
 	
 	/*
-	 * Constants
+	 * Constants 
 	 */
 	private static final String configFileName = "config.xml";
 

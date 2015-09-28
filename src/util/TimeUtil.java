@@ -5,11 +5,13 @@
  */
 package util;
 
+import java.util.Date;
+
 public class TimeUtil {
 
-	/*
-	 * Converts a system time in string to long format. Return the number in long if given string is valid,
-	 * false if it is not.
+	/**
+	 * Converts a system time in string to long format.
+	 * @return System time in long format if the string is valid
 	 */
 	public static long StringToLongTime(String sysTimeInString){
 		try{
@@ -17,5 +19,13 @@ public class TimeUtil {
 		} catch (NumberFormatException e){
 			return 0;
 		}
+	}
+	
+	/**
+	 * Returns date format in String
+	 */
+	public static String getDate(long time){
+		Date date = new Date(time * 1000);
+		return date.toString();
 	}
 }
