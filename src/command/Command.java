@@ -42,11 +42,23 @@ public abstract class Command {
 	public abstract String undo();
 	
 	/**
-	 * Determines if the command manipulates the task data structure in any way
-	 * @return True if command modifies the data structure in some way (add, delete etc).
-	 *  False otherwise (display, help etc)
+	 * Determines if the command supports the undo function
+	 * @return True if command supports undo function, false if it does not
 	 */
-	public abstract boolean isManipulative();
+	public abstract boolean isUndoable();
+	
+	/**
+	 * Get the list of fields that are required to run this command
+	 * @return List of required parameter names
+	 * 
+	 */
+	public abstract String[] getRequiredFields();
+	
+	/**
+	 * Get the list of optional fields that can be used to run this command
+	 * @return List of required parameter names
+	 */
+	public abstract String[] getOptionalFields();
 	
 	/**
 	 * Sets the parameters required for some commands. Should be called before calling

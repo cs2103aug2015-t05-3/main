@@ -18,8 +18,19 @@ public class CmdHelp extends Command{
 	}
 	
 	@Override
-	public boolean isManipulative(){
+	public boolean isUndoable(){
 		return false;
+	}
+
+	@Override
+	public String[] getRequiredFields() {
+		return new String[]{};
+	}
+
+	@Override
+	public String[] getOptionalFields() {
+		// TODO Auto-generated method stub
+		return new String[]{};
 	}
 	
 }

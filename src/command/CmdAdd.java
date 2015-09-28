@@ -14,10 +14,11 @@ import util.TimeUtil;
 public class CmdAdd extends Command {
 
 	/*
-	 * Constants 
+	 * Constants
 	 */
 	// Message constants
-	//private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
+	// private static final String MSG_TASKUNSPECIFIED = "Please specify a task
+	// name";
 	private static final String MSG_TASKADDED = "Added : %1$s";
 
 	// Error codes
@@ -33,9 +34,9 @@ public class CmdAdd extends Command {
 	private String taskStartTime;
 	private String taskEndTime;
 	private String taskPriority;
-	
-	public CmdAdd(){
-		
+
+	public CmdAdd() {
+
 	}
 
 	public CmdAdd(String taskName) {
@@ -44,12 +45,13 @@ public class CmdAdd extends Command {
 
 	@Override
 	public String execute() {
-		
+
 		addTask = getTask(); // Tries to get the task object (if available)
-		
-		if(addTask == null){ // Not an existing task. Create a task object from scratch 
+
+		if (addTask == null) { // Not an existing task. Create a task object
+								// from scratch
 			// Get details of the task to add
-			if(taskName == null){
+			if (taskName == null) {
 				taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
 			}
 			taskStartTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_STARTTIME);
@@ -57,14 +59,15 @@ public class CmdAdd extends Command {
 			taskPriority = getParameterValue(CmdParameters.PARAM_NAME_TASK_PRIORITY);
 
 			/*
-			 * ERROR errCode = validateParam(); // Validate commands if (errCode !=
-			 * ERROR.OK) { switch (errCode) { case TASKUNSPECIFIED: return
+			 * ERROR errCode = validateParam(); // Validate commands if (errCode
+			 * != ERROR.OK) { switch (errCode) { case TASKUNSPECIFIED: return
 			 * MSG_TASKUNSPECIFIED; } }
 			 */
 
 			assignDefaults(); // Assign defaults
 
-			// Convert the start/end times to a format we can use for calculation
+			// Convert the start/end times to a format we can use for
+			// calculation
 			long taskStartTimeL = TimeUtil.StringToLongTime(taskStartTime);
 			long taskEndTimeL = TimeUtil.StringToLongTime(taskEndTime);
 
@@ -75,7 +78,7 @@ public class CmdAdd extends Command {
 		}
 
 		TaskTree.add(addTask);
-		
+
 		return String.format(MSG_TASKADDED, taskName);
 	}
 
@@ -87,7 +90,7 @@ public class CmdAdd extends Command {
 	}
 
 	@Override
-	public boolean isManipulative() {
+	public boolean isUndoable() {
 		return true;
 	}
 
@@ -134,5 +137,16 @@ public class CmdAdd extends Command {
 		default:
 			return PRIORITY_TYPE.NORMAL;
 		}
+	}
+
+	@Override
+	public String[] getRequiredFields() {
+		return new String[] { CmdParameters.PARAM_NAME_TASK_NAME };
+	}
+
+	@Override
+	public String[] getOptionalFields() {
+		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME,
+				CmdParameters.PARAM_NAME_TASK_PRIORITY };
 	}
 }

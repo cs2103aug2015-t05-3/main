@@ -1,9 +1,10 @@
 package command;
 
+import constants.CmdParameters;
 import tds.Task;
 import tds.TaskTree;
 
-public class CmdDelete extends Command{
+public class CmdDelete extends Command {
 
 	/*
 	 * Constants
@@ -23,29 +24,29 @@ public class CmdDelete extends Command{
 	 */
 	private Task deleteTask;
 	private String taskName;
-	
-	public CmdDelete(){
-		
+
+	public CmdDelete() {
+
 	}
-	
-	public CmdDelete(String taskName){
+
+	public CmdDelete(String taskName) {
 		this.taskName = taskName;
 	}
-	
+
 	@Override
 	public String execute() {
-		
+
 		deleteTask = getTask(); // Tries to get the task object (if available)
-		
-		if(deleteTask == null){
+
+		if (deleteTask == null) {
 			return MSG_TASKUNSPECIFIED;
 		}
-		
+
 		boolean isRemoved = TaskTree.remove(deleteTask);
-		if(isRemoved){
+		if (isRemoved) {
 			return String.format(MSG_TASKNOTFOUND, taskName);
 		}
-		
+
 		return String.format(MSG_TASKDELETED, taskName);
 	}
 
@@ -57,8 +58,18 @@ public class CmdDelete extends Command{
 	}
 
 	@Override
-	public boolean isManipulative() {
+	public boolean isUndoable() {
 		return true;
 	}
-	
+
+	@Override
+	public String[] getRequiredFields() {
+		return new String[] { CmdParameters.PARAM_NAME_TASK_NAME };
+	}
+
+	@Override
+	public String[] getOptionalFields() {
+		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME};
+	}
+
 }

@@ -47,7 +47,7 @@ public class CmdList extends Command {
 	}
 	
 	@Override
-	public boolean isManipulative(){
+	public boolean isUndoable(){
 		return false;
 	}
 	
@@ -99,6 +99,16 @@ public class CmdList extends Command {
 		}
 		
 		return displayTask;
+	}
+
+	@Override
+	public String[] getRequiredFields() {
+		return new String[]{};
+	}
+
+	@Override
+	public String[] getOptionalFields() {
+		return new String[]{};
 	}
 	
 }
