@@ -1,12 +1,10 @@
 /**
  * Keeps a list of parameter constants to be resolved by both LanguageProcessor and Command
+ * 
+ * @author Yan Chan Min Oo
  */
 package constants;
 
-/**
- * @author Yan Chan Min Oo
- *
- */
 public class CmdParameters {
 	public static final String PARAM_NAME_TASK_NAME = "ttn";
 	public static final String PARAM_NAME_TASK_STARTTIME = "tst";

@@ -1,14 +1,11 @@
 /**
  * Provides a list of methods to manipulate time for classes to use
  * 
+ * @author Yan Chan Min Oo
  */
 package util;
 
-/**
- * @author Yan Chan Min Oo
- *
- */
-public class Time {
+public class TimeUtil {
 
 	/*
 	 * Converts a system time in string to long format. Return the number in long if given string is valid,

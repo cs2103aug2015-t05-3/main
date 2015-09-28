@@ -1,10 +1,15 @@
+/**
+ * The add command
+ * 
+ * @author Yan Chan Min Oo
+ */
 package command;
 
 import constants.CmdParameters;
 import tds.Task;
 import tds.Task.PRIORITY_TYPE;
 import tds.TaskTree;
-import util.Time;
+import util.TimeUtil;
 
 public class CmdAdd extends Command {
 
@@ -60,8 +65,8 @@ public class CmdAdd extends Command {
 			assignDefaults(); // Assign defaults
 
 			// Convert the start/end times to a format we can use for calculation
-			long taskStartTimeL = Time.StringToLongTime(taskStartTime);
-			long taskEndTimeL = Time.StringToLongTime(taskEndTime);
+			long taskStartTimeL = TimeUtil.StringToLongTime(taskStartTime);
+			long taskEndTimeL = TimeUtil.StringToLongTime(taskEndTime);
 
 			// Convert the priority to a format we can use for storing
 			PRIORITY_TYPE taskPriorityP = getPriorityValue(taskPriority);
@@ -94,7 +99,7 @@ public class CmdAdd extends Command {
 	 * ERROR.TASKUNSPECIFIED; } return ERROR.OK; }
 	 */
 
-	/*
+	/**
 	 * Assign default values to unspecified parameters
 	 */
 	private void assignDefaults() {

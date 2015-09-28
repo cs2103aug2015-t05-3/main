@@ -1,14 +1,11 @@
 /**
  * Start point of the entire program.
+ * 
+ * @author Yan Chan Min Oo
  */
 
 import command.*;
 import tds.TaskTree;
-
-/**
- * @author Yan Chan Min Oo
- *
- */
 
 public class TaskBuddy {
 	
