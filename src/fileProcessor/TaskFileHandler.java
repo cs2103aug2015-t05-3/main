@@ -52,10 +52,14 @@ public class TaskFileHandler {
 		return tasks;
 	}
 
-	public void add() throws Exception {
-		int id = 5;
+	/**
+	 * Adds new task to XML file
+	 * @param t
+	 */
+	public void add(Task t) throws Exception {
+		int id = t.getId();
 		String[] headers = { "title", "startTime", "endTime", "flag", "priority" };
-		Task t = new Task("Add add method", 1447252200000L, 1452868200000L, FLAG_TYPE.NULL, PRIORITY_TYPE.HIGH);
+		//Task t = new Task("Add add method", 1447252200000L, 1452868200000L, FLAG_TYPE.NULL, PRIORITY_TYPE.HIGH);
 	
 		Element newTask = doc.createElement("task");
 		newTask.setAttribute("id", "" + id);
@@ -69,8 +73,12 @@ public class TaskFileHandler {
 		genXML();
 	}
 	
-	public void delete() throws Exception {
-		int id = 5;
+	/**
+	 * Delete task from XML file
+	 * @param id
+	 * @throws Exception
+	 */
+	public void delete(int id) throws Exception {
 		Element e = locateID(id);
 		root.removeChild(e);
 		genXML();
@@ -140,7 +148,8 @@ public class TaskFileHandler {
 				eElement = (Element) nNode;
 				// System.out.println("Task ID : " +
 				// eElement.getAttribute("id"));
-
+				int id = Integer.parseInt(eElement.getAttribute("id"));
+				
 				String title = retrieveElement(eElement, "title");
 				long startTime = TimeUtil.getLongTime(retrieveElement(eElement, "startTime"));
 				long endTime = TimeUtil.getLongTime(retrieveElement(eElement, "endTime"));
@@ -148,7 +157,7 @@ public class TaskFileHandler {
 				PRIORITY_TYPE priority = detPriority(retrieveElement(eElement, "priority"));
 
 				// ID in Task Object Not Implemented Yet!! TODO: Add ID.
-				t = new Task(title, startTime, endTime, flag, priority);
+				t = new Task(id, title, startTime, endTime, flag, priority);
 				tasks.add(t);
 			}
 		}
@@ -206,8 +215,7 @@ public class TaskFileHandler {
 	/**
 	 * Remove text nodes that are used for indentation.
 	 * 
-	 * @param Root
-	 *            Element of XML file
+	 * @param Node
 	 */
 	// Source: https://stackoverflow.com/a/31421664
 	private static void removeEmptyText(Node node) {
