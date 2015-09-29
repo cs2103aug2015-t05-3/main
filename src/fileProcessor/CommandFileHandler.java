@@ -26,8 +26,6 @@ public class CommandFileHandler {
 	Element eElement;
 	File xmlFile;
 	HashMap<String, String> cmdTable;
-	Node nNode;
-	NodeList nList;
 	
 	// Can modify this to specify filename
 	public CommandFileHandler(String fileName) throws Exception {
@@ -37,10 +35,12 @@ public class CommandFileHandler {
 		doc = dBuilder.parse(xmlFile);
 		doc.getDocumentElement().normalize();
 		cmdTable = new HashMap<>();
+		parseCmd();
 	}
 	
 	private void parseCmd() {
-		nList = doc.getElementsByTagName("command");
+		Node nNode;
+		NodeList nList = doc.getElementsByTagName("command");
 		
 		for (int i = 0; i < nList.getLength(); i++) {
 			nNode = nList.item(i);
@@ -58,7 +58,6 @@ public class CommandFileHandler {
 	}
 	
 	public HashMap<String, String> getCmdTable() {
-		parseCmd();
 		return cmdTable;
 	}
 	
