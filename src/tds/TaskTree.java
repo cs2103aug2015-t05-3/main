@@ -99,8 +99,10 @@ public class TaskTree {
 				isAdded = false;
 			}
 		}
-		increaseTaskListSize();
-		pushAddToStorage(task);
+		if (isAdded) {
+			increaseTaskListSize();
+			pushAddToStorage(task);
+		}
 		return isAdded;
 	}
 
@@ -119,8 +121,10 @@ public class TaskTree {
 				isRemoved = false;
 			}
 		}
-		decreaseTaskListSize();
-		pushRemoveToStorage(task);
+		if (isRemoved) {
+			decreaseTaskListSize();
+			pushRemoveToStorage(task);
+		}
 		return isRemoved;
 	}
 
