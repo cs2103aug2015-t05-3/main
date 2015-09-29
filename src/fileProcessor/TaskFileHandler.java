@@ -155,8 +155,7 @@ public class TaskFileHandler {
 				long endTime = TimeUtil.getLongTime(retrieveElement(eElement, "endTime"));
 				FLAG_TYPE flag = detFlag(retrieveElement(eElement, "flag"));
 				PRIORITY_TYPE priority = detPriority(retrieveElement(eElement, "priority"));
-
-				// ID in Task Object Not Implemented Yet!! TODO: Add ID.
+				
 				t = new Task(id, title, startTime, endTime, flag, priority);
 				tasks.add(t);
 			}
