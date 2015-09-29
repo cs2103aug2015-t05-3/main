@@ -32,6 +32,9 @@ public class TaskTree {
 	private static final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
 	private static final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
 
+	private static final String TASK_FILENAME = "tasks.xml";
+	
+	static TaskFileHandler fileHandler;
 	private static ArrayList<TreeSet<Task>> taskTrees;
 	private static int taskTreeSize;
 
@@ -97,7 +100,7 @@ public class TaskTree {
 			}
 		}
 		increaseTaskListSize();
-		pushToStorage();
+		pushAddToStorage(task);
 		return isAdded;
 	}
 
@@ -117,7 +120,7 @@ public class TaskTree {
 			}
 		}
 		decreaseTaskListSize();
-		pushToStorage();
+		pushRemoveToStorage(task);
 		return isRemoved;
 	}
 
@@ -239,7 +242,7 @@ public class TaskTree {
 		isReplaced &= taskTrees.get(treeType).remove(oldTask);
 		isReplaced &= taskTrees.get(treeType).add(newTask);
 
-		pushToStorage();
+		pushUpdateToStorage(oldTask, newTask);
 		return isReplaced;
 	}
 
@@ -587,16 +590,38 @@ public class TaskTree {
 		// TODO Deliver task list to fileProcessor
 	}
 
+	private static void pushAddToStorage(Task task) {
+		try {
+			fileHandler.add(task);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void pushRemoveToStorage(Task task) {
+		int taskId = task.getId();
+		try {
+			fileHandler.delete(taskId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void pushUpdateToStorage(Task oldTask, Task newTask) {
+		//TODO wait for implementation of update
+	}
+	
 	/**
 	 * To retrieve task list the Task file. This method is called upon the
 	 * starting of this program.
 	 */
 	private static void pullFromStorage() {
-		String filename = "test.txt";
-		TaskFileHandler fileHandler;
+		
 		ArrayList <Task> taskList;
 		try {
-			fileHandler = new TaskFileHandler(filename);
+			fileHandler = new TaskFileHandler(TASK_FILENAME);
 			taskList = fileHandler.retrieveTaskList();
 			for (TreeSet<Task> tree : taskTrees) {
 				tree.addAll(taskList);
