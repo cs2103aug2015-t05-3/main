@@ -3,6 +3,9 @@ package tds;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
+
+import fileProcessor.TaskFileHandler;
+
 import java.util.ArrayList;
 import tds.comparators.*;
 import tds.Task.FLAG_TYPE;
@@ -589,7 +592,18 @@ public class TaskTree {
 	 * starting of this program.
 	 */
 	private static void pullFromStorage() {
-		// TODO Get task list from fileProcessor
-		// TODO Construct TaskTree with the given list
+		String filename = "test.txt";
+		TaskFileHandler fileHandler;
+		ArrayList <Task> taskList;
+		try {
+			fileHandler = new TaskFileHandler(filename);
+			taskList = fileHandler.retrieveTaskList();
+			for (TreeSet<Task> tree : taskTrees) {
+				tree.addAll(taskList);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
