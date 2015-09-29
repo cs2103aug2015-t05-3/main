@@ -579,17 +579,6 @@ public class TaskTree {
 		taskTreeSize -= 1;
 	}
 
-	/**
-	 * To update and store the Task file. This method is called if an operation
-	 * may cause changes in the {@code TaskTree} data structure. These
-	 * operations are {@code add, remove, update} and {@code replace}
-	 */
-	private static void pushToStorage() {
-		// TODO Generate task list from TaskTree
-		// ArrayList<Task> list = new ArrayList<Task>(getList());
-		// TODO Deliver task list to fileProcessor
-	}
-
 	private static void pushAddToStorage(Task task) {
 		try {
 			fileHandler.add(task);
