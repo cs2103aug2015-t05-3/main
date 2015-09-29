@@ -1,7 +1,9 @@
-// Taken from http://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
-// Modified for CS2103T Project
+/**
+ * Attempts to retrieve the list of commands that will be utilized.
+ * @author Zander Chai
+ */
 
-// Zander Chai
+//Source: http://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
 
 package fileProcessor;
 

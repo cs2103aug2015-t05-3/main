@@ -46,6 +46,7 @@ public class TimeUtil {
 	
 	/**
 	 * Converts a date to long time
+	 * @return long time
 	 * ToDo: Refactor this
 	 */
 	public static long getLongTime(String sDate) {
