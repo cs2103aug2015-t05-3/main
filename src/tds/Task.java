@@ -19,7 +19,7 @@ public class Task implements Comparable<Task> {
 		NULL(0), DONE(1);
 
 		private final int value;
-		
+
 		private FLAG_TYPE(int value) {
 			this.value = value;
 		}
@@ -27,8 +27,9 @@ public class Task implements Comparable<Task> {
 		int getValue() {
 			return value;
 		}
-		
+
 		private static final Map<Integer, FLAG_TYPE> lookup = new HashMap<Integer, FLAG_TYPE>();
+
 		static {
 			for (FLAG_TYPE f : EnumSet.allOf(FLAG_TYPE.class))
 				lookup.put(f.getValue(), f);
@@ -46,7 +47,7 @@ public class Task implements Comparable<Task> {
 		VERY_HIGH(0), HIGH(1), ABOVE_NORMAL(2), NORMAL(3), BELOW_NORMAL(4), LOW(5), VERY_LOW(6);
 
 		private final int value;
-		
+
 		private PRIORITY_TYPE(int value) {
 			this.value = value;
 		}
@@ -54,7 +55,7 @@ public class Task implements Comparable<Task> {
 		int getValue() {
 			return value;
 		}
-		
+
 		private static final Map<Integer, PRIORITY_TYPE> lookup = new HashMap<Integer, PRIORITY_TYPE>();
 
 		static {
@@ -103,6 +104,42 @@ public class Task implements Comparable<Task> {
 	 */
 	public Task(String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		this.id = taskNumber++;
+		this.name = name;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.flag = flag;
+		this.priority = priority;
+	}
+
+	/**
+	 * Initializes a newly created {@code Task} object so that it store the
+	 * name, starting time, ending time, flag and priority as the argument. The
+	 * ID will be specified through fileProcessor only. Do not use this to add
+	 * new task from user.
+	 * 
+	 * @param id
+	 *            the index number used to identify this task.
+	 * 
+	 * @param name
+	 *            the name or description of the newly constructed {@code Task}
+	 * @param startTime
+	 *            the starting time of the newly constructed {@code Task} in
+	 *            UNIX format
+	 * @param endTime
+	 *            the ending time of the newly constructed {@code Task} in UNIX
+	 *            format
+	 * @param flag
+	 *            the given flag field; Task marked as done is specified with
+	 *            this flag.
+	 * @param priority
+	 *            the given priority field;
+	 * 
+	 */
+	public Task(int id, String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
+		// TODO loosely implemented. Check for possible flaw cases next time.
+		taskNumber = id;
+		taskNumber++;
+		// TODO Case when specified id is lesser than taskNumber.
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
