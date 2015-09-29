@@ -169,11 +169,11 @@ public class Task implements Comparable<Task> {
 	}
 
 	/**
-	 * Returns the id of this task in {@code long}.
+	 * Returns the id of this task in {@code int}.
 	 * 
 	 * @return the id
 	 */
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
