@@ -14,20 +14,19 @@ public class TaskBuddy {
 	/*
 	 * Constants 
 	 */
-	private static final String configFileName = "config.xml";
+	private static final String cmdFileName = "commands.xml";
 	
 	/*
 	 * Global variables
 	 */
 	private static Scanner _in;
+	private static LanguageProcessor lp;
 
 	public static void main(String[] args) {
-		// Load arguments from config file
-		
 		// Get task file location
 		
 		// Load tasks
-		TaskTree.init();
+		init();
 		
 		// Load GUI (NEXT TIME, IGNORE FOR NOW)
 		
@@ -35,11 +34,31 @@ public class TaskBuddy {
 		runCommands();
 	}
 	
+	/**
+	 * Initialises all the necessary variables
+	 */
+	private static void init(){
+		_in = new Scanner(System.in);
+		lp = new LanguageProcessor(cmdFileName);
+		TaskTree.init();
+	}
+	
 	private static void runCommands(){
 		String cmd;
 		do{
+			System.out.print("Command: ");
 			cmd = getInput();
+			Command toExecute = lp.resolveCmd(cmd);
+			if(toExecute == null){
+				System.out.println("Invalid cmd!");
+				continue;
+			}
+			System.out.println(toExecute.execute());
+			if(toExecute.isUndoable()){
+				Command.addHistory(toExecute);
+			}
 		} while (!cmd.equals("exit"));
+		_in.close();
 	}
 	
 	private static String getInput(){

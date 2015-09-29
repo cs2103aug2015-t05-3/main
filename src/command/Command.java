@@ -105,7 +105,7 @@ public abstract class Command {
 	 * @param toAdd 
 	 * 				The command to add to the list of history
 	 */
-	public void addHistory(Command toAdd){
+	public static void addHistory(Command toAdd){
 		history.add(toAdd);
 	}
 }
