@@ -110,6 +110,8 @@ public class CmdDelete extends Command {
 		
 		String output = displayDeleteList(deleteTaskList);
 		int input = INPUT_DEFAULT_VALUE; 
+		
+		TaskBuddy.printMessage();
 		/*
 		 * To be coded when UI is available
 		 * 

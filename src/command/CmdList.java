@@ -42,7 +42,7 @@ public class CmdList extends Command {
 	
 	@Override
 	public String undo(){
-		//do nothing (Display should not have undo)
+		//do nothing (List should not have undo)
 		return null;
 	}
 	

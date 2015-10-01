@@ -10,26 +10,25 @@ public class CmdExit extends Command {
 
 	@Override
 	public String undo() {
-		// TODO Auto-generated method stub
+		//do nothing (Exit should not have undo)
 		return null;
 	}
 
 	@Override
 	public boolean isUndoable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public String[] getRequiredFields() {
 		// TODO Auto-generated method stub
-		return null;
+		return new String[0];
 	}
 
 	@Override
 	public String[] getOptionalFields() {
 		// TODO Auto-generated method stub
-		return null;
+		return new String[0];
 	}
 
 }

@@ -10,13 +10,12 @@ public class CmdClear extends Command{
 
 	@Override
 	public String undo() {
-		// TODO Auto-generated method stub
+		//do nothing (Clear should not have undo)
 		return null;
 	}
 
 	@Override
 	public boolean isUndoable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
