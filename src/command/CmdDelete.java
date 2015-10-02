@@ -5,6 +5,7 @@ import java.util.List;
 import constants.CmdParameters;
 import tds.Task;
 import tds.TaskTree;
+import logic.TaskBuddy;
 
 public class CmdDelete extends Command {
 
@@ -20,6 +21,8 @@ public class CmdDelete extends Command {
 	private static final String MSG_TASKNOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKDELETED = "Deleted : %1$s";
 	private static final String MSG_NOTASKDELETED = "No task deleted";
+	
+	private static final String MSG_INVALID_INPUT = "Invalid input.";
 
 	// Error codes
 	/*
@@ -111,19 +114,14 @@ public class CmdDelete extends Command {
 		String output = displayDeleteList(deleteTaskList);
 		int input = INPUT_DEFAULT_VALUE; 
 		
-		TaskBuddy.printMessage();
-		/*
-		 * To be coded when UI is available
-		 * 
-		print(output);
-		*0 to exit
-		while(not within 0 <= userInput <= deleteTaskList.size()){
-			print("Invalid number.");
+		TaskBuddy.printMessage(output);
+		
+		while(input < -1 || input > deleteTaskList.size()){
+			input = processInput(TaskBuddy.getInput());
+			if(input < -1 || input > deleteTaskList.size()){
+				TaskBuddy.printMessage(MSG_INVALID_INPUT);
+			}
 		}
-		
-		input = userInput;
-		 */
-		
 		
 		return input;
 	}
@@ -142,6 +140,21 @@ public class CmdDelete extends Command {
 		
 		return output;
 		
+	}
+	
+	//Method to be refactored if possible (Should not be in CmdDelete)
+	private int processInput(String input){
+		int inputNumber = INPUT_DEFAULT_VALUE;
+		
+		if(input == null || input.equals("")){
+			return inputNumber;
+		}
+		
+		try{
+			inputNumber = Integer.parseInt(input);
+		}catch(NumberFormatException e){/*Do nothing*/}
+		
+		return inputNumber;
 	}
 	
 }
