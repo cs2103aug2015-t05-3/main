@@ -17,7 +17,7 @@ public class CmdUpdate extends Command {
 	@Override
 	public boolean isUndoable() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
