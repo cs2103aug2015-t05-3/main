@@ -573,7 +573,31 @@ public class TaskTree {
 	}
 	
 	private static void pushUpdateToStorage(Task oldTask, Task newTask) {
-		//TODO wait for implementation of update
+		int oldId = oldTask.getId();
+		int newId = newTask.getId();
+		
+		if (oldId == newId) {
+			try {
+				//TODO Wait for update method from FileProcessor
+				//fileHandler.update(newTask);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				fileHandler.delete(oldId);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				fileHandler.add(newTask);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
