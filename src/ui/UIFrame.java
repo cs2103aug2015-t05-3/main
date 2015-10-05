@@ -40,7 +40,7 @@ public class UIFrame extends javax.swing.JFrame {
         jScrollPane2.setViewportView(uiOutputField);
 
         uiMaxWinBtn.setBackground(new java.awt.Color(244, 230, 153));
-        uiMaxWinBtn.setText("▲");
+        uiMaxWinBtn.setText(Character.toString((char)0x25B2));
 
         uiInputTextField.setBackground(new java.awt.Color(24, 24, 27));
         uiInputTextField.setForeground(new java.awt.Color(240, 240, 240));
