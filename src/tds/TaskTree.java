@@ -129,36 +129,6 @@ public class TaskTree {
 	}
 
 	/**
-	 * Replace an old {@code Task} object from this {@code TaskTree} with a new
-	 * {@code Task} object. The new {@code Task} object will be treated as a
-	 * newly created task.
-	 * 
-	 * @param oldTask
-	 *            to be replaced from this {@code TaskTree}
-	 * @param newTask
-	 *            to replace the old {@code Task} object
-	 * 
-	 * @return true if this {@code TaskTree} contained the old {@code Task}
-	 *         object and can be replaced by the new {@code Task} object
-	 */
-	public static boolean replace(Task oldTask, Task newTask) {
-
-		boolean[] checkBits = oldTask.getAttributesDiff(newTask);
-		boolean isReplaced = true;
-
-		// Re-insert task based on its modified attributes
-		for (int i = 0; i < SIZE_OF_TASK_TREES; i++) {
-			if (checkBits[i] == false) {
-				isReplaced &= updateAttributeTree(oldTask, newTask, TYPE.get(i));
-			}
-		}
-		// Replace old task with new task for the remaining tree;
-		oldTask = newTask;
-
-		return isReplaced;
-	}
-
-	/**
 	 * Update an {@code Task} object from this {@code TaskTree} with the given
 	 * new name or description
 	 * 
@@ -619,6 +589,7 @@ public class TaskTree {
 			for (TreeSet<Task> tree : taskTrees) {
 				tree.addAll(taskList);
 			}
+			taskTreeSize = taskList.size();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

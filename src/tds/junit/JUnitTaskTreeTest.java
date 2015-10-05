@@ -152,7 +152,7 @@ public class JUnitTaskTreeTest {
 		}
 		
 		ArrayList<Task> returnList, originalList;
-		Task taskOld, taskNew;
+		Task taskOld;
 		String checkString, resultString, replaceTerm;
 		
 		// Get original list
