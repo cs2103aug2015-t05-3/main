@@ -28,6 +28,15 @@ public class CmdSearch extends Command {
 	 */
 	private String taskName;
 	
+	public CmdSearch() {
+
+	}
+
+	public CmdSearch(String taskName) {
+		this.taskName = taskName;
+	}
+
+	
 	@Override
 	public String execute() {
 		

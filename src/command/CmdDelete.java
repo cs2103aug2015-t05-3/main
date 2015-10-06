@@ -19,7 +19,7 @@ public class CmdDelete extends Command {
 	// Message constants
 	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
 	private static final String MSG_TASKNOTFOUND = "Specified task \"%1$s\" not found";
-	private static final String MSG_TASKDELETED = "Deleted : %1$s";
+	private static final String MSG_TASKDELETED = "Deleted : \"%1$s\"";
 	private static final String MSG_NOTASKDELETED = "No task deleted";
 	
 	private static final String MSG_INVALID_INPUT = "Invalid input.";
@@ -91,7 +91,7 @@ public class CmdDelete extends Command {
 			return String.format(MSG_TASKNOTFOUND, taskName);
 		}
 		
-		//Case 2: List.size > 2
+		//Case 2: List.size > 1
 		if(deleteTaskList.size() > 1){
 			int input = getUserInput(deleteTaskList);
 			if(input == INPUT_NO_DELETE){
@@ -129,6 +129,9 @@ public class CmdDelete extends Command {
 	private String displayDeleteList(List<Task> deleteTaskList){
 		
 		String output = "";
+		
+		//To use CmdSearch()'s displaySearchList() method
+		Command cmdsearch = new CmdSearch();
 		
 		output = output + deleteTaskList.size() +
 				" instances of \"" + taskName + "\" found:" + System.lineSeparator() ;
