@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import command.*;
 import fileProcessor.CommandFileHandler;
+import util.StringUtil;
 
 /**
  * Translates and breaks natural language down for computation
@@ -57,13 +58,17 @@ public class LanguageProcessor {
 		return toExecute;
 	}
 	
+	/**
+	 * Extracts the command string to execute
+	 * @param userCmd The entire user input string
+	 * @return The command string
+	 */
 	private String getCmd(String userCmd){
-		return userCmd.split(" ")[0]; // TODO: Move to String util
+		return StringUtil.getFirstWord(userCmd);
 	}
 	
 	private String getTaskName(String userCmd){
-		//String[] a = userCmd.split(" ", 2);
-		//for (String s : a)System.out.println("@"+s);
+		StringUtil.removeFirstWord(userCmd);
 		return userCmd.split(" ", 2)[1]; // TODO: Move to String Util
 	}
 	

@@ -1,13 +1,12 @@
-package logic;
-
 /**
  * Start point of the entire program.
  * 
  * @author Yan Chan Min Oo
  */
 
-import java.util.Scanner;
+package logic;
 
+import java.util.Scanner;
 import command.*;
 import tds.TaskTree;
 import parser.LanguageProcessor;
@@ -18,6 +17,7 @@ public class TaskBuddy {
 	 * Constants 
 	 */
 	private static final String cmdFileName = "commands.xml";
+	private static final String taskFileName = "tasks.xml";
 	
 	/*
 	 * Global variables
@@ -43,7 +43,7 @@ public class TaskBuddy {
 	private static void init(){
 		_in = new Scanner(System.in);
 		lp = new LanguageProcessor(cmdFileName);
-		TaskTree.init();
+		TaskTree.init(taskFileName);
 	}
 	
 	private static void runCommands(){
