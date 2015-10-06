@@ -1,6 +1,7 @@
 package fileProcessor;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -31,10 +32,19 @@ public class TaskFileHandler {
 	Document doc;
 	Element root;
 	File xmlFile;
-
+	
 	public TaskFileHandler(String fileName) throws Exception {
 		tasks = new ArrayList<>();
 		xmlFile = new File(fileName);
+
+		if (!xmlFile.exists()) { 
+			PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+			writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
+			writer.println("<tasklist>");
+			writer.println("</tasklist>");
+			writer.close();
+		}
+			
 		dbFactory = DocumentBuilderFactory.newInstance();
 		dBuilder = dbFactory.newDocumentBuilder();
 		doc = dBuilder.parse(xmlFile);
@@ -273,7 +283,7 @@ public class TaskFileHandler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		TaskFileHandler runT = new TaskFileHandler("tasks.xml");
+		TaskFileHandler runT = new TaskFileHandler("_tasks.xml");
 		//runT.add();
 		//runT.genXML();
 		//runT.delete();
