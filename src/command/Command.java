@@ -101,11 +101,19 @@ public abstract class Command {
 	
 	/**
 	 * Add a command to the list of history. To be called after successfully executing a 
-	 * manipulation command 
+	 * undoable command 
 	 * @param toAdd 
 	 * 				The command to add to the list of history
 	 */
 	public static void addHistory(Command toAdd){
 		history.add(toAdd);
+	}
+	
+	/**
+	 * Gets and removes the last command which was executed
+	 * @return The last command which was executed
+	 */
+	protected static Command extractHistory(){
+		return history.pop();
 	}
 }

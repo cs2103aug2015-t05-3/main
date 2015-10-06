@@ -1,35 +1,38 @@
 package command;
 
 public class CmdUndo extends Command {
+	
+	/*
+	 * Constants
+	 */
+	private static final String MSG_UNDO = "Undo: ";
+	private static final String MSG_UNDOEMPTY = "No commands to undo!";
 
 	@Override
 	public String execute() {
-		// TODO Auto-generated method stub
-		return null;
+		Command toUndo = extractHistory();
+		
+		return toUndo == null ? MSG_UNDOEMPTY : MSG_UNDO + toUndo.undo();
 	}
 
 	@Override
 	public String undo() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isUndoable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public String[] getRequiredFields() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[0];
 	}
 
 	@Override
 	public String[] getOptionalFields() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[0];
 	}
 
 	
