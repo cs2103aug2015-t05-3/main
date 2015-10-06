@@ -32,8 +32,6 @@ public class TaskTree {
 	private static final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
 	private static final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
 
-	private static final String TASK_FILENAME = "tasks.xml";
-	
 	static TaskFileHandler fileHandler;
 	private static ArrayList<TreeSet<Task>> taskTrees;
 	private static int taskTreeSize;
@@ -45,14 +43,19 @@ public class TaskTree {
 	private static final String TO_STRING_CLOSE = "]";
 	private static final String TO_STRING_DELIMETER = ",";
 
-	// Prevent instantiation of this constructor 
-	private TaskTree() {}
-	
+	// Prevent instantiation of this constructor
+	private TaskTree() {
+	}
+
 	/**
 	 * Initialize a new, empty tree set, sorted according to the ordering of
 	 * each attributes in the task.
+	 * 
+	 * @param taskFilePath
+	 *            File path directed to the storage XML file for tasks.
+	 * 
 	 */
-	public static void init() {
+	public static void init(String taskFilePath) {
 		taskTreeSize = 0;
 		taskTrees = new ArrayList<TreeSet<Task>>(SIZE_OF_TASK_TREES);
 
@@ -66,22 +69,8 @@ public class TaskTree {
 		fromValueHandler = new Task("");
 
 		// Fill TaskTree from file storage
+		iniTaskFileHandler(taskFilePath);
 		pullFromStorage();
-	}
-
-	/**
-	 * Initialize new tree sets containing the {@code Task} objects in the
-	 * specified {@code TaskTree}, sorted according according to the ordering of
-	 * each attributes in the task.
-	 * 
-	 * @param collection
-	 *            whose {@code Task} objects will comprise the new set
-	 */
-	public static void init(Collection<Task> collection) {
-		init();
-		for (TreeSet<Task> tree : taskTrees) {
-			tree.addAll(collection);
-		}
 	}
 
 	/**
@@ -525,7 +514,6 @@ public class TaskTree {
 	 *            the attribute type to be printed.
 	 * @return a string representation of this task tree in a list.
 	 */
-
 	public static String getString(TYPE taskAttributeType) {
 
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(taskAttributeType));
@@ -541,6 +529,11 @@ public class TaskTree {
 		return buffer;
 	}
 
+	/**
+	 * Return total number of task in this tree
+	 * 
+	 * @return number of task in this tree
+	 */
 	public static int size() {
 		return taskTreeSize;
 	}
@@ -553,6 +546,11 @@ public class TaskTree {
 		taskTreeSize -= 1;
 	}
 
+	// Storage related methods
+
+	/**
+	 * Push a new task to storage file.
+	 */
 	private static void pushAddToStorage(Task task) {
 		try {
 			fileHandler.add(task);
@@ -561,7 +559,10 @@ public class TaskTree {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Remove a task from the storage
+	 */
 	private static void pushRemoveToStorage(Task task) {
 		int taskId = task.getId();
 		try {
@@ -571,15 +572,18 @@ public class TaskTree {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Update a new task to storage file.
+	 */
 	private static void pushUpdateToStorage(Task oldTask, Task newTask) {
 		int oldId = oldTask.getId();
 		int newId = newTask.getId();
-		
+
 		if (oldId == newId) {
 			try {
-				//TODO Wait for update method from FileProcessor
-				//fileHandler.update(newTask);
+				// TODO Wait for update method from FileProcessor
+				// fileHandler.update(newTask);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -599,21 +603,29 @@ public class TaskTree {
 			}
 		}
 	}
-	
+
 	/**
 	 * To retrieve task list the Task file. This method is called upon the
 	 * starting of this program.
 	 */
 	private static void pullFromStorage() {
-		
-		ArrayList <Task> taskList;
+
+		ArrayList<Task> taskList;
 		try {
-			fileHandler = new TaskFileHandler(TASK_FILENAME);
 			taskList = fileHandler.retrieveTaskList();
 			for (TreeSet<Task> tree : taskTrees) {
 				tree.addAll(taskList);
 			}
 			taskTreeSize = taskList.size();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static void iniTaskFileHandler(String taskFilePath) {
+		try {
+			fileHandler = new TaskFileHandler(taskFilePath);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
