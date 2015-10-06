@@ -32,9 +32,9 @@ public class TaskTree {
 	private static final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
 	private static final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
 
-	static TaskFileHandler fileHandler;
-	private static ArrayList<TreeSet<Task>> taskTrees;
-	private static int taskTreeSize;
+	private static TaskFileHandler _fileHandler;
+	private static ArrayList<TreeSet<Task>> _taskTrees;
+	private static int _taskTreeSize;
 
 	// For managing comparable argument during query
 	private static Task fromValueHandler;
@@ -52,19 +52,19 @@ public class TaskTree {
 	 * each attributes in the task.
 	 * 
 	 * @param taskFilePath
-	 *            File path directed to the storage XML file for tasks.
+	 *            directed to the storage XML file for tasks.
 	 * 
 	 */
 	public static void init(String taskFilePath) {
-		taskTreeSize = 0;
-		taskTrees = new ArrayList<TreeSet<Task>>(SIZE_OF_TASK_TREES);
+		_taskTreeSize = 0;
+		_taskTrees = new ArrayList<TreeSet<Task>>(SIZE_OF_TASK_TREES);
 
-		taskTrees.add(TASK_NAME_TREE, new TreeSet<Task>(new NameComparator()));
-		taskTrees.add(TASK_START_TIME_TREE, new TreeSet<Task>(new StartTimeComparator()));
-		taskTrees.add(TASK_END_TIME_TREE, new TreeSet<Task>(new EndTimeComparator()));
-		taskTrees.add(TASK_FLAG_TREE, new TreeSet<Task>(new FlagComparator()));
-		taskTrees.add(TASK_PRIORITY_TREE, new TreeSet<Task>(new PriorityComparator()));
-		taskTrees.add(TASK_CREATE_TIME_TREE, new TreeSet<Task>(new IdComparator()));
+		_taskTrees.add(TASK_NAME_TREE, new TreeSet<Task>(new NameComparator()));
+		_taskTrees.add(TASK_START_TIME_TREE, new TreeSet<Task>(new StartTimeComparator()));
+		_taskTrees.add(TASK_END_TIME_TREE, new TreeSet<Task>(new EndTimeComparator()));
+		_taskTrees.add(TASK_FLAG_TREE, new TreeSet<Task>(new FlagComparator()));
+		_taskTrees.add(TASK_PRIORITY_TREE, new TreeSet<Task>(new PriorityComparator()));
+		_taskTrees.add(TASK_CREATE_TIME_TREE, new TreeSet<Task>(new IdComparator()));
 
 		fromValueHandler = new Task("");
 
@@ -83,7 +83,7 @@ public class TaskTree {
 	 */
 	public static boolean add(Task task) {
 		boolean isAdded = true;
-		for (TreeSet<Task> tree : taskTrees) {
+		for (TreeSet<Task> tree : _taskTrees) {
 			if (!tree.add(task)) {
 				isAdded = false;
 			}
@@ -105,7 +105,7 @@ public class TaskTree {
 	 */
 	public static boolean remove(Task task) {
 		boolean isRemoved = true;
-		for (TreeSet<Task> tree : taskTrees) {
+		for (TreeSet<Task> tree : _taskTrees) {
 			if (!tree.remove(task)) {
 				isRemoved = false;
 			}
@@ -202,8 +202,8 @@ public class TaskTree {
 
 		int treeType = taskAttributeType.getValue();
 
-		isReplaced &= taskTrees.get(treeType).remove(oldTask);
-		isReplaced &= taskTrees.get(treeType).add(newTask);
+		isReplaced &= _taskTrees.get(treeType).remove(oldTask);
+		isReplaced &= _taskTrees.get(treeType).add(newTask);
 
 		pushUpdateToStorage(oldTask, newTask);
 		return isReplaced;
@@ -221,12 +221,12 @@ public class TaskTree {
 	 *         object contain the {@code searchTerm}
 	 */
 	public static List<Task> searchName(String searchTerm) {
-		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
+		ArrayList<Task> resultList = new ArrayList<Task>(_taskTreeSize);
 
 		boolean isCaseInsensitive = checkLowercase(searchTerm);
 		String checkString;
 
-		for (Task task : taskTrees.get(TASK_NAME_TREE)) {
+		for (Task task : _taskTrees.get(TASK_NAME_TREE)) {
 
 			checkString = task.getName();
 			if (isCaseInsensitive) {
@@ -371,7 +371,7 @@ public class TaskTree {
 
 		int treeType = taskAttributeType.getValue();
 
-		TreeSet<Task> taskTree = taskTrees.get(treeType);
+		TreeSet<Task> taskTree = _taskTrees.get(treeType);
 		ArrayList<Task> emptyList = new ArrayList<Task>();
 		boolean isToInclusive;
 		Task toValueHdlBuffer;
@@ -457,7 +457,7 @@ public class TaskTree {
 	 */
 	public static List<Task> getList() {
 		int treeType = Attributes.TYPE.ID.getValue();
-		return getSortedList(taskTrees.get(treeType));
+		return getSortedList(_taskTrees.get(treeType));
 	}
 
 	/**
@@ -475,11 +475,11 @@ public class TaskTree {
 	 */
 	public static List<Task> getSortedList(TYPE taskAttributeType) {
 
-		return getSortedList(taskTrees.get(taskAttributeType.getValue()));
+		return getSortedList(_taskTrees.get(taskAttributeType.getValue()));
 	}
 
 	private static List<Task> getSortedList(TreeSet<Task> taskTree) {
-		ArrayList<Task> resultList = new ArrayList<Task>(taskTreeSize);
+		ArrayList<Task> resultList = new ArrayList<Task>(_taskTreeSize);
 		for (Task task : taskTree) {
 			resultList.add(task);
 		}
@@ -535,15 +535,15 @@ public class TaskTree {
 	 * @return number of task in this tree
 	 */
 	public static int size() {
-		return taskTreeSize;
+		return _taskTreeSize;
 	}
 
 	private static void increaseTaskListSize() {
-		taskTreeSize += 1;
+		_taskTreeSize += 1;
 	}
 
 	private static void decreaseTaskListSize() {
-		taskTreeSize -= 1;
+		_taskTreeSize -= 1;
 	}
 
 	// Storage related methods
@@ -553,7 +553,7 @@ public class TaskTree {
 	 */
 	private static void pushAddToStorage(Task task) {
 		try {
-			fileHandler.add(task);
+			_fileHandler.add(task);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -566,7 +566,7 @@ public class TaskTree {
 	private static void pushRemoveToStorage(Task task) {
 		int taskId = task.getId();
 		try {
-			fileHandler.delete(taskId);
+			_fileHandler.delete(taskId);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -590,13 +590,13 @@ public class TaskTree {
 			}
 		} else {
 			try {
-				fileHandler.delete(oldId);
+				_fileHandler.delete(oldId);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try {
-				fileHandler.add(newTask);
+				_fileHandler.add(newTask);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -612,20 +612,27 @@ public class TaskTree {
 
 		ArrayList<Task> taskList;
 		try {
-			taskList = fileHandler.retrieveTaskList();
-			for (TreeSet<Task> tree : taskTrees) {
+			taskList = _fileHandler.retrieveTaskList();
+			for (TreeSet<Task> tree : _taskTrees) {
 				tree.addAll(taskList);
 			}
-			taskTreeSize = taskList.size();
+			_taskTreeSize = taskList.size();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * This method will be called to construct the taskFileHandler for file
+	 * storage
+	 * 
+	 * @param taskFilePath
+	 *            directed to the storage XML file for tasks.
+	 */
 	private static void iniTaskFileHandler(String taskFilePath) {
 		try {
-			fileHandler = new TaskFileHandler(taskFilePath);
+			_fileHandler = new TaskFileHandler(taskFilePath);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
