@@ -1,15 +1,23 @@
 package ui;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+
 /**
  *
  * @author Yan Chan Min Oo
  */
 public class UIFrame extends javax.swing.JFrame {
+	
+	private LinkedList<String> holder; // Holds the list of user input
 
     /**
      * Creates new form UIFrame
      */
     public UIFrame() {
+    	holder = new LinkedList<>();
         initComponents();
     }
 
@@ -27,6 +35,16 @@ public class UIFrame extends javax.swing.JFrame {
         uiOutputField = new javax.swing.JTextArea();
         uiMaxWinBtn = new javax.swing.JButton();
         uiInputTextField = new javax.swing.JTextField();
+        uiInputTextField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				synchronized (holder) {
+                    holder.add(uiInputTextField.getText());
+                    holder.notify();
+                }
+                //frame.dispose();  
+			}
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -44,6 +62,7 @@ public class UIFrame extends javax.swing.JFrame {
 
         uiInputTextField.setBackground(new java.awt.Color(24, 24, 27));
         uiInputTextField.setForeground(new java.awt.Color(240, 240, 240));
+        uiInputTextField.setCaretColor(Color.WHITE);
 
         javax.swing.GroupLayout uiPanelLayout = new javax.swing.GroupLayout(uiPanel);
         uiPanel.setLayout(uiPanelLayout);
@@ -83,41 +102,32 @@ public class UIFrame extends javax.swing.JFrame {
         );
 
         pack();
+        uiInputTextField.requestFocusInWindow();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+    
+    protected String getInputText(){
+    	synchronized (holder) {
+            // wait for input from field
+            while (holder.isEmpty()) {
+            	try{
+            		holder.wait();
+            	} catch(InterruptedException e){ }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UIFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UIFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UIFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UIFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+            return holder.remove(0);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new UIFrame().setVisible(true);
-            }
-        });
+    }
+    
+    protected void setInputText(String s){
+    	uiInputTextField.setText(s);
+    }
+    
+    protected String getOutputText(){
+    	return uiOutputField.getText();
+    }
+    
+    protected void setOutputText(String s){
+    	uiOutputField.setText(s);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

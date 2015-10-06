@@ -1,10 +1,12 @@
 package command;
 
+import ui.UIHelper;
+
 public class CmdExit extends Command {
 
 	@Override
 	public String execute() {
-		// TODO Auto-generated method stub
+		UIHelper.destroyUI();
 		return null;
 	}
 

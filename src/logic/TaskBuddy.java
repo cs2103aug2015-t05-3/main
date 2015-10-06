@@ -9,6 +9,7 @@ package logic;
 import java.util.Scanner;
 import command.*;
 import tds.TaskTree;
+import ui.UIHelper;
 import parser.LanguageProcessor;
 
 public class TaskBuddy {
@@ -18,20 +19,19 @@ public class TaskBuddy {
 	 */
 	private static final String cmdFileName = "commands.xml";
 	private static final String taskFileName = "tasks.xml";
+	private static final String MSG_INVALIDCMD = "Please enter a valid command. For more info, enter help";
 	
 	/*
 	 * Global variables
 	 */
-	private static Scanner _in;
+	//private static Scanner _in;
 	private static LanguageProcessor lp;
 
 	public static void main(String[] args) {
 		// Get task file location
 		
-		// Load tasks
+		// Initialise all the variables
 		init();
-		
-		// Load GUI (NEXT TIME, IGNORE FOR NOW)
 		
 		// (Loop) Execute commands
 		runCommands();
@@ -41,31 +41,31 @@ public class TaskBuddy {
 	 * Initialises all the necessary variables
 	 */
 	private static void init(){
-		_in = new Scanner(System.in);
 		lp = new LanguageProcessor(cmdFileName);
 		TaskTree.init(taskFileName);
+		UIHelper.createUI();
 	}
 	
 	private static void runCommands(){
-		String cmd;
 		do{
-			System.out.print("Command: ");
-			cmd = getInput();
+			String cmd = getInput();
 			Command toExecute = lp.resolveCmd(cmd);
 			if(toExecute == null){
-				System.out.println("Invalid cmd!");
+				UIHelper.appendOutput(MSG_INVALIDCMD);
 				continue;
+			} else if (toExecute instanceof CmdExit){
+				toExecute.execute();
+				break;
 			}
-			System.out.println(toExecute.execute());
+			UIHelper.appendOutput(toExecute.execute());
 			if(toExecute.isUndoable()){
 				Command.addHistory(toExecute);
 			}
-		} while (!cmd.equals("exit"));
-		_in.close();
+		} while (true);
 	}
 	
 	public static String getInput(){
-		return _in.nextLine();
+		return UIHelper.getUserInput();
 	}
 	
 	public static void printMessage(String message){
