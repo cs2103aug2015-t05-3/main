@@ -525,7 +525,6 @@ public class TaskTree {
 	 *            the attribute type to be printed.
 	 * @return a string representation of this task tree in a list.
 	 */
-
 	public static String getString(TYPE taskAttributeType) {
 
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(taskAttributeType));
@@ -541,6 +540,10 @@ public class TaskTree {
 		return buffer;
 	}
 
+	/**
+	 * Return total number of task in this tree
+	 * @return number of task in this tree
+	 */
 	public static int size() {
 		return taskTreeSize;
 	}
