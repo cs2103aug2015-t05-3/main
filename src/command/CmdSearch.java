@@ -71,7 +71,7 @@ public class CmdSearch extends Command {
 		return TaskTree.searchName(taskName);
 	}
 	
-	private String displaySearchList(List<Task> searchTaskList){
+	public String displaySearchList(List<Task> searchTaskList){
 		
 		String output = "";
 		
