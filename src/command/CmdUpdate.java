@@ -3,6 +3,7 @@ package command;
 import java.util.List;
 
 import constants.CmdParameters;
+import logic.TaskBuddy;
 import tds.Task;
 import tds.TaskTree;
 
@@ -21,6 +22,8 @@ public class CmdUpdate extends Command {
 	private static final String MSG_TASKUPDATED = "Updated : \"%1$s\" to \"%2$s\"";
 	private static final String MSG_TASKNOTUPDATED = "Task not updated";
 
+	private static final String MSG_INVALID_INPUT = "Invalid input.";
+	
 	// Error codes
 	/*
 	 * private enum ERROR { OK, TASKUNSPECIFIED }
@@ -101,10 +104,9 @@ public class CmdUpdate extends Command {
 		if(updateTaskList.size() == 1){
 			updateTask = updateTaskList.get(0);
 			prevTaskName = updateTask.getName();
-			//prevTaskName
-			//TaskTree.updateName(updateTask, newTaskName)
-			//TaskTree.(updateTask);
-			return String.format(MSG_TASKUPDATED, taskName);
+			String newTaskName = getNewTaskName();
+			TaskTree.updateName(updateTask, newTaskName);
+			return String.format(MSG_TASKUPDATED, taskName, newTaskName);
 		}
 		
 		//Case 3: List.size > 1
@@ -112,32 +114,79 @@ public class CmdUpdate extends Command {
 		if(input == INPUT_NO_UPDATE){
 			return MSG_TASKNOTUPDATED;
 		}else{
-			updateTask = updateTaskList.get(input);
+			int index = input - 1;
+			updateTask = updateTaskList.get(index);
+			prevTaskName = updateTask.getName();
 		}
-			/*	
-		//Case 2: List.size > 2
-		if(deleteTaskList.size() > 1){
-			int input = getUserInput(deleteTaskList);
-					if(input == INPUT_NO_DELETE){
-						return MSG_NOTASKDELETED;
-					}else{
-						deleteTask = deleteTaskList.get(input);
-						TaskTree.remove(deleteTask);
-						return String.format(MSG_TASKDELETED, taskName);
-					}
-				}
-				
-				//Case 3: List.size == 1
-				deleteTask = deleteTaskList.get(0);
-				TaskTree.remove(deleteTask);
-				return String.format(MSG_TASKDELETED, taskName);
-		*/
-		return String.format(MSG_TASKUPDATED, taskName);
+		String newTaskName = getNewTaskName();
+		TaskTree.updateName(updateTask, newTaskName);
+		
+		//Case 1: nothing is edited or newTaskName is empty
+		if(newTaskName.equals(taskName) || newTaskName.equals("") || newTaskName == null){
+			return MSG_TASKNOTUPDATED;
+		}
+			
+		return String.format(MSG_TASKUPDATED, taskName, newTaskName);
 	}
 	
-	
+	//To be refactored
 	private int getUserInput(List<Task> updateTaskList){
-		return 0;
+		
+		String output = displayUpdateList(updateTaskList);
+		int input = INPUT_DEFAULT_VALUE; 
+		
+		TaskBuddy.printMessage(output);
+		
+		while(input < -1 || input > updateTaskList.size()){
+			input = processInput(TaskBuddy.getInput());
+			if(input < -1 || input > updateTaskList.size()){
+				TaskBuddy.printMessage(MSG_INVALID_INPUT);
+			}
+		}
+		
+		return input;
 	}
+	
+	private String displayUpdateList(List<Task> updateTaskList){
+		
+		String output = "";
+		
+		output = output + updateTaskList.size() +
+				" instances of \"" + taskName + "\" found:" + System.lineSeparator() ;
+		for(int i=0; i<updateTaskList.size(); i++){
+			output = output + (i+1) + ". " + updateTaskList.get(i).getName() + System.lineSeparator();
+		}
+		output = output + "\"update 0\" to exit" + System.lineSeparator();
+		output = output + System.lineSeparator();
+		
+		return output;
+		
+	}
+	
+	//Method to be refactored if possible (Should not be in CmdSearch)
+	private int processInput(String input){
+		int inputNumber = INPUT_DEFAULT_VALUE;
+			
+		if(input == null || input.equals("")){
+			return inputNumber;
+		}
+			
+		try{
+			inputNumber = Integer.parseInt(input);
+		}catch(NumberFormatException e){/*Do nothing*/}
+			
+		return inputNumber;
+	}
+	
+	private String getNewTaskName(){
+		String input = taskName;//
+		
+		//edit(input) gives commandline current taskname and allow user to edit
+		//return value of edit is a string that will be trimmed
+		
+		return input;
+	}
+	
+
 
 }

@@ -97,7 +97,8 @@ public class CmdDelete extends Command {
 			if(input == INPUT_NO_DELETE){
 				return MSG_NOTASKDELETED;
 			}else{
-				deleteTask = deleteTaskList.get(input);
+				int index = input - 1;
+				deleteTask = deleteTaskList.get(index);
 				TaskTree.remove(deleteTask);
 				return String.format(MSG_TASKDELETED, taskName);
 			}
@@ -129,9 +130,6 @@ public class CmdDelete extends Command {
 	private String displayDeleteList(List<Task> deleteTaskList){
 		
 		String output = "";
-		
-		//To use CmdSearch()'s displaySearchList() method
-		Command cmdsearch = new CmdSearch();
 		
 		output = output + deleteTaskList.size() +
 				" instances of \"" + taskName + "\" found:" + System.lineSeparator() ;
