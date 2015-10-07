@@ -1,4 +1,4 @@
-package tds;
+package taskCollections;
 
 import java.util.EnumSet;
 import java.util.HashMap;

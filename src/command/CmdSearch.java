@@ -3,8 +3,8 @@ package command;
 import java.util.List;
 
 import constants.CmdParameters;
-import tds.Task;
-import tds.TaskTree;
+import taskCollections.Task;
+import taskCollections.TaskTree;
 
 public class CmdSearch extends Command {
 

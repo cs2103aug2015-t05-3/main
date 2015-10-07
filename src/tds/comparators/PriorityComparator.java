@@ -1,7 +1,8 @@
 package tds.comparators;
 
 import java.util.Comparator;
-import tds.Task;
+
+import taskCollections.Task;
 
 /**
  * Provide {@code tds.Task} a comparator for the priority attribute  

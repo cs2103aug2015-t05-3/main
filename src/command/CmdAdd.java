@@ -6,9 +6,9 @@
 package command;
 
 import constants.CmdParameters;
-import tds.Task;
-import tds.Task.PRIORITY_TYPE;
-import tds.TaskTree;
+import taskCollections.Task;
+import taskCollections.TaskTree;
+import taskCollections.Task.PRIORITY_TYPE;
 import util.TimeUtil;
 
 public class CmdAdd extends Command {

@@ -1,16 +1,16 @@
-package tds;
+package taskCollections;
 
 import java.util.List;
 import java.util.TreeSet;
 
 import fileProcessor.TaskFileHandler;
+import taskCollections.Attributes;
+import taskCollections.Attributes.TYPE;
+import taskCollections.Task.FLAG_TYPE;
+import taskCollections.Task.PRIORITY_TYPE;
 
 import java.util.ArrayList;
 import tds.comparators.*;
-import tds.Task.FLAG_TYPE;
-import tds.Task.PRIORITY_TYPE;
-import tds.Attributes;
-import tds.Attributes.TYPE;
 
 /**
  * Provides methods for storing and manipulating {@code Task} via
@@ -422,7 +422,7 @@ public class TaskTree {
 	 *            to search for
 	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
 	 *         objects match the {@code flagSearch}
-	 * @see tds.Task
+	 * @see taskCollections.Task
 	 * 
 	 */
 	public static List<Task> searchFlag(FLAG_TYPE type) {
@@ -441,7 +441,7 @@ public class TaskTree {
 	 *            to search for
 	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
 	 *         objects match the {@code prioritySearch}
-	 * @see tds.Task
+	 * @see taskCollections.Task
 	 * 
 	 */
 	public static List<Task> searchPriority(PRIORITY_TYPE type) {
@@ -474,7 +474,7 @@ public class TaskTree {
 	 *            the attribute type to be sorted with.
 	 * @return a view of this {@code TaskTree} whose {@code Task} objects are
 	 *         sorted according to its specified attribute type.
-	 * @see tds.Attributes
+	 * @see taskCollections.Attributes
 	 */
 	public static List<Task> getSortedList(TYPE taskAttributeType) {
 

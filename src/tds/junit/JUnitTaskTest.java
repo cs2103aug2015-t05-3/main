@@ -1,9 +1,9 @@
 package tds.junit;
 import org.junit.Test;
 
-import tds.Task;
-import tds.Task.FLAG_TYPE;
-import tds.Task.PRIORITY_TYPE;
+import taskCollections.Task;
+import taskCollections.Task.FLAG_TYPE;
+import taskCollections.Task.PRIORITY_TYPE;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;

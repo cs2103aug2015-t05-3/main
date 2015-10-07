@@ -8,9 +8,9 @@ package logic;
 
 import java.util.Scanner;
 import command.*;
-import tds.TaskTree;
 import ui.UIHelper;
 import parser.LanguageProcessor;
+import taskCollections.TaskTree;
 
 public class TaskBuddy {
 	

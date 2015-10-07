@@ -3,9 +3,8 @@ package command;
 import java.util.List;
 
 import constants.CmdParameters;
-//import logic.TaskBuddy;
-import tds.Task;
-import tds.TaskTree;
+import taskCollections.Task;
+import taskCollections.TaskTree;
 import ui.UIHelper;
 
 public class CmdUpdate extends Command {

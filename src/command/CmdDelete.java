@@ -3,10 +3,10 @@ package command;
 import java.util.List;
 
 import constants.CmdParameters;
-import tds.Task;
-import tds.TaskTree;
 import ui.UIHelper;
 import logic.TaskBuddy;
+import taskCollections.Task;
+import taskCollections.TaskTree;
 
 public class CmdDelete extends Command {
 

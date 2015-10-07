@@ -1,9 +1,10 @@
 package command;
 
-import tds.Task;
-import tds.TaskTree;
 import util.TimeUtil;
 import java.util.List;
+
+import taskCollections.Task;
+import taskCollections.TaskTree;
 
 
 public class CmdList extends Command {

@@ -10,7 +10,7 @@ package command;
 import java.util.HashMap;
 import java.util.Stack;
 
-import tds.Task;
+import taskCollections.Task;
 
 public abstract class Command {
 	

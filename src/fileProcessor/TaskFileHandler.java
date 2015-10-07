@@ -19,9 +19,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import tds.Task;
-import tds.Task.FLAG_TYPE;
-import tds.Task.PRIORITY_TYPE;
+import taskCollections.Task;
+import taskCollections.Task.FLAG_TYPE;
+import taskCollections.Task.PRIORITY_TYPE;
 import util.TimeUtil;
 
 public class TaskFileHandler {
