@@ -89,12 +89,12 @@ public class CmdList extends Command {
 				"Task Prioirty: " + task.getPriority() + System.lineSeparator();
 		
 		if(task.getStartTime() != Task.DATE_NULL){
-			String start = TimeUtil.getDate(task.getStartTime());
+			String start = TimeUtil.getFormattedDate(task.getStartTime());
 			displayTask = displayTask + "Start Time: " + start + System.lineSeparator();
 		}
 		
 		if(task.getEndTime() != Task.DATE_NULL){
-			String end = TimeUtil.getDate(task.getEndTime());
+			String end = TimeUtil.getFormattedDate(task.getEndTime());
 			displayTask = displayTask + "End Time: " + end + System.lineSeparator();
 		}
 		
