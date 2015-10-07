@@ -94,6 +94,37 @@ public class TaskFileHandler {
 		genXML();
 	}
 	
+	/**
+	 * Update task to XML file
+	 * @param t
+	 * @throws Exception
+	 */
+	public void update (Task t) throws Exception {
+		Element e = locateID(t.getId());
+		
+		NodeList nl = e.getChildNodes();
+		
+		for (int i = 0; i < nl.getLength(); i++) {
+			switch (i) {
+				case (0):
+					nl.item(i).setTextContent(t.getName());
+					break;
+				case (1):
+					nl.item(i).setTextContent(TimeUtil.getFormattedDate(t.getStartTime()));
+					break;
+				case (2):
+					nl.item(i).setTextContent(TimeUtil.getFormattedDate(t.getEndTime()));
+					break;
+				case (3):
+					nl.item(i).setTextContent("" + t.getFlag());
+					break;
+				case (4):
+					nl.item(i).setTextContent("" + t.getPriority());
+					break;
+			}
+		}
+		
+	}
 	private Element locateID(int id) {
 		
 		Element e;
@@ -283,7 +314,9 @@ public class TaskFileHandler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		TaskFileHandler runT = new TaskFileHandler("_tasks.xml");
+		TaskFileHandler runT = new TaskFileHandler("tasks.xml");
+		//Task t = new Task("Delete the Task Program", 0L, 0L, FLAG_TYPE.NULL, PRIORITY_TYPE.VERY_HIGH);
+		//runT.update(t);
 		//runT.add();
 		//runT.genXML();
 		//runT.delete();

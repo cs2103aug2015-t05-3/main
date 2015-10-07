@@ -39,6 +39,11 @@ public class TimeUtil {
 	 * @return date in sample format: Tuesday: 29/09/15 20:15 GMT+0800
 	 */
 	public static String getFormattedDate(long time) {
+		
+		if (time == 0L) {
+			return "0";
+		}
+		
 		Date date = new Date(time);
 		String dateText = _df.format(date);
 		return dateText;
@@ -50,6 +55,11 @@ public class TimeUtil {
 	 * ToDo: Refactor this
 	 */
 	public static long getLongTime(String sDate) {
+		
+		if (sDate.equals("0")) {
+			return 0L;
+		}
+		
 		try {
 			Date date = (Date)_df.parse(sDate);
 			return date.getTime();
