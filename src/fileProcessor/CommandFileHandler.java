@@ -23,7 +23,6 @@ public class CommandFileHandler {
 	DocumentBuilderFactory dbFactory;
 	DocumentBuilder dBuilder;
 	Document doc;
-	Element eElement;
 	File xmlFile;
 	HashMap<String, String> cmdTable;
 	
@@ -39,6 +38,7 @@ public class CommandFileHandler {
 	}
 	
 	private void parseCmd() {
+		Element eElement;
 		Node nNode;
 		NodeList nList = doc.getElementsByTagName("command");
 		
