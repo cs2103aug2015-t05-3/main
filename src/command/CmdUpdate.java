@@ -106,8 +106,7 @@ public class CmdUpdate extends Command {
 		if(updateTaskList.size() == 1){
 			updateTask = updateTaskList.get(0);
 			prevTaskName = updateTask.getName();
-			String newTaskName = getNewTaskName(prevTaskName);
-			TaskTree.updateName(updateTask, newTaskName);
+			String newTaskName = getNewTaskName(prevTaskName);	
 			
 			//check if invalid
 			if(newTaskName.equals(prevTaskName)) {
@@ -117,6 +116,7 @@ public class CmdUpdate extends Command {
 				return MSG_TASKNOTUPDATED;
 			}
 			
+			TaskTree.updateName(updateTask, newTaskName);
 			return String.format(MSG_TASKUPDATED, prevTaskName, newTaskName);
 		}
 		
@@ -130,7 +130,6 @@ public class CmdUpdate extends Command {
 			prevTaskName = updateTask.getName();
 		}
 		String newTaskName = getNewTaskName(prevTaskName);
-		TaskTree.updateName(updateTask, newTaskName);
 		
 		//check if invalid
 		if(newTaskName.equals(prevTaskName)) {
@@ -139,7 +138,8 @@ public class CmdUpdate extends Command {
 		if(newTaskName.equals("") || newTaskName == null){
 			return MSG_TASKNOTUPDATED;
 		}
-			
+		
+		TaskTree.updateName(updateTask, newTaskName);	
 		return String.format(MSG_TASKUPDATED, prevTaskName, newTaskName);
 	}
 	

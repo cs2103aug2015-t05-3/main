@@ -41,6 +41,7 @@ public class CmdSearch extends Command {
 	public String execute() {
 		
 		taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
+		System.out.println(taskName);
 		List<Task> searchTaskList = searchTask(taskName);
 		
 		return displaySearchList(searchTaskList);
@@ -59,12 +60,12 @@ public class CmdSearch extends Command {
 
 	@Override
 	public String[] getRequiredFields() {
-		return new String[0];
+		return new String[] { CmdParameters.PARAM_NAME_TASK_NAME };
 	}
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[0];
+		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME};
 	}
 	
 	private List<Task> searchTask(String taskName){
