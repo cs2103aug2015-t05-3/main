@@ -123,7 +123,7 @@ public class TaskFileHandler {
 					break;
 			}
 		}
-		
+		genXML();
 	}
 	private Element locateID(int id) {
 		
