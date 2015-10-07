@@ -3,9 +3,10 @@ package command;
 import java.util.List;
 
 import constants.CmdParameters;
-import logic.TaskBuddy;
+//import logic.TaskBuddy;
 import tds.Task;
 import tds.TaskTree;
+import ui.UIHelper;
 
 public class CmdUpdate extends Command {
 
@@ -20,9 +21,10 @@ public class CmdUpdate extends Command {
 	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
 	private static final String MSG_TASKNOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKUPDATED = "Updated : \"%1$s\" to \"%2$s\"";
-	private static final String MSG_TASKNOTUPDATED = "Task not updated";
-
-	private static final String MSG_INVALID_INPUT = "Invalid input.";
+	private static final String MSG_TASKNOTUPDATED = "Empty String. Task not updated";
+	private static final String MSG_TASKNOCHANGE = "No changes was made";
+	
+	private static final String MSG_INVALID_INPUT = "Invalid input";
 	
 	// Error codes
 	/*
@@ -104,9 +106,18 @@ public class CmdUpdate extends Command {
 		if(updateTaskList.size() == 1){
 			updateTask = updateTaskList.get(0);
 			prevTaskName = updateTask.getName();
-			String newTaskName = getNewTaskName();
+			String newTaskName = getNewTaskName(prevTaskName);
 			TaskTree.updateName(updateTask, newTaskName);
-			return String.format(MSG_TASKUPDATED, taskName, newTaskName);
+			
+			//check if invalid
+			if(newTaskName.equals(prevTaskName)) {
+				return MSG_TASKNOCHANGE;
+			}
+			if(newTaskName.equals("") || newTaskName == null){
+				return MSG_TASKNOTUPDATED;
+			}
+			
+			return String.format(MSG_TASKUPDATED, prevTaskName, newTaskName);
 		}
 		
 		//Case 3: List.size > 1
@@ -118,15 +129,18 @@ public class CmdUpdate extends Command {
 			updateTask = updateTaskList.get(index);
 			prevTaskName = updateTask.getName();
 		}
-		String newTaskName = getNewTaskName();
+		String newTaskName = getNewTaskName(prevTaskName);
 		TaskTree.updateName(updateTask, newTaskName);
 		
-		//Case 1: nothing is edited or newTaskName is empty
-		if(newTaskName.equals(taskName) || newTaskName.equals("") || newTaskName == null){
+		//check if invalid
+		if(newTaskName.equals(prevTaskName)) {
+			return MSG_TASKNOCHANGE;
+		}
+		if(newTaskName.equals("") || newTaskName == null){
 			return MSG_TASKNOTUPDATED;
 		}
 			
-		return String.format(MSG_TASKUPDATED, taskName, newTaskName);
+		return String.format(MSG_TASKUPDATED, prevTaskName, newTaskName);
 	}
 	
 	//To be refactored
@@ -135,12 +149,14 @@ public class CmdUpdate extends Command {
 		String output = displayUpdateList(updateTaskList);
 		int input = INPUT_DEFAULT_VALUE; 
 		
-		TaskBuddy.printMessage(output);
+		//TaskBuddy.printMessage(output);
+		UIHelper.appendOutput(output);
 		
-		while(input < -1 || input > updateTaskList.size()){
-			input = processInput(TaskBuddy.getInput());
-			if(input < -1 || input > updateTaskList.size()){
-				TaskBuddy.printMessage(MSG_INVALID_INPUT);
+		while(input <= -1 || input > updateTaskList.size()){
+			input = processInput(UIHelper.getUserInput());
+			if(input <= -1 || input > updateTaskList.size()){
+				//TaskBuddy.printMessage(MSG_INVALID_INPUT);
+				UIHelper.appendOutput(MSG_INVALID_INPUT);
 			}
 		}
 		
@@ -156,7 +172,7 @@ public class CmdUpdate extends Command {
 		for(int i=0; i<updateTaskList.size(); i++){
 			output = output + (i+1) + ". " + updateTaskList.get(i).getName() + System.lineSeparator();
 		}
-		output = output + "\"update 0\" to exit" + System.lineSeparator();
+		output = output + "\"0\" to exit" + System.lineSeparator();
 		output = output + System.lineSeparator();
 		
 		return output;
@@ -178,11 +194,11 @@ public class CmdUpdate extends Command {
 		return inputNumber;
 	}
 	
-	private String getNewTaskName(){
-		String input = taskName;//
+	private String getNewTaskName(String prevTaskName){
 		
-		//edit(input) gives commandline current taskname and allow user to edit
-		//return value of edit is a string that will be trimmed
+		UIHelper.setInput(prevTaskName);
+		
+		String input = UIHelper.getUserInput().trim();
 		
 		return input;
 	}

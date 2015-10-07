@@ -5,6 +5,7 @@ import java.util.List;
 import constants.CmdParameters;
 import tds.Task;
 import tds.TaskTree;
+import ui.UIHelper;
 import logic.TaskBuddy;
 
 public class CmdDelete extends Command {
@@ -91,6 +92,8 @@ public class CmdDelete extends Command {
 			return String.format(MSG_TASKNOTFOUND, taskName);
 		}
 		
+		String deletedTaskName;
+		
 		//Case 2: List.size > 1
 		if(deleteTaskList.size() > 1){
 			int input = getUserInput(deleteTaskList);
@@ -99,15 +102,17 @@ public class CmdDelete extends Command {
 			}else{
 				int index = input - 1;
 				deleteTask = deleteTaskList.get(index);
+				deletedTaskName = deleteTask.getName();
 				TaskTree.remove(deleteTask);
-				return String.format(MSG_TASKDELETED, taskName);
+				return String.format(MSG_TASKDELETED, deletedTaskName);
 			}
 		}
 		
 		//Case 3: List.size == 1
 		deleteTask = deleteTaskList.get(0);
+		deletedTaskName = deleteTask.getName();
 		TaskTree.remove(deleteTask);
-		return String.format(MSG_TASKDELETED, taskName);
+		return String.format(MSG_TASKDELETED, deletedTaskName);
 	}
 
 	private int getUserInput(List<Task> deleteTaskList){
@@ -115,12 +120,15 @@ public class CmdDelete extends Command {
 		String output = displayDeleteList(deleteTaskList);
 		int input = INPUT_DEFAULT_VALUE; 
 		
-		TaskBuddy.printMessage(output);
+		//TaskBuddy.printMessage(output);
+		UIHelper.appendOutput(output);
 		
-		while(input < -1 || input > deleteTaskList.size()){
-			input = processInput(TaskBuddy.getInput());
-			if(input < -1 || input > deleteTaskList.size()){
-				TaskBuddy.printMessage(MSG_INVALID_INPUT);
+		while(input <= -1 || input > deleteTaskList.size()){
+			//input = processInput(TaskBuddy.getInput());
+			input = processInput(UIHelper.getUserInput());
+			if(input <= -1 || input > deleteTaskList.size()){
+				UIHelper.appendOutput(MSG_INVALID_INPUT);
+				
 			}
 		}
 		
@@ -131,12 +139,12 @@ public class CmdDelete extends Command {
 		
 		String output = "";
 		
-		output = output + deleteTaskList.size() +
+		output = output + "[" + deleteTaskList.size() + "]" +
 				" instances of \"" + taskName + "\" found:" + System.lineSeparator() ;
 		for(int i=0; i<deleteTaskList.size(); i++){
 			output = output + (i+1) + ". " + deleteTaskList.get(i).getName() + System.lineSeparator();
 		}
-		output = output + "\"delete 0\" to exit" + System.lineSeparator();
+		output = output + "\"0\" to exit" + System.lineSeparator();
 		output = output + System.lineSeparator();
 		
 		return output;
