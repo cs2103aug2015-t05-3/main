@@ -46,6 +46,13 @@ public class CmdDelete extends Command {
 
 	@Override
 	public String execute() {
+		
+		deleteTask = getTask();
+		
+		if(deleteTask != null){
+			TaskTree.remove(deleteTask);
+			return String.format(MSG_TASKDELETED, deleteTask.getName());
+		}
 
 		taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
 

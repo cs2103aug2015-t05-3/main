@@ -41,7 +41,6 @@ public class CmdSearch extends Command {
 	public String execute() {
 		
 		taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
-		System.out.println(taskName);
 		List<Task> searchTaskList = searchTask(taskName);
 		
 		return displaySearchList(searchTaskList);
