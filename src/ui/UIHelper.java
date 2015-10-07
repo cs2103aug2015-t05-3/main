@@ -62,5 +62,9 @@ public class UIHelper {
 	public static void setOutput(String s){
 		frame.setOutputText(s);
 	}
+	
+	public static void setInput(String s){
+		frame.setInputText(s);
+	}
 
 }
