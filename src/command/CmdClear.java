@@ -1,16 +1,21 @@
 package command;
 
+import ui.UIHelper;
+
 public class CmdClear extends Command{
 
+	// Variable constants
+	private static final String EMPTY_STRING = "";
+	
 	@Override
 	public String execute() {
-		// TODO Auto-generated method stub
-		return null;
+		//Current problem: new line 
+		UIHelper.setOutput(EMPTY_STRING);
+		return EMPTY_STRING;
 	}
 
 	@Override
 	public String undo() {
-		//do nothing (Clear should not have undo)
 		return null;
 	}
 
@@ -21,14 +26,12 @@ public class CmdClear extends Command{
 
 	@Override
 	public String[] getRequiredFields() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[0];
 	}
 
 	@Override
 	public String[] getOptionalFields() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[0];
 	}
 
 }
