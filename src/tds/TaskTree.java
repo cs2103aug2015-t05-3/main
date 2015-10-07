@@ -221,7 +221,11 @@ public class TaskTree {
 	 */
 	public static List<Task> searchName(String searchTerm) {
 		ArrayList<Task> resultList = new ArrayList<Task>(_taskTreeSize);
-
+		
+		if (searchTerm == null) {
+			return new ArrayList<Task>();
+		}
+		
 		boolean isCaseInsensitive = checkLowercase(searchTerm);
 		String checkString;
 
