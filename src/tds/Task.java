@@ -137,8 +137,10 @@ public class Task implements Comparable<Task> {
 	 */
 	public Task(int id, String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		// TODO loosely implemented. Check for possible flaw cases next time.
+		this.id = id;
 		taskNumber = id;
 		taskNumber++;
+		
 		// TODO Case when specified id is lesser than taskNumber.
 		this.name = name;
 		this.startTime = startTime;
