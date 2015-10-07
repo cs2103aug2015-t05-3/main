@@ -586,7 +586,7 @@ public class TaskTree {
 		if (oldId == newId) {
 			try {
 				// TODO Wait for update method from FileProcessor
-				// fileHandler.update(newTask);
+				fileHandler.update(newTask);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
