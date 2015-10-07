@@ -128,6 +128,7 @@ public class UIFrame extends javax.swing.JFrame {
     
     protected void setOutputText(String s){
     	uiOutputField.setText(s);
+    	uiOutputField.setCaretPosition(uiOutputField.getDocument().getLength());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
