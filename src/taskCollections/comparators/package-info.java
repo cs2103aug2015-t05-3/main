@@ -4,4 +4,4 @@
  * @author amoshydra
  *
  */
-package tds.comparators;
+package taskCollections.comparators;

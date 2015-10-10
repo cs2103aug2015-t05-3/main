@@ -8,9 +8,9 @@ import taskCollections.Attributes;
 import taskCollections.Attributes.TYPE;
 import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
+import taskCollections.comparators.*;
 
 import java.util.ArrayList;
-import tds.comparators.*;
 
 /**
  * Provides methods for storing and manipulating {@code Task} via

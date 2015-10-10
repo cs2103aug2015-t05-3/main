@@ -1,4 +1,4 @@
-package tds.comparators;
+package taskCollections.comparators;
 
 import java.util.Comparator;
 
@@ -9,9 +9,9 @@ import taskCollections.Task;
  * 
  * @author amoshydra
  */
-public class EndTimeComparator implements Comparator<Task> {
+public class FlagComparator implements Comparator<Task> {
 	@Override
 	public int compare(Task lhs, Task rhs) {
-		return lhs.compareEndTimeTo(rhs);
+		return lhs.compareFlagTo(rhs);
 	}
 }

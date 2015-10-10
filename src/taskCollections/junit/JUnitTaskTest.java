@@ -1,4 +1,4 @@
-package tds.junit;
+package taskCollections.junit;
 import org.junit.Test;
 
 import taskCollections.Task;

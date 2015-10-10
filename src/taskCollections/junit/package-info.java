@@ -5,4 +5,4 @@
  * @author amoshydra
  *
  */
-package tds.junit;
+package taskCollections.junit;
