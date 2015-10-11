@@ -3,7 +3,7 @@ package taskCollections;
 import java.util.List;
 import java.util.TreeSet;
 
-import fileProcessor.TaskFileHandler;
+import storage.TaskFileHandler;
 import taskCollections.Attributes;
 import taskCollections.Attributes.TYPE;
 import taskCollections.Task.FLAG_TYPE;
