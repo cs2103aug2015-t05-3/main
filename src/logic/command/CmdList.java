@@ -1,4 +1,4 @@
-package command;
+package logic.command;
 
 import util.TimeUtil;
 import java.util.List;

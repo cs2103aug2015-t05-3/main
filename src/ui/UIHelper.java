@@ -55,16 +55,16 @@ public class UIHelper {
 		frame.dispose();
 	}
 	
-	public static void appendOutput(String s){
-		frame.setOutputText(frame.getOutputText() + s + System.lineSeparator());
+	public static void appendOutput(String appendString){
+		frame.setOutputText(frame.getOutputText() + appendString + System.lineSeparator());
 	}
 	
-	public static void setOutput(String s){
-		frame.setOutputText(s);
+	public static void setOutput(String out){
+		frame.setOutputText(out);
 	}
 	
-	public static void setInput(String s){
-		frame.setInputText(s);
+	public static void setInput(String in){
+		frame.setInputText(in);
 	}
 
 }

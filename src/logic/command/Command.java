@@ -5,7 +5,7 @@
  * @author Yan Chan Min Oo
  */
 
-package command;
+package logic.command;
 
 import java.util.HashMap;
 import java.util.Stack;

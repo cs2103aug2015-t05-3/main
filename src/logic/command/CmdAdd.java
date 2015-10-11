@@ -3,7 +3,7 @@
  * 
  * @author Yan Chan Min Oo
  */
-package command;
+package logic.command;
 
 import constants.CmdParameters;
 import taskCollections.Task;

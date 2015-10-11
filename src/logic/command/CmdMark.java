@@ -1,4 +1,4 @@
-package command;
+package logic.command;
 
 public class CmdMark extends Command{
 

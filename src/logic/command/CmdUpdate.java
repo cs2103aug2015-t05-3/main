@@ -1,4 +1,4 @@
-package command;
+package logic.command;
 
 import java.util.List;
 

@@ -2,8 +2,8 @@ package parser;
 
 import java.util.HashMap;
 
-import command.*;
-import fileProcessor.CommandFileHandler;
+import logic.command.*;
+import storage.CommandFileHandler;
 import util.StringUtil;
 import constants.CmdParameters;
 
@@ -34,8 +34,8 @@ public class LanguageProcessor {
 	 */
 	private HashMap<String, String> cmdTable;
 
-	public LanguageProcessor(String cmdFileName) {
-		initCmdList(cmdFileName);// TODO: EXIT PROGRAM OR SOMETHING IF CANT INIT
+	public LanguageProcessor() {
+		//initCmdList(cmdFileName);// TODO: EXIT PROGRAM OR SOMETHING IF CANT INIT
 	}
 
 	public boolean initCmdList(String cmdFileName) {

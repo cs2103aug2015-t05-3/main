@@ -1,18 +1,17 @@
-package command;
+package logic.command;
 
-public class CmdUndo extends Command {
+import ui.UIHelper;
+
+public class CmdClear extends Command{
+
+	// Variable constants
+	private static final String EMPTY_STRING = "";
 	
-	/*
-	 * Constants
-	 */
-	private static final String MSG_UNDO = "Undo: ";
-	private static final String MSG_UNDOEMPTY = "No commands to undo!";
-
 	@Override
 	public String execute() {
-		Command toUndo = extractHistory();
-		
-		return toUndo == null ? MSG_UNDOEMPTY : MSG_UNDO + toUndo.undo();
+		//Current problem: new line 
+		UIHelper.setOutput(EMPTY_STRING);
+		return EMPTY_STRING;
 	}
 
 	@Override
@@ -35,6 +34,4 @@ public class CmdUndo extends Command {
 		return new String[0];
 	}
 
-	
-	
 }

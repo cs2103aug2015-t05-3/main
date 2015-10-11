@@ -6,8 +6,7 @@
 
 package logic;
 
-import java.util.Scanner;
-import command.*;
+import logic.command.*;
 import ui.UIHelper;
 import parser.LanguageProcessor;
 import taskCollections.TaskTree;
@@ -41,7 +40,8 @@ public class TaskBuddy {
 	 * Initialises all the necessary variables
 	 */
 	private static void init(){
-		lp = new LanguageProcessor(cmdFileName);
+		lp = new LanguageProcessor();
+		lp.initCmdList(cmdFileName);
 		TaskTree.init(taskFileName);
 		UIHelper.createUI();
 	}

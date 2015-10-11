@@ -5,7 +5,7 @@
 
 //Source: http://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
 
-package fileProcessor;
+package storage;
 
 import java.io.File;
 import java.util.HashMap;

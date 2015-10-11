@@ -1,4 +1,4 @@
-package fileProcessor;
+package storage;
 
 import java.io.File;
 import java.io.PrintWriter;

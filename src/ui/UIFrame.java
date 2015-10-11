@@ -118,16 +118,16 @@ public class UIFrame extends javax.swing.JFrame {
         }
     }
     
-    protected void setInputText(String s){
-    	uiInputTextField.setText(s);
+    protected void setInputText(String input){
+    	uiInputTextField.setText(input);
     }
     
     protected String getOutputText(){
     	return uiOutputField.getText();
     }
     
-    protected void setOutputText(String s){
-    	uiOutputField.setText(s);
+    protected void setOutputText(String output){
+    	uiOutputField.setText(output);
     	uiOutputField.setCaretPosition(uiOutputField.getDocument().getLength());
     }
 
