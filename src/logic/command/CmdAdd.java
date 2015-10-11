@@ -68,8 +68,8 @@ public class CmdAdd extends Command {
 
 			// Convert the start/end times to a format we can use for
 			// calculation
-			long taskStartTimeL = TimeUtil.StringToLongTime(taskStartTime);
-			long taskEndTimeL = TimeUtil.StringToLongTime(taskEndTime);
+			long taskStartTimeL = TimeUtil.sysStringToLongTime(taskStartTime);
+			long taskEndTimeL = TimeUtil.sysStringToLongTime(taskEndTime);
 
 			// Convert the priority to a format we can use for storing
 			PRIORITY_TYPE taskPriorityP = getPriorityValue(taskPriority);

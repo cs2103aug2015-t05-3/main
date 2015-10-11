@@ -17,17 +17,17 @@ public class StringUtil {
 	/**
 	 * Takes in a string, and returns the first word, delimited by a whitespace
 	 */
-	public static String getFirstWord(String s) {
-		assert s != null;
-		assert !s.isEmpty();
-		return s.split(tokenDelim)[0];
+	public static String getFirstWord(String input) {
+		assert input != null;
+		assert !input.isEmpty();
+		return input.split(tokenDelim)[0];
 	}
 
 	/**
 	 * Takes in a string, removes the first word and returns the rest
 	 */
-	public static String removeFirstWord(String s) {
-		String[] tokens = s.split(tokenDelim, 2);
+	public static String removeFirstWord(String input) {
+		String[] tokens = input.split(tokenDelim, 2);
 		if (tokens.length < 2) {
 			return null;
 		} else {
