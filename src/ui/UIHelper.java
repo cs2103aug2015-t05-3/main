@@ -20,6 +20,9 @@ public class UIHelper {
 	}
 	
 	public static void createUI(){
+		if(frame != null){ // Dont allow multiple UI instances
+			return;
+		}
 		frame = new UIFrame();
 		 /* Set the Nimbus look and feel */
         try {
