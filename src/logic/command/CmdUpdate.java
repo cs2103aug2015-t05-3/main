@@ -195,7 +195,7 @@ public class CmdUpdate extends Command {
 	
 	private String getNewTaskName(String prevTaskName){
 		
-		UIHelper.setInput(prevTaskName);
+		UIHelper.setUserInput(prevTaskName);
 		
 		String input = UIHelper.getUserInput().trim();
 		

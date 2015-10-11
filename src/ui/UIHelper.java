@@ -20,7 +20,7 @@ public class UIHelper {
 	}
 	
 	public static void createUI(){
-		if(frame != null){ // Dont allow multiple UI instances
+		if(frame != null){ // Dont allow multiple UI instances TODO: Allow recreation after destroy
 			return;
 		}
 		frame = new UIFrame();
@@ -66,7 +66,7 @@ public class UIHelper {
 		frame.setOutputText(out);
 	}
 	
-	public static void setInput(String in){
+	public static void setUserInput(String in){
 		frame.setInputText(in);
 	}
 
