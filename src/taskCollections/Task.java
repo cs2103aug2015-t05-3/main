@@ -10,7 +10,7 @@ import java.util.Map;
  * @author amoshydra
  */
 public class Task implements Comparable<Task> {
-	private static int taskNumber = 1;
+	private static int taskNumber = 0;
 
 	/**
 	 * Field value constant for flag attribute.
@@ -137,9 +137,16 @@ public class Task implements Comparable<Task> {
 	 */
 	public Task(int id, String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		// TODO loosely implemented. Check for possible flaw cases next time.
+		
 		this.id = id;
-		taskNumber = id;
-		taskNumber++;
+		if (id <= taskNumber) {
+			System.err.println("Attempted to replace an existing task" + id);
+			assert false : "Attempted to replace an existing task";
+		}
+		else {
+			taskNumber = id;
+			taskNumber++;			
+		}
 		
 		// TODO Case when specified id is lesser than taskNumber.
 		this.name = name;
