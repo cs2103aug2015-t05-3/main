@@ -6,7 +6,12 @@
 
 package logic;
 
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+
 import logic.command.*;
+import ui.UIFrame;
 import ui.UIHelper;
 import parser.LanguageProcessor;
 import taskCollections.TaskTree;
@@ -18,12 +23,14 @@ public class TaskBuddy {
 	 */
 	private static final String cmdFileName = "commands.xml";
 	private static final String taskFileName = "tasks.xml";
+	private static final String logFileName = "log.log";
 	private static final String MSG_INVALIDCMD = "Please enter a valid command. For more info, enter help";
 	
 	/*
 	 * Global variables
 	 */
 	//private static Scanner _in;
+	private static Logger log;
 	private static LanguageProcessor lp;
 
 	public static void main(String[] args) {
@@ -40,10 +47,24 @@ public class TaskBuddy {
 	 * Initialises all the necessary variables
 	 */
 	private static void init(){
+		initLog();
 		lp = new LanguageProcessor();
-		lp.initCmdList(cmdFileName);
+		if(!lp.initCmdList(cmdFileName)){
+			log.severe("TaskBuddy: Cmd list init failed");
+		}
 		TaskTree.init(taskFileName);
 		UIHelper.createUI();
+	}
+	
+	private static void initLog(){
+		log = Logger.getLogger("log");
+		try {
+			log.addHandler(new FileHandler(logFileName));
+		} catch (SecurityException e) {
+			log.severe("TaskBuddy: " + e);
+		} catch (IOException e) {
+			log.severe("TaskBuddy: " + e);
+		}
 	}
 	
 	private static void runCommands(){

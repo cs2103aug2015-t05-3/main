@@ -5,9 +5,12 @@
  */
 package ui;
 
+import java.util.logging.Logger;
+
 public class UIHelper {
 	
 	private static UIFrame frame;
+	private static Logger log = Logger.getLogger("log");
 	
 	/**
 	 * Returns a string of the user input. Triggered on enter press.
@@ -33,13 +36,13 @@ public class UIHelper {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UIFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            log.log(java.util.logging.Level.SEVERE, "UIHelper: ",ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UIFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        	log.log(java.util.logging.Level.SEVERE, "UIHelper: ",ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UIFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        	log.log(java.util.logging.Level.SEVERE, "UIHelper: ",ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UIFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        	log.log(java.util.logging.Level.WARNING, "UIHelper: ",ex);
         }
         //</editor-fold>
 
