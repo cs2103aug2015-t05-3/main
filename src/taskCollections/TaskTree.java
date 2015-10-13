@@ -68,8 +68,13 @@ public class TaskTree {
 		fromValueHandler = new Task("");
 
 		// Fill TaskTree from file storage
-		iniTaskFileHandler(taskFilePath);
-		pullFromStorage();
+		try {
+			iniTaskFileHandler(taskFilePath);
+			pullFromStorage();
+		} catch (Exception e) {
+			// TODO Throw exception to logic
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -89,7 +94,12 @@ public class TaskTree {
 		}
 		if (isAdded) {
 			increaseTaskListSize();
-			pushAddToStorage(task);
+			try {
+				pushAddToStorage(task);
+			} catch (Exception e) {
+				// TODO Throw exception to logic
+				e.printStackTrace();
+			}
 		}
 		return isAdded;
 	}
@@ -111,7 +121,12 @@ public class TaskTree {
 		}
 		if (isRemoved) {
 			decreaseTaskListSize();
-			pushRemoveToStorage(task);
+			try {
+				pushRemoveToStorage(task);
+			} catch (Exception e) {
+				// throw exception to logic
+				e.printStackTrace();
+			}
 		}
 		return isRemoved;
 	}
@@ -203,8 +218,13 @@ public class TaskTree {
 
 		isReplaced &= _taskTrees.get(treeType).remove(oldTask);
 		isReplaced &= _taskTrees.get(treeType).add(newTask);
-
-		pushUpdateToStorage(oldTask, newTask);
+		
+		try {
+			pushUpdateToStorage(oldTask, newTask);
+		} catch (Exception e) {
+			// TODO throw exception to logic
+			e.printStackTrace();
+		}
 		return isReplaced;
 	}
 
@@ -218,14 +238,16 @@ public class TaskTree {
 	 *            the sequence to search for
 	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
 	 *         object contain the {@code searchTerm}
+	 * @throws IllegalArgumentException
+	 *             if search term is empty
 	 */
 	public static List<Task> searchName(String searchTerm) {
 		ArrayList<Task> resultList = new ArrayList<Task>(_taskTreeSize);
-		
+
 		if (searchTerm == null) {
-			return new ArrayList<Task>();
+			throw new IllegalArgumentException("search term is empty");
 		}
-		
+
 		boolean isCaseInsensitive = checkLowercase(searchTerm);
 		String checkString;
 
@@ -553,56 +575,34 @@ public class TaskTree {
 
 	/**
 	 * Push a new task to storage file.
+	 * @throws Exception 
 	 */
-	private static void pushAddToStorage(Task task) {
-		try {
-			_fileHandler.add(task);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private static void pushAddToStorage(Task task) throws Exception {
+		_fileHandler.add(task);
 	}
 
 	/**
 	 * Remove a task from the storage
+	 * @throws Exception 
 	 */
-	private static void pushRemoveToStorage(Task task) {
+	private static void pushRemoveToStorage(Task task) throws Exception {
 		int taskId = task.getId();
-		try {
-			_fileHandler.delete(taskId);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		_fileHandler.delete(taskId);
 	}
 
 	/**
 	 * Update a new task to storage file.
+	 * @throws Exception 
 	 */
-	private static void pushUpdateToStorage(Task oldTask, Task newTask) {
+	private static void pushUpdateToStorage(Task oldTask, Task newTask) throws Exception {
 		int oldId = oldTask.getId();
 		int newId = newTask.getId();
 
 		if (oldId == newId) {
-			try {
-				_fileHandler.update(newTask);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			_fileHandler.update(newTask);
 		} else {
-			try {
-				_fileHandler.delete(oldId);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				_fileHandler.add(newTask);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			_fileHandler.delete(oldId);
+			_fileHandler.add(newTask);
 		}
 	}
 
@@ -610,19 +610,14 @@ public class TaskTree {
 	 * To retrieve task list the Task file. This method is called upon the
 	 * starting of this program.
 	 */
-	private static void pullFromStorage() {
-
+	private static void pullFromStorage() throws Exception {
 		ArrayList<Task> taskList;
-		try {
-			taskList = _fileHandler.retrieveTaskList();
-			for (TreeSet<Task> tree : _taskTrees) {
-				tree.addAll(taskList);
-			}
-			_taskTreeSize = taskList.size();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		taskList = _fileHandler.retrieveTaskList();
+
+		for (TreeSet<Task> tree : _taskTrees) {
+			tree.addAll(taskList);
 		}
+		_taskTreeSize = taskList.size();
 	}
 
 	/**
@@ -632,12 +627,7 @@ public class TaskTree {
 	 * @param taskFilePath
 	 *            directed to the storage XML file for tasks.
 	 */
-	private static void iniTaskFileHandler(String taskFilePath) {
-		try {
+	private static void iniTaskFileHandler(String taskFilePath) throws Exception {
 			_fileHandler = new TaskFileHandler(taskFilePath);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
