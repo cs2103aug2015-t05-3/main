@@ -1,15 +1,21 @@
 package storage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -18,6 +24,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
@@ -33,21 +40,38 @@ public class TaskFileHandler {
 	Element root;
 	File xmlFile;
 	
-	public TaskFileHandler(String fileName) throws Exception {
+	public TaskFileHandler(String fileName) {
 		tasks = new ArrayList<>();
 		xmlFile = new File(fileName);
 
 		if (!xmlFile.exists()) { 
-			PrintWriter writer = new PrintWriter(fileName, "UTF-8");
-			writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
-			writer.println("<tasklist>");
-			writer.println("</tasklist>");
-			writer.close();
+			PrintWriter writer;
+			try {
+				writer = new PrintWriter(fileName, "UTF-8");
+				writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
+				writer.println("<tasklist>");
+				writer.println("</tasklist>");
+				writer.close();
+			} catch (FileNotFoundException e) {
+				System.err.println("File Not Found");
+			} catch (UnsupportedEncodingException e) {
+				System.err.println("Unsupported Encoding");
+			}			
 		}
 			
 		dbFactory = DocumentBuilderFactory.newInstance();
-		dBuilder = dbFactory.newDocumentBuilder();
-		doc = dBuilder.parse(xmlFile);
+		try {
+			dBuilder = dbFactory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			System.err.println("Parser Config Error.");
+		}
+		try {
+			doc = dBuilder.parse(xmlFile);
+		} catch (SAXException e) {
+			System.err.println("SAX Exception.");
+		} catch (IOException e) {
+			System.err.println("IO Error.");
+		}
 		doc.getDocumentElement().normalize();
 		root = doc.getDocumentElement();
 		
@@ -66,7 +90,7 @@ public class TaskFileHandler {
 	 * Adds new task to XML file
 	 * @param t
 	 */
-	public void add(Task t) throws Exception {
+	public void add(Task t) {
 		int id = t.getId();
 		String[] headers = { "title", "startTime", "endTime", "flag", "priority" };
 		//Task t = new Task("Add add method", 1447252200000L, 1452868200000L, FLAG_TYPE.NULL, PRIORITY_TYPE.HIGH);
@@ -88,7 +112,7 @@ public class TaskFileHandler {
 	 * @param id
 	 * @throws Exception
 	 */
-	public void delete(int id) throws Exception {
+	public void delete(int id) {
 		Element e = locateID(id);
 		root.removeChild(e);
 		genXML();
@@ -99,7 +123,7 @@ public class TaskFileHandler {
 	 * @param t
 	 * @throws Exception
 	 */
-	public void update (Task t) throws Exception {
+	public void update (Task t) {
 		Element e = locateID(t.getId());
 		
 		NodeList nl = e.getChildNodes();
@@ -239,6 +263,7 @@ public class TaskFileHandler {
 		}
 	}
 
+	/*
 	private void display() {
 		for (Task t : tasks) {
 			System.out.println(t.getId());
@@ -251,6 +276,7 @@ public class TaskFileHandler {
 			System.out.println();
 		}
 	}
+	*/
 
 	/**
 	 * Remove text nodes that are used for indentation.
@@ -271,23 +297,29 @@ public class TaskFileHandler {
 		}
 	}
 
-	private void printFile(Document document, int indent) throws Exception {
+	private void printFile(Document document, int indent) {
 
 		removeEmptyText(document.getDocumentElement());
 
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + indent);
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
 		Result result = new StreamResult(xmlFile);
 		Source source = new DOMSource(document);
-		transformer.transform(source, result);
+		Transformer transformer;
+		try {
+			transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + indent);
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.transform(source, result);			
+		} catch (TransformerConfigurationException e) {
+			System.err.println("Transformer Configuration Exeception.");
+		} catch (TransformerException e) {
+			System.err.println("Transformer Exeception.");
+		}
+
 	}
 
-	private void genXML() throws Exception {
+	private void genXML() {
 		printFile(doc, 4);
 	}
 
@@ -313,7 +345,7 @@ public class TaskFileHandler {
 		return e;
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		TaskFileHandler runT = new TaskFileHandler("tasks.xml");
 		//Task t = new Task("Delete the Task Program", 0L, 0L, FLAG_TYPE.NULL, PRIORITY_TYPE.VERY_HIGH);
 		//runT.update(t);
