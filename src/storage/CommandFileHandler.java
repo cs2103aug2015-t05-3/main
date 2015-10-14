@@ -8,15 +8,18 @@
 package storage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class CommandFileHandler {
 	
@@ -27,14 +30,22 @@ public class CommandFileHandler {
 	HashMap<String, String> cmdTable;
 	
 	// Can modify this to specify filename
-	public CommandFileHandler(String fileName) throws Exception {
+	public CommandFileHandler(String fileName) {
 		xmlFile = new File(fileName);
 		dbFactory = DocumentBuilderFactory.newInstance();
-		dBuilder = dbFactory.newDocumentBuilder();
-		doc = dBuilder.parse(xmlFile);
-		doc.getDocumentElement().normalize();
-		cmdTable = new HashMap<>();
-		parseCmd();
+		try {
+			dBuilder = dbFactory.newDocumentBuilder();
+			doc = dBuilder.parse(xmlFile);
+			doc.getDocumentElement().normalize();
+			cmdTable = new HashMap<>();
+			parseCmd();
+		} catch (ParserConfigurationException e) {
+			System.err.println("Parser Config Error.");
+		} catch (SAXException e) {
+			System.err.println("SAX Exception.");
+		} catch (IOException e) {
+			System.err.println("IO Error.");
+		}
 	}
 	
 	private void parseCmd() {
