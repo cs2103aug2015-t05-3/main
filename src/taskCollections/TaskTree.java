@@ -31,6 +31,8 @@ public class TaskTree {
 	private static final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
 	private static final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
 
+	private static final String MSG_ERR_SEARCH_TERM_EMPTY = "search term is empty";
+	
 	private static TaskFileHandler _fileHandler;
 	private static ArrayList<TreeSet<Task>> _taskTrees;
 	private static int _taskTreeSize;
@@ -65,16 +67,12 @@ public class TaskTree {
 		_taskTrees.add(TASK_PRIORITY_TREE, new TreeSet<Task>(new PriorityComparator()));
 		_taskTrees.add(TASK_CREATE_TIME_TREE, new TreeSet<Task>(new IdComparator()));
 
-		fromValueHandler = new Task("");
+		fromValueHandler = Task.getVirtualTask();
 
 		// Fill TaskTree from file storage
-		try {
-			iniTaskFileHandler(taskFilePath);
-			pullFromStorage();
-		} catch (Exception e) {
-			// TODO Throw exception to logic
-			e.printStackTrace();
-		}
+		iniTaskFileHandler(taskFilePath);
+		pullFromStorage();
+
 	}
 
 	/**
@@ -94,12 +92,7 @@ public class TaskTree {
 		}
 		if (isAdded) {
 			increaseTaskListSize();
-			try {
-				pushAddToStorage(task);
-			} catch (Exception e) {
-				// TODO Throw exception to logic
-				e.printStackTrace();
-			}
+			pushAddToStorage(task);
 		}
 		return isAdded;
 	}
@@ -218,13 +211,8 @@ public class TaskTree {
 
 		isReplaced &= _taskTrees.get(treeType).remove(oldTask);
 		isReplaced &= _taskTrees.get(treeType).add(newTask);
-		
-		try {
-			pushUpdateToStorage(oldTask, newTask);
-		} catch (Exception e) {
-			// TODO throw exception to logic
-			e.printStackTrace();
-		}
+
+		pushUpdateToStorage(oldTask, newTask);
 		return isReplaced;
 	}
 
@@ -243,9 +231,9 @@ public class TaskTree {
 	 */
 	public static List<Task> searchName(String searchTerm) {
 		ArrayList<Task> resultList = new ArrayList<Task>(_taskTreeSize);
-
+		
 		if (searchTerm == null) {
-			throw new IllegalArgumentException("search term is empty");
+			throw new IllegalArgumentException(MSG_ERR_SEARCH_TERM_EMPTY);
 		}
 
 		boolean isCaseInsensitive = checkLowercase(searchTerm);
@@ -404,7 +392,7 @@ public class TaskTree {
 		if (toValueL < fromValueL) {
 			return emptyList;
 		} else {
-			toValueHdlBuffer = new Task("");
+			toValueHdlBuffer = Task.getVirtualTask();
 			if (toValueL == fromValueL) {
 				isToInclusive = false;
 			} else {
@@ -575,26 +563,29 @@ public class TaskTree {
 
 	/**
 	 * Push a new task to storage file.
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
-	private static void pushAddToStorage(Task task) throws Exception {
+	private static void pushAddToStorage(Task task) {
 		_fileHandler.add(task);
 	}
 
 	/**
 	 * Remove a task from the storage
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
-	private static void pushRemoveToStorage(Task task) throws Exception {
+	private static void pushRemoveToStorage(Task task) {
 		int taskId = task.getId();
 		_fileHandler.delete(taskId);
 	}
 
 	/**
 	 * Update a new task to storage file.
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
-	private static void pushUpdateToStorage(Task oldTask, Task newTask) throws Exception {
+	private static void pushUpdateToStorage(Task oldTask, Task newTask) {
 		int oldId = oldTask.getId();
 		int newId = newTask.getId();
 
@@ -610,7 +601,7 @@ public class TaskTree {
 	 * To retrieve task list the Task file. This method is called upon the
 	 * starting of this program.
 	 */
-	private static void pullFromStorage() throws Exception {
+	private static void pullFromStorage() {
 		ArrayList<Task> taskList;
 		taskList = _fileHandler.retrieveTaskList();
 
@@ -627,7 +618,7 @@ public class TaskTree {
 	 * @param taskFilePath
 	 *            directed to the storage XML file for tasks.
 	 */
-	private static void iniTaskFileHandler(String taskFilePath) throws Exception {
-			_fileHandler = new TaskFileHandler(taskFilePath);
+	private static void iniTaskFileHandler(String taskFilePath) {
+		_fileHandler = new TaskFileHandler(taskFilePath);
 	}
 }
