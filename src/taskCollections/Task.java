@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Task implements Comparable<Task> {
 	private static int taskNumber = 0;
-
+	
 	/**
 	 * Field value constant for flag attribute.
 	 */
@@ -139,16 +139,11 @@ public class Task implements Comparable<Task> {
 		// TODO loosely implemented. Check for possible flaw cases next time.
 		
 		this.id = id;
-		if (id <= taskNumber) {
-			System.err.println("Attempted to replace an existing task" + id);
-			assert false : "Attempted to replace an existing task";
-		}
-		else {
+		if (id >= taskNumber) {
 			taskNumber = id;
-			taskNumber++;			
+			taskNumber++;						
 		}
 		
-		// TODO Case when specified id is lesser than taskNumber.
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -168,6 +163,12 @@ public class Task implements Comparable<Task> {
 		this(name, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
 	}
 
+	static Task getVirtualTask() {
+		Task temp = new Task(taskNumber, null, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
+		taskNumber--;
+		return temp;
+	}
+	
 	/**
 	 * Returns the name or description of this task in {@code String}.
 	 * 
