@@ -62,16 +62,15 @@ public class TaskFileHandler {
 		dbFactory = DocumentBuilderFactory.newInstance();
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
+			doc = dBuilder.parse(xmlFile);
 		} catch (ParserConfigurationException e) {
 			System.err.println("Parser Config Error.");
-		}
-		try {
-			doc = dBuilder.parse(xmlFile);
 		} catch (SAXException e) {
 			System.err.println("SAX Exception.");
 		} catch (IOException e) {
 			System.err.println("IO Error.");
 		}
+		
 		doc.getDocumentElement().normalize();
 		root = doc.getDocumentElement();
 		
