@@ -125,7 +125,7 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new name or description
 	 * 
 	 * @param task
@@ -141,7 +141,7 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new start time
 	 * 
 	 * @param task
@@ -157,7 +157,7 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new end time
 	 * 
 	 * @param task
@@ -173,7 +173,7 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new flag
 	 * 
 	 * @param task
@@ -189,7 +189,7 @@ public class TaskTree {
 	}
 
 	/**
-	 * Update an {@code Task} object from this {@code TaskTree} with the given
+	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new priority
 	 * 
 	 * @param task
