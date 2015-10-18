@@ -151,18 +151,6 @@ public class Task implements Comparable<Task> {
 		this.priority = priority;
 	}
 
-	/**
-	 * Initializes a newly created {@code Task} object which contain only the
-	 * name or description of the task. The value of starting time, ending time
-	 * and flag are set to null or zero. Priority will be initialized to normal.
-	 * 
-	 * @param name
-	 *            the name or description of the newly constructed {@code Task}
-	 */
-	public Task(String name) {
-		this(name, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
-	}
-
 	static Task getVirtualTask() {
 		Task temp = new Task(taskNumber, null, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
 		taskNumber--;
