@@ -22,33 +22,37 @@ import java.util.ArrayList;
  * @author amoshydra
  */
 public class TaskTree {
-
-	private static final int TASK_NAME_TREE = Attributes.TYPE.NAME.getValue();
-	private static final int TASK_START_TIME_TREE = Attributes.TYPE.START_TIME.getValue();
-	private static final int TASK_END_TIME_TREE = Attributes.TYPE.END_TIME.getValue();
-	private static final int TASK_FLAG_TREE = Attributes.TYPE.FLAG.getValue();
-	private static final int TASK_PRIORITY_TREE = Attributes.TYPE.PRIORITY.getValue();
-	private static final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
-	private static final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
-
-	private static final String MSG_ERR_SEARCH_TERM_EMPTY = "search term is empty";
 	
-	private static TaskFileHandler _fileHandler;
-	private static ArrayList<TreeSet<Task>> _taskTrees;
-	private static int _taskTreeSize;
+	private TaskTree _taskTree;
+	private ArrayList<TreeSet<Task>> _taskTrees;
+	private int _taskTreeSize;
+	private TaskFileHandler _fileHandler;
+	
+	// TaskTree attributes type
+	private final int TASK_NAME_TREE = Attributes.TYPE.NAME.getValue();
+	private final int TASK_START_TIME_TREE = Attributes.TYPE.START_TIME.getValue();
+	private final int TASK_END_TIME_TREE = Attributes.TYPE.END_TIME.getValue();
+	private final int TASK_FLAG_TREE = Attributes.TYPE.FLAG.getValue();
+	private final int TASK_PRIORITY_TREE = Attributes.TYPE.PRIORITY.getValue();
+	private final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
+	private final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
+
+	// Message Constants
+	private final String MSG_ERR_SEARCH_TERM_EMPTY = "search term is empty";
 
 	// For managing comparable argument during query
-	private static Task fromValueHandler;
+	private Task fromValueHandler;
 
-	private static final String TO_STRING_OPEN = "[";
-	private static final String TO_STRING_CLOSE = "]";
-	private static final String TO_STRING_DELIMETER = ",";
-	private static final String CHECK_STRING_CONCATOR = " ";
+	private final String TO_STRING_OPEN = "[";
+	private final String TO_STRING_CLOSE = "]";
+	private final String TO_STRING_DELIMETER = ",";
+	private final String CHECK_STRING_CONCATOR = " ";
 
 	// Prevent instantiation of this constructor
 	private TaskTree() {
 	}
 
+	// Constructor of TaskTree
 	/**
 	 * Initialize a new, empty tree set, sorted according to the ordering of
 	 * each attributes in the task.
@@ -57,7 +61,10 @@ public class TaskTree {
 	 *            directed to the storage XML file for tasks.
 	 * 
 	 */
-	public static void init(String taskFilePath) {
+	private void init(String taskFilePath) {
+
+		_taskTree = new TaskTree();
+
 		_taskTreeSize = 0;
 		_taskTrees = new ArrayList<TreeSet<Task>>(SIZE_OF_TASK_TREES);
 
@@ -73,9 +80,32 @@ public class TaskTree {
 		// Fill TaskTree from file storage
 		iniTaskFileHandler(taskFilePath);
 		pullFromStorage();
-
+	}
+	/**
+	 * Construct and return a new instance of {@code TaskTree}. If the taskTree
+	 * has already been constructed, a null instance.
+	 * 
+	 * @return the constructed instance of {@code TaskTree} if it has not exist
+	 *         yet. Otherwise, return {@code null}.
+	 */
+	public TaskTree newTaskTree(String taskFilePath) {
+		if (_taskTree == null) {
+			init(taskFilePath);
+			return getTaskTree();
+		} else {
+			return null;
+		}
+	}
+	/**
+	 * Return the original instance of {@code TaskTree}
+	 * 
+	 * @return the original instance of {@code TaskTree}
+	 */
+	public TaskTree getTaskTree() {
+		return _taskTree;
 	}
 
+	// TaskTree Task operation: Add and Remove
 	/**
 	 * Adds the specified {@code Task} object to this {@code TaskTree}
 	 * 
@@ -84,7 +114,7 @@ public class TaskTree {
 	 * @return true if this {@code TaskTree} did not already contain the
 	 *         specified {@code Task} object
 	 */
-	public static boolean add(Task task) {
+	public boolean add(Task task) {
 		boolean isAdded = true;
 		for (TreeSet<Task> tree : _taskTrees) {
 			if (!tree.add(task)) {
@@ -106,7 +136,7 @@ public class TaskTree {
 	 * @return true if this {@code TaskTree} contained the specified
 	 *         {@code Task} object
 	 */
-	public static boolean remove(Task task) {
+	public boolean remove(Task task) {
 		boolean isRemoved = true;
 		for (TreeSet<Task> tree : _taskTrees) {
 			if (!tree.remove(task)) {
@@ -125,6 +155,8 @@ public class TaskTree {
 		return isRemoved;
 	}
 
+
+	// TaskTree Task operation: Update
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new name
@@ -136,7 +168,7 @@ public class TaskTree {
 	 * @return true if this {@code TaskTree} contained the task and can be
 	 *         modified
 	 */
-	public static boolean updateName(Task task, String newValue) {
+	public boolean updateName(Task task, String newValue) {
 		task.setName(newValue);
 		task.setFullName(newValue);
 		return updateAttributeTree(task, task, TYPE.NAME);
@@ -153,10 +185,10 @@ public class TaskTree {
 	 * @return true if this {@code TaskTree} contained the task and can be
 	 *         modified
 	 */
-	public static void updateDescription(Task task, String newValue) {
+	public void updateDescription(Task task, String newValue) {
 		task.setDescription(newValue);
 	}
-	
+
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new start time
@@ -168,7 +200,7 @@ public class TaskTree {
 	 * @return true if this {@code TaskTree} contained the task and can be
 	 *         modified
 	 */
-	public static boolean updateStartTime(Task task, long newValue) {
+	public boolean updateStartTime(Task task, long newValue) {
 		task.setStartTime(newValue);
 		return updateAttributeTree(task, task, TYPE.START_TIME);
 	}
@@ -184,7 +216,7 @@ public class TaskTree {
 	 * @return true if this {@code TaskTree} contained the task and can be
 	 *         modified
 	 */
-	public static boolean updateEndTime(Task task, long newValue) {
+	public boolean updateEndTime(Task task, long newValue) {
 		task.setEndTime(newValue);
 		return updateAttributeTree(task, task, TYPE.END_TIME);
 	}
@@ -200,7 +232,7 @@ public class TaskTree {
 	 * @return true if this {@code TaskTree} contained the task and can be
 	 *         modified
 	 */
-	public static boolean updateFlag(Task task, FLAG_TYPE newValue) {
+	public boolean updateFlag(Task task, FLAG_TYPE newValue) {
 		task.setFlag(newValue);
 		return updateAttributeTree(task, task, TYPE.FLAG);
 	}
@@ -216,12 +248,12 @@ public class TaskTree {
 	 * @return true if this {@code TaskTree} contained the task and can be
 	 *         modified
 	 */
-	public static boolean updatePriority(Task task, PRIORITY_TYPE newValue) {
+	public boolean updatePriority(Task task, PRIORITY_TYPE newValue) {
 		task.setPriority(newValue);
 		return updateAttributeTree(task, task, TYPE.PRIORITY);
 	}
 
-	private static boolean updateAttributeTree(Task oldTask, Task newTask, TYPE taskAttributeType) {
+	private boolean updateAttributeTree(Task oldTask, Task newTask, TYPE taskAttributeType) {
 		boolean isReplaced = true;
 
 		int treeType = taskAttributeType.getValue();
@@ -233,6 +265,8 @@ public class TaskTree {
 		return isReplaced;
 	}
 
+
+	// TaskTree Task operation: Search and query
 	/**
 	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
 	 * objects contain the {@code searchTerm}. The returned {@code List} is
@@ -246,9 +280,9 @@ public class TaskTree {
 	 * @throws IllegalArgumentException
 	 *             if search term is empty
 	 */
-	public static List<Task> searchName(String searchTerm) {
+	public List<Task> searchName(String searchTerm) {
 		ArrayList<Task> resultList = new ArrayList<Task>(_taskTreeSize);
-		
+
 		if (searchTerm == null) {
 			throw new IllegalArgumentException(MSG_ERR_SEARCH_TERM_EMPTY);
 		}
@@ -262,7 +296,7 @@ public class TaskTree {
 			checkNameString = task.getName();
 			checkDescString = task.getDescription();
 			checkString = checkNameString + CHECK_STRING_CONCATOR + checkDescString;
-			
+
 			if (isCaseInsensitive) {
 				checkString = checkString.toLowerCase();
 			}
@@ -274,7 +308,7 @@ public class TaskTree {
 		return resultList;
 	}
 
-	private static boolean checkLowercase(String text) {
+	private boolean checkLowercase(String text) {
 		int textLength = text.length();
 		char charInText;
 
@@ -305,7 +339,7 @@ public class TaskTree {
 	 *         objects range from {@code fromStartTime}, inclusive, to
 	 *         {@code toStartTime}, inclusive
 	 */
-	public static List<Task> queryStartTime(long fromStartTime, long toStartTime) {
+	public List<Task> queryStartTime(long fromStartTime, long toStartTime) {
 		return query(TYPE.START_TIME, fromStartTime, toStartTime);
 	}
 
@@ -326,7 +360,7 @@ public class TaskTree {
 	 *         objects range from {@code fromEndTime}, inclusive, to
 	 *         {@code toEndTime}, inclusive
 	 */
-	public static List<Task> queryEndTime(long fromEndTime, long toEndTime) {
+	public List<Task> queryEndTime(long fromEndTime, long toEndTime) {
 		return query(TYPE.END_TIME, fromEndTime, toEndTime);
 	}
 
@@ -347,7 +381,7 @@ public class TaskTree {
 	 *         objects range from {@code fromFlag}, inclusive, to {@code toFlag}
 	 *         , inclusive
 	 */
-	public static List<Task> queryFlag(FLAG_TYPE fromFlag, FLAG_TYPE toFlag) {
+	public List<Task> queryFlag(FLAG_TYPE fromFlag, FLAG_TYPE toFlag) {
 
 		int fromValue = fromFlag.getValue();
 		int toValue = toFlag.getValue();
@@ -372,7 +406,7 @@ public class TaskTree {
 	 *         objects range from {@code fromPriority}, inclusive, to
 	 *         {@code toPriority}, inclusive
 	 */
-	public static List<Task> queryPriority(PRIORITY_TYPE fromPriority, PRIORITY_TYPE toPriority) {
+	public List<Task> queryPriority(PRIORITY_TYPE fromPriority, PRIORITY_TYPE toPriority) {
 
 		int fromValue = fromPriority.getValue();
 		int toValue = toPriority.getValue();
@@ -401,7 +435,7 @@ public class TaskTree {
 	 *         objects range from {@code fromValueL}, inclusive, to
 	 *         {@code toValueL}, inclusive
 	 */
-	public static List<Task> query(TYPE taskAttributeType, long fromValueL, long toValueL) {
+	public List<Task> query(TYPE taskAttributeType, long fromValueL, long toValueL) {
 
 		int treeType = taskAttributeType.getValue();
 
@@ -456,7 +490,7 @@ public class TaskTree {
 	 * @see taskCollections.Task
 	 * 
 	 */
-	public static List<Task> searchFlag(FLAG_TYPE type) {
+	public List<Task> searchFlag(FLAG_TYPE type) {
 		int flagValue = type.getValue();
 
 		return query(TYPE.FLAG, flagValue, flagValue);
@@ -475,12 +509,14 @@ public class TaskTree {
 	 * @see taskCollections.Task
 	 * 
 	 */
-	public static List<Task> searchPriority(PRIORITY_TYPE type) {
+	public List<Task> searchPriority(PRIORITY_TYPE type) {
 		int priorityValue = type.getValue();
 
 		return query(TYPE.PRIORITY, priorityValue, priorityValue);
 	}
 
+
+	// TaskTree operation: getList
 	/**
 	 * Returns a view of this {@code TaskTree} whose {@code Task} objects are
 	 * sorted according to order it is created. The returned {@code List} is
@@ -489,7 +525,7 @@ public class TaskTree {
 	 *
 	 * @return a view of this {@code TaskTree}.
 	 */
-	public static List<Task> getList() {
+	public List<Task> getList() {
 		int treeType = Attributes.TYPE.ID.getValue();
 		return getSortedList(_taskTrees.get(treeType));
 	}
@@ -507,12 +543,12 @@ public class TaskTree {
 	 *         sorted according to its specified attribute type.
 	 * @see taskCollections.Attributes
 	 */
-	public static List<Task> getSortedList(TYPE taskAttributeType) {
+	public List<Task> getSortedList(TYPE taskAttributeType) {
 
 		return getSortedList(_taskTrees.get(taskAttributeType.getValue()));
 	}
 
-	private static List<Task> getSortedList(TreeSet<Task> taskTree) {
+	private List<Task> getSortedList(TreeSet<Task> taskTree) {
 		ArrayList<Task> resultList = new ArrayList<Task>(_taskTreeSize);
 		for (Task task : taskTree) {
 			resultList.add(task);
@@ -520,6 +556,8 @@ public class TaskTree {
 		return resultList;
 	}
 
+
+	// TaskTree operation: getString
 	/**
 	 * Returns a string representation of this {@code TaskTree}. The string
 	 * representation consists of a list of the {@code TaskTree}'s {@code Task}
@@ -531,7 +569,7 @@ public class TaskTree {
 	 * @return a string representation of this task tree in a list.
 	 * 
 	 */
-	public static String getString() {
+	public String getString() {
 		return getString(Attributes.TYPE.ID);
 	}
 
@@ -548,7 +586,7 @@ public class TaskTree {
 	 *            the attribute type to be printed.
 	 * @return a string representation of this task tree in a list.
 	 */
-	public static String getString(TYPE taskAttributeType) {
+	public String getString(TYPE taskAttributeType) {
 
 		ArrayList<Task> resultList = new ArrayList<Task>(getSortedList(taskAttributeType));
 		int listSize = resultList.size();
@@ -563,31 +601,35 @@ public class TaskTree {
 		return buffer;
 	}
 
+
+	// TaskTree operation: size related
 	/**
 	 * Return total number of task in this tree
 	 * 
 	 * @return number of task in this tree
 	 */
-	public static int size() {
+	public int size() {
 		return _taskTreeSize;
 	}
 
-	private static void increaseTaskListSize() {
+	private void increaseTaskListSize() {
 		_taskTreeSize += 1;
 	}
 
-	private static void decreaseTaskListSize() {
+	private void decreaseTaskListSize() {
 		_taskTreeSize -= 1;
 	}
 
 	// Storage related methods
 
+	
+	// TaskTree operation: File Storage related
 	/**
 	 * Push a new task to storage file.
 	 * 
 	 * @throws Exception
 	 */
-	private static void pushAddToStorage(Task task) {
+	private void pushAddToStorage(Task task) {
 		_fileHandler.add(task);
 	}
 
@@ -596,7 +638,7 @@ public class TaskTree {
 	 * 
 	 * @throws Exception
 	 */
-	private static void pushRemoveToStorage(Task task) {
+	private void pushRemoveToStorage(Task task) {
 		int taskId = task.getId();
 		_fileHandler.delete(taskId);
 	}
@@ -606,7 +648,7 @@ public class TaskTree {
 	 * 
 	 * @throws Exception
 	 */
-	private static void pushUpdateToStorage(Task oldTask, Task newTask) {
+	private void pushUpdateToStorage(Task oldTask, Task newTask) {
 		int oldId = oldTask.getId();
 		int newId = newTask.getId();
 
@@ -622,7 +664,7 @@ public class TaskTree {
 	 * To retrieve task list the Task file. This method is called upon the
 	 * starting of this program.
 	 */
-	private static void pullFromStorage() {
+	private void pullFromStorage() {
 		ArrayList<Task> taskList;
 		taskList = _fileHandler.retrieveTaskList();
 
@@ -639,7 +681,7 @@ public class TaskTree {
 	 * @param taskFilePath
 	 *            directed to the storage XML file for tasks.
 	 */
-	private static void iniTaskFileHandler(String taskFilePath) {
+	private void iniTaskFileHandler(String taskFilePath) {
 		_fileHandler = new TaskFileHandler(taskFilePath);
 	}
 }
