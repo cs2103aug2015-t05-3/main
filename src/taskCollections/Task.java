@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Task implements Comparable<Task> {
 	private static int taskNumber = 0;
-	
+
 	/**
 	 * Field value constant for flag attribute.
 	 */
@@ -77,6 +77,8 @@ public class Task implements Comparable<Task> {
 
 	private int id;
 	private String name;
+	private String fullName;
+	private String description;
 	private long startTime;
 	private long endTime;
 	private FLAG_TYPE flag;
@@ -88,7 +90,7 @@ public class Task implements Comparable<Task> {
 	 * internal ID will be used to differentiate duplicated value.
 	 * 
 	 * @param name
-	 *            the name or description of the newly constructed {@code Task}
+	 *            the name of the newly constructed {@code Task}
 	 * @param startTime
 	 *            the starting time of the newly constructed {@code Task} in
 	 *            UNIX format
@@ -101,14 +103,12 @@ public class Task implements Comparable<Task> {
 	 * @param priority
 	 *            the given priority field;
 	 * 
+	 * @deprecated Use {@code Task} constructor that support a full name and a
+	 *             description instead
+	 * 
 	 */
 	public Task(String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
-		this.id = taskNumber++;
-		this.name = name;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.flag = flag;
-		this.priority = priority;
+		this(name, name, null, startTime, endTime, flag, priority);
 	}
 
 	/**
@@ -119,9 +119,44 @@ public class Task implements Comparable<Task> {
 	 * 
 	 * @param id
 	 *            the index number used to identify this task.
-	 * 
 	 * @param name
-	 *            the name or description of the newly constructed {@code Task}
+	 *            the name of the newly constructed {@code Task}
+	 * @param startTime
+	 *            the starting time of the newly constructed {@code Task} in
+	 *            UNIX format
+	 * @param endTime
+	 *            the ending time of the newly constructed {@code Task} in UNIX
+	 *            format
+	 * @param flag
+	 *            the given flag field; Task marked as done is specified with
+	 *            this flag.
+	 * @param priority
+	 *            the given priority field;
+	 * 
+	 * @deprecated Use {@code Task} constructor that support a full name and a
+	 *             description instead
+	 * 
+	 */
+	public Task(int id, String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
+		this(id, name, name, null, startTime, endTime, flag, priority);
+	}
+
+	/**
+	 * Initializes a newly created {@code Task} object so that it store the
+	 * name, starting time, ending time, flag and priority as the argument. The
+	 * ID will be specified through fileProcessor only. Do not use this to add
+	 * new task from user.
+	 * 
+	 * @param id
+	 *            the index number used to identify this task.
+	 * @param name
+	 *            the name of the newly constructed {@code Task}
+	 * @param fullName
+	 *            the original user specified name of the newly constructed
+	 *            {@code Task}
+	 * @param description
+	 *            the description of the newly constructed
+	 *            {@code Task}
 	 * @param startTime
 	 *            the starting time of the newly constructed {@code Task} in
 	 *            UNIX format
@@ -135,16 +170,56 @@ public class Task implements Comparable<Task> {
 	 *            the given priority field;
 	 * 
 	 */
-	public Task(int id, String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
-		// TODO loosely implemented. Check for possible flaw cases next time.
-		
+	public Task(int id, String name, String fullName, String description, long startTime, long endTime, FLAG_TYPE flag,
+			PRIORITY_TYPE priority) {
+
 		this.id = id;
 		if (id >= taskNumber) {
 			taskNumber = id;
-			taskNumber++;						
+			taskNumber++;
 		}
-		
+
 		this.name = name;
+		this.fullName = fullName;
+		this.description = description;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.flag = flag;
+		this.priority = priority;
+	}
+	
+	/**
+	 * Initializes a newly created {@code Task} object so that it store the
+	 * name, starting time, ending time, flag and priority as the argument. An
+	 * internal ID will be used to differentiate duplicated value.
+	 * 
+	 * @param name
+	 *            the name of the newly constructed {@code Task}
+	 * @param fullName
+	 *            the original user specified name of the newly constructed
+	 *            {@code Task}
+	 * @param description
+	 *            the description of the newly constructed
+	 *            {@code Task}
+	 * @param startTime
+	 *            the starting time of the newly constructed {@code Task} in
+	 *            UNIX format
+	 * @param endTime
+	 *            the ending time of the newly constructed {@code Task} in UNIX
+	 *            format
+	 * @param flag
+	 *            the given flag field; Task marked as done is specified with
+	 *            this flag.
+	 * @param priority
+	 *            the given priority field;
+	 * 
+	 */
+	public Task(String name, String fullName, String description, long startTime, long endTime, FLAG_TYPE flag,
+			PRIORITY_TYPE priority) {
+		this.id = taskNumber++;
+		this.name = name;
+		this.fullName = fullName;
+		this.description = description;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.flag = flag;
@@ -156,15 +231,6 @@ public class Task implements Comparable<Task> {
 		taskNumber--;
 		return temp;
 	}
-	
-	/**
-	 * Returns the name or description of this task in {@code String}.
-	 * 
-	 * @return the name or description of this task.
-	 */
-	public String getName() {
-		return name;
-	}
 
 	/**
 	 * Returns the id of this task in {@code int}.
@@ -173,6 +239,33 @@ public class Task implements Comparable<Task> {
 	 */
 	public int getId() {
 		return id;
+	}
+
+	/**
+	 * Returns the name of this task in {@code String}.
+	 * 
+	 * @return the name of this task.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Returns the full name of this task in {@code String}.
+	 * 
+	 * @return the full name of this task.
+	 */
+	public String getFullName() {
+		return fullName;
+	}
+
+	/**
+	 * Returns the name of this task in {@code String}.
+	 * 
+	 * @return the description of this task.
+	 */
+	public String getDescription() {
+		return description;
 	}
 
 	/**
@@ -212,15 +305,35 @@ public class Task implements Comparable<Task> {
 	}
 
 	/**
-	 * Change the name or description of this task.
+	 * Change the name of this task.
 	 * 
 	 * @param name
-	 *            the new name or description for the task.
+	 *            the new name for the task.
 	 */
 	void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Change the name of this task.
+	 * 
+	 * @param name
+	 *            the new name for the task.
+	 */
+	void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	
+	/**
+	 * Change the description of this task.
+	 * 
+	 * @param description
+	 *            the new description for the task.
+	 */
+	void setDescription(String description) {
+		this.description = description;
+	}
+	
 	/**
 	 * Change the start time of this task.
 	 * 

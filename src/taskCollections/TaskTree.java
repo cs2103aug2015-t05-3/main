@@ -43,6 +43,7 @@ public class TaskTree {
 	private static final String TO_STRING_OPEN = "[";
 	private static final String TO_STRING_CLOSE = "]";
 	private static final String TO_STRING_DELIMETER = ",";
+	private static final String CHECK_STRING_CONCATOR = " ";
 
 	// Prevent instantiation of this constructor
 	private TaskTree() {
@@ -126,7 +127,7 @@ public class TaskTree {
 
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
-	 * new name or description
+	 * new name
 	 * 
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
@@ -137,9 +138,25 @@ public class TaskTree {
 	 */
 	public static boolean updateName(Task task, String newValue) {
 		task.setName(newValue);
+		task.setFullName(newValue);
 		return updateAttributeTree(task, task, TYPE.NAME);
 	}
 
+	/**
+	 * Update a {@code Task} object from this {@code TaskTree} with the given
+	 * new description
+	 * 
+	 * @param task
+	 *            to be modified from this {@code TaskTree}
+	 * @param newValue
+	 *            to update this task
+	 * @return true if this {@code TaskTree} contained the task and can be
+	 *         modified
+	 */
+	public static void updateDescription(Task task, String newValue) {
+		task.setDescription(newValue);
+	}
+	
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new start time
@@ -237,11 +254,15 @@ public class TaskTree {
 		}
 
 		boolean isCaseInsensitive = checkLowercase(searchTerm);
+		String checkNameString, checkDescString;
 		String checkString;
 
 		for (Task task : _taskTrees.get(TASK_NAME_TREE)) {
 
-			checkString = task.getName();
+			checkNameString = task.getName();
+			checkDescString = task.getDescription();
+			checkString = checkNameString + CHECK_STRING_CONCATOR + checkDescString;
+			
 			if (isCaseInsensitive) {
 				checkString = checkString.toLowerCase();
 			}
