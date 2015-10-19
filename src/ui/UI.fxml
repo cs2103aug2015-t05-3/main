@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UIController">
+   <children>
+      <TableView fx:id="table2" layoutX="513.0" layoutY="80.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="264.0" prefHeight="440.0" prefWidth="264.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="18.0">
+         <columns>
+            <TableColumn fx:id="id1" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
+            <TableColumn fx:id="task1" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
+         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <Text fx:id="cmdMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="RED" layoutX="13.0" layoutY="529.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Testing 123..." textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="769.9999923706055" AnchorPane.bottomAnchor="55.0">
+         <font>
+            <Font name="Calibri" size="16.0" />
+         </font>
+      </Text>
+      <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" layoutX="13.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello Jim, you have 9 tasks pending." textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="769.9999994337559" AnchorPane.topAnchor="8.0">
+         <font>
+            <Font name="Calibri Bold" size="18.0" />
+         </font>
+      </Text>
+      <Line endX="800.0" endY="10.0" layoutY="25.0" startY="10.0" />
+      <Text fx:id="searchMsg" boundsType="LOGICAL_VERTICAL_CENTER" layoutX="13.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Results for &quot;buy milk&quot; : 9 results" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="769.9999994337559" AnchorPane.topAnchor="45.0">
+         <font>
+            <Font name="Calibri" size="16.0" />
+         </font>
+      </Text>
+      <TableView fx:id="table1" layoutX="18.0" layoutY="77.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="465.0" prefHeight="440.0" prefWidth="465.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="18.0">
+        <columns>
+          <TableColumn fx:id="id" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
+          <TableColumn fx:id="task" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
+            <TableColumn fx:id="sDate" minWidth="101.0" prefWidth="101.0" resizable="false" text="sDate" />
+            <TableColumn fx:id="eDate" minWidth="101.0" prefWidth="101.0" resizable="false" text="eDate" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <HBox alignment="CENTER_LEFT" layoutX="19.0" layoutY="540.0" prefHeight="43.0" prefWidth="780.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0">
+         <children>
+            <TextField fx:id="input" onKeyPressed="#enterPressed" prefHeight="39.0" prefWidth="1314.0" promptText="Enter command here" />
+            <TextField fx:id="input2" minWidth="4.0" prefHeight="39.0" promptText="task name" />
+            <TextField fx:id="input3" minWidth="4.0" prefHeight="39.0" promptText="deadline" />
+            <TextField fx:id="input4" minWidth="4.0" prefHeight="39.0" promptText="start time" />
+            <TextField fx:id="input5" minWidth="4.0" prefHeight="39.0" promptText="priority" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
