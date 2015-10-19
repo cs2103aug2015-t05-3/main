@@ -9,15 +9,16 @@ public class CmdUndo extends Command {
 	private static final String MSG_UNDOEMPTY = "No commands to undo!";
 
 	@Override
-	public String execute() {
+	public CommandAction execute() {
 		Command toUndo = extractHistory();
 		
-		return toUndo == null ? MSG_UNDOEMPTY : MSG_UNDO + toUndo.undo();
+		//return toUndo == null ? MSG_UNDOEMPTY : MSG_UNDO + toUndo.undo();
+		return new CommandAction("", true);
 	}
 
 	@Override
-	public String undo() {
-		return null;
+	public CommandAction undo() {
+		return new CommandAction("", true);
 	}
 
 	@Override

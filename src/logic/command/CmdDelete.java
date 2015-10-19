@@ -1,6 +1,8 @@
 package logic.command;
 
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import constants.CmdParameters;
 import ui.UIHelper;
@@ -36,6 +38,8 @@ public class CmdDelete extends Command {
 	private Task deleteTask;
 	private String taskName;
 
+	private static Logger log = Logger.getLogger("log_CmdDelete");
+	
 	public CmdDelete() {
 
 	}
@@ -45,29 +49,34 @@ public class CmdDelete extends Command {
 	}
 
 	@Override
-	public String execute() {
+	public CommandAction execute() {
 		
 		deleteTask = getTask();
 		
 		if(deleteTask != null){
 			TaskTree.remove(deleteTask);
-			return String.format(MSG_TASKDELETED, deleteTask.getName());
+			//return String.format(MSG_TASKDELETED, deleteTask.getName());
+			return new CommandAction(String.format(MSG_TASKDELETED, deleteTask.getName()), true);
 		}
 
 		taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
 
 		if (taskName == null || taskName.equals("")) {
-			return MSG_TASKUNSPECIFIED;
+			//return MSG_TASKUNSPECIFIED;
+			return new CommandAction(MSG_TASKUNSPECIFIED, false);
 		}
 
 		List<Task> deleteTaskList = searchTask(taskName);
+		//deleteTaskList = null; // for testing
+		assert(deleteTaskList != null);
 		
-		return deleteTask(deleteTaskList);
+		//return deleteTask(deleteTaskList);
+		return new CommandAction(deleteTask(deleteTaskList), true);
 		
 	}
 
 	@Override
-	public String undo() {
+	public CommandAction undo() {
 		Command add = new CmdAdd();
 		add.setTask(deleteTask);
 		return add.execute();
@@ -165,11 +174,15 @@ public class CmdDelete extends Command {
 		if(input == null || input.equals("")){
 			return inputNumber;
 		}
-		
+		log.log(Level.INFO, "[Start] format String into Integer");
 		try{
 			inputNumber = Integer.parseInt(input);
-		}catch(NumberFormatException e){/*Do nothing*/}
-		
+		}catch(NumberFormatException e){
+			log.log(Level.WARNING, "NumberFormatException");
+		}catch(Exception e){
+			log.log(Level.SEVERE, "Unkown Exception");
+		}
+		log.log(Level.INFO, "[End] format String into Integer");
 		return inputNumber;
 	}
 	

@@ -15,34 +15,25 @@ public class CmdList extends Command {
 	// Message constants
 	private static final String MSG_EMPTY_TASKTREE = "No task to display";
 	
-
-	// Error codes
-	/*
-	 * private enum ERROR { OK, TASKUNSPECIFIED }
-	 */
-
-	/*
-	 * Variables for internal use
-	 */
-	
-	
 	public CmdList(){
 		
 	}
 	
 	@Override
-	public String execute(){
+	public CommandAction execute(){
 		
 		if(TaskTree.size() == 0){
-			return MSG_EMPTY_TASKTREE;
+			//return MSG_EMPTY_TASKTREE;
+			return new CommandAction(MSG_EMPTY_TASKTREE, false);
 		}
 		
-		return listAllTask();
+		//return listAllTask();
+		return new CommandAction(listAllTask(), false);
 		
 	}
 	
 	@Override
-	public String undo(){
+	public CommandAction undo(){
 		//do nothing (List should not have undo)
 		return null;
 	}

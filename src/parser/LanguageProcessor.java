@@ -19,7 +19,6 @@ public class LanguageProcessor {
 	 * Constants
 	 */
 	private static final String CONFIG_CMD_ADD = "add";
-	private static final String CONFIG_CMD_CLEAR = "clear";
 	private static final String CONFIG_CMD_DELETE = "delete";
 	private static final String CONFIG_CMD_EXIT = "exit";
 	private static final String CONFIG_CMD_HELP = "help";
@@ -98,8 +97,6 @@ public class LanguageProcessor {
 		switch (actualCmd) {
 		case CONFIG_CMD_ADD:
 			return new CmdAdd();
-		case CONFIG_CMD_CLEAR:
-			return new CmdClear();
 		case CONFIG_CMD_DELETE:
 			return new CmdDelete();
 		case CONFIG_CMD_EXIT:
