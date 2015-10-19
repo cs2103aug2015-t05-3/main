@@ -7,7 +7,6 @@ package logic.command;
 
 import constants.CmdParameters;
 import taskCollections.Task;
-import taskCollections.TaskTree;
 import taskCollections.Task.PRIORITY_TYPE;
 import util.TimeUtil;
 
@@ -74,10 +73,10 @@ public class CmdAdd extends Command {
 			// Convert the priority to a format we can use for storing
 			PRIORITY_TYPE taskPriorityP = getPriorityValue(taskPriority);
 
-			addTask = new Task(taskName, taskStartTimeL, taskEndTimeL, Task.FLAG_TYPE.NULL, taskPriorityP);
+			addTask = new Task(taskName, taskName,null, taskStartTimeL, taskEndTimeL, Task.FLAG_TYPE.NULL, taskPriorityP);
 		}
 
-		TaskTree.add(addTask);
+		_taskTree.add(addTask);
 
 		return new CommandAction(String.format(MSG_TASKADDED, taskName), true);
 	}

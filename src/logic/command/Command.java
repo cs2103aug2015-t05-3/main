@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Stack;
 
 import taskCollections.Task;
+import taskCollections.TaskTree;
 
 public abstract class Command {
 	
@@ -24,6 +25,8 @@ public abstract class Command {
 	private static Stack<Command> history = new Stack<Command>();
 	// The task that the command is trying to manipulate
 	private Task task;
+	// The task tree which all commands will reference to
+	protected static TaskTree _taskTree;
 	
 	public Command(){
 		parameters = new HashMap<String,String>();
@@ -115,5 +118,9 @@ public abstract class Command {
 	 */
 	protected static Command extractHistory(){
 		return history.pop();
+	}
+	
+	public static void init(String taskFileName){
+		_taskTree = TaskTree.newTaskTree(taskFileName);
 	}
 }

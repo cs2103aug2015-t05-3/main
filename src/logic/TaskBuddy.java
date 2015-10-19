@@ -51,7 +51,7 @@ public class TaskBuddy {
 		if(!lp.initCmdList(cmdFileName)){
 			log.severe("TaskBuddy: Cmd list init failed");
 		}
-		TaskTree.init(taskFileName);
+		Command.init(taskFileName);
 		UIHelper.createUI();
 	}
 	
