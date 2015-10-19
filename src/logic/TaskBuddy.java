@@ -52,7 +52,7 @@ public class TaskBuddy {
 		if(!lp.initCmdList(cmdFileName)){
 			log.severe("TaskBuddy: Cmd list init failed");
 		}
-		TaskTree.init(taskFileName);
+		TaskTree.newTaskTree(taskFileName);
 		UIHelper.createUI();
 	}
 	
@@ -74,9 +74,6 @@ public class TaskBuddy {
 			if(toExecute == null){
 				UIHelper.appendOutput(MSG_INVALIDCMD);
 				continue;
-			} else if (toExecute instanceof CmdExit){
-				toExecute.execute();
-				break;
 			}
 			UIHelper.appendOutput(toExecute.execute());
 			if(toExecute.isUndoable()){
