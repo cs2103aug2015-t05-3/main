@@ -33,18 +33,20 @@ import util.TimeUtil;
 
 public class TaskFileHandler {
 
-	ArrayList<Task> tasks;
-	DocumentBuilderFactory dbFactory;
-	DocumentBuilder dBuilder;
-	Document doc;
-	Element root;
-	File xmlFile;
+	private ArrayList<Task> _tasks;
+	private Document _doc;
+	private Element _root;
+	private File _xmlFile;
 	
 	public TaskFileHandler(String fileName) {
-		tasks = new ArrayList<>();
-		xmlFile = new File(fileName);
+		
+		DocumentBuilderFactory dbFactory;
+		DocumentBuilder dBuilder;
+		
+		_tasks = new ArrayList<>();
+		_xmlFile = new File(fileName);
 
-		if (!xmlFile.exists()) { 
+		if (!_xmlFile.exists()) { 
 			PrintWriter writer;
 			try {
 				writer = new PrintWriter(fileName, "UTF-8");
@@ -62,7 +64,7 @@ public class TaskFileHandler {
 		dbFactory = DocumentBuilderFactory.newInstance();
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
-			doc = dBuilder.parse(xmlFile);
+			_doc = dBuilder.parse(_xmlFile);
 		} catch (ParserConfigurationException e) {
 			System.err.println("Parser Config Error.");
 		} catch (SAXException e) {
@@ -71,8 +73,8 @@ public class TaskFileHandler {
 			System.err.println("IO Error.");
 		}
 		
-		doc.getDocumentElement().normalize();
-		root = doc.getDocumentElement();
+		_doc.getDocumentElement().normalize();
+		_root = _doc.getDocumentElement();
 		
 		importAllTasks();
 	}
@@ -82,7 +84,7 @@ public class TaskFileHandler {
 	 */
 	public ArrayList<Task> retrieveTaskList() {
 		importAllTasks();
-		return tasks;
+		return _tasks;
 	}
 
 	/**
@@ -94,10 +96,10 @@ public class TaskFileHandler {
 		String[] headers = { "title", "startTime", "endTime", "flag", "priority" };
 		//Task t = new Task("Add add method", 1447252200000L, 1452868200000L, FLAG_TYPE.NULL, PRIORITY_TYPE.HIGH);
 	
-		Element newTask = doc.createElement("task");
+		Element newTask = _doc.createElement("task");
 		newTask.setAttribute("id", "" + id);
 	
-		root.appendChild(newTask);
+		_root.appendChild(newTask);
 	
 		for (int i = 0; i < headers.length; i++) {
 			Element e = addElement(headers[i], t);
@@ -113,7 +115,7 @@ public class TaskFileHandler {
 	 */
 	public void delete(int id) {
 		Element e = locateID(id);
-		root.removeChild(e);
+		_root.removeChild(e);
 		genXML();
 	}
 	
@@ -139,10 +141,10 @@ public class TaskFileHandler {
 					nl.item(i).setTextContent(TimeUtil.getFormattedDate(t.getEndTime()));
 					break;
 				case (3):
-					nl.item(i).setTextContent("" + t.getFlag());
+					nl.item(i).setTextContent(String.valueOf(t.getFlag()));
 					break;
 				case (4):
-					nl.item(i).setTextContent("" + t.getPriority());
+					nl.item(i).setTextContent(String.valueOf(t.getPriority()));
 					break;
 			}
 		}
@@ -152,7 +154,7 @@ public class TaskFileHandler {
 		
 		Element e;
 		Node nNode;
-		NodeList nList = doc.getElementsByTagName("task");
+		NodeList nList = _doc.getElementsByTagName("task");
 		
 		for (int i = 0; i < nList.getLength(); i++) {
 			nNode = nList.item(i);
@@ -174,14 +176,14 @@ public class TaskFileHandler {
 		
 		Element e;
 		Node nNode;
-		NodeList nList = doc.getElementsByTagName("task");
+		NodeList nList = _doc.getElementsByTagName("task");
 		
 		for (int i = 0; i < nList.getLength(); i++) {
 			nNode = nList.item(i);
 			
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				e = (Element) nNode;
-				e.setAttribute("id", Integer.toString(i));
+				e.setAttribute("id", String.valueOf(i));
 			}
 		}
 		
@@ -202,7 +204,7 @@ public class TaskFileHandler {
 		
 		Element eElement;
 		Node nNode;
-		NodeList nList = doc.getElementsByTagName("task");
+		NodeList nList = _doc.getElementsByTagName("task");
 		Task t;
 		
 		for (int i = 0; i < nList.getLength(); i++) {
@@ -210,8 +212,7 @@ public class TaskFileHandler {
 
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				eElement = (Element) nNode;
-				// System.out.println("Task ID : " +
-				// eElement.getAttribute("id"));
+				
 				int id = Integer.parseInt(eElement.getAttribute("id"));
 				
 				String title = retrieveElement(eElement, "title");
@@ -221,7 +222,7 @@ public class TaskFileHandler {
 				PRIORITY_TYPE priority = detPriority(retrieveElement(eElement, "priority"));
 				
 				t = new Task(id, title, startTime, endTime, flag, priority);
-				tasks.add(t);
+				_tasks.add(t);
 			}
 		}
 	}
@@ -301,7 +302,7 @@ public class TaskFileHandler {
 		removeEmptyText(document.getDocumentElement());
 
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Result result = new StreamResult(xmlFile);
+		Result result = new StreamResult(_xmlFile);
 		Source source = new DOMSource(document);
 		Transformer transformer;
 		try {
@@ -319,26 +320,26 @@ public class TaskFileHandler {
 	}
 
 	private void genXML() {
-		printFile(doc, 4);
+		printFile(_doc, 4);
 	}
 
 	private Element addElement(String s, Task t) {
-		Element e = doc.createElement(s);
+		Element e = _doc.createElement(s);
 		switch (s) {
 		case "title":
-			e.appendChild(doc.createTextNode(t.getName()));
+			e.appendChild(_doc.createTextNode(t.getName()));
 			break;
 		case "startTime":
-			e.appendChild(doc.createTextNode(TimeUtil.getFormattedDate(t.getStartTime())));
+			e.appendChild(_doc.createTextNode(TimeUtil.getFormattedDate(t.getStartTime())));
 			break;
 		case "endTime":
-			e.appendChild(doc.createTextNode(TimeUtil.getFormattedDate(t.getEndTime())));
+			e.appendChild(_doc.createTextNode(TimeUtil.getFormattedDate(t.getEndTime())));
 			break;
 		case "flag":
-			e.appendChild(doc.createTextNode("" + t.getFlag()));
+			e.appendChild(_doc.createTextNode("" + t.getFlag()));
 			break;
 		case "priority":
-			e.appendChild(doc.createTextNode("" + t.getPriority()));
+			e.appendChild(_doc.createTextNode("" + t.getPriority()));
 			break;
 		}
 		return e;
@@ -352,6 +353,6 @@ public class TaskFileHandler {
 		//runT.genXML();
 		//runT.delete();
 		//runT.genXML();
-		// runT.display();
+		//runT.display();
 	}
 }
