@@ -1,6 +1,8 @@
 package logic.command;
 
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import constants.CmdParameters;
 import ui.UIHelper;
@@ -36,6 +38,8 @@ public class CmdDelete extends Command {
 	private Task deleteTask;
 	private String taskName;
 
+	private static Logger log = Logger.getLogger("log_CmdDelete");
+	
 	public CmdDelete() {
 
 	}
@@ -61,6 +65,8 @@ public class CmdDelete extends Command {
 		}
 
 		List<Task> deleteTaskList = searchTask(taskName);
+		//deleteTaskList = null; // for testing
+		assert(deleteTaskList != null);
 		
 		return deleteTask(deleteTaskList);
 		
@@ -165,11 +171,15 @@ public class CmdDelete extends Command {
 		if(input == null || input.equals("")){
 			return inputNumber;
 		}
-		
+		log.log(Level.INFO, "[Start] format String into Integer");
 		try{
 			inputNumber = Integer.parseInt(input);
-		}catch(NumberFormatException e){/*Do nothing*/}
-		
+		}catch(NumberFormatException e){
+			log.log(Level.WARNING, "NumberFormatException");
+		}catch(Exception e){
+			log.log(Level.SEVERE, "Unkown Exception");
+		}
+		log.log(Level.INFO, "[End] format String into Integer");
 		return inputNumber;
 	}
 	
