@@ -13,12 +13,18 @@ public class CmdSearch extends Command {
 	 * Constants
 	 */	
 	// Message constants
-	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
-	private static final String MSG_TASKNOTFOUND = "Specified task \"%1$s\" not found";
-	private static final String MSG_OUTPUT = "[%1%s] instances of \"%2$s\" found";
+	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
+	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
+	private static final String MSG_TASKFOUND = "Task \"%1$s\" found";
+	private static final String MSG_ISNTANCEFOUND = "[%1%s] instances of \"%2$s\" found";
 
+	
+	/*
+	 * Variables for internal use
+	 */
 	private String _taskName;
 	private int _taskID;
+	private boolean _isID;
 	
 	public CmdSearch() {
 
@@ -35,10 +41,11 @@ public class CmdSearch extends Command {
 	@Override
 	public CommandAction execute() {
 		
-		String parameter = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
+		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
 		
-		List<Task> taskList = searchTask(parameter);
-		String outputMsg = getOutputMsg(taskList);
+		_isID = isInteger(parameter);
+		List<Task> taskList = searchTask(_isID, _taskID, _taskName);
+		String outputMsg = getOutputMsg(taskList, _isID);
 		boolean isUndoable = false;
 		
 		return new CommandAction(outputMsg, isUndoable, taskList);
@@ -57,7 +64,7 @@ public class CmdSearch extends Command {
 
 	@Override
 	public String[] getRequiredFields() {
-		return new String[] { CmdParameters.PARAM_NAME_TASK_NAME };
+		return new String[] { CmdParameters.PARAM_NAME_CMD_SEARCH };
 	}
 
 	@Override
@@ -65,25 +72,25 @@ public class CmdSearch extends Command {
 		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME};
 	}
 	
-	private List<Task> searchTask(String parameter){
-		if(isInteger(parameter)){
-			return searchByTaskID(_taskID);
+	public List<Task> searchTask(boolean isID, int taskID, String taskName){
+		if(isID){
+			return searchByTaskID(taskID);
 		}else{
-			return searchByTaskName(_taskName);
+			return searchByTaskName(taskName);
 		}
 	}
 	
-	private List<Task> searchByTaskName(String taskName){
+	public List<Task> searchByTaskName(String taskName){
 		return TaskTree.searchName(taskName);
 	}
 	
-	private List<Task> searchByTaskID(int taskID){
+	public List<Task> searchByTaskID(int taskID){
 		List<Task> taskList = new ArrayList<Task>();
 		taskList.add(TaskTree.getList().get(taskID));
 		return taskList;
 	}
 	
-	private boolean isInteger(String parameter){
+	public boolean isInteger(String parameter){
 		try{
 			_taskID = Integer.parseInt(parameter);
 		}catch(NumberFormatException e){
@@ -93,12 +100,25 @@ public class CmdSearch extends Command {
 		return true;
 	}
 	
-	private String getOutputMsg(List<Task> taskList){
+	public String getOutputMsg(List<Task> taskList, boolean isID){
+		
+		//Case 1 : List isEmpty
 		if(taskList.isEmpty()){
-			return String.format(MSG_TASKNOTFOUND, _taskName);
-		}else{
-			return String.format(MSG_OUTPUT, taskList.size() ,_taskName);
+			if(isID){
+				return String.format(MSG_TASKIDNOTFOUND, _taskID);
+			}else{
+				return String.format(MSG_TASKNAMENOTFOUND, _taskName);
+			}
+		}
+
+		//Case 2 : List.size > 1 (Since ID is unique)
+		if(taskList.size() > 1){
+			return String.format(MSG_ISNTANCEFOUND, taskList.size() ,_taskName);		
 		} 
+		
+		//Case 3: List.size == 1
+		return String.format(MSG_TASKFOUND, taskList.get(0).getName());
+	
 	}
 	
 }
