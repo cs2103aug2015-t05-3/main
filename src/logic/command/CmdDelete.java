@@ -91,7 +91,7 @@ public class CmdDelete extends Command {
 	}
 	
 	private String deleteTask(Task task){
-		TaskTree.remove(task);
+		_taskTree.remove(task);
 		return String.format(MSG_TASKDELETED, _task.getName());
 	}
 	

@@ -81,12 +81,12 @@ public class CmdSearch extends Command {
 	}
 	
 	public List<Task> searchByTaskName(String taskName){
-		return TaskTree.searchName(taskName);
+		return _taskTree.searchName(taskName);
 	}
 	
 	public List<Task> searchByTaskID(int taskID){
 		List<Task> taskList = new ArrayList<Task>();
-		taskList.add(TaskTree.getList().get(taskID));
+		taskList.add(_taskTree.getList().get(taskID));
 		return taskList;
 	}
 	

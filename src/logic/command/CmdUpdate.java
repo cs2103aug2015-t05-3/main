@@ -93,7 +93,7 @@ public class CmdUpdate extends Command {
 	}
 	
 	private List<Task> searchTask(String taskName){
-		return TaskTree.searchName(taskName);
+		return _taskTree.searchName(taskName);
 	}
 	
 	private String updateTask(List<Task> updateTaskList){
@@ -117,7 +117,7 @@ public class CmdUpdate extends Command {
 				return MSG_TASKNOTUPDATED;
 			}
 			
-			TaskTree.updateName(updateTask, newTaskName);
+			_taskTree.updateName(updateTask, newTaskName);
 			return String.format(MSG_TASKUPDATED, prevTaskName, newTaskName);
 		}
 		
@@ -140,7 +140,7 @@ public class CmdUpdate extends Command {
 			return MSG_TASKNOTUPDATED;
 		}
 		
-		TaskTree.updateName(updateTask, newTaskName);	
+		_taskTree.updateName(updateTask, newTaskName);	
 		return String.format(MSG_TASKUPDATED, prevTaskName, newTaskName);
 	}
 	
