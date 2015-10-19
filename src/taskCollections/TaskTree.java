@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class TaskTree {
 	
-	private TaskTree _taskTree;
+	private static TaskTree _taskTree;
 	private ArrayList<TreeSet<Task>> _taskTrees;
 	private int _taskTreeSize;
 	private TaskFileHandler _fileHandler;
@@ -88,9 +88,9 @@ public class TaskTree {
 	 * @return the constructed instance of {@code TaskTree} if it has not exist
 	 *         yet. Otherwise, return {@code null}.
 	 */
-	public TaskTree newTaskTree(String taskFilePath) {
+	public static TaskTree newTaskTree(String taskFilePath) {
 		if (_taskTree == null) {
-			init(taskFilePath);
+			_taskTree.init(taskFilePath);
 			return getTaskTree();
 		} else {
 			return null;
@@ -101,7 +101,7 @@ public class TaskTree {
 	 * 
 	 * @return the original instance of {@code TaskTree}
 	 */
-	public TaskTree getTaskTree() {
+	public static TaskTree getTaskTree() {
 		return _taskTree;
 	}
 
