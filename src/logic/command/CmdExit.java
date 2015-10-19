@@ -7,6 +7,7 @@ public class CmdExit extends Command {
 	@Override
 	public String execute() {
 		UIHelper.destroyUI();
+		System.exit(0);
 		return null;
 	}
 

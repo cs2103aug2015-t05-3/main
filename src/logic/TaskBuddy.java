@@ -11,7 +11,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 import logic.command.*;
-import ui.UIFrame;
 import ui.UIHelper;
 import parser.LanguageProcessor;
 import taskCollections.TaskTree;
@@ -74,9 +73,6 @@ public class TaskBuddy {
 			if(toExecute == null){
 				UIHelper.appendOutput(MSG_INVALIDCMD);
 				continue;
-			} else if (toExecute instanceof CmdExit){
-				toExecute.execute();
-				break;
 			}
 			UIHelper.appendOutput(toExecute.execute());
 			if(toExecute.isUndoable()){
@@ -85,12 +81,8 @@ public class TaskBuddy {
 		} while (true);
 	}
 	
-	public static String getInput(){
+	private static String getInput(){
 		return UIHelper.getUserInput();
-	}
-	
-	public static void printMessage(String message){
-		System.out.println(message);
 	}
 
 }
