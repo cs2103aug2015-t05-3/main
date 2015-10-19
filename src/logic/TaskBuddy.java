@@ -74,7 +74,7 @@ public class TaskBuddy {
 				UIHelper.appendOutput(MSG_INVALIDCMD);
 				continue;
 			}
-			UIHelper.appendOutput(toExecute.execute());
+			UIHelper.appendOutput(toExecute.execute().getOutput());
 			if(toExecute.isUndoable()){
 				Command.addHistory(toExecute);
 			}

@@ -5,14 +5,14 @@ import ui.UIHelper;
 public class CmdExit extends Command {
 
 	@Override
-	public String execute() {
+	public CommandAction execute() {
 		UIHelper.destroyUI();
 		System.exit(0);
-		return null;
+		return new CommandAction("", false);
 	}
 
 	@Override
-	public String undo() {
+	public CommandAction undo() {
 		//do nothing (Exit should not have undo)
 		return null;
 	}

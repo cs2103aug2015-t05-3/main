@@ -44,7 +44,7 @@ public class CmdAdd extends Command {
 	}
 
 	@Override
-	public String execute() {
+	public CommandAction execute() {
 
 		addTask = getTask(); // Tries to get the task object (if available)
 
@@ -79,11 +79,11 @@ public class CmdAdd extends Command {
 
 		TaskTree.add(addTask);
 
-		return String.format(MSG_TASKADDED, taskName);
+		return new CommandAction(String.format(MSG_TASKADDED, taskName), true);
 	}
 
 	@Override
-	public String undo() {
+	public CommandAction undo() {
 		Command delete = new CmdDelete();
 		delete.setTask(addTask);
 		return delete.execute();

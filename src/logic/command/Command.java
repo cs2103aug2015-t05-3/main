@@ -31,15 +31,15 @@ public abstract class Command {
 	
 	/**
 	 * Executes the command
-	 * @return The string to output for user display
+	 * @return a CommandAction object
 	 */
-	public abstract String execute();
+	public abstract CommandAction execute();
 	
 	/**
 	 * Undo an operation. Applies to manipulative commands only
-	 * @return The string to output for user display
+	 * @return a CommandAction object
 	 */
-	public abstract String undo();
+	public abstract CommandAction undo();
 	
 	/**
 	 * Determines if the command supports the undo function

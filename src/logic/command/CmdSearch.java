@@ -38,16 +38,17 @@ public class CmdSearch extends Command {
 
 	
 	@Override
-	public String execute() {
+	public CommandAction execute() {
 		
 		taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
 		List<Task> searchTaskList = searchTask(taskName);
 		
-		return displaySearchList(searchTaskList);
+		//return displaySearchList(searchTaskList);
+		return new CommandAction(displaySearchList(searchTaskList), false);
 	}
 
 	@Override
-	public String undo() {
+	public CommandAction undo() {
 		//do nothing (Search should not have undo)
 		return null;
 	}

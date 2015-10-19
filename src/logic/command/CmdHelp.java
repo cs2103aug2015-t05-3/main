@@ -7,12 +7,12 @@ public class CmdHelp extends Command{
 	}
 	
 	@Override
-	public String execute(){
-		return null;
+	public CommandAction execute(){
+		return new CommandAction("", false);
 	}
 	
 	@Override
-	public String undo(){
+	public CommandAction undo(){
 		//do nothing (Help should not have undo)
 		return null;
 	}

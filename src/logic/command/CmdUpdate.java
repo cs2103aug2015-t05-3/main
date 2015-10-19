@@ -51,21 +51,23 @@ public class CmdUpdate extends Command {
 	}
 	
 	@Override
-	public String execute() {
+	public CommandAction execute() {
 		
 		taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
 		
 		if (taskName == null || taskName.equals("")) {
-			return MSG_TASKUNSPECIFIED;
+			//return MSG_TASKUNSPECIFIED;
+			return new CommandAction(MSG_TASKUNSPECIFIED, false);
 		}
 		
 		List<Task> updateTaskList = searchTask(taskName);
 		
-		return updateTask(updateTaskList);
+		//return updateTask(updateTaskList);
+		return new CommandAction(updateTask(updateTaskList), true);
 	}
 
 	@Override
-	public String undo() {
+	public CommandAction undo() {
 		
 		Command update = new CmdUpdate();
 		update.setTask(updateTask);

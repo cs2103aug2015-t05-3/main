@@ -3,12 +3,12 @@ package logic.command;
 public class CmdMark extends Command{
 
 	@Override
-	public String execute() {
+	public CommandAction execute() {
 		return null;
 	}
 
 	@Override
-	public String undo() {
+	public CommandAction undo() {
 		return null;
 	}
 
