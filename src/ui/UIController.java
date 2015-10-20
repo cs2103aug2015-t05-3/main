@@ -62,7 +62,7 @@ public class UIController implements Initializable {
 	private TextField input5 = new TextField();
 
 	private int troll = 100;
-	
+
 	private static List<Task> _floatingTaskList;
 	private static List<Task> _nonFloatingTaskList;
 
@@ -85,6 +85,7 @@ public class UIController implements Initializable {
             }
 			// delete(3);
 			// Other classes will do the job.
+			clearInput();
 		}
 	}
 
@@ -180,8 +181,8 @@ public class UIController implements Initializable {
 		}
 	}
 	
-	public static void setOutputMsg(String s) {
-		cmdMsg.setText(s);
+	public static void setOutputMsg(String a){
+		//cmdMsg.setText(a);
 	}
 
 	@Override

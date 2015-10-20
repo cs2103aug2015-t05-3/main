@@ -18,7 +18,6 @@ public class UIHelper {
 	private static UIFrame frame;
 	private static Logger log = Logger.getLogger("log");
 	*/
-	private static UIController uic;
 	
 	//private static UI user_interface;
 	
@@ -62,6 +61,7 @@ public class UIHelper {
 	public static void setOutputMsg(String s) {
 		UIController.setOutputMsg(s);
 	}
+	
 	
 	public static void setUserInput(String in){
 		//frame.setInputText(in);
