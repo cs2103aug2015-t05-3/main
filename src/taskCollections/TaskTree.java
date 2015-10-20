@@ -113,12 +113,17 @@ public class TaskTree {
 	 *         specified {@code Task} object
 	 */
 	public boolean add(Task task) {
+
+		if (task == null) {
+			throw new NullPointerException();
+		}
+
 		boolean isAdded = true;
 		for (TreeSet<Task> tree : _taskTrees) {
-			if (!tree.add(task)) {
-				isAdded = false;
-			}
+			isAdded &= tree.add(task);
+			assert isAdded;
 		}
+
 		if (isAdded) {
 			increaseTaskListSize();
 			pushAddToStorage(task);
@@ -135,20 +140,19 @@ public class TaskTree {
 	 *         {@code Task} object
 	 */
 	public boolean remove(Task task) {
+
+		if (task == null) {
+			throw new NullPointerException();
+		}
+
 		boolean isRemoved = true;
 		for (TreeSet<Task> tree : _taskTrees) {
-			if (!tree.remove(task)) {
-				isRemoved = false;
-			}
+			isRemoved &= tree.remove(task);
+			assert isRemoved;
 		}
 		if (isRemoved) {
 			decreaseTaskListSize();
-			try {
-				pushRemoveToStorage(task);
-			} catch (Exception e) {
-				// throw exception to logic
-				e.printStackTrace();
-			}
+			pushRemoveToStorage(task);
 		}
 		return isRemoved;
 	}
@@ -250,14 +254,21 @@ public class TaskTree {
 	}
 
 	private boolean updateAttributeTree(Task oldTask, Task newTask, TYPE taskAttributeType) {
-		boolean isReplaced = true;
 
 		int treeType = taskAttributeType.getValue();
 
-		isReplaced &= _taskTrees.get(treeType).remove(oldTask);
-		isReplaced &= _taskTrees.get(treeType).add(newTask);
+		boolean isReplaced, isAdded, isRemoved;
+		isReplaced = isAdded = isRemoved = false;
 
-		pushUpdateToStorage(oldTask, newTask);
+		isRemoved = _taskTrees.get(treeType).remove(oldTask);
+		if (isRemoved) {
+			isAdded = _taskTrees.get(treeType).add(newTask);
+		}
+		isReplaced = isAdded & isRemoved;
+
+		if (isReplaced) {
+			pushUpdateToStorage(oldTask, newTask);
+		}
 		return isReplaced;
 	}
 
