@@ -12,12 +12,6 @@ import javafx.scene.image.Image;
 
 public class UI extends Application {
     
-	
-	public void createUI() {
-		launch();
-	}
-	
-	
 	@Override
 	public void start(Stage stage) {
 		Parent root;
@@ -34,5 +28,10 @@ public class UI extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public void run() {
+		launch();
 	}
 }

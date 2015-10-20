@@ -80,8 +80,7 @@ public class TaskBuddy {
 	}
 	
 	private static String getInput(){
-		return "";
-		//return UIHelper.getUserInput();
+		return UIHelper.getUserInput();
 	}
 
 }

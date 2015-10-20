@@ -49,13 +49,14 @@ public class CmdUpdate extends Command {
 		_task = getTask();
 		if(isUndo()){
 			String outputMsg = updateTask(_task, _prevTaskName);
-			return new CommandAction(outputMsg, true);
+			boolean isUndoable = true;
+			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
 		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);	
 		if (parameter == null || parameter.equals("")) {
 			//return MSG_TASKUNSPECIFIED;
-			return new CommandAction(MSG_TASKUNSPECIFIED, false);
+			return new CommandAction(MSG_TASKUNSPECIFIED, false, _taskTree.getList());
 		}
 		
 		CmdSearch search = new CmdSearch();
@@ -115,7 +116,7 @@ public class CmdUpdate extends Command {
 				outputMsg = String.format(MSG_TASKNAMENOTFOUND, _taskName);
 			}
 			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable);
+			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
 		//Case 2: List.size > 1 (more than 1 instance found)
@@ -134,19 +135,19 @@ public class CmdUpdate extends Command {
 		if(newTaskName == null || newTaskName.equals("")){
 			String outputMsg = MSG_TASKNOTUPDATED;
 			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable);
+			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
 		//Same taskName
 		if(newTaskName.equals(_task.getName())){
 			String outputMsg = MSG_TASKNOCHANGE;
 			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable);
+			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
 		String outputMsg = updateTask(_task, newTaskName);
 		boolean isUndoable = true;
-		return new CommandAction(outputMsg, isUndoable);
+		return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		
 	}
 	
