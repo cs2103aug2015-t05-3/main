@@ -81,7 +81,6 @@ public class UIController implements Initializable {
 			//inputBuffer.add(in);
 			synchronized (inputBuffer) {
                 inputBuffer.add(in);
-                System.out.println("b");
                 inputBuffer.notify();
             }
 			// delete(3);
@@ -93,10 +92,8 @@ public class UIController implements Initializable {
             // wait for input from field
             while (inputBuffer.isEmpty()) {
             	try{
-            		System.out.println("w");
             		inputBuffer.wait();
-            	} catch(InterruptedException e){System.out.println("e"); }
-            	System.out.println("a");
+            	} catch(InterruptedException e){ }
             }
 
             return inputBuffer.remove(0);
