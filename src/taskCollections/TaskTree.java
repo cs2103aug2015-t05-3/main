@@ -34,7 +34,7 @@ public class TaskTree {
 	private static final int TASK_END_TIME_TREE = Attributes.TYPE.END_TIME.getValue();
 	private static final int TASK_FLAG_TREE = Attributes.TYPE.FLAG.getValue();
 	private static final int TASK_PRIORITY_TREE = Attributes.TYPE.PRIORITY.getValue();
-	private static final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
+	private static final int TASK_ID_TREE = Attributes.TYPE.ID.getValue();
 	private static final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
 
 	// Message Constants
@@ -73,7 +73,7 @@ public class TaskTree {
 		_taskTrees.add(TASK_END_TIME_TREE, new TreeSet<Task>(new EndTimeComparator()));
 		_taskTrees.add(TASK_FLAG_TREE, new TreeSet<Task>(new FlagComparator()));
 		_taskTrees.add(TASK_PRIORITY_TREE, new TreeSet<Task>(new PriorityComparator()));
-		_taskTrees.add(TASK_CREATE_TIME_TREE, new TreeSet<Task>(new IdComparator()));
+		_taskTrees.add(TASK_ID_TREE, new TreeSet<Task>(new IdComparator()));
 
 		fromValueHandler = Task.getVirtualTask();
 
@@ -501,13 +501,14 @@ public class TaskTree {
 	 *
 	 */
 	public Task getTask(int id) {
-		ArrayList<Task> list = new ArrayList<Task>(query(TYPE.ID, id, id));
 
-		if (list.isEmpty()) {
-			return null;
-		} else {
-			return list.get(0);
+		TreeSet<Task> idTree = _taskTrees.get(TASK_ID_TREE);
+
+		for (Task task : idTree) {
+			if (task.getId() == id)
+				return task;
 		}
+		return null;
 	}
 
 	/**
