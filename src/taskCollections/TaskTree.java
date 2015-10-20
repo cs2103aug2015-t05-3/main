@@ -495,7 +495,7 @@ public class TaskTree {
 	 *
 	 * @param id
 	 *            to get
-	 * @return a task from this {@code TaskTree} via it's ID
+	 * @return a task from this {@code TaskTree} via its ID if found; otherwise null.
 	 *
 	 * @see taskCollections.Task
 	 *
