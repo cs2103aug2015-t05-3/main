@@ -577,15 +577,12 @@ public class TaskTree {
 	 * @see taskCollections.Attributes
 	 */
 	public List<Task> getSortedList(TYPE taskAttributeType) {
-
-		return getSortedList(_taskTrees.get(taskAttributeType.getValue()));
+		int taskAttributeIndex = taskAttributeType.getValue();
+		return getSortedList(_taskTrees.get(taskAttributeIndex));
 	}
 
 	private List<Task> getSortedList(TreeSet<Task> taskTree) {
-		ArrayList<Task> resultList = new ArrayList<Task>(_taskTreeSize);
-		for (Task task : taskTree) {
-			resultList.add(task);
-		}
+		ArrayList<Task> resultList = new ArrayList<Task>(taskTree);
 		return resultList;
 	}
 
