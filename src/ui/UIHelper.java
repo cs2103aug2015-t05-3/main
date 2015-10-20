@@ -28,7 +28,6 @@ public class UIHelper {
 		frame.setInputText("");
 		
 		return inputString;*/
-		System.out.println("h");
 		return UIController.getInput();
 	}
 	

@@ -37,7 +37,6 @@ public class TaskBuddy {
 		init();
 		
 		// (Loop) Execute commands
-		System.out.println("init done");
 		runCommands();
 	}
 	
