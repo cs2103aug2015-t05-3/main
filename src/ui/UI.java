@@ -32,9 +32,6 @@ public class UI extends Application {
 
 
 	public void run() {
-		// TODO Auto-generated method stub
-		System.out.println("c11");
 		launch();
-		System.out.println("c22");
 	}
 }

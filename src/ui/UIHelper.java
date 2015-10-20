@@ -33,6 +33,10 @@ public class UIHelper {
 	}
 	
 	
+	public static void loadTask() {
+		
+	}
+	
 	public static void createUI() {
 		/*
 		if(frame != null){ // Dont allow multiple UI instances TODO: Allow recreation after destroy
