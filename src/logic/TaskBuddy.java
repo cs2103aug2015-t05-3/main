@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import logic.command.*;
 import ui.UIHelper;
 import parser.LanguageProcessor;
-import taskCollections.TaskTree;
 
 public class TaskBuddy {
 	
@@ -28,7 +27,6 @@ public class TaskBuddy {
 	/*
 	 * Global variables
 	 */
-	//private static Scanner _in;
 	private static Logger log;
 	private static LanguageProcessor lp;
 
@@ -48,7 +46,7 @@ public class TaskBuddy {
 	private static void init(){
 		initLog();
 		lp = new LanguageProcessor();
-		if(!lp.initCmdList(cmdFileName)){
+		if(!lp.init(cmdFileName)){
 			log.severe("TaskBuddy: Cmd list init failed");
 		}
 		Command.init(taskFileName);
@@ -82,7 +80,8 @@ public class TaskBuddy {
 	}
 	
 	private static String getInput(){
-		return UIHelper.getUserInput();
+		return "";
+		//return UIHelper.getUserInput();
 	}
 
 }

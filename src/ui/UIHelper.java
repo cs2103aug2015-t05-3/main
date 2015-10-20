@@ -21,14 +21,15 @@ public class UIHelper {
 	/**
 	 * Returns a string of the user input. Triggered on enter press.
 	 */
-	/*
+	
 	public static String getUserInput(){
-		String inputString = frame.getInputText();
+		/*String inputString = frame.getInputText();
 		frame.setInputText("");
 		
-		return inputString;
+		return inputString;*/
+		return "";
 	}
-	*/
+	
 	
 	public static void createUI() {
 		/*
@@ -62,7 +63,10 @@ public class UIHelper {
             }
         });
         */
-		UI.launch("");
+		if(user_interface == null){
+			user_interface = new UI();
+			user_interface.createUI();
+		}
 	}
 	
 	
@@ -70,21 +74,21 @@ public class UIHelper {
 	/**
 	 * Destroys the UI
 	 */
-	/*
+	
 	public static void destroyUI(){
-		frame.dispose();
+		//frame.dispose();
 	}
 	
 	public static void appendOutput(String appendString){
-		frame.setOutputText(frame.getOutputText() + appendString + System.lineSeparator());
+		//frame.setOutputText(frame.getOutputText() + appendString + System.lineSeparator());
 	}
 	
 	public static void setOutput(String out){
-		frame.setOutputText(out);
+		//frame.setOutputText(out);
 	}
 	
 	public static void setUserInput(String in){
-		frame.setInputText(in);
+		//frame.setInputText(in);
 	}
-	*/
+	
 }

@@ -24,24 +24,24 @@ import java.util.ArrayList;
 public class TaskTree {
 	
 	private static TaskTree _taskTree;
-	private ArrayList<TreeSet<Task>> _taskTrees;
-	private int _taskTreeSize;
-	private TaskFileHandler _fileHandler;
+	private static ArrayList<TreeSet<Task>> _taskTrees;
+	private static int _taskTreeSize;
+	private static TaskFileHandler _fileHandler;
 	
 	// TaskTree attributes type
-	private final int TASK_NAME_TREE = Attributes.TYPE.NAME.getValue();
-	private final int TASK_START_TIME_TREE = Attributes.TYPE.START_TIME.getValue();
-	private final int TASK_END_TIME_TREE = Attributes.TYPE.END_TIME.getValue();
-	private final int TASK_FLAG_TREE = Attributes.TYPE.FLAG.getValue();
-	private final int TASK_PRIORITY_TREE = Attributes.TYPE.PRIORITY.getValue();
-	private final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
-	private final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
+	private static final int TASK_NAME_TREE = Attributes.TYPE.NAME.getValue();
+	private static final int TASK_START_TIME_TREE = Attributes.TYPE.START_TIME.getValue();
+	private static final int TASK_END_TIME_TREE = Attributes.TYPE.END_TIME.getValue();
+	private static final int TASK_FLAG_TREE = Attributes.TYPE.FLAG.getValue();
+	private static final int TASK_PRIORITY_TREE = Attributes.TYPE.PRIORITY.getValue();
+	private static final int TASK_CREATE_TIME_TREE = Attributes.TYPE.ID.getValue();
+	private static final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
 
 	// Message Constants
 	private final String MSG_ERR_SEARCH_TERM_EMPTY = "search term is empty";
 
 	// For managing comparable argument during query
-	private Task fromValueHandler;
+	private static Task fromValueHandler;
 
 	private final String TO_STRING_OPEN = "[";
 	private final String TO_STRING_CLOSE = "]";
@@ -61,7 +61,7 @@ public class TaskTree {
 	 *            directed to the storage XML file for tasks.
 	 * 
 	 */
-	private void init(String taskFilePath) {
+	private static void init(String taskFilePath) {
 
 		_taskTree = new TaskTree();
 
@@ -90,7 +90,7 @@ public class TaskTree {
 	 */
 	public static TaskTree newTaskTree(String taskFilePath) {
 		if (_taskTree == null) {
-			_taskTree.init(taskFilePath);
+			init(taskFilePath);
 			return getTaskTree();
 		} else {
 			return null;
@@ -663,7 +663,7 @@ public class TaskTree {
 	 * To retrieve task list the Task file. This method is called upon the
 	 * starting of this program.
 	 */
-	private void pullFromStorage() {
+	private static void pullFromStorage() {
 		ArrayList<Task> taskList;
 		taskList = _fileHandler.retrieveTaskList();
 
@@ -680,7 +680,7 @@ public class TaskTree {
 	 * @param taskFilePath
 	 *            directed to the storage XML file for tasks.
 	 */
-	private void iniTaskFileHandler(String taskFilePath) {
+	private static void iniTaskFileHandler(String taskFilePath) {
 		_fileHandler = new TaskFileHandler(taskFilePath);
 	}
 }
