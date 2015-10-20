@@ -550,7 +550,11 @@ public class Task implements Comparable<Task> {
 	 */
 	@Override
 	public String toString() {
-		return "" + name + TO_STRING_DELIMETER + startTime + TO_STRING_DELIMETER + endTime + TO_STRING_DELIMETER + flag
-				+ TO_STRING_DELIMETER + priority;
+		return "" + name + TO_STRING_DELIMETER
+				+ description + TO_STRING_DELIMETER
+				+ startTime + TO_STRING_DELIMETER
+				+ endTime + TO_STRING_DELIMETER
+				+ flag + TO_STRING_DELIMETER
+				+ priority;
 	}
 }
