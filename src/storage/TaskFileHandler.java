@@ -221,7 +221,7 @@ public class TaskFileHandler {
 				FLAG_TYPE flag = detFlag(retrieveElement(eElement, "flag"));
 				PRIORITY_TYPE priority = detPriority(retrieveElement(eElement, "priority"));
 				
-				t = new Task(id, title, startTime, endTime, flag, priority);
+				t = new Task(id, title, "", startTime, endTime, flag, priority);
 				_tasks.add(t);
 			}
 		}
