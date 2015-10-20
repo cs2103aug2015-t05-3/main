@@ -78,7 +78,7 @@ public class CmdAdd extends Command {
 
 		_taskTree.add(addTask);
 
-		return new CommandAction(String.format(MSG_TASKADDED, taskName), true);
+		return new CommandAction(String.format(MSG_TASKADDED, taskName), true, _taskTree.getList());
 	}
 
 	@Override

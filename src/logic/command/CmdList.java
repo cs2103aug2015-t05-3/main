@@ -24,7 +24,7 @@ public class CmdList extends Command {
 		if(_taskTree.size() == 0){
 			String outputMsg = MSG_EMPTY_TASKTREE;
 			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable);
+			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
 		List<Task> taskList = getAllTask();

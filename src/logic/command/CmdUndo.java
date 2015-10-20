@@ -21,7 +21,7 @@ public class CmdUndo extends Command {
 		if(toUndo == null){
 			String outputMsg = MSG_UNDOEMPTY;
 			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable);
+			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
 		return toUndo.undo();

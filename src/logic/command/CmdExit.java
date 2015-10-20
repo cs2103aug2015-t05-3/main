@@ -8,7 +8,7 @@ public class CmdExit extends Command {
 	public CommandAction execute() {
 		UIHelper.destroyUI();
 		System.exit(0);
-		return new CommandAction("", false);
+		return new CommandAction("", false, _taskTree.getList());
 	}
 
 	@Override

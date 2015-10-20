@@ -86,7 +86,8 @@ public class CmdHelp extends Command{
 		}
 		
 		JOptionPane.showMessageDialog(null, HELP_ALL);
-		return new CommandAction(MSG_HELP, false);
+		boolean isUndoable = false;
+		return new CommandAction(MSG_HELP, isUndoable, _taskTree.getList());
 	}
 	
 	@Override
