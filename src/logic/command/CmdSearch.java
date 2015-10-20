@@ -5,7 +5,6 @@ import java.util.List;
 
 import constants.CmdParameters;
 import taskCollections.Task;
-import taskCollections.TaskTree;
 
 public class CmdSearch extends Command {
 
