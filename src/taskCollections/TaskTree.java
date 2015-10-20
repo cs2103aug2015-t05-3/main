@@ -15,19 +15,19 @@ import java.util.ArrayList;
 /**
  * Provides methods for storing and manipulating {@code Task} via
  * {@code TreeSet}.
- * 
+ *
  * @see Task
  * @see Attributes
- * 
+ *
  * @author amoshydra
  */
 public class TaskTree {
-	
+
 	private static TaskTree _taskTree;
 	private static ArrayList<TreeSet<Task>> _taskTrees;
 	private static int _taskTreeSize;
 	private static TaskFileHandler _fileHandler;
-	
+
 	// TaskTree attributes type
 	private static final int TASK_NAME_TREE = Attributes.TYPE.NAME.getValue();
 	private static final int TASK_START_TIME_TREE = Attributes.TYPE.START_TIME.getValue();
@@ -38,7 +38,7 @@ public class TaskTree {
 	private static final int SIZE_OF_TASK_TREES = Attributes.NUM_OF_ATTRIBUTES;
 
 	// Message Constants
-	private final String MSG_ERR_SEARCH_TERM_EMPTY = "search term is empty";
+	private final String MSG_ERR_SEARCH_TERM_EMPTY = "Search term is empty";
 
 	// For managing comparable argument during query
 	private static Task fromValueHandler;
@@ -56,10 +56,10 @@ public class TaskTree {
 	/**
 	 * Initialize a new, empty tree set, sorted according to the ordering of
 	 * each attributes in the task.
-	 * 
+	 *
 	 * @param taskFilePath
 	 *            directed to the storage XML file for tasks.
-	 * 
+	 *
 	 */
 	private static void init(String taskFilePath) {
 
@@ -81,24 +81,22 @@ public class TaskTree {
 		iniTaskFileHandler(taskFilePath);
 		pullFromStorage();
 	}
+
 	/**
 	 * Construct and return a new instance of {@code TaskTree}. If the taskTree
-	 * has already been constructed, a null instance.
-	 * 
-	 * @return the constructed instance of {@code TaskTree} if it has not exist
-	 *         yet. Otherwise, return {@code null}.
+	 * has already been constructed, the previous instance is replaced.
+	 *
+	 * @return a new instance of {@code TaskTree}. This new {@code TaskTree}
+	 *         will replace the previous instance of the TaskTree.
 	 */
 	public static TaskTree newTaskTree(String taskFilePath) {
-		if (_taskTree == null) {
-			init(taskFilePath);
-			return getTaskTree();
-		} else {
-			return null;
-		}
+		init(taskFilePath);
+		return getTaskTree();
 	}
+
 	/**
 	 * Return the original instance of {@code TaskTree}
-	 * 
+	 *
 	 * @return the original instance of {@code TaskTree}
 	 */
 	public static TaskTree getTaskTree() {
@@ -108,7 +106,7 @@ public class TaskTree {
 	// TaskTree Task operation: Add and Remove
 	/**
 	 * Adds the specified {@code Task} object to this {@code TaskTree}
-	 * 
+	 *
 	 * @param task
 	 *            to be added to this {@code TaskTree}
 	 * @return true if this {@code TaskTree} did not already contain the
@@ -130,7 +128,7 @@ public class TaskTree {
 
 	/**
 	 * Removes the specified {@code Task} object to this {@code TaskTree}
-	 * 
+	 *
 	 * @param task
 	 *            to be removed from this {@code TaskTree}
 	 * @return true if this {@code TaskTree} contained the specified
@@ -155,12 +153,11 @@ public class TaskTree {
 		return isRemoved;
 	}
 
-
 	// TaskTree Task operation: Update
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new name
-	 * 
+	 *
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
@@ -176,7 +173,7 @@ public class TaskTree {
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new description
-	 * 
+	 *
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
@@ -191,7 +188,7 @@ public class TaskTree {
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new start time
-	 * 
+	 *
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
@@ -207,7 +204,7 @@ public class TaskTree {
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new end time
-	 * 
+	 *
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
@@ -223,7 +220,7 @@ public class TaskTree {
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new flag
-	 * 
+	 *
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
@@ -239,7 +236,7 @@ public class TaskTree {
 	/**
 	 * Update a {@code Task} object from this {@code TaskTree} with the given
 	 * new priority
-	 * 
+	 *
 	 * @param task
 	 *            to be modified from this {@code TaskTree}
 	 * @param newValue
@@ -263,7 +260,6 @@ public class TaskTree {
 		pushUpdateToStorage(oldTask, newTask);
 		return isReplaced;
 	}
-
 
 	// TaskTree Task operation: Search and query
 	/**
@@ -329,7 +325,7 @@ public class TaskTree {
 	 * {@code List} is backed by this {@code TaskTree}, so changes in the
 	 * returned {@code List} are reflected in this {@code TaskTree}, and
 	 * vice-versa.
-	 * 
+	 *
 	 * @param fromStartTime
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toStartTime
@@ -350,7 +346,7 @@ public class TaskTree {
 	 * {@code fromEndTime} only.) The returned {@code List} is backed by this
 	 * {@code TaskTree}, so changes in the returned {@code List} are reflected
 	 * in this {@code TaskTree}, and vice-versa.
-	 * 
+	 *
 	 * @param fromEndTime
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toEndTime
@@ -371,7 +367,7 @@ public class TaskTree {
 	 * {@code fromFlag} only.) The returned {@code List} is backed by this
 	 * {@code TaskTree}, so changes in the returned {@code List} are reflected
 	 * in this {@code TaskTree}, and vice-versa.
-	 * 
+	 *
 	 * @param fromFlag
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toFlag
@@ -396,7 +392,7 @@ public class TaskTree {
 	 * {@code fromPriority} only.) The returned {@code List} is backed by this
 	 * {@code TaskTree}, so changes in the returned {@code List} are reflected
 	 * in this {@code TaskTree}, and vice-versa.
-	 * 
+	 *
 	 * @param fromPriority
 	 *            low endpoint (inclusive) of the returned list
 	 * @param toPriority
@@ -423,7 +419,7 @@ public class TaskTree {
 	 * changes in the returned {@code List} are reflected in this
 	 * {@code TaskTree}, and vice-versa. To query flag and priority, please use
 	 * its respective query method.
-	 * 
+	 *
 	 * @param taskAttributeType
 	 *            the attribute type to be query with.
 	 * @param fromValueL
@@ -487,7 +483,7 @@ public class TaskTree {
 	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
 	 *         objects match the {@code flagSearch}
 	 * @see taskCollections.Task
-	 * 
+	 *
 	 */
 	public List<Task> searchFlag(FLAG_TYPE type) {
 		int flagValue = type.getValue();
@@ -506,14 +502,13 @@ public class TaskTree {
 	 * @return a view of the portion of this {@code TaskTree} whose {@code Task}
 	 *         objects match the {@code prioritySearch}
 	 * @see taskCollections.Task
-	 * 
+	 *
 	 */
 	public List<Task> searchPriority(PRIORITY_TYPE type) {
 		int priorityValue = type.getValue();
 
 		return query(TYPE.PRIORITY, priorityValue, priorityValue);
 	}
-
 
 	// TaskTree operation: getList
 	/**
@@ -555,7 +550,6 @@ public class TaskTree {
 		return resultList;
 	}
 
-
 	// TaskTree operation: getString
 	/**
 	 * Returns a string representation of this {@code TaskTree}. The string
@@ -564,9 +558,9 @@ public class TaskTree {
 	 * square brackets ("[]"). Adjacent {@code Task} objects are separated by
 	 * the characters ", " (comma and space). {@code Task} objects are converted
 	 * to strings as by String.toString(Object).
-	 * 
+	 *
 	 * @return a string representation of this task tree in a list.
-	 * 
+	 *
 	 */
 	public String getString() {
 		return getString(Attributes.TYPE.ID);
@@ -580,7 +574,7 @@ public class TaskTree {
 	 * ("[]"). Adjacent {@code Task} objects are separated by the characters
 	 * ", " (comma and space). {@code Task} objects are converted to strings as
 	 * by String.toString(Object).
-	 * 
+	 *
 	 * @param taskAttributeType
 	 *            the attribute type to be printed.
 	 * @return a string representation of this task tree in a list.
@@ -600,11 +594,10 @@ public class TaskTree {
 		return buffer;
 	}
 
-
 	// TaskTree operation: size related
 	/**
 	 * Return total number of task in this tree
-	 * 
+	 *
 	 * @return number of task in this tree
 	 */
 	public int size() {
@@ -621,11 +614,10 @@ public class TaskTree {
 
 	// Storage related methods
 
-	
 	// TaskTree operation: File Storage related
 	/**
 	 * Push a new task to storage file.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private void pushAddToStorage(Task task) {
@@ -634,7 +626,7 @@ public class TaskTree {
 
 	/**
 	 * Remove a task from the storage
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private void pushRemoveToStorage(Task task) {
@@ -644,7 +636,7 @@ public class TaskTree {
 
 	/**
 	 * Update a new task to storage file.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private void pushUpdateToStorage(Task oldTask, Task newTask) {
@@ -676,7 +668,7 @@ public class TaskTree {
 	/**
 	 * This method will be called to construct the taskFileHandler for file
 	 * storage
-	 * 
+	 *
 	 * @param taskFilePath
 	 *            directed to the storage XML file for tasks.
 	 */
