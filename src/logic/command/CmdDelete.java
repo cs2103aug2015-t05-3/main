@@ -56,6 +56,11 @@ public class CmdDelete extends Command {
 		
 		CmdSearch search = new CmdSearch();
 		_isID = search.isInteger(parameter);
+		if(_isID){
+			_taskID = Integer.parseInt(parameter);
+		} else {
+			_taskName = parameter;
+		}
 		List<Task> taskList = search.searchTask(_isID, _taskID, _taskName);
 		
 		return processList(taskList);
