@@ -22,7 +22,7 @@ public class CmdList extends Command {
 	@Override
 	public CommandAction execute(){
 		
-		if(TaskTree.size() == 0){
+		if(_taskTree.size() == 0){
 			//return MSG_EMPTY_TASKTREE;
 			return new CommandAction(MSG_EMPTY_TASKTREE, false);
 		}
@@ -53,7 +53,7 @@ public class CmdList extends Command {
 	private String listAllTask(){
 		
 		String displayAllTask = "";
-		List<Task> taskList = TaskTree.getList();
+		List<Task> taskList = _taskTree.getList();
 		
 		for(int i=0; i<taskList.size(); i++){
 			Task currTask = taskList.get(i);

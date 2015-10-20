@@ -15,28 +15,20 @@ public class CmdDelete extends Command {
 	/*
 	 * Constants
 	 */
-	// Variable constants
-	private static final int INPUT_NO_DELETE = 0;
-	private static final int INPUT_DEFAULT_VALUE = -1;
-	
 	// Message constants
 	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
-	private static final String MSG_TASKNOTFOUND = "Specified task \"%1$s\" not found";
+	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
+	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
+	private static final String MSG_ISNTANCEFOUND = "[%1%s] instances of \"%2$s\" found";
 	private static final String MSG_TASKDELETED = "Deleted : \"%1$s\"";
-	private static final String MSG_NOTASKDELETED = "No task deleted";
-	
-	private static final String MSG_INVALID_INPUT = "Invalid input.";
-
-	// Error codes
-	/*
-	 * private enum ERROR { OK, TASKUNSPECIFIED }
-	 */
 
 	/*
 	 * Variables for internal use
 	 */
-	private Task deleteTask;
-	private String taskName;
+	private Task _task;
+	private String _taskName;
+	private int _taskID;
+	private boolean _isID;
 
 	private static Logger log = Logger.getLogger("log_CmdDelete");
 	
@@ -45,40 +37,36 @@ public class CmdDelete extends Command {
 	}
 
 	public CmdDelete(String taskName) {
-		this.taskName = taskName;
+		_taskName = taskName;
 	}
 
 	@Override
 	public CommandAction execute() {
-		
-		deleteTask = getTask();
-		
-		if(deleteTask != null){
-			TaskTree.remove(deleteTask);
-			//return String.format(MSG_TASKDELETED, deleteTask.getName());
-			return new CommandAction(String.format(MSG_TASKDELETED, deleteTask.getName()), true);
+
+		//Try undo first
+		_task = getTask();
+		if(isUndo()){
+			String outputMsg = deleteTask(_task);
+			return new CommandAction(outputMsg, true);
 		}
-
-		taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
-
-		if (taskName == null || taskName.equals("")) {
-			//return MSG_TASKUNSPECIFIED;
+		
+		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
+		if (parameter == null || parameter.equals("")) {
 			return new CommandAction(MSG_TASKUNSPECIFIED, false);
 		}
-
-		List<Task> deleteTaskList = searchTask(taskName);
-		//deleteTaskList = null; // for testing
-		assert(deleteTaskList != null);
 		
-		//return deleteTask(deleteTaskList);
-		return new CommandAction(deleteTask(deleteTaskList), true);
+		CmdSearch search = new CmdSearch();
+		_isID = search.isInteger(parameter);
+		List<Task> taskList = search.searchTask(_isID, _taskID, _taskName);
+		
+		return processList(taskList);
 		
 	}
 
 	@Override
 	public CommandAction undo() {
 		Command add = new CmdAdd();
-		add.setTask(deleteTask);
+		add.setTask(_task);
 		return add.execute();
 	}
 
@@ -89,7 +77,7 @@ public class CmdDelete extends Command {
 
 	@Override
 	public String[] getRequiredFields() {
-		return new String[] { CmdParameters.PARAM_NAME_TASK_NAME };
+		return new String[] { CmdParameters.PARAM_NAME_CMD_SEARCH };
 	}
 
 	@Override
@@ -97,93 +85,47 @@ public class CmdDelete extends Command {
 		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME};
 	}
 	
-	private List<Task> searchTask(String taskName){
-		return TaskTree.searchName(taskName);
+	private boolean isUndo(){
+		if(_task == null){
+			return false;
+		}else{
+			return true;
+		}
 	}
 	
-	private String deleteTask(List<Task> deleteTaskList){
+	private String deleteTask(Task task){
+		_taskTree.remove(task);
+		return String.format(MSG_TASKDELETED, _task.getName());
+	}
+	
+	
+	private CommandAction processList(List<Task> taskList){
 		
-		//Case 1: List.size is empty
-		if(deleteTaskList.isEmpty()){
-			return String.format(MSG_TASKNOTFOUND, taskName);
-		}
-		
-		String deletedTaskName;
-		
-		//Case 2: List.size > 1
-		if(deleteTaskList.size() > 1){
-			int input = getUserInput(deleteTaskList);
-			if(input == INPUT_NO_DELETE){
-				return MSG_NOTASKDELETED;
+		//Case 1: List is empty (nothing found)
+		if(taskList.isEmpty()){
+			String outputMsg = "";
+			if(_isID){
+				outputMsg = String.format(MSG_TASKIDNOTFOUND, _taskID);
 			}else{
-				int index = input - 1;
-				deleteTask = deleteTaskList.get(index);
-				deletedTaskName = deleteTask.getName();
-				TaskTree.remove(deleteTask);
-				return String.format(MSG_TASKDELETED, deletedTaskName);
-			}
+				outputMsg = String.format(MSG_TASKNAMENOTFOUND, _taskName);
+			}	 
+			boolean isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable);
 		}
 		
-		//Case 3: List.size == 1
-		deleteTask = deleteTaskList.get(0);
-		deletedTaskName = deleteTask.getName();
-		TaskTree.remove(deleteTask);
-		return String.format(MSG_TASKDELETED, deletedTaskName);
-	}
-
-	private int getUserInput(List<Task> deleteTaskList){
-		
-		String output = displayDeleteList(deleteTaskList);
-		int input = INPUT_DEFAULT_VALUE; 
-		
-		//TaskBuddy.printMessage(output);
-		UIHelper.appendOutput(output);
-		
-		while(input <= -1 || input > deleteTaskList.size()){
-			//input = processInput(TaskBuddy.getInput());
-			input = processInput(UIHelper.getUserInput());
-			if(input <= -1 || input > deleteTaskList.size()){
-				UIHelper.appendOutput(MSG_INVALID_INPUT);
-				
-			}
+		//Case 2: List.size > 1 (more than 1 instance found)
+		if(taskList.size() > 1){
+			String outputMsg = String.format(MSG_ISNTANCEFOUND, _taskName);
+			boolean isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable, taskList);
 		}
 		
-		return input;
-	}
-	
-	private String displayDeleteList(List<Task> deleteTaskList){
+		//Case 3: List.size == 1 (task to be deleted found)
+		_task = taskList.get(0);
+		String outputMsg = deleteTask(_task);
+		boolean isUndoable = true;
+		return new CommandAction(outputMsg, isUndoable);
 		
-		String output = "";
-		
-		output = output + "[" + deleteTaskList.size() + "]" +
-				" instances of \"" + taskName + "\" found:" + System.lineSeparator() ;
-		for(int i=0; i<deleteTaskList.size(); i++){
-			output = output + (i+1) + ". " + deleteTaskList.get(i).getName() + System.lineSeparator();
-		}
-		output = output + "\"0\" to exit" + System.lineSeparator();
-		output = output + System.lineSeparator();
-		
-		return output;
-		
-	}
-	
-	//Method to be refactored if possible (Should not be in CmdDelete)
-	private int processInput(String input){
-		int inputNumber = INPUT_DEFAULT_VALUE;
-		
-		if(input == null || input.equals("")){
-			return inputNumber;
-		}
-		log.log(Level.INFO, "[Start] format String into Integer");
-		try{
-			inputNumber = Integer.parseInt(input);
-		}catch(NumberFormatException e){
-			log.log(Level.WARNING, "NumberFormatException");
-		}catch(Exception e){
-			log.log(Level.SEVERE, "Unkown Exception");
-		}
-		log.log(Level.INFO, "[End] format String into Integer");
-		return inputNumber;
-	}
+	}	
 	
 }
