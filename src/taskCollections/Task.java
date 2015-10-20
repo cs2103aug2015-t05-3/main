@@ -77,7 +77,6 @@ public class Task implements Comparable<Task> {
 
 	private int id;
 	private String name;
-	private String fullName;
 	private String description;
 	private long startTime;
 	private long endTime;
@@ -103,12 +102,12 @@ public class Task implements Comparable<Task> {
 	 * @param priority
 	 *            the given priority field;
 	 * 
-	 * @deprecated Use {@code Task} constructor that support a full name and a
-	 *             description instead
+	 * @deprecated Use {@code Task} constructor that support a description
+	 *             instead
 	 * 
 	 */
 	public Task(String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
-		this(name, name, null, startTime, endTime, flag, priority);
+		this(name, null, startTime, endTime, flag, priority);
 	}
 
 	/**
@@ -133,12 +132,12 @@ public class Task implements Comparable<Task> {
 	 * @param priority
 	 *            the given priority field;
 	 * 
-	 * @deprecated Use {@code Task} constructor that support a full name and a
-	 *             description instead
+	 * @deprecated Use {@code Task} constructor that support a description
+	 *             instead
 	 * 
 	 */
 	public Task(int id, String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
-		this(id, name, name, null, startTime, endTime, flag, priority);
+		this(id, name, null, startTime, endTime, flag, priority);
 	}
 
 	/**
@@ -151,12 +150,8 @@ public class Task implements Comparable<Task> {
 	 *            the index number used to identify this task.
 	 * @param name
 	 *            the name of the newly constructed {@code Task}
-	 * @param fullName
-	 *            the original user specified name of the newly constructed
-	 *            {@code Task}
 	 * @param description
-	 *            the description of the newly constructed
-	 *            {@code Task}
+	 *            the description of the newly constructed {@code Task}
 	 * @param startTime
 	 *            the starting time of the newly constructed {@code Task} in
 	 *            UNIX format
@@ -170,7 +165,7 @@ public class Task implements Comparable<Task> {
 	 *            the given priority field;
 	 * 
 	 */
-	public Task(int id, String name, String fullName, String description, long startTime, long endTime, FLAG_TYPE flag,
+	public Task(int id, String name, String description, long startTime, long endTime, FLAG_TYPE flag,
 			PRIORITY_TYPE priority) {
 
 		this.id = id;
@@ -180,14 +175,13 @@ public class Task implements Comparable<Task> {
 		}
 
 		this.name = name;
-		this.fullName = fullName;
 		this.description = description;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.flag = flag;
 		this.priority = priority;
 	}
-	
+
 	/**
 	 * Initializes a newly created {@code Task} object so that it store the
 	 * name, starting time, ending time, flag and priority as the argument. An
@@ -195,12 +189,8 @@ public class Task implements Comparable<Task> {
 	 * 
 	 * @param name
 	 *            the name of the newly constructed {@code Task}
-	 * @param fullName
-	 *            the original user specified name of the newly constructed
-	 *            {@code Task}
 	 * @param description
-	 *            the description of the newly constructed
-	 *            {@code Task}
+	 *            the description of the newly constructed {@code Task}
 	 * @param startTime
 	 *            the starting time of the newly constructed {@code Task} in
 	 *            UNIX format
@@ -214,11 +204,9 @@ public class Task implements Comparable<Task> {
 	 *            the given priority field;
 	 * 
 	 */
-	public Task(String name, String fullName, String description, long startTime, long endTime, FLAG_TYPE flag,
-			PRIORITY_TYPE priority) {
+	public Task(String name, String description, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		this.id = taskNumber++;
 		this.name = name;
-		this.fullName = fullName;
 		this.description = description;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -248,15 +236,6 @@ public class Task implements Comparable<Task> {
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/**
-	 * Returns the full name of this task in {@code String}.
-	 * 
-	 * @return the full name of this task.
-	 */
-	public String getFullName() {
-		return fullName;
 	}
 
 	/**
@@ -315,16 +294,6 @@ public class Task implements Comparable<Task> {
 	}
 
 	/**
-	 * Change the name of this task.
-	 * 
-	 * @param name
-	 *            the new name for the task.
-	 */
-	void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-	
-	/**
 	 * Change the description of this task.
 	 * 
 	 * @param description
@@ -333,7 +302,7 @@ public class Task implements Comparable<Task> {
 	void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	/**
 	 * Change the start time of this task.
 	 * 

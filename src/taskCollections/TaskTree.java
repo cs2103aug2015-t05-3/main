@@ -170,7 +170,6 @@ public class TaskTree {
 	 */
 	public boolean updateName(Task task, String newValue) {
 		task.setName(newValue);
-		task.setFullName(newValue);
 		return updateAttributeTree(task, task, TYPE.NAME);
 	}
 
