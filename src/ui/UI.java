@@ -12,14 +12,6 @@ import javafx.scene.image.Image;
 
 public class UI extends Application {
     
-	
-	public void createUI() {
-		System.out.println("c11");
-		launch();
-		System.out.println("c22");
-	}
-	
-	
 	@Override
 	public void start(Stage stage) {
 		Parent root;
@@ -36,5 +28,13 @@ public class UI extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public void run() {
+		// TODO Auto-generated method stub
+		System.out.println("c11");
+		launch();
+		System.out.println("c22");
 	}
 }

@@ -3,7 +3,6 @@ package ui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.concurrent.Semaphore;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -114,7 +113,15 @@ public class UIController implements Initializable {
 		System.out.println("c1");
 		if (ui == null) {
 			ui = new UI();
-			ui.createUI();
+			
+			new Thread() {
+				@Override
+				public void run() {
+					javafx.application.Application.launch(UI.class);
+				}
+				//ui.run();
+			}.start();
+			
 			//inputBuffer = new ArrayList<>();
 			//lock = new Semaphore(1);
 		}

@@ -9,6 +9,15 @@
 
 <AnchorPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.UIController">
    <children>
+      <HBox alignment="CENTER_LEFT" layoutX="19.0" layoutY="540.0" prefHeight="43.0" prefWidth="780.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0">
+         <children>
+            <TextField fx:id="input" onKeyPressed="#enterPressed" prefHeight="39.0" prefWidth="1314.0" promptText="Enter command here" />
+            <TextField fx:id="input2" minWidth="4.0" prefHeight="39.0" promptText="task name" />
+            <TextField fx:id="input3" minWidth="4.0" prefHeight="39.0" promptText="deadline" />
+            <TextField fx:id="input4" minWidth="4.0" prefHeight="39.0" promptText="start time" />
+            <TextField fx:id="input5" minWidth="4.0" prefHeight="39.0" promptText="priority" />
+         </children>
+      </HBox>
       <TableView fx:id="table2" layoutX="513.0" layoutY="80.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="264.0" prefHeight="440.0" prefWidth="264.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="18.0">
          <columns>
             <TableColumn fx:id="id1" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
@@ -45,14 +54,5 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <HBox alignment="CENTER_LEFT" layoutX="19.0" layoutY="540.0" prefHeight="43.0" prefWidth="780.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0">
-         <children>
-            <TextField fx:id="input" onKeyPressed="#enterPressed" prefHeight="39.0" prefWidth="1314.0" promptText="Enter command here" />
-            <TextField fx:id="input2" minWidth="4.0" prefHeight="39.0" promptText="task name" />
-            <TextField fx:id="input3" minWidth="4.0" prefHeight="39.0" promptText="deadline" />
-            <TextField fx:id="input4" minWidth="4.0" prefHeight="39.0" promptText="start time" />
-            <TextField fx:id="input5" minWidth="4.0" prefHeight="39.0" promptText="priority" />
-         </children>
-      </HBox>
    </children>
 </AnchorPane>
