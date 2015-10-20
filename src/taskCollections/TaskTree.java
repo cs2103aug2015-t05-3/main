@@ -473,6 +473,29 @@ public class TaskTree {
 	}
 
 	/**
+	 * Returns a task from this {@code TaskTree} via its id. The returned
+	 * {@code Task} is backed by this {@code TaskTree}, so changes in the
+	 * returned {@code Task} are reflected in this {@code TaskTree}, and
+	 * vice-versa.
+	 *
+	 * @param id
+	 *            to get
+	 * @return a task from this {@code TaskTree} via it's ID
+	 *
+	 * @see taskCollections.Task
+	 *
+	 */
+	public Task getTask(int id) {
+		ArrayList<Task> list = new ArrayList<Task>(query(TYPE.ID, id, id));
+
+		if (list.isEmpty()) {
+			return null;
+		} else {
+			return list.get(0);
+		}
+	}
+
+	/**
 	 * Returns a view of the portion of this {@code TaskTree} whose {@code Task}
 	 * objects matches the {@code flagSearch}. The returned {@code List} is
 	 * backed by this {@code TaskTree}, so changes in the returned {@code List}
