@@ -7,12 +7,14 @@
 package logic;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 import logic.command.*;
 import ui.UIHelper;
 import parser.LanguageProcessor;
+import taskCollections.Task;
 
 public class TaskBuddy {
 	
@@ -51,6 +53,13 @@ public class TaskBuddy {
 		}
 		Command.init(taskFileName);
 		UIHelper.createUI();
+		initTasks();
+	}
+	
+	private static void initTasks(){
+		// Run list: TODO change implementation
+		Command list = new CmdList();
+		resolveCmdAction(list.execute(), list);
 	}
 	
 	private static void initLog(){
@@ -69,14 +78,30 @@ public class TaskBuddy {
 			String cmd = getInput();
 			Command toExecute = lp.resolveCmd(cmd);
 			if(toExecute == null){
-				UIHelper.appendOutput(MSG_INVALIDCMD);
+				UIHelper.setOutputMsg(MSG_INVALIDCMD);
 				continue;
 			}
-			UIHelper.appendOutput(toExecute.execute().getOutput());
+			/*UIHelper.appendOutput(toExecute.execute().getOutput());
 			if(toExecute.isUndoable()){
 				Command.addHistory(toExecute);
-			}
+			}*/
+			resolveCmdAction(toExecute.execute(), toExecute);
 		} while (true);
+	}
+	
+	private static void resolveCmdAction(CommandAction action, Command executed){
+		String outputMsg = action.getOutput();
+		List<Task> tasksToDisplay = action.getTaskList();
+		
+		if(outputMsg != null){
+			UIHelper.setOutputMsg(outputMsg);
+		}
+		if(action.getTaskList() != null){
+			UIHelper.setTableOutput(tasksToDisplay);
+		}
+		if(action.isUndoable()){
+			Command.addHistory(executed);
+		}
 	}
 	
 	private static String getInput(){

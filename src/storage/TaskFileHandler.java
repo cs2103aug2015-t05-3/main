@@ -83,7 +83,6 @@ public class TaskFileHandler {
 	 * @return ArrayList<Task> : List of Tasks
 	 */
 	public ArrayList<Task> retrieveTaskList() {
-		importAllTasks();
 		return _tasks;
 	}
 

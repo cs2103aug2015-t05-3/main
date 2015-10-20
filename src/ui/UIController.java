@@ -31,7 +31,7 @@ public class UIController implements Initializable {
 	 */
 
 	@FXML
-	private Text cmdMsg;
+	private static Text cmdMsg;
 	@FXML
 	private TableColumn<UITask1, String> id1;
 	@FXML
@@ -62,28 +62,30 @@ public class UIController implements Initializable {
 	private TextField input5 = new TextField();
 
 	private int troll = 100;
-	
-	private List<Task> _floatingTaskList;
-	private List<Task> _nonFloatingTaskList;
+
+	private static List<Task> _floatingTaskList;
+	private static List<Task> _nonFloatingTaskList;
 
 	private static UI ui;
 	//private static Semaphore lock;
 	private static ArrayList<String> inputBuffer = new ArrayList<>();
 
-	final ObservableList<UITask1> data = FXCollections.observableArrayList();
-	final ObservableList<UITask2> data1 = FXCollections.observableArrayList();
+	final static ObservableList<UITask1> data = FXCollections.observableArrayList();
+	final static ObservableList<UITask2> data1 = FXCollections.observableArrayList();
 
 	public void enterPressed(KeyEvent ke) {
 		if (ke.getCode().equals(KeyCode.ENTER)) {
 			String in = input.getText().trim();
-			cmdMsg.setText("You have entered: \"" + in + "\"");
-			add();
+			//cmdMsg.setText("You have entered: \"" + in + "\"");
+			//add();
 			//inputBuffer.add(in);
 			synchronized (inputBuffer) {
                 inputBuffer.add(in);
                 inputBuffer.notify();
             }
 			// delete(3);
+			// Other classes will do the job.
+			clearInput();
 		}
 	}
 
@@ -137,7 +139,7 @@ public class UIController implements Initializable {
 		input.clear();
 	}
 	
-	private void seperateTaskList(List<Task> taskList){
+	public static void seperateTaskList(List<Task> taskList){
 		_nonFloatingTaskList = new ArrayList<Task>();
 		_floatingTaskList = new ArrayList<Task>();
 			
@@ -149,23 +151,42 @@ public class UIController implements Initializable {
 				i++;
 			}
 		}
-			
 		//Remaining tasks are all non-floating
 		_nonFloatingTaskList = taskList;
-	}
 		
-	private boolean isFloating(Task task){
+		genTable();
+	}
+
+	private static boolean isFloating(Task task){
 		if(task.getEndTime() == 0){
 			return true;
 		}else{
 			return false;
 		}
 	}
+	
+	private static void genTable() {
+		data.clear();
+		data1.clear();
+		
+		for (Task t : _nonFloatingTaskList) {
+			UITask1 ui1 = new UITask1(t.getId(), t.getName(), t.getStartTime(), t.getEndTime());
+			data.add(ui1);
+		}
+		
+		for (Task t : _floatingTaskList) {
+			//TODO: RESOLVE PRIORITY
+			UITask2 ui2 = new UITask2(t.getId(), t.getName(), "N");
+			data1.add(ui2);
+		}
+	}
+	
+	public static void setOutputMsg(String a){
+		//cmdMsg.setText(a);
+	}
 
 	@Override
-	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-		
-				
+	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {				
 				
 		id1.setCellValueFactory(new PropertyValueFactory<UITask1, String>("id"));
 		task1.setCellValueFactory(new PropertyValueFactory<UITask1, String>("Task"));
