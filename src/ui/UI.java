@@ -14,7 +14,9 @@ public class UI extends Application {
     
 	
 	public void createUI() {
+		System.out.println("c11");
 		launch();
+		System.out.println("c22");
 	}
 	
 	

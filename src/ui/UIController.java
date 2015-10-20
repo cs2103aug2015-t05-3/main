@@ -1,7 +1,9 @@
 package ui;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.Semaphore;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -54,6 +56,10 @@ public class UIController implements Initializable {
 
 	private int troll = 6;
 
+	private static UI ui;
+	//private static Semaphore lock;
+	private static ArrayList<String> inputBuffer = new ArrayList<>();
+
 	final ObservableList<Task> data = FXCollections.observableArrayList(
 			new Task(1, "Buy snake", "not funny", "not funny"), new Task(2, "Buy milk", "not funny", "not funny"),
 			new Task(3, "Buy dog", "not funny", "not funny"), new Task(4, "Buy cat", "not funny", "not funny"),
@@ -61,10 +67,32 @@ public class UIController implements Initializable {
 
 	public void enterPressed(KeyEvent ke) {
 		if (ke.getCode().equals(KeyCode.ENTER)) {
-			cmdMsg.setText("You have entered: \"" + input.getText().trim() + "\"");
+			String in = input.getText().trim();
+			cmdMsg.setText("You have entered: \"" + in + "\"");
 			add();
+			//inputBuffer.add(in);
+			synchronized (inputBuffer) {
+                inputBuffer.add(in);
+                System.out.println("b");
+                inputBuffer.notify();
+            }
 			// delete(3);
 		}
+	}
+
+	public static String getInput() {
+		synchronized (inputBuffer) {
+            // wait for input from field
+            while (inputBuffer.isEmpty()) {
+            	try{
+            		System.out.println("w");
+            		inputBuffer.wait();
+            	} catch(InterruptedException e){System.out.println("e"); }
+            	System.out.println("a");
+            }
+
+            return inputBuffer.remove(0);
+        }
 	}
 
 	public void add() {
@@ -79,6 +107,21 @@ public class UIController implements Initializable {
 		data.remove(id);
 
 		// clearform
+		input.clear();
+	}
+
+	public static void createUI() {
+		System.out.println("c1");
+		if (ui == null) {
+			ui = new UI();
+			ui.createUI();
+			//inputBuffer = new ArrayList<>();
+			//lock = new Semaphore(1);
+		}
+		System.out.println("c2");
+	}
+	
+	public void clearInput(){
 		input.clear();
 	}
 

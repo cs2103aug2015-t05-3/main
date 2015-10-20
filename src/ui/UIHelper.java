@@ -15,8 +15,9 @@ public class UIHelper {
 	private static UIFrame frame;
 	private static Logger log = Logger.getLogger("log");
 	*/
+	private static UIController uic;
 	
-	private static UI user_interface;
+	//private static UI user_interface;
 	
 	/**
 	 * Returns a string of the user input. Triggered on enter press.
@@ -27,7 +28,8 @@ public class UIHelper {
 		frame.setInputText("");
 		
 		return inputString;*/
-		return "";
+		System.out.println("h");
+		return UIController.getInput();
 	}
 	
 	
@@ -63,10 +65,7 @@ public class UIHelper {
             }
         });
         */
-		if(user_interface == null){
-			user_interface = new UI();
-			user_interface.createUI();
-		}
+		UIController.createUI();
 	}
 	
 	

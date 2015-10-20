@@ -37,6 +37,7 @@ public class TaskBuddy {
 		init();
 		
 		// (Loop) Execute commands
+		System.out.println("init done");
 		runCommands();
 	}
 	
@@ -80,8 +81,7 @@ public class TaskBuddy {
 	}
 	
 	private static String getInput(){
-		return "";
-		//return UIHelper.getUserInput();
+		return UIHelper.getUserInput();
 	}
 
 }
