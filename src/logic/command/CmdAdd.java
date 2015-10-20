@@ -73,7 +73,7 @@ public class CmdAdd extends Command {
 			// Convert the priority to a format we can use for storing
 			PRIORITY_TYPE taskPriorityP = getPriorityValue(taskPriority);
 
-			addTask = new Task(taskName, taskName,null, taskStartTimeL, taskEndTimeL, Task.FLAG_TYPE.NULL, taskPriorityP);
+			addTask = new Task(taskName,null, taskStartTimeL, taskEndTimeL, Task.FLAG_TYPE.NULL, taskPriorityP);
 		}
 
 		_taskTree.add(addTask);
