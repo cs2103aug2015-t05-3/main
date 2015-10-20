@@ -26,6 +26,10 @@ public class LanguageProcessor {
 		return userCmd;
 	}
 	
+	private String getSearchTerm(String userCmd){
+		return StringUtil.removeFirstWord(userCmd);
+	}
+	
 	public boolean init(String cmdFileName){
 		cmdP = CommandProcessor.getInstance();
 		return cmdP.initCmdList(cmdFileName);
@@ -72,6 +76,7 @@ public class LanguageProcessor {
 		case CmdParameters.PARAM_NAME_TASK_NAME:
 			paramValue = getTaskName(fullParam);
 		case CmdParameters.PARAM_NAME_CMD_SEARCH:
+			paramValue = getSearchTerm(fullParam);
 		case CmdParameters.PARAM_NAME_TASK_ENDTIME:
 		case CmdParameters.PARAM_NAME_TASK_STARTTIME:
 		case CmdParameters.PARAM_NAME_TASK_PRIORITY:
