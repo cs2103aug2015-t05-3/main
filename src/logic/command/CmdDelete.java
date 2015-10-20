@@ -43,7 +43,7 @@ public class CmdDelete extends Command {
 	@Override
 	public CommandAction execute() {
 
-		//Try Undo first
+		//Try undo first
 		_task = getTask();
 		if(isUndo()){
 			String outputMsg = deleteTask(_task);
@@ -51,6 +51,9 @@ public class CmdDelete extends Command {
 		}
 		
 		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
+		if (parameter == null || parameter.equals("")) {
+			return new CommandAction(MSG_TASKUNSPECIFIED, false);
+		}
 		
 		CmdSearch search = new CmdSearch();
 		_isID = search.isInteger(parameter);

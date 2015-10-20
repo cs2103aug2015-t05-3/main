@@ -4,40 +4,32 @@ import java.util.List;
 
 import constants.CmdParameters;
 import taskCollections.Task;
-import taskCollections.TaskTree;
 import ui.UIHelper;
 
 public class CmdUpdate extends Command {
 
 	/*
 	 * Constants
-	 */
-	// Variable constants
-	private static final int INPUT_NO_UPDATE = 0;
-	private static final int INPUT_DEFAULT_VALUE = -1;
-	
+	 */	
 	// Message constants
 	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
-	private static final String MSG_TASKNOTFOUND = "Specified task \"%1$s\" not found";
+	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
+	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
 	private static final String MSG_TASKUPDATED = "Updated : \"%1$s\" to \"%2$s\"";
+	private static final String MSG_ISNTANCEFOUND = "[%1%s] instances of \"%2$s\" found";
 	private static final String MSG_TASKNOTUPDATED = "Empty String. Task not updated";
 	private static final String MSG_TASKNOCHANGE = "No changes was made";
 	
-	private static final String MSG_INVALID_INPUT = "Invalid input";
-	
-	// Error codes
-	/*
-	 * private enum ERROR { OK, TASKUNSPECIFIED }
-	 */
-
 	/*
 	 * Variables for internal use
 	 */
-	private Task updateTask;
-	private String taskName;
+	private Task _task;
+	private String _taskName;
+	private int _taskID;
+	private boolean _isID;
 	
 	//variables for undo
-	private String prevTaskName;
+	private String _prevTaskName;
 	//To be included in later version
 	private long prevTaskStartTime;
 	private long prevTaskEndTime;
@@ -47,34 +39,40 @@ public class CmdUpdate extends Command {
 	}
 
 	public CmdUpdate(String taskName) {
-		this.taskName = taskName;
+		_taskName = taskName;
 	}
 	
 	@Override
 	public CommandAction execute() {
 		
-		taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
+		//Try undo 1st
+		_task = getTask();
+		if(isUndo()){
+			String outputMsg = updateTask(_task, _prevTaskName);
+			return new CommandAction(outputMsg, true);
+		}
 		
-		if (taskName == null || taskName.equals("")) {
+		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);	
+		if (parameter == null || parameter.equals("")) {
 			//return MSG_TASKUNSPECIFIED;
 			return new CommandAction(MSG_TASKUNSPECIFIED, false);
 		}
 		
-		List<Task> updateTaskList = searchTask(taskName);
+		CmdSearch search = new CmdSearch();
+		_isID = search.isInteger(parameter);
+		List<Task> taskList = search.searchTask(_isID, _taskID, _taskName);
 		
-		//return updateTask(updateTaskList);
-		return new CommandAction(updateTask(updateTaskList), true);
+		return processList(taskList);
 	}
 
 	@Override
 	public CommandAction undo() {
 		
 		Command update = new CmdUpdate();
-		update.setTask(updateTask);
-		update.setParameter(prevTaskName, null);
+		update.setTask(_task);
+		update.setParameter(_prevTaskName, null);
 		
-
-		return execute();
+		return update.execute();
 	}
 
 	@Override
@@ -84,7 +82,7 @@ public class CmdUpdate extends Command {
 
 	@Override
 	public String[] getRequiredFields() {
-		return new String[] { CmdParameters.PARAM_NAME_TASK_NAME };
+		return new String[] { CmdParameters.PARAM_NAME_CMD_SEARCH };
 	}
 
 	@Override
@@ -92,118 +90,73 @@ public class CmdUpdate extends Command {
 		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME};
 	}
 	
-	private List<Task> searchTask(String taskName){
-		return _taskTree.searchName(taskName);
-	}
-	
-	private String updateTask(List<Task> updateTaskList){
-		
-		//Case 1: List.size is empty
-		if(updateTaskList.isEmpty()){
-			return String.format(MSG_TASKNOTFOUND, taskName);
-		}
-		
-		//Case 2: List.size == 1
-		if(updateTaskList.size() == 1){
-			updateTask = updateTaskList.get(0);
-			prevTaskName = updateTask.getName();
-			String newTaskName = getNewTaskName(prevTaskName);	
-			
-			//check if invalid
-			if(newTaskName.equals(prevTaskName)) {
-				return MSG_TASKNOCHANGE;
-			}
-			if(newTaskName.equals("") || newTaskName == null){
-				return MSG_TASKNOTUPDATED;
-			}
-			
-			_taskTree.updateName(updateTask, newTaskName);
-			return String.format(MSG_TASKUPDATED, prevTaskName, newTaskName);
-		}
-		
-		//Case 3: List.size > 1
-		int input = getUserInput(updateTaskList);
-		if(input == INPUT_NO_UPDATE){
-			return MSG_TASKNOTUPDATED;
+	private boolean isUndo(){
+		if(_task == null){
+			return false;
 		}else{
-			int index = input - 1;
-			updateTask = updateTaskList.get(index);
-			prevTaskName = updateTask.getName();
+			return true;
 		}
-		String newTaskName = getNewTaskName(prevTaskName);
-		
-		//check if invalid
-		if(newTaskName.equals(prevTaskName)) {
-			return MSG_TASKNOCHANGE;
-		}
-		if(newTaskName.equals("") || newTaskName == null){
-			return MSG_TASKNOTUPDATED;
-		}
-		
-		_taskTree.updateName(updateTask, newTaskName);	
-		return String.format(MSG_TASKUPDATED, prevTaskName, newTaskName);
 	}
 	
-	//To be refactored
-	private int getUserInput(List<Task> updateTaskList){
+	private String updateTask(Task task, String newTaskName){
+		_prevTaskName = task.getName();
+		_taskTree.updateName(task, newTaskName);
+		return String.format(MSG_TASKUPDATED, _prevTaskName, task.getName());
+	}
+	
+	private CommandAction processList(List<Task> taskList){
 		
-		String output = displayUpdateList(updateTaskList);
-		int input = INPUT_DEFAULT_VALUE; 
-		
-		//TaskBuddy.printMessage(output);
-		UIHelper.appendOutput(output);
-		
-		while(input <= -1 || input > updateTaskList.size()){
-			input = processInput(UIHelper.getUserInput());
-			if(input <= -1 || input > updateTaskList.size()){
-				//TaskBuddy.printMessage(MSG_INVALID_INPUT);
-				UIHelper.appendOutput(MSG_INVALID_INPUT);
+		//Case 1: List is empty (nothing found)
+		if(taskList.isEmpty()){
+			String outputMsg = "";
+			if(_isID){
+				outputMsg = String.format(MSG_TASKIDNOTFOUND, _taskID);
+			}else{
+				outputMsg = String.format(MSG_TASKNAMENOTFOUND, _taskName);
 			}
+			boolean isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable);
 		}
 		
-		return input;
-	}
-	
-	private String displayUpdateList(List<Task> updateTaskList){
-		
-		String output = "";
-		
-		output = output + updateTaskList.size() +
-				" instances of \"" + taskName + "\" found:" + System.lineSeparator() ;
-		for(int i=0; i<updateTaskList.size(); i++){
-			output = output + (i+1) + ". " + updateTaskList.get(i).getName() + System.lineSeparator();
+		//Case 2: List.size > 1 (more than 1 instance found)
+		if(taskList.size() > 1){
+			String outputMsg = String.format(MSG_ISNTANCEFOUND, _taskName);
+			boolean isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable, taskList);
 		}
-		output = output + "\"0\" to exit" + System.lineSeparator();
-		output = output + System.lineSeparator();
 		
-		return output;
+		//Case 3: List.size == 1 (task to be updated found)
+		_task = taskList.get(0);
 		
-	}
-	
-	//Method to be refactored if possible (Should not be in CmdSearch)
-	private int processInput(String input){
-		int inputNumber = INPUT_DEFAULT_VALUE;
-			
-		if(input == null || input.equals("")){
-			return inputNumber;
+		String newTaskName = getUserInput(_task.getName());
+		
+		//Empty taskName
+		if(newTaskName == null || newTaskName.equals("")){
+			String outputMsg = MSG_TASKNOTUPDATED;
+			boolean isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable);
 		}
-			
-		try{
-			inputNumber = Integer.parseInt(input);
-		}catch(NumberFormatException e){/*Do nothing*/}
-			
-		return inputNumber;
+		
+		//Same taskName
+		if(newTaskName.equals(_task.getName())){
+			String outputMsg = MSG_TASKNOCHANGE;
+			boolean isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable);
+		}
+		
+		String outputMsg = updateTask(_task, newTaskName);
+		boolean isUndoable = true;
+		return new CommandAction(outputMsg, isUndoable);
+		
 	}
 	
-	private String getNewTaskName(String prevTaskName){
+	private String getUserInput(String currTaskName){
+		String newTaskName = "";
 		
-		UIHelper.setUserInput(prevTaskName);
+		UIHelper.setUserInput(currTaskName);
+		newTaskName = UIHelper.getUserInput().trim();
 		
-		String input = UIHelper.getUserInput().trim();
-		
-		return input;
+		return newTaskName;
 	}
-	
-
 
 }
