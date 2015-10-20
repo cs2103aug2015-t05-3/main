@@ -5,10 +5,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import constants.CmdParameters;
-import ui.UIHelper;
-import logic.TaskBuddy;
 import taskCollections.Task;
-import taskCollections.TaskTree;
 
 public class CmdDelete extends Command {
 

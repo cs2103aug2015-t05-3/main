@@ -15,7 +15,6 @@ public class CmdMark extends Command{
 	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
 	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
-	private static final String MSG_TASKUPDATED = "Updated : \"%1$s\" to \"%2$s\"";
 	private static final String MSG_ISNTANCEFOUND = "[%1%s] instances of \"%2$s\" found";
 	private static final String MSG_TASKMARKED = "Marked: \"%1$s\"";
 	private static final String MSG_TASKUNMARKED = "Unmarked: \"%1$s\"";
