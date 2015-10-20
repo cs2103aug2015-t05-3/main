@@ -46,12 +46,14 @@ public class CmdMark extends Command{
 		_task = getTask();
 		if(isUndo()){
 			String outputMsg = toggleMarkTask(_task);
-			return new CommandAction(outputMsg, true);
+			boolean isUndoable = true;
+			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 				
 		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
 		if (parameter == null || parameter.equals("")) {
-			return new CommandAction(MSG_TASKUNSPECIFIED, false);
+			boolean isUndoable = false;
+			return new CommandAction(MSG_TASKUNSPECIFIED, isUndoable, _taskTree.getList());
 		}
 				
 		CmdSearch search = new CmdSearch();
@@ -122,7 +124,7 @@ public class CmdMark extends Command{
 				outputMsg = String.format(MSG_TASKNAMENOTFOUND, _taskName);
 			}	 
 			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable);
+			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
 		//Case 2: List.size > 1 (more than 1 instance found)
@@ -136,7 +138,7 @@ public class CmdMark extends Command{
 		_task = taskList.get(0);
 		String outputMsg = toggleMarkTask(_task);
 		boolean isUndoable = true;
-		return new CommandAction(outputMsg, isUndoable);
+		return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 	}
 	
 }
