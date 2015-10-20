@@ -6,7 +6,10 @@
 package ui;
 
 
+import java.util.List;
 import java.util.logging.Logger;
+
+import taskCollections.Task;
 
 
 public class UIHelper {
@@ -24,10 +27,6 @@ public class UIHelper {
 	 */
 	
 	public static String getUserInput(){
-		/*String inputString = frame.getInputText();
-		frame.setInputText("");
-		
-		return inputString;*/
 		return UIController.getInput();
 	}
 	
@@ -37,37 +36,6 @@ public class UIHelper {
 	}
 	
 	public static void createUI() {
-		/*
-		if(frame != null){ // Dont allow multiple UI instances TODO: Allow recreation after destroy
-			return;
-		}
-		frame = new UIFrame();
-
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            log.log(java.util.logging.Level.SEVERE, "UIHelper: ",ex);
-        } catch (InstantiationException ex) {
-        	log.log(java.util.logging.Level.SEVERE, "UIHelper: ",ex);
-        } catch (IllegalAccessException ex) {
-        	log.log(java.util.logging.Level.SEVERE, "UIHelper: ",ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        	log.log(java.util.logging.Level.WARNING, "UIHelper: ",ex);
-        }
-        //</editor-fold>
-
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                frame.setVisible(true);
-            }
-        });
-        */
 		UIController.createUI();
 	}
 	
@@ -85,8 +53,14 @@ public class UIHelper {
 		//frame.setOutputText(frame.getOutputText() + appendString + System.lineSeparator());
 	}
 	
-	public static void setOutput(String out){
-		//frame.setOutputText(out);
+	//give the entire list for output generation
+	public static void setTableOutput(List<Task> completeList){
+		UIController.seperateTaskList(completeList);
+	}
+	
+	//set UI's output msg
+	public static void setOutputMsg(String s) {
+		UIController.setOutputMsg(s);
 	}
 	
 	public static void setUserInput(String in){
