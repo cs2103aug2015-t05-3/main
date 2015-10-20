@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * A task object used to store task name, time and different attributes.
- * 
+ *
  * @author amoshydra
  */
 public class Task implements Comparable<Task> {
@@ -73,10 +73,10 @@ public class Task implements Comparable<Task> {
 	 * date.
 	 */
 	public final static int DATE_NULL = 0;
-	private final static String EMPTY_STRING = "";
+	private final static String EMPTY_STRING = "meow";
 	private final static String TO_STRING_DELIMETER = "|";
 
-	
+
 	private int id;
 	private String name;
 	private String description;
@@ -89,7 +89,7 @@ public class Task implements Comparable<Task> {
 	 * Initializes a newly created {@code Task} object so that it store the
 	 * name, starting time, ending time, flag and priority as the argument. An
 	 * internal ID will be used to differentiate duplicated value.
-	 * 
+	 *
 	 * @param name
 	 *            the name of the newly constructed {@code Task}
 	 * @param startTime
@@ -103,10 +103,10 @@ public class Task implements Comparable<Task> {
 	 *            this flag.
 	 * @param priority
 	 *            the given priority field;
-	 * 
+	 *
 	 * @deprecated Use {@code Task} constructor that support a description
 	 *             instead
-	 * 
+	 *
 	 */
 	public Task(String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		this(name, EMPTY_STRING, startTime, endTime, flag, priority);
@@ -117,7 +117,7 @@ public class Task implements Comparable<Task> {
 	 * name, starting time, ending time, flag and priority as the argument. The
 	 * ID will be specified through fileProcessor only. Do not use this to add
 	 * new task from user.
-	 * 
+	 *
 	 * @param id
 	 *            the index number used to identify this task.
 	 * @param name
@@ -133,10 +133,10 @@ public class Task implements Comparable<Task> {
 	 *            this flag.
 	 * @param priority
 	 *            the given priority field;
-	 * 
+	 *
 	 * @deprecated Use {@code Task} constructor that support a description
 	 *             instead
-	 * 
+	 *
 	 */
 	public Task(int id, String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		this(id, name, EMPTY_STRING, startTime, endTime, flag, priority);
@@ -147,7 +147,7 @@ public class Task implements Comparable<Task> {
 	 * name, starting time, ending time, flag and priority as the argument. The
 	 * ID will be specified through fileProcessor only. Do not use this to add
 	 * new task from user.
-	 * 
+	 *
 	 * @param id
 	 *            the index number used to identify this task.
 	 * @param name
@@ -165,7 +165,7 @@ public class Task implements Comparable<Task> {
 	 *            this flag.
 	 * @param priority
 	 *            the given priority field;
-	 * 
+	 *
 	 */
 	public Task(int id, String name, String description, long startTime, long endTime, FLAG_TYPE flag,
 			PRIORITY_TYPE priority) {
@@ -188,7 +188,7 @@ public class Task implements Comparable<Task> {
 	 * Initializes a newly created {@code Task} object so that it store the
 	 * name, starting time, ending time, flag and priority as the argument. An
 	 * internal ID will be used to differentiate duplicated value.
-	 * 
+	 *
 	 * @param name
 	 *            the name of the newly constructed {@code Task}
 	 * @param description
@@ -204,7 +204,7 @@ public class Task implements Comparable<Task> {
 	 *            this flag.
 	 * @param priority
 	 *            the given priority field;
-	 * 
+	 *
 	 */
 	public Task(String name, String description, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		this.id = taskNumber++;
@@ -217,14 +217,14 @@ public class Task implements Comparable<Task> {
 	}
 
 	static Task getVirtualTask() {
-		Task temp = new Task(taskNumber, EMPTY_STRING, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
+		Task temp = new Task(taskNumber, EMPTY_STRING, EMPTY_STRING, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
 		taskNumber--;
 		return temp;
 	}
 
 	/**
 	 * Returns the id of this task in {@code int}.
-	 * 
+	 *
 	 * @return the id
 	 */
 	public int getId() {
@@ -233,7 +233,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Returns the name of this task in {@code String}.
-	 * 
+	 *
 	 * @return the name of this task.
 	 */
 	public String getName() {
@@ -242,7 +242,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Returns the name of this task in {@code String}.
-	 * 
+	 *
 	 * @return the description of this task.
 	 */
 	public String getDescription() {
@@ -251,7 +251,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Returns the start time of this task in {@code long}.
-	 * 
+	 *
 	 * @return the start time of this task.
 	 */
 	public long getStartTime() {
@@ -260,7 +260,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Returns the end time of this task in {@code long}.
-	 * 
+	 *
 	 * @return the end time of this task.
 	 */
 	public long getEndTime() {
@@ -269,7 +269,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Returns the flag of this task in {@code int}.
-	 * 
+	 *
 	 * @return the flag of this task.
 	 */
 	public FLAG_TYPE getFlag() {
@@ -278,7 +278,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Returns the priority of this task in {@code int}.
-	 * 
+	 *
 	 * @return the priority of this task.
 	 */
 	public PRIORITY_TYPE getPriority() {
@@ -287,7 +287,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Change the name of this task.
-	 * 
+	 *
 	 * @param name
 	 *            the new name for the task.
 	 */
@@ -297,7 +297,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Change the description of this task.
-	 * 
+	 *
 	 * @param description
 	 *            the new description for the task.
 	 */
@@ -307,7 +307,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Change the start time of this task.
-	 * 
+	 *
 	 * @param startTime
 	 *            the new start time for the task.
 	 */
@@ -317,7 +317,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Change the end time of this task.
-	 * 
+	 *
 	 * @param endTime
 	 *            the new end time for the task.
 	 */
@@ -327,7 +327,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Change the flag of this task.
-	 * 
+	 *
 	 * @param flag
 	 *            the new flag for the task.
 	 */
@@ -337,7 +337,7 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Change the priority of this task.
-	 * 
+	 *
 	 * @param priority
 	 *            the new priority for the task.
 	 */
@@ -360,7 +360,7 @@ public class Task implements Comparable<Task> {
 	/**
 	 * Determines whether or not two task are equal. The two tasks are equal if
 	 * the values name, start time, end time, flag and priority are equal.
-	 * 
+	 *
 	 * @return {@code true} if the object to be compared is an instance of Task
 	 *         and has the same attributes; false otherwise.
 	 */
@@ -379,7 +379,7 @@ public class Task implements Comparable<Task> {
 	/**
 	 * Compares this {@code Task} instance with another based on the order they
 	 * are created.
-	 * 
+	 *
 	 * @return the value 0 if this {@code Task} is equal to the argument
 	 *         {@code Task}; a value less than 0 if this {@code Task} is created
 	 *         earlier than the argument {@code Task}; and a value greater than
@@ -394,10 +394,10 @@ public class Task implements Comparable<Task> {
 	/**
 	 * Compares this {@code Task} instance with another to generate an array of
 	 * check bits.
-	 * 
+	 *
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
-	 * 
+	 *
 	 * @return a boolean array with all element as {@code true} if the
 	 *         {@code Task} is identical to the other; A difference in
 	 *         attributes between two task will cause a boolean in the array to
@@ -418,10 +418,10 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Compares the name of this {@code Task} instance with another.
-	 * 
+	 *
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
-	 * 
+	 *
 	 * @return the value 0 if the name of this {@code Task} is equal to the
 	 *         argument {@code Task}; a value less than 0 if this name is
 	 *         lexicographically less than the argument name; a value greater
@@ -435,10 +435,10 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Compares the starting time of this {@code Task} instance with another.
-	 * 
+	 *
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
-	 * 
+	 *
 	 * @return the value 0 if the starting time of this {@code Task} is equal to
 	 *         the argument {@code Task}; a value less than 0 if this starting
 	 *         time is numerically less than the argument starting time; a value
@@ -454,10 +454,10 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Compares the ending time of this {@code Task} instance with another.
-	 * 
+	 *
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
-	 * 
+	 *
 	 * @return the value 0 if the ending time of this {@code Task} is equal to
 	 *         the argument {@code Task}; a value less than 0 if this ending
 	 *         time is numerically less than the argument ending time; a value
@@ -473,10 +473,10 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Compares the flag of this {@code Task} instance with another.
-	 * 
+	 *
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
-	 * 
+	 *
 	 * @return the value 0 if the flag of this {@code Task} is equal to the
 	 *         argument {@code Task}; a value less than 0 if this flag time is
 	 *         numerically less than the argument flag; a value greater than 0
@@ -489,10 +489,10 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Compares the priority of this {@code Task} instance with another.
-	 * 
+	 *
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
-	 * 
+	 *
 	 * @return the value 0 if the priority of this {@code Task} is equal to the
 	 *         argument {@code Task}; a value less than 0 if this priority time
 	 *         is numerically less than the argument priority; a value greater
@@ -506,10 +506,10 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Compares the ID of this {@code Task} instance with another.
-	 * 
+	 *
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
-	 * 
+	 *
 	 * @return the value 0 if the ID of this {@code Task} is equal to the
 	 *         argument {@code Task}; a value less than 0 if this ID is
 	 *         numerically less than the argument ID; a value greater than 0
@@ -522,12 +522,12 @@ public class Task implements Comparable<Task> {
 	/**
 	 * Allow comparator to differentiate two duplicated attributes via its ID of
 	 * creation
-	 * 
+	 *
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
 	 * @param result
 	 *            result obtained from previous comparison
-	 * 
+	 *
 	 * @return the original result if it is already different. Otherwise, the
 	 *         difference in ID is returned
 	 */
@@ -541,9 +541,9 @@ public class Task implements Comparable<Task> {
 
 	/**
 	 * Represent this {@code Task} into a {@code String} format
-	 * 
+	 *
 	 * @return a string representation of this task in the format such as:
-	 * 
+	 *
 	 *         <pre>
 	 *         name | startTime | endTime | flag | priority
 	 *         </pre>
