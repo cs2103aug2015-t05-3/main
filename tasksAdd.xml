@@ -35,4 +35,11 @@
         <flag>NULL</flag>
         <priority>NORMAL</priority>
     </task>
+    <task id="5">
+        <title>New Task Added for JUnit Testing</title>
+        <startTime>0</startTime>
+        <endTime>0</endTime>
+        <flag>DONE</flag>
+        <priority>NORMAL</priority>
+    </task>
 </tasklist>

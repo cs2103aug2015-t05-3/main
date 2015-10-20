@@ -22,17 +22,17 @@
         <priority>ABOVE_NORMAL</priority>
     </task>
     <task id="3">
-        <title>Run Around the Campus 10 Times</title>
+        <title>Run Around the Campus 100000 Times</title>
         <startTime>Saturday: 31/10/15 12:00 GMT+0800</startTime>
         <endTime>Saturday: 31/10/15 20:05 GMT+0800</endTime>
         <flag>NULL</flag>
         <priority>VERY_LOW</priority>
     </task>
-    <task id="4">
-        <title>this task</title>
+    <task id="5">
+        <title>New Task Added for JUnit Testing</title>
         <startTime>0</startTime>
         <endTime>0</endTime>
-        <flag>NULL</flag>
+        <flag>DONE</flag>
         <priority>NORMAL</priority>
     </task>
 </tasklist>
