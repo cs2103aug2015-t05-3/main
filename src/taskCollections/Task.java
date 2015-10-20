@@ -73,8 +73,10 @@ public class Task implements Comparable<Task> {
 	 * date.
 	 */
 	public final static int DATE_NULL = 0;
+	private final static String EMPTY_STRING = "";
 	private final static String TO_STRING_DELIMETER = "|";
 
+	
 	private int id;
 	private String name;
 	private String description;
@@ -107,7 +109,7 @@ public class Task implements Comparable<Task> {
 	 * 
 	 */
 	public Task(String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
-		this(name, null, startTime, endTime, flag, priority);
+		this(name, EMPTY_STRING, startTime, endTime, flag, priority);
 	}
 
 	/**
@@ -137,7 +139,7 @@ public class Task implements Comparable<Task> {
 	 * 
 	 */
 	public Task(int id, String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
-		this(id, name, null, startTime, endTime, flag, priority);
+		this(id, name, EMPTY_STRING, startTime, endTime, flag, priority);
 	}
 
 	/**
@@ -215,7 +217,7 @@ public class Task implements Comparable<Task> {
 	}
 
 	static Task getVirtualTask() {
-		Task temp = new Task(taskNumber, null, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
+		Task temp = new Task(taskNumber, EMPTY_STRING, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
 		taskNumber--;
 		return temp;
 	}
