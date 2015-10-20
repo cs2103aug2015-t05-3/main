@@ -465,6 +465,10 @@ public class TaskTree {
 				fromValueHandler.setFlag(FLAG_TYPE.get((int) fromValueL));
 				toValueHdlBuffer.setFlag(FLAG_TYPE.get((int) toValueL));
 				break;
+			case ID:
+				fromValueHandler.setId((int) fromValueL);
+				toValueHdlBuffer.setId((int) toValueL);
+				break;
 			default:
 				return emptyList;
 			}

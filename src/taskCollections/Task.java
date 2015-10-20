@@ -73,8 +73,10 @@ public class Task implements Comparable<Task> {
 	 * date.
 	 */
 	public final static int DATE_NULL = 0;
-	private final static String EMPTY_STRING = "meow";
+	private final static String EMPTY_STRING = "";
 	private final static String TO_STRING_DELIMETER = "|";
+	private final static String TO_STRING_START = "";
+	private final static String TO_STRING_END = "";
 
 
 	private int id;
@@ -283,6 +285,17 @@ public class Task implements Comparable<Task> {
 	 */
 	public PRIORITY_TYPE getPriority() {
 		return priority;
+	}
+
+	/**
+	 * Change the id of this task.
+	 *
+	 * @param id
+	 *            the new id for the task.
+	 */
+	public void setId(int id) {
+		this.id = id;
+
 	}
 
 	/**
@@ -545,16 +558,17 @@ public class Task implements Comparable<Task> {
 	 * @return a string representation of this task in the format such as:
 	 *
 	 *         <pre>
-	 *         name | startTime | endTime | flag | priority
+	 *         name | description | startTime | endTime | flag | priority
 	 *         </pre>
 	 */
 	@Override
 	public String toString() {
-		return "" + name + TO_STRING_DELIMETER
-				+ description + TO_STRING_DELIMETER
-				+ startTime + TO_STRING_DELIMETER
-				+ endTime + TO_STRING_DELIMETER
-				+ flag + TO_STRING_DELIMETER
-				+ priority;
+		return TO_STRING_START + name +
+		   TO_STRING_DELIMETER + description +
+		   TO_STRING_DELIMETER + startTime +
+		   TO_STRING_DELIMETER + endTime +
+		   TO_STRING_DELIMETER + flag +
+		   TO_STRING_DELIMETER + priority +
+		   TO_STRING_END;
 	}
 }
