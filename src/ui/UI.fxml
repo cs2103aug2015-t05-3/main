@@ -28,12 +28,12 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Text fx:id="cmdMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="RED" layoutX="13.0" layoutY="529.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Testing 123..." textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999949932098" AnchorPane.bottomAnchor="55.0">
+      <Text fx:id="cmdMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="RED" layoutX="13.0" layoutY="529.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is where the output message is." textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999949932098" AnchorPane.bottomAnchor="55.0">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
       </Text>
-      <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" layoutX="13.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello Jim, you have 9 tasks pending." textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999990165234" AnchorPane.topAnchor="8.0">
+      <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" layoutX="13.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello Jim, you have x tasks pending." textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999990165234" AnchorPane.topAnchor="8.0">
          <font>
             <Font name="Calibri Bold" size="18.0" />
          </font>

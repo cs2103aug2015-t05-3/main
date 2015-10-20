@@ -9,6 +9,8 @@ package ui;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
+
 import taskCollections.Task;
 
 
@@ -59,6 +61,7 @@ public class UIHelper {
 	
 	//set UI's output msg
 	public static void setOutputMsg(String s) {
+		JOptionPane.showMessageDialog(null, s);
 		UIController.setOutputMsg(s);
 	}
 	
