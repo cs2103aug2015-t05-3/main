@@ -21,10 +21,12 @@ public class JUnitTaskTest {
 	private static final int HOUR = 3600;
 
 	// Initializing task attributes
-	private String taskName 		= "Buy Milk tonight";
-	private String taskNameLowCase	= "buy milk tonight";
-	private String taskNameDiff	= "Buy Milk tomorrow";
+	private String taskName 			= "Buy Milk";
+	private String taskNameLowCase		= "buy milk";
+	private String taskNameDiff			= "Buy Yogurt";
 
+	private String description 			= "brand: Meji, Vol: 5L";
+	
 	private Date nowTime 	= new Date();
 	private long startTime	= nowTime.getTime() % 1000;
 	private long endTime	= startTime + (2 * HOUR);
@@ -43,13 +45,14 @@ public class JUnitTaskTest {
 	@SuppressWarnings("unused")
 	private static final int TASK_ARRAY_SIZE = 7;
 	
-	Task[] tasks = {new Task(taskName, startTime, endTime, flag, priority),
-			new Task(taskName, startTime, endTime, flag, priority),
-			new Task(taskNameLowCase, startTime, endTime, flag, priority),
-			new Task(taskName, startTime, endTime, Task.FLAG_TYPE.DONE, priority),
-			new Task(taskNameDiff, startTime, startTime, flag, priority),
-			new Task(taskNameDiff, startTime, endTime, flag, priority),
-			new Task(taskNameDiff, startTime, endTime, flag, Task.PRIORITY_TYPE.VERY_HIGH)
+	Task[] tasks = {
+			new Task(taskName, description, startTime, endTime, flag, priority),
+			new Task(taskName, description, startTime, endTime, flag, priority),
+			new Task(taskNameLowCase, description, startTime, endTime, flag, priority),
+			new Task(taskName, description, startTime, endTime, Task.FLAG_TYPE.DONE, priority),
+			new Task(taskName, description, startTime, startTime, flag, priority),
+			new Task(taskNameDiff, description, startTime, endTime, flag, priority),
+			new Task(taskName, description, startTime, endTime, flag, Task.PRIORITY_TYPE.VERY_HIGH)
 			};
 	
 	@Test
@@ -89,8 +92,8 @@ public class JUnitTaskTest {
 		
 		// Evaluate test cases
 		assertTrue(testSameTask < 0);		// "TASK_ORIGINAL is created earlier than TASK_SAME_TASK"
-		assertTrue(testDiffCase < 0);		// "Buy Milk tonight" is smaller than "buy milk tomorrow"
-		assertTrue(testDiffName > 0);		// "Buy Milk tonight" is greater than "Buy Milk tomorrow"
+		assertTrue(testDiffCase < 0);		// "Buy Milk" is smaller than "buy milk"
+		assertTrue(testDiffName < 0);		// "Buy Milk" is greater than "Buy Yogurt"
 		assertTrue(testDiffTime > 0);		// "2 * HOUR" is greater than "0"
 		assertTrue(testDiffFlag < 0);		// "IS_NULL" is smaller than "IS_DONE"
 		assertTrue(testDiffPriority > 0);	// "NORMAL" is greater than "VERY_HIGH"
