@@ -1,11 +1,15 @@
 package logic.command;
 
+import java.util.List;
+
+import taskCollections.Task;
+
 public class CmdUndo extends Command {
 	
 	/*
 	 * Constants
 	 */
-	private static final String MSG_UNDO = "Undo: ";
+	//private static final String MSG_UNDO = "Undo: ";
 	private static final String MSG_UNDOEMPTY = "No commands to undo!";
 
 	@Override
@@ -13,12 +17,19 @@ public class CmdUndo extends Command {
 		Command toUndo = extractHistory();
 		
 		//return toUndo == null ? MSG_UNDOEMPTY : MSG_UNDO + toUndo.undo();
-		return new CommandAction("", true);
+		
+		if(toUndo == null){
+			String outputMsg = MSG_UNDOEMPTY;
+			boolean isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable);
+		}
+		
+		return toUndo.undo();
 	}
 
 	@Override
 	public CommandAction undo() {
-		return new CommandAction("", true);
+		return null;
 	}
 
 	@Override
@@ -28,12 +39,12 @@ public class CmdUndo extends Command {
 
 	@Override
 	public String[] getRequiredFields() {
-		return new String[0];
+		return new String[]{};
 	}
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[0];
+		return new String[]{};
 	}
 
 	
