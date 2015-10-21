@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import constants.UIFieldIndex;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,9 +19,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import parser.CommandProcessor;
 import taskCollections.Task;
 import util.TimeUtil;
 
@@ -68,28 +68,35 @@ public class UIController implements Initializable {
 
 	private static UI ui;
 	//private static Semaphore lock;
-	private static ArrayList<String> inputBuffer = new ArrayList<>();
+	private static ArrayList<String[]> inputBuffer = new ArrayList<>();
 
 	final static ObservableList<UITask1> data = FXCollections.observableArrayList();
 	final static ObservableList<UITask2> data1 = FXCollections.observableArrayList();
+	
+	private static final double WIDTH_EXPANDED = 4080;
+	private static final double WIDTH_SHRINKED = 250;
 
-	public void enterPressed(KeyEvent ke) {
-		if (ke.getCode().equals(KeyCode.ENTER)) {
-			String in = input.getText().trim();
-			//cmdMsg.setText("You have entered: \"" + in + "\"");
-			//add();
-			//inputBuffer.add(in);
-			synchronized (inputBuffer) {
-                inputBuffer.add(in);
-                inputBuffer.notify();
-            }
-			// delete(3);
-			// Other classes will do the job.
-			clearInput();
-		}
+	public void enterPressed() {
+		//String in = input.getText().trim();
+		
+		synchronized (inputBuffer) {
+            String[] in = new String[UIFieldIndex.INPUT_BUFFSIZE];
+            // TODO: Convert to array
+            in[0] = input.getText().trim();
+            in[1] = input2.getText().trim();
+            in[2] = input3.getText().trim();
+            in[3] = input4.getText().trim();
+            in[4] = input5.getText().trim();
+            		
+			inputBuffer.add(in);
+            inputBuffer.notify();
+        }
+		
+		// Other classes will do the job.
+		clearInput();
 	}
-
-	public static String getInput() {
+	
+	public static String[] getInput() {
 		synchronized (inputBuffer) {
             // wait for input from field
             while (inputBuffer.isEmpty()) {
@@ -121,7 +128,6 @@ public class UIController implements Initializable {
 	public static void createUI() {
 		if (ui == null) {
 			ui = new UI();
-			
 			new Thread() {
 				@Override
 				public void run() {
@@ -129,7 +135,6 @@ public class UIController implements Initializable {
 				}
 				//ui.run();
 			}.start();
-			
 			//inputBuffer = new ArrayList<>();
 			//lock = new Semaphore(1);
 		}
@@ -137,6 +142,10 @@ public class UIController implements Initializable {
 	
 	public void clearInput(){
 		input.clear();
+		input2.clear();
+		input3.clear();
+		input4.clear();
+		input5.clear();
 	}
 	
 	public static void seperateTaskList(List<Task> taskList){
@@ -204,7 +213,7 @@ public class UIController implements Initializable {
 		
 		table1.getSortOrder().add(id1);
 		
-		input2.focusedProperty().addListener(new ChangeListener<Boolean>() {
+		/*input2.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
 					Boolean newPropertyValue) {
@@ -220,20 +229,50 @@ public class UIController implements Initializable {
 					Boolean newPropertyValue) {
 				if (newPropertyValue) {
 					System.out.println("Textfield out focus");
-					input.setPrefWidth(4080);
+					input.setPrefWidth();
 				}
 			}
-		});
+		});*/
 
 		input.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
-				if (newValue.equals("add")) {
-					System.out.println("Roar");
+				if (isValidCmd(input.getText().trim())) {
+					shrinkCmdCell();
+				} else {
+					expandCmdCell();
 				}
 			}
 		});
+	}
+	
+	private void expandCmdCell(){
+		input.setPrefWidth(WIDTH_EXPANDED);
+		hideRedundantCells();
+	}
+	
+	private void shrinkCmdCell(){
+		input.setPrefWidth(WIDTH_SHRINKED);
+		showRedundantCells();
+	}
+	
+	private void hideRedundantCells(){
+		input2.setVisible(false);
+		input3.setVisible(false);
+		input4.setVisible(false);
+		input5.setVisible(false);
+	}
+	
+	private void showRedundantCells(){
+		input2.setVisible(true);
+		input3.setVisible(true);
+		input4.setVisible(true);
+		input5.setVisible(true);
+	}
+	
+	private boolean isValidCmd(String input){
+		return CommandProcessor.getInstance().getEffectiveCmd(input) == null ? false : true;
 	}
 
 	// To Implement Priority

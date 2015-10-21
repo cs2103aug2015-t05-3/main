@@ -85,7 +85,11 @@ public class CmdSearch extends Command {
 	
 	public List<Task> searchByTaskID(int taskID){
 		List<Task> taskList = new ArrayList<Task>();
-		taskList.add(_taskTree.getList().get(taskID));
+		Task searched = _taskTree.getTask(taskID);
+		if(searched != null){
+			taskList.add(searched);
+		}
+		
 		return taskList;
 	}
 	

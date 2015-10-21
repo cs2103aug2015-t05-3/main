@@ -46,5 +46,23 @@ public class StringUtil {
 		
 		return m.find();
 	}
+	
+	/**
+	 * Takes in a search term (word), look for it, then return the word following the search term
+	 * @param fullString 
+	 * 		The full string to search in
+	 * @param afterWord 
+	 * 		The search term (a word) NOTE: Support for multiple search terms using | is not supported yet
+	 * @return The following word if afterWord is found, null if it isn't
+	 */
+	public static String getWordAfter(String fullString, String afterWord){
+		Matcher m = Pattern.compile("\\b"+afterWord+"\\b\\s\\b(.*){1}\\b").matcher(fullString);
+		if(m.find()){
+			String tokens[] = m.group(1).split(" ");
+			return tokens[0];
+		} else {
+			return null;
+		}
+	}
 
 }
