@@ -22,9 +22,9 @@ public class CmdSearch extends Command {
 	/*
 	 * Variables for internal use
 	 */
-	private String _taskName;
-	private int _taskID;
-	private boolean _isID;
+	public String _taskName;
+	public int _taskID;
+	public boolean _isID;
 	
 	public CmdSearch() {
 
