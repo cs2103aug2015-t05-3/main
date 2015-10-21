@@ -16,7 +16,7 @@ public class CmdUpdate extends Command {
 	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
 	private static final String MSG_TASKUPDATED = "Updated : \"%1$s\" to \"%2$s\"";
-	private static final String MSG_ISNTANCEFOUND = "[%1%s] instances of \"%2$s\" found";
+	private static final String MSG_ISNTANCEFOUND = "[%1$s] instances of \"%2$s\" found";
 	private static final String MSG_TASKNOTUPDATED = "Empty String. Task not updated";
 	private static final String MSG_TASKNOCHANGE = "No changes was made";
 	
@@ -55,12 +55,16 @@ public class CmdUpdate extends Command {
 		
 		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);	
 		if (parameter == null || parameter.equals("")) {
-			//return MSG_TASKUNSPECIFIED;
 			return new CommandAction(MSG_TASKUNSPECIFIED, false, _taskTree.getList());
 		}
 		
 		CmdSearch search = new CmdSearch();
 		_isID = search.isInteger(parameter);
+		if(_isID){
+			_taskID = Integer.parseInt(parameter);
+		} else {
+			_taskName = parameter;
+		}
 		List<Task> taskList = search.searchTask(_isID, _taskID, _taskName);
 		
 		return processList(taskList);
@@ -121,7 +125,7 @@ public class CmdUpdate extends Command {
 		
 		//Case 2: List.size > 1 (more than 1 instance found)
 		if(taskList.size() > 1){
-			String outputMsg = String.format(MSG_ISNTANCEFOUND, _taskName);
+			String outputMsg = String.format(MSG_ISNTANCEFOUND, taskList.size(), _taskName);
 			boolean isUndoable = false;
 			return new CommandAction(outputMsg, isUndoable, taskList);
 		}
