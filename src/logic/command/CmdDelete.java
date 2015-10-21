@@ -13,10 +13,10 @@ public class CmdDelete extends Command {
 	 * Constants
 	 */
 	// Message constants
-	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
+	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name or task ID";
 	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
-	private static final String MSG_ISNTANCEFOUND = "[%1%s] instances of \"%2$s\" found";
+	private static final String MSG_ISNTANCEFOUND = "[%1$s] instances of \"%2$s\" found";
 	private static final String MSG_TASKDELETED = "Deleted : \"%1$s\"";
 
 	/*
@@ -119,7 +119,7 @@ public class CmdDelete extends Command {
 		
 		//Case 2: List.size > 1 (more than 1 instance found)
 		if(taskList.size() > 1){
-			String outputMsg = String.format(MSG_ISNTANCEFOUND, _taskName);
+			String outputMsg = String.format(MSG_ISNTANCEFOUND, taskList.size(), _taskName);
 			boolean isUndoable = false;
 			return new CommandAction(outputMsg, isUndoable, taskList);
 		}

@@ -12,10 +12,11 @@ public class CmdSearch extends Command {
 	 * Constants
 	 */	
 	// Message constants
+	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name or task ID";
 	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
 	private static final String MSG_TASKFOUND = "Task \"%1$s\" found";
-	private static final String MSG_ISNTANCEFOUND = "[%1%s] instances of \"%2$s\" found";
+	private static final String MSG_ISNTANCEFOUND = "[%1$s] instances of \"%2$s\" found";
 
 	
 	/*
@@ -41,8 +42,17 @@ public class CmdSearch extends Command {
 	public CommandAction execute() {
 		
 		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
+		if (parameter == null || parameter.equals("")) {
+			boolean isUndoable = false;
+			return new CommandAction(MSG_TASKUNSPECIFIED, isUndoable, _taskTree.getList());
+		}
 		
 		_isID = isInteger(parameter);
+		if(_isID){
+			_taskID = Integer.parseInt(parameter);
+		} else {
+			_taskName = parameter;
+		}
 		List<Task> taskList = searchTask(_isID, _taskID, _taskName);
 		String outputMsg = getOutputMsg(taskList, _isID);
 		boolean isUndoable = false;

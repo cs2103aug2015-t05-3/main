@@ -19,6 +19,7 @@ public class CmdAdd extends Command {
 	// private static final String MSG_TASKUNSPECIFIED = "Please specify a task
 	// name";
 	private static final String MSG_TASKADDED = "Added : %1$s";
+	private static final String MSG_TASKNAMENOTGIVEN = "Please enter a task name";
 
 	// Error codes
 	/*
@@ -52,6 +53,9 @@ public class CmdAdd extends Command {
 			// Get details of the task to add
 			if (taskName == null) {
 				taskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
+			}
+			if (taskName == null || taskName.equals("")) {
+				return new CommandAction(MSG_TASKNAMENOTGIVEN, false, _taskTree.getList());
 			}
 			taskStartTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_STARTTIME);
 			taskEndTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_ENDTIME);
