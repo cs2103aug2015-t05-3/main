@@ -75,8 +75,8 @@ public class TaskBuddy {
 	
 	private static void runCommands(){
 		do{
-			String cmd = getInput();
-			Command toExecute = lp.resolveCmd(cmd);
+			String[] in = getInput();
+			Command toExecute = lp.resolveCmd(in);
 			if(toExecute == null){
 				UIHelper.setOutputMsg(MSG_INVALIDCMD);
 				continue;
@@ -104,7 +104,7 @@ public class TaskBuddy {
 		}
 	}
 	
-	private static String getInput(){
+	private static String[] getInput(){
 		return UIHelper.getUserInput();
 	}
 

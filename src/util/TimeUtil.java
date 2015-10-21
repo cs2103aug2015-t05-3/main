@@ -20,7 +20,7 @@ public class TimeUtil {
 	 */
 	public static long sysStringToLongTime(String sysTimeInString) {
 		try {
-			return Integer.parseInt(sysTimeInString);
+			return Long.parseLong(sysTimeInString);
 		} catch (NumberFormatException e) {
 			return 0;
 		}
