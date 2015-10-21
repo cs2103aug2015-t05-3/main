@@ -9,6 +9,8 @@ import taskCollections.Task;
 
 //JUnit
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 public class CommandTest {
@@ -19,6 +21,53 @@ public class CommandTest {
 	
 	@Test
 	public void testCmdSearch(){
+		
+		test_isInteger();
+		test_getOutputMsg();
+		
+	}
+	
+	public void test_isInteger(){
+		String input;
+		
+		/*
+		 * Test 1  [Boundary Case Integer.MIN_VALUE-1 && Integer.MAX_VALUE+1]
+		 * 		1.: input is long
+		 */
+		
+		//Test 1a: Integer.MIN_VALUE - 1 [Input is Long]
+		input = "-2147483649";
+		assertFalse(_testSearch.isInteger(input));
+		
+		//Test 1b: Integer.MAX_VALUE + 1 [Input is Long]
+		input = "2147483648";
+		assertFalse(_testSearch.isInteger(input));
+		
+		/*
+		 * Test 2  [Not a number]
+		 * 		1.: input is a string
+		 */
+		
+		//Test 2: Input is a String
+		input = "test";
+		assertFalse(_testSearch.isInteger(input));
+		
+		/*
+		 * Test 3  [Is an Integer]
+		 * 		1.: input is an integer
+		 */
+		
+		//Test 3a: Integer.MIN_VALUE [Input is Integer]
+		input = "-2147483648";
+		assertTrue(_testSearch.isInteger(input));
+		
+		//Test 3b: Integer.MAX_VALUE [Input is Integer]
+		input = "2147483647";
+		assertTrue(_testSearch.isInteger(input));
+		
+	}
+	
+	public void test_getOutputMsg(){
 		
 		/*
 		 * Test 1  [Combining multiple inputs using test pairs]
@@ -83,6 +132,7 @@ public class CommandTest {
 		
 		//Test 3b: taskList size == 1 (isID == true) [In the event search was by taskID]
 		assertEquals(_expectedOutput, _testSearch.getOutputMsg(_taskList, true));
+		
 	}
 	
 }
