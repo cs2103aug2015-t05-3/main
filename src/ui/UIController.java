@@ -27,31 +27,32 @@ public class UIController implements Initializable {
 	 * Tutorial video from https://www.youtube.com/watch?v=dF48KdNH1g4
 	 */
 
-	@FXML
-	private Text cmdMsg;
-	private static Text cmdMsgClone;
-	@FXML
-	private TableColumn<UITask1, String> id1;
-	@FXML
-	private TableColumn<UITask1, String> task1;
-	@FXML
-	private TableColumn<UITask1, String> sDate;
-	@FXML
-	private TableColumn<UITask1, String> eDate;
-	@FXML
-	private TableColumn<UITask2, String> id2;
-	@FXML
-	private TableColumn<UITask2, String> task2;
-	@FXML
-	private TableColumn<UITask2, String> priority;
-	@FXML
-	private TableView<UITask1> table1 = new TableView<UITask1>();
-	@FXML
-	private TableView<UITask2> table2 = new TableView<UITask2>();
-	@FXML
-	private TextField input = new TextField();
+	private static final String MSG_CMD_WELCOME = "Welcome! Loading your stuffs";
+	private static final String MSG_PENDING_HELLO = "Hello Jim, you have x tasks pending.";
 
-	private int troll = 100;
+	private static final String VAR_TABLE_STRING_ID = "id";
+	private static final String VAR_TABLE_STRING_TASK = "task";
+	private static final String VAR_TABLE_STRING_SDATE = "sDate";
+	private static final String VAR_TABLE_STRING_EDATE = "eDate";
+	private static final String VAR_TABLE_STRING_PRIORITY = "priority";
+
+	@FXML private Text cmdMsg;
+	private static Text cmdMsgReference;
+	@FXML private Text pendingMsg;
+	private static Text pendingMsgReference;
+	@FXML private TableColumn<UITaskTimed, String> idTimed;
+	@FXML private TableColumn<UITaskTimed, String> taskTimed;
+	@FXML private TableColumn<UITaskTimed, String> sDate;
+	@FXML private TableColumn<UITaskTimed, String> eDate;
+	@FXML private TableColumn<UITaskFloat, String> idFloat;
+	@FXML private TableColumn<UITaskFloat, String> taskFloat;
+	@FXML private TableColumn<UITaskFloat, String> priority;
+	@FXML private TableView<UITaskTimed> tableTimed;
+	@FXML private TableView<UITaskFloat> tableFloat;
+	@FXML private TextField input;
+
+	//TODO remove this
+	private int debugTestingIndex = 100;
 
 	private static List<Task> _floatingTaskList;
 	private static List<Task> _nonFloatingTaskList;
@@ -60,52 +61,34 @@ public class UIController implements Initializable {
 	//private static Semaphore lock;
 	private static ArrayList<String[]> inputBuffer = new ArrayList<>();
 
-	final static ObservableList<UITask1> data = FXCollections.observableArrayList();
-	final static ObservableList<UITask2> data1 = FXCollections.observableArrayList();
+	final static ObservableList<UITaskTimed> dataTimed = FXCollections.observableArrayList();
+	final static ObservableList<UITaskFloat> dataFloat = FXCollections.observableArrayList();
 
-	public void enterPressed() {
-		//String in = input.getText().trim();
+	@Override
+	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-		synchronized (inputBuffer) {
-            String[] in = new String[UIFieldIndex.INPUT_BUFFSIZE];
-            // TODO: Convert to array
-            in[0] = input.getText().trim();
+		// Text fields
+		cmdMsgReference = cmdMsg;
+		cmdMsgReference.setText(MSG_CMD_WELCOME);
+		pendingMsgReference = pendingMsg;
+		pendingMsgReference.setText(MSG_PENDING_HELLO);
 
-			inputBuffer.add(in);
-            inputBuffer.notify();
-        }
+		// Table
+		idTimed.setCellValueFactory(  new PropertyValueFactory<UITaskTimed, String>(VAR_TABLE_STRING_ID));
+		taskTimed.setCellValueFactory(new PropertyValueFactory<UITaskTimed, String>(VAR_TABLE_STRING_TASK));
+		sDate.setCellValueFactory(    new PropertyValueFactory<UITaskTimed, String>(VAR_TABLE_STRING_SDATE));
+		eDate.setCellValueFactory(    new PropertyValueFactory<UITaskTimed, String>(VAR_TABLE_STRING_EDATE));
 
-		// Other classes will do the job.
-		clearInput();
-	}
+		idFloat.setCellValueFactory(  new PropertyValueFactory<UITaskFloat, String>(VAR_TABLE_STRING_ID));
+		taskFloat.setCellValueFactory(new PropertyValueFactory<UITaskFloat, String>(VAR_TABLE_STRING_TASK));
+		priority.setCellValueFactory( new PropertyValueFactory<UITaskFloat, String>(VAR_TABLE_STRING_PRIORITY));
 
-	public static String[] getInput() {
-		synchronized (inputBuffer) {
-            // wait for input from field
-            while (inputBuffer.isEmpty()) {
-            	try{
-            		inputBuffer.wait();
-            	} catch(InterruptedException e){ }
-            }
+		idTimed.setSortType(TableColumn.SortType.ASCENDING);
 
-            return inputBuffer.remove(0);
-        }
-	}
+		tableTimed.setItems(dataTimed);
+		tableFloat.setItems(dataFloat);
 
-	public void add() {
-		UITask1 t = new UITask1(troll--, "Buy Milk from Shop", 1442851200000L, 1443283140000L);
-		data.add(t);
-
-		UITask2 t1 = new UITask2(troll--, "Go Die in a fire", "N");
-		data1.add(t1);
-		table1.getSortOrder().add(id1);
-
-		clearInput();
-	}
-
-	public void delete(int id) {
-		data.remove(id);
-		clearInput();
+		tableTimed.getSortOrder().add(idTimed);
 	}
 
 	public static void createUI() {
@@ -123,8 +106,25 @@ public class UIController implements Initializable {
 		}
 	}
 
-	public void clearInput(){
-		input.clear();
+	public static String[] getInput() {
+		synchronized (inputBuffer) {
+            // wait for input from field
+            while (inputBuffer.isEmpty()) {
+            	try{
+            		inputBuffer.wait();
+            	} catch(InterruptedException e){ }
+            }
+
+            return inputBuffer.remove(0);
+        }
+	}
+
+	public static void setOutputMsg(String a){
+		try {
+			cmdMsgReference.setText(a);
+		} catch (NullPointerException e) {
+			return;
+		}
 	}
 
 	public static void seperateTaskList(List<Task> taskList){
@@ -154,59 +154,32 @@ public class UIController implements Initializable {
 	}
 
 	private static void genTable() {
-		data.clear();
-		data1.clear();
+		dataTimed.clear();
+		dataFloat.clear();
 
 		for (Task t : _nonFloatingTaskList) {
-			UITask1 ui1 = new UITask1(t.getId(), t.getName(), t.getStartTime(), t.getEndTime());
-			data.add(ui1);
+			UITaskTimed ui1 = new UITaskTimed(t.getId(), t.getName(), t.getStartTime(), t.getEndTime());
+			dataTimed.add(ui1);
 		}
 
 		for (Task t : _floatingTaskList) {
 			//TODO: RESOLVE PRIORITY
-			UITask2 ui2 = new UITask2(t.getId(), t.getName(), "N");
-			data1.add(ui2);
+			UITaskFloat ui2 = new UITaskFloat(t.getId(), t.getName(), "N");
+			dataFloat.add(ui2);
 		}
 	}
 
-	public static void setOutputMsg(String a){
-		try {
-			cmdMsgClone.setText(a);
-		} catch (NullPointerException e) {
-			return;
-		}
-	}
-
-	@Override
-	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-
-		cmdMsgClone = cmdMsg;
-		cmdMsgClone.setText("");
-
-		id1.setCellValueFactory(new PropertyValueFactory<UITask1, String>("id"));
-		task1.setCellValueFactory(new PropertyValueFactory<UITask1, String>("Task"));
-		sDate.setCellValueFactory(new PropertyValueFactory<UITask1, String>("sDate"));
-		eDate.setCellValueFactory(new PropertyValueFactory<UITask1, String>("eDate"));
-
-		id2.setCellValueFactory(new PropertyValueFactory<UITask2, String>("id"));
-		task2.setCellValueFactory(new PropertyValueFactory<UITask2, String>("Task"));
-		priority.setCellValueFactory(new PropertyValueFactory<UITask2, String>("priority"));
-
-		id1.setSortType(TableColumn.SortType.ASCENDING);
-
-		table1.setItems(data);
-		table2.setItems(data1);
-
-		table1.getSortOrder().add(id1);
+	public void clearInput(){
+		input.clear();
 	}
 
 	// To Implement Priority
-	public static class UITask2 {
+	public static class UITaskFloat {
 		private final SimpleIntegerProperty id;
 		private final SimpleStringProperty task;
 		private final SimpleStringProperty priority;
 
-		private UITask2(int id, String task, String priority) {
+		private UITaskFloat(int id, String task, String priority) {
 			this.id = new SimpleIntegerProperty(id);
 			this.task = new SimpleStringProperty(task);
 			this.priority = new SimpleStringProperty(priority);
@@ -225,14 +198,14 @@ public class UIController implements Initializable {
 		}
 	}
 
-	public static class UITask1 {
+	public static class UITaskTimed {
 		private final SimpleIntegerProperty id;
 		private final SimpleStringProperty task;
 		private final SimpleStringProperty sDate;
 		private final SimpleStringProperty eDate;
 		private final SimpleLongProperty eDateLong;
 
-		private UITask1(int id, String task, long sDate, long eDate) {
+		private UITaskTimed(int id, String task, long sDate, long eDate) {
 			this.id = new SimpleIntegerProperty(id);
 			this.task = new SimpleStringProperty(task);
 			this.sDate = new SimpleStringProperty(TimeUtil.getUIFormattedDate(sDate));
@@ -259,5 +232,39 @@ public class UIController implements Initializable {
 		public long getEDateLong() {
 			return eDateLong.get();
 		}
+	}
+
+	// Event methods
+	public void enterPressed() {
+		//String in = input.getText().trim();
+
+		synchronized (inputBuffer) {
+            String[] in = new String[UIFieldIndex.INPUT_BUFFSIZE];
+            // TODO: Convert to array
+            in[0] = input.getText().trim();
+
+			inputBuffer.add(in);
+            inputBuffer.notify();
+        }
+
+		// Other classes will do the job.
+		clearInput();
+	}
+
+	// Debugging code
+	public void add() {
+		UITaskTimed t = new UITaskTimed(debugTestingIndex--, "Buy Milk from Shop", 1442851200000L, 1443283140000L);
+		dataTimed.add(t);
+
+		UITaskFloat t1 = new UITaskFloat(debugTestingIndex--, "Go Die in a fire", "N");
+		dataFloat.add(t1);
+		tableTimed.getSortOrder().add(idTimed);
+
+		clearInput();
+	}
+
+	public void delete(int id) {
+		dataTimed.remove(id);
+		clearInput();
 	}
 }
