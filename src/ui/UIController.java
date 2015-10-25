@@ -142,7 +142,7 @@ public class UIController implements Initializable {
 		//Remaining tasks are all non-floating
 		_nonFloatingTaskList = taskList;
 
-		genTable();
+		generateTable();
 	}
 
 	private static boolean isFloating(Task task){
@@ -153,7 +153,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-	private static void genTable() {
+	private static void generateTable() {
 		dataTimed.clear();
 		dataFloat.clear();
 
@@ -243,12 +243,31 @@ public class UIController implements Initializable {
             // TODO: Convert to array
             in[0] = input.getText().trim();
 
+            uiHotFix(in); //TODO Re-implement this
+
 			inputBuffer.add(in);
             inputBuffer.notify();
         }
 
 		// Other classes will do the job.
 		clearInput();
+	}
+
+	// Debugging codes
+	private void uiHotFix(String[] in) {
+
+		String emptyStr = "";
+		String spaceStr = " ";
+		String splitRegex = "\\s+";
+
+		for (int i = 1; i < in.length; i++) {
+        	in[i] = emptyStr;
+        }
+        if (in[0].contains(spaceStr)) {
+        	String[] splited = in[0].split(splitRegex, 2);
+            in[0] = splited[0];
+            in[1] = splited[1];
+        }
 	}
 
 	// Debugging code
