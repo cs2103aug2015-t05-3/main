@@ -28,7 +28,7 @@ public class UIController implements Initializable {
 	 */
 
 	private static final String MSG_CMD_WELCOME = "Welcome! Loading your stuffs";
-	private static final String MSG_PENDING_HELLO = "Hello Jim, you have x tasks pending.";
+	private static final String MSG_PENDING_HELLO = "Hello Jim,";
 
 	private static final String VAR_TABLE_STRING_ID = "id";
 	private static final String VAR_TABLE_STRING_TASK = "task";
@@ -89,6 +89,10 @@ public class UIController implements Initializable {
 		tableFloat.setItems(dataFloat);
 
 		tableTimed.getSortOrder().add(idTimed);
+
+		// Focus Settings
+		tableTimed.setFocusTraversable(false);
+		tableFloat.setFocusTraversable(false);
 	}
 
 	public static void createUI() {
