@@ -14,33 +14,33 @@
             <TextField fx:id="input" onAction="#enterPressed" prefHeight="39.0" prefWidth="1314.0" promptText="Enter command here" />
          </children>
       </HBox>
-      <TableView fx:id="table2" layoutX="497.0" layoutY="62.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="264.0" prefHeight="458.0" prefWidth="298.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="21.0">
+      <TableView fx:id="tableFloat" layoutX="497.0" layoutY="62.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="264.0" prefHeight="458.0" prefWidth="298.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="21.0">
          <columns>
-            <TableColumn fx:id="id2" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
-            <TableColumn fx:id="task2" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
+            <TableColumn fx:id="idFloat" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
+            <TableColumn fx:id="taskFloat" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
             <TableColumn fx:id="priority" minWidth="35.0" prefWidth="35.0" resizable="false" text="P" />
          </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Text fx:id="cmdMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="RED" layoutX="13.0" layoutY="529.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is where the output message is." textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999949932098" AnchorPane.bottomAnchor="55.0">
+      <Text fx:id="cmdMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="RED" layoutX="13.0" layoutY="529.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subtitle" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999949932098" AnchorPane.bottomAnchor="55.0">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
       </Text>
-      <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" layoutX="13.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello Jim, you have x tasks pending." textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999990165234" AnchorPane.topAnchor="8.0">
+      <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" layoutX="13.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Heading" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999990165234" AnchorPane.topAnchor="8.0">
          <font>
             <Font name="Calibri Bold" size="18.0" />
          </font>
       </Text>
       <Line endX="816.0" endY="10.0" layoutY="25.0" startY="10.0" />
-      <TableView fx:id="table1" layoutX="18.0" layoutY="77.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="465.0" prefHeight="458.0" prefWidth="465.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="18.0">
+      <TableView fx:id="tableTimed" layoutX="18.0" layoutY="77.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="465.0" prefHeight="458.0" prefWidth="465.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="18.0">
         <columns>
-          <TableColumn fx:id="id1" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
-          <TableColumn fx:id="task1" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
-            <TableColumn fx:id="sDate" minWidth="101.0" prefWidth="101.0" resizable="false" text="sDate" />
-            <TableColumn fx:id="eDate" minWidth="101.0" prefWidth="101.0" resizable="false" text="eDate" />
+          <TableColumn fx:id="idTimed" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
+          <TableColumn fx:id="taskTimed" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
+            <TableColumn fx:id="sDate" minWidth="101.0" prefWidth="101.0" resizable="false" text="Start" />
+            <TableColumn fx:id="eDate" minWidth="101.0" prefWidth="101.0" resizable="false" text="End" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
