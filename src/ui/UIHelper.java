@@ -30,6 +30,11 @@ public class UIHelper {
 
 	public static void createUI() {
 		UIController.createUI();
+		try {
+		    Thread.sleep(1500);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
 	}
 
 	/**
