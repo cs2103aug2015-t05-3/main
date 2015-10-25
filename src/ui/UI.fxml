@@ -12,10 +12,6 @@
       <HBox alignment="CENTER_LEFT" layoutX="19.0" layoutY="540.0" prefHeight="43.0" prefWidth="780.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0">
          <children>
             <TextField fx:id="input" onAction="#enterPressed" prefHeight="39.0" prefWidth="1314.0" promptText="Enter command here" />
-            <TextField fx:id="input2" onAction="#enterPressed" minWidth="4.0" prefHeight="39.0" promptText="task name / id / search term" visible="false" />
-            <TextField fx:id="input3" onAction="#enterPressed" minWidth="4.0" prefHeight="39.0" promptText="deadline" visible="false" />
-            <TextField fx:id="input4" onAction="#enterPressed" minWidth="4.0" prefHeight="39.0" promptText="start time" visible="false" />
-            <TextField fx:id="input5" onAction="#enterPressed" minWidth="4.0" prefHeight="39.0" promptText="priority" visible="false" />
          </children>
       </HBox>
       <TableView fx:id="table2" layoutX="497.0" layoutY="62.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="264.0" prefHeight="458.0" prefWidth="298.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="21.0">
