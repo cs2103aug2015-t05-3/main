@@ -1,6 +1,6 @@
 /**
  * The add command
- * 
+ *
  * @author Yan Chan Min Oo
  */
 package logic.command;
@@ -125,18 +125,10 @@ public class CmdAdd extends Command {
 	 */
 	private PRIORITY_TYPE getPriorityValue(String priority) {
 		switch (priority) {
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_VERYHIGH:
-			return PRIORITY_TYPE.VERY_HIGH;
 		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH:
 			return PRIORITY_TYPE.HIGH;
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_ABOVENORM:
-			return PRIORITY_TYPE.ABOVE_NORMAL;
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_BELOWNORM:
-			return PRIORITY_TYPE.BELOW_NORMAL;
 		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_LOW:
 			return PRIORITY_TYPE.LOW;
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_VERYLOW:
-			return PRIORITY_TYPE.VERY_LOW;
 		default:
 			return PRIORITY_TYPE.NORMAL;
 		}

@@ -52,7 +52,7 @@ public class JUnitTaskTest {
 			new Task(taskName, description, startTime, endTime, Task.FLAG_TYPE.DONE, priority),
 			new Task(taskName, description, startTime, startTime, flag, priority),
 			new Task(taskNameDiff, description, startTime, endTime, flag, priority),
-			new Task(taskName, description, startTime, endTime, flag, Task.PRIORITY_TYPE.VERY_HIGH)
+			new Task(taskName, description, startTime, endTime, flag, Task.PRIORITY_TYPE.HIGH)
 			};
 
 	@Test

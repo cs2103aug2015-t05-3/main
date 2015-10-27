@@ -16,12 +16,14 @@ public class UIHelper {
 	// private static Logger log = Logger.getLogger("log");
 	// private static UI user_interface;
 
+	private static UIController uiController;
+
 	/**
 	 * Returns a string of the user input. Triggered on enter press.
 	 */
 
 	public static String getUserInput() {
-		return UIController.getInput();
+		return uiController.getInput();
 	}
 
 	public static void loadTask() {
@@ -30,11 +32,7 @@ public class UIHelper {
 
 	public static void createUI() {
 		UIController.createUI();
-		try {
-		    Thread.sleep(1500);
-		} catch(InterruptedException ex) {
-		    Thread.currentThread().interrupt();
-		}
+		uiController = UI.getController();
 	}
 
 	/**
@@ -52,12 +50,12 @@ public class UIHelper {
 
 	// give the entire list for output generation
 	public static void setTableOutput(List<Task> completeList) {
-		UIController.seperateTaskList(completeList);
+		uiController.seperateTaskList(completeList);
 	}
 
 	// set UI's output msg
 	public static void setOutputMsg(String s) {
-		UIController.setOutputMsg(s);
+		uiController.setOutputMsg(s);
 	}
 
 	public static void setUserInput(String in) {

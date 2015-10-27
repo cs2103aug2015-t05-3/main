@@ -44,7 +44,7 @@ public class Task implements Comparable<Task> {
 	 * Field value constant for priority attribute.
 	 */
 	public enum PRIORITY_TYPE {
-		VERY_HIGH(0), HIGH(1), ABOVE_NORMAL(2), NORMAL(3), BELOW_NORMAL(4), LOW(5), VERY_LOW(6);
+		HIGH(0), NORMAL(1), LOW(2);
 
 		private final int value;
 
