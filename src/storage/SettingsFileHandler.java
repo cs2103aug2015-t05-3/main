@@ -22,10 +22,10 @@ public class SettingsFileHandler {
 	public boolean init() {
 		_settingsFile = new File (_fileName);
 		
-		if (!_settingsFile.exists()) {
-			return false;
-		} else {
+		if (_settingsFile.exists()) {
 			return true;
+		} else {
+			return false;
 		}
 	}
 	
@@ -33,7 +33,7 @@ public class SettingsFileHandler {
 	 * Returns true if settings file is created successfully.
 	 * Generates error and returns false otherwise.
 	 */
-	public boolean createSettingsFile(String taskFileLocation) {
+	public boolean alterSettingsFile(String taskFileLocation) {
 		try {
 			PrintWriter pw = new PrintWriter(_fileName);
 			_taskFileLocation = taskFileLocation;
@@ -82,4 +82,16 @@ public class SettingsFileHandler {
 			return _taskFileLocation;
 		}
 	}
+	/*
+	public static void main (String[] args) {
+		SettingsFileHandler lol = new SettingsFileHandler();
+		boolean exists = lol.init();
+		System.out.println(exists);
+		if (!exists) {
+			lol.alterSettingsFile("D:\\Users\\Zander\\git\\main\\tasks11111.xml");
+			System.out.println(lol.getTaskFileLocation());
+			
+		}
+	}
+	*/
 }
