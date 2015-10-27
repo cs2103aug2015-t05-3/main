@@ -14,7 +14,7 @@
          <children>
             <VBox alignment="CENTER" prefHeight="40.0" prefWidth="817.0">
                <children>
-                  <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Heading" textOrigin="CENTER" wrappingWidth="779.9999990165234">
+                  <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Heading Title" textOrigin="CENTER" wrappingWidth="779.9999990165234">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -58,21 +58,24 @@
                   </TableView>
                </children>
                <VBox.margin>
-                  <Insets bottom="20.0" left="18.0" right="18.0" />
+                  <Insets bottom="5.0" left="18.0" right="18.0" />
                </VBox.margin>
             </HBox>
             <VBox alignment="CENTER" prefHeight="0.0" prefWidth="780.0" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="780.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <TextField fx:id="input" onAction="#enterPressed" prefHeight="50.0" prefWidth="1314.0" promptText="Enter command here" />
-                     </children>
-                  </HBox>
-                  <Text fx:id="cmdMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="#575757" strokeType="OUTSIDE" strokeWidth="0.0" text="Subtitle" textOrigin="CENTER" wrappingWidth="779.9999949932098" VBox.vgrow="ALWAYS">
+                  <Text fx:id="cmdMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Subtitle" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999949932098" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets left="5.0" top="10.0" />
                      </VBox.margin>
                   </Text>
+                  <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="780.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <TextField fx:id="input" onAction="#enterPressed" prefHeight="50.0" prefWidth="1314.0" promptText="Enter command here">
+                           <HBox.margin>
+                              <Insets bottom="10.0" />
+                           </HBox.margin></TextField>
+                     </children>
+                  </HBox>
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" left="18.0" right="18.0" />
