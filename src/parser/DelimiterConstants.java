@@ -6,16 +6,18 @@
 package parser;
 
 public class DelimiterConstants {
-		public static final String INPUT_TASK_DELIMITER = "-";
+		public static final String DELIMITER_TOKEN = "-";
 
-		public static final String INPUT_TASK_SPECIFIER_STARTTIME = INPUT_TASK_DELIMITER + "sd";
-		public static final String INPUT_TASK_SPECIFIER_ENDTIME = INPUT_TASK_DELIMITER + "ed";
-		public static final String INPUT_TASK_SPECIFIER_PRIORITY = INPUT_TASK_DELIMITER + "p";
+		public static final String TASK_SPECIFIER_STARTTIME = DELIMITER_TOKEN + "sd";
+		public static final String TASK_SPECIFIER_ENDTIME = DELIMITER_TOKEN + "ed";
+		public static final String TASK_SPECIFIER_PRIORITY = DELIMITER_TOKEN + "p";
 
-		public static final String INPUT_TASK_FILTER_ALL = INPUT_TASK_DELIMITER + "all";
-		public static final String INPUT_TASK_FILTER_DONE = INPUT_TASK_DELIMITER + "done";
-		public static final String INPUT_TASK_FILTER_FLOATING = INPUT_TASK_DELIMITER + "floating";
+		public static final String TASK_FILTER_ALL = DELIMITER_TOKEN + "all";
+		public static final String TASK_FILTER_DONE = DELIMITER_TOKEN + "done";
+		public static final String TASK_FILTER_FLOATING = DELIMITER_TOKEN + "floating";
 
-		public static final String INPUT_TASK_SETTING_NEWFILE = INPUT_TASK_DELIMITER + "nf";
-		public static final String INPUT_TASK_SETTING_OPENFILE = INPUT_TASK_DELIMITER + "of";
+		public static final String TASK_SETTING_NEWFILE = DELIMITER_TOKEN + "nf";
+		public static final String TASK_SETTING_OPENFILE = DELIMITER_TOKEN + "of";
+		
+		public static final String TASK_MARK_UNMARK = DELIMITER_TOKEN + "um";
 }

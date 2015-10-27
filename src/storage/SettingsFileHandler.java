@@ -13,9 +13,17 @@ public class SettingsFileHandler {
 	private String _fileName = "settings.cfg";
 	private String _taskFileLocation;
 	private File _settingsFile;
+	private static SettingsFileHandler s;
 	
-	public SettingsFileHandler() {
+	private SettingsFileHandler() {
 		
+	}
+	
+	public static SettingsFileHandler getInstance() {
+		if(s == null){
+			s = new SettingsFileHandler();
+		}
+		return s;
 	}
 	
 	/*
@@ -89,7 +97,7 @@ public class SettingsFileHandler {
 	 * Returns task file location if file is present.
 	 * Returns null if absent.
 	 */
-	public String getTaskFileLocation() {
+	public String getTaskFile() {
 		File taskFile = new File (_taskFileLocation);
 		
 		if (!taskFile.exists()) {

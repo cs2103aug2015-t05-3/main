@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import logic.command.*;
 import ui.UIHelper;
 import parser.LanguageProcessor;
+import storage.SettingsFileHandler;
 import taskCollections.Task;
 
 public class TaskBuddy {
@@ -22,18 +23,20 @@ public class TaskBuddy {
 	 * Constants 
 	 */
 	private static final String cmdFileName = "commands.xml";
-	private static final String taskFileName = "tasks.xml";
 	private static final String logFileName = "log.log";
+	private static final String FILE_NAME_SETTING = "settings.cfg";
 	private static final String MSG_INVALIDCMD = "Please enter a valid command. For more info, enter help";
+	private static final String MSG_TASKFILE_NOTFOUND = "Please enter the task file location";
 	
 	/*
 	 * Global variables
 	 */
 	private static Logger log;
 	private static LanguageProcessor lp;
+	private static String taskFileName;
+	private static SettingsFileHandler settings;
 
 	public static void main(String[] args) {
-		// Get task file location
 		
 		// Initialise all the variables
 		init();
@@ -47,19 +50,35 @@ public class TaskBuddy {
 	 */
 	private static void init(){
 		initLog();
+		UIHelper.createUI();
+		initTaskFile();
 		lp = new LanguageProcessor();
 		if(!lp.init(cmdFileName)){
 			log.severe("TaskBuddy: Cmd list init failed");
 		}
 		Command.init(taskFileName);
-		UIHelper.createUI();
 		initTasks();
 	}
 	
 	private static void initTasks(){
 		// Run list: TODO change implementation
+		
 		Command list = new CmdList();
 		resolveCmdAction(list.execute(), list);
+	}
+	
+	private static void initTaskFile(){
+		settings = SettingsFileHandler.getInstance();
+		if(settings.init()){
+			taskFileName = settings.getTaskFile();
+		} else {
+			do {
+				UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);
+				taskFileName = UIHelper.getUserInput();
+				settings.alterSettingsFile(taskFileName);
+				settings.createTaskFile();
+			} while((taskFileName = settings.getTaskFile()) == null);
+		}
 	}
 	
 	private static void initLog(){
