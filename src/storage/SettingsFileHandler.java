@@ -97,7 +97,7 @@ public class SettingsFileHandler {
 	 * Returns task file location if file is present.
 	 * Returns null if absent.
 	 */
-	public String getTaskFileLocation() {
+	public String getTaskFile() {
 		File taskFile = new File (_taskFileLocation);
 		
 		if (!taskFile.exists()) {
