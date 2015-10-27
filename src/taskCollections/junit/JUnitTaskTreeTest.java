@@ -63,7 +63,7 @@ public class JUnitTaskTreeTest {
 			Task.PRIORITY_TYPE.NORMAL,
 			Task.PRIORITY_TYPE.HIGH,
 			Task.PRIORITY_TYPE.NORMAL,
-			Task.PRIORITY_TYPE.VERY_HIGH,
+			Task.PRIORITY_TYPE.HIGH,
 			Task.PRIORITY_TYPE.NORMAL };
 
 	/**
@@ -299,7 +299,7 @@ public class JUnitTaskTreeTest {
 		assertEquals(_taskTree.size(), listSize -= 1);
 
 		// Remove non-existing element
-		Task extraTask = new Task("Name", "Description", 0, 0, Task.FLAG_TYPE.NULL, Task.PRIORITY_TYPE.ABOVE_NORMAL);
+		Task extraTask = new Task("Name", "Description", 0, 0, Task.FLAG_TYPE.NULL, Task.PRIORITY_TYPE.HIGH);
 		assertFalse(_taskTree.remove(extraTask));
 		assertEquals(_taskTree.size(), listSize);
 
