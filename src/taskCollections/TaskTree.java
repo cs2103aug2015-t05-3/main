@@ -118,17 +118,20 @@ public class TaskTree {
 			throw new NullPointerException();
 		}
 
-		boolean isAdded = true;
+		boolean isAddedToData = true;
+		boolean isAddedToFile = true;
+
 		for (TreeSet<Task> tree : _taskTrees) {
-			isAdded &= tree.add(task);
-			assert isAdded;
+			isAddedToData &= tree.add(task);
+			assert isAddedToData;
 		}
 
-		if (isAdded) {
+		if (isAddedToData) {
 			increaseTaskListSize();
-			pushAddToStorage(task);
+			isAddedToFile &= pushAddToStorage(task);
 		}
-		return isAdded;
+
+		return isAddedToData && isAddedToFile;
 	}
 
 	/**
@@ -145,16 +148,18 @@ public class TaskTree {
 			throw new NullPointerException();
 		}
 
-		boolean isRemoved = true;
+		boolean isRemovedFromData = true;
+		boolean isRemovedFromFile = true;
+
 		for (TreeSet<Task> tree : _taskTrees) {
-			isRemoved &= tree.remove(task);
-			assert isRemoved;
+			isRemovedFromData &= tree.remove(task);
+			assert isRemovedFromData;
 		}
-		if (isRemoved) {
+		if (isRemovedFromData) {
 			decreaseTaskListSize();
-			pushRemoveToStorage(task);
+			isRemovedFromFile &= pushRemoveToStorage(task);
 		}
-		return isRemoved;
+		return isRemovedFromData && isRemovedFromFile;
 	}
 
 	// TaskTree Task operation: Update
@@ -656,8 +661,12 @@ public class TaskTree {
 	 *
 	 * @throws Exception
 	 */
-	private void pushAddToStorage(Task task) {
-		_fileHandler.add(task);
+	private boolean pushAddToStorage(Task task) {
+		boolean isPushSuccessful = true;
+
+		isPushSuccessful &= _fileHandler.add(task);
+
+		return isPushSuccessful;
 	}
 
 	/**
@@ -665,9 +674,13 @@ public class TaskTree {
 	 *
 	 * @throws Exception
 	 */
-	private void pushRemoveToStorage(Task task) {
+	private boolean pushRemoveToStorage(Task task) {
 		int taskId = task.getId();
-		_fileHandler.delete(taskId);
+		boolean isPullSuccessful = true;
+
+		isPullSuccessful &= _fileHandler.delete(taskId);
+
+		return isPullSuccessful;
 	}
 
 	/**
@@ -675,16 +688,19 @@ public class TaskTree {
 	 *
 	 * @throws Exception
 	 */
-	private void pushUpdateToStorage(Task oldTask, Task newTask) {
+	private boolean pushUpdateToStorage(Task oldTask, Task newTask) {
 		int oldId = oldTask.getId();
 		int newId = newTask.getId();
+		boolean isPushSuccessful = true;
 
 		if (oldId == newId) {
-			_fileHandler.update(newTask);
+			isPushSuccessful &= _fileHandler.update(newTask);
 		} else {
-			_fileHandler.delete(oldId);
-			_fileHandler.add(newTask);
+			isPushSuccessful &= _fileHandler.delete(oldId);
+			isPushSuccessful &= _fileHandler.add(newTask);
 		}
+
+		return isPushSuccessful;
 	}
 
 	/**
