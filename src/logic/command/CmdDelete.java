@@ -47,7 +47,7 @@ public class CmdDelete extends Command {
 		if(_task == null){
 			String outputMsg = MSG_TASKIDNOTFOUND;
 			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
+			return new CommandAction(outputMsg, isUndoable, null);
 		}
 		
 		String outputMsg = deleteTask(_task);
