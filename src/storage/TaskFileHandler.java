@@ -75,7 +75,7 @@ public class TaskFileHandler {
 	 * Adds new task to XML file
 	 * @param t
 	 */
-	public void add(Task t) {
+	public boolean add(Task t) {
 		int id = t.getId();
 		String[] headers = { "title", "startTime", "endTime", "flag", "priority" };
 		//Task t = new Task("Add add method", 1447252200000L, 1452868200000L, FLAG_TYPE.NULL, PRIORITY_TYPE.HIGH);
@@ -89,7 +89,7 @@ public class TaskFileHandler {
 			Element e = addElement(headers[i], t);
 			newTask.appendChild(e);
 		}
-		genXML();
+		return genXML();
 	}
 	
 	/**
@@ -97,10 +97,10 @@ public class TaskFileHandler {
 	 * @param id
 	 * @throws Exception
 	 */
-	public void delete(int id) {
+	public boolean delete(int id) {
 		Element e = locateID(id);
 		_root.removeChild(e);
-		genXML();
+		return genXML();
 	}
 	
 	/**
@@ -108,7 +108,7 @@ public class TaskFileHandler {
 	 * @param t
 	 * @throws Exception
 	 */
-	public void update (Task t) {
+	public boolean update(Task t) {
 		Element e = locateID(t.getId());
 		
 		NodeList nl = e.getChildNodes();
@@ -132,7 +132,7 @@ public class TaskFileHandler {
 					break;
 			}
 		}
-		genXML();
+		return genXML();
 	}
 	private Element locateID(int id) {
 		
@@ -266,7 +266,7 @@ public class TaskFileHandler {
 		}
 	}
 
-	private void printFile(Document document, int indent) {
+	private boolean printFile(Document document, int indent) {
 
 		removeEmptyText(document.getDocumentElement());
 
@@ -279,17 +279,20 @@ public class TaskFileHandler {
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + indent);
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.transform(source, result);			
+			transformer.transform(source, result);
+			return true; //refactor this
 		} catch (TransformerConfigurationException e) {
 			System.err.println("Transformer Configuration Exeception.");
+			return false;
 		} catch (TransformerException e) {
 			System.err.println("Transformer Exeception.");
+			return false;
 		}
 
 	}
 
-	private void genXML() {
-		printFile(_doc, 4);
+	private boolean genXML() {
+		return printFile(_doc, 4);
 	}
 
 	private Element addElement(String s, Task t) {
