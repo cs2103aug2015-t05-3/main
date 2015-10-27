@@ -6,14 +6,16 @@
 package parser;
 
 public class DelimeterConstants {
-		public static final String INPUT_TASK_SPECIFIER_STARTTIME = "-sDate";
-		public static final String INPUT_TASK_SPECIFIER_ENDTIME = "-eDate";
-		public static final String INPUT_TASK_SPECIFIER_PRIORITY = "-p";
+		public static final String INPUT_TASK_DELIMTER = "-";
 
-		public static final String INPUT_TASK_FILTER_ALL = "-all";
-		public static final String INPUT_TASK_FILTER_DONE = "-done";
-		public static final String INPUT_TASK_FILTER_FLOATING = "-floating";
+		public static final String INPUT_TASK_SPECIFIER_STARTTIME = INPUT_TASK_DELIMTER + "sDate";
+		public static final String INPUT_TASK_SPECIFIER_ENDTIME = INPUT_TASK_DELIMTER + "eDate";
+		public static final String INPUT_TASK_SPECIFIER_PRIORITY = INPUT_TASK_DELIMTER + "p";
 
-		public static final String INPUT_TASK_SETTING_NEWFILE = "-nf";
-		public static final String INPUT_TASK_SETTING_OPENFILE = "-of";
+		public static final String INPUT_TASK_FILTER_ALL = INPUT_TASK_DELIMTER + "all";
+		public static final String INPUT_TASK_FILTER_DONE = INPUT_TASK_DELIMTER + "done";
+		public static final String INPUT_TASK_FILTER_FLOATING = INPUT_TASK_DELIMTER + "floating";
+
+		public static final String INPUT_TASK_SETTING_NEWFILE = INPUT_TASK_DELIMTER + "nf";
+		public static final String INPUT_TASK_SETTING_OPENFILE = INPUT_TASK_DELIMTER + "of";
 }
