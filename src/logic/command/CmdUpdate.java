@@ -4,7 +4,8 @@ import java.util.List;
 
 import constants.CmdParameters;
 import taskCollections.Task;
-import ui.UIHelper;
+import taskCollections.Task.FLAG_TYPE;
+import taskCollections.Task.PRIORITY_TYPE;
 
 public class CmdUpdate extends Command {
 
@@ -15,10 +16,12 @@ public class CmdUpdate extends Command {
 	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
 	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
-	private static final String MSG_TASKUPDATED = "Updated : \"%1$s\" to \"%2$s\"";
+	//private static final String MSG_TASKUPDATED = "Updated : \"%1$s\" to \"%2$s\"";
 	private static final String MSG_ISNTANCEFOUND = "[%1$s] instances of \"%2$s\" found";
 	private static final String MSG_TASKNOTUPDATED = "Empty String. Task not updated";
 	private static final String MSG_TASKNOCHANGE = "No changes was made";
+	private static final String MSG_TASKUPDATED = "Updated ID: \"%1$s\"";
+	private static final String MSG_INVALIDTIME = "Invalid start/end time given";
 	
 	/*
 	 * Variables for internal use
@@ -26,14 +29,18 @@ public class CmdUpdate extends Command {
 	private Task _task;
 	private String _taskName;
 	private int _taskID;
-	private boolean _isID;
+	
+	private String _newTaskName;
+	private long _newStartTime;
+	private long _newEndTime;
+	private PRIORITY_TYPE _newPriority; 
 	
 	//variables for undo
 	private String _prevTaskName;
-	//To be included in later version
-	private long prevTaskStartTime;
-	private long prevTaskEndTime;
-
+	private long _prevStartTime;
+	private long _prevEndTime;
+	private PRIORITY_TYPE _prevPriority; 
+	
 	public CmdUpdate() {
 
 	}
@@ -45,29 +52,36 @@ public class CmdUpdate extends Command {
 	@Override
 	public CommandAction execute() {
 		
+		String outputMsg;
+		boolean isUndoable;
+		
 		//Try undo 1st
 		_task = getTask();
 		if(isUndo()){
-			String outputMsg = updateTask(_task, _prevTaskName);
-			boolean isUndoable = true;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
+			outputMsg = updateTask(_task, _prevTaskName, _prevStartTime, _prevEndTime, _prevPriority);
+			isUndoable = true;
+			return new CommandAction(outputMsg, isUndoable,  _taskTree.searchFlag(FLAG_TYPE.NULL));
 		}
 		
-		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);	
-		if (parameter == null || parameter.equals("")) {
-			return new CommandAction(MSG_TASKUNSPECIFIED, false, _taskTree.getList());
+		String paramTaskID = getRequiredFields()[0];
+		_task = proccessTaskID(paramTaskID);
+		if(_task == null){
+			outputMsg = MSG_TASKIDNOTFOUND;
+			isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable, null);
 		}
 		
-		CmdSearch search = new CmdSearch();
-		_isID = search.isInteger(parameter);
-		if(_isID){
-			_taskID = Integer.parseInt(parameter);
-		} else {
-			_taskName = parameter;
+		String[] paramOptionalFields = getOptionalFields();
+		proccessOptionalFields(paramOptionalFields);
+		if(isInvalidTime(_newStartTime, _newEndTime)){
+			outputMsg = MSG_INVALIDTIME;
+			isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable, null);
 		}
-		List<Task> taskList = search.searchTask(_isID, _taskID, _taskName);
-		
-		return processList(taskList);
+			
+		outputMsg = updateTask(_task, _newTaskName, _newStartTime, _newEndTime, _newPriority);
+		isUndoable = true;
+		return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
 	}
 
 	@Override
@@ -87,12 +101,13 @@ public class CmdUpdate extends Command {
 
 	@Override
 	public String[] getRequiredFields() {
-		return new String[] { CmdParameters.PARAM_NAME_CMD_SEARCH };
+		return new String[] { CmdParameters.PARAM_NAME_TASK_ID };
 	}
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME};
+		return new String[] { CmdParameters.PARAM_NAME_TASK_NAME, CmdParameters.PARAM_NAME_TASK_STARTTIME,
+				CmdParameters.PARAM_NAME_TASK_ENDTIME, CmdParameters.PARAM_NAME_TASK_PRIORITY };
 	}
 	
 	private boolean isUndo(){
@@ -103,65 +118,84 @@ public class CmdUpdate extends Command {
 		}
 	}
 	
-	private String updateTask(Task task, String newTaskName){
+	private Task proccessTaskID(String paramTaskID){
+		int taskID = Integer.parseInt(paramTaskID);
+		_taskID = taskID;
+		return _taskTree.getTask(taskID);
+	}
+	
+	private void proccessOptionalFields(String[] paramOptionalFields){
+		
+		if(paramOptionalFields[0] != null){
+			_newTaskName = paramOptionalFields[0];
+		}else{
+			_newTaskName = _task.getName();
+		}
+		
+		if(paramOptionalFields[1] != null){
+			_newStartTime = Long.parseLong(paramOptionalFields[1]);
+		}else{
+			_newStartTime = _task.getStartTime();
+		}
+		
+		if(paramOptionalFields[2] != null){
+			_newEndTime = Long.parseLong(paramOptionalFields[2]);
+		}else{
+			_newEndTime = _task.getEndTime();
+		}
+		
+		if(paramOptionalFields[3] != null){
+			_newPriority = getPriorityType(paramOptionalFields[3]);
+		}else{
+			_newPriority = _task.getPriority();
+		}
+		
+	}
+	
+	private PRIORITY_TYPE getPriorityType(String priorityParam){
+		
+		PRIORITY_TYPE priorityType;
+		
+		switch(priorityParam){
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH:
+				priorityType = PRIORITY_TYPE.HIGH; 
+				break;
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_NORM:
+				priorityType = PRIORITY_TYPE.NORMAL; 
+				break;
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_LOW:
+				priorityType = PRIORITY_TYPE.LOW; 
+				break;
+			default:
+				priorityType = PRIORITY_TYPE.NORMAL; 
+				break;
+		}
+		
+		return priorityType;
+	}
+	
+	private boolean isInvalidTime(long newStartTime, long newEndTime){
+		
+		if((newEndTime-newStartTime) > 0){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private String updateTask(Task task, String newTaskName, long newStartTime, long newEndTime, PRIORITY_TYPE newPriority){
+		//Set prev task details
 		_prevTaskName = task.getName();
+		_prevStartTime = task.getStartTime();
+		_prevEndTime = task.getEndTime();
+		_prevPriority = task.getPriority();
+		
+		//Update
 		_taskTree.updateName(task, newTaskName);
-		return String.format(MSG_TASKUPDATED, _prevTaskName, task.getName());
-	}
-	
-	private CommandAction processList(List<Task> taskList){
-		
-		//Case 1: List is empty (nothing found)
-		if(taskList.isEmpty()){
-			String outputMsg = "";
-			if(_isID){
-				outputMsg = String.format(MSG_TASKIDNOTFOUND, _taskID);
-			}else{
-				outputMsg = String.format(MSG_TASKNAMENOTFOUND, _taskName);
-			}
-			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
-		}
-		
-		//Case 2: List.size > 1 (more than 1 instance found)
-		if(taskList.size() > 1){
-			String outputMsg = String.format(MSG_ISNTANCEFOUND, taskList.size(), _taskName);
-			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, taskList);
-		}
-		
-		//Case 3: List.size == 1 (task to be updated found)
-		_task = taskList.get(0);
-		
-		String newTaskName = getUserInput(_task.getName());
-		
-		//Empty taskName
-		if(newTaskName == null || newTaskName.equals("")){
-			String outputMsg = MSG_TASKNOTUPDATED;
-			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
-		}
-		
-		//Same taskName
-		if(newTaskName.equals(_task.getName())){
-			String outputMsg = MSG_TASKNOCHANGE;
-			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
-		}
-		
-		String outputMsg = updateTask(_task, newTaskName);
-		boolean isUndoable = true;
-		return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
-		
-	}
-	
-	private String getUserInput(String currTaskName){
-		String newTaskName = "";
-		
-		UIHelper.setUserInput(currTaskName);
-		//newTaskName = UIHelper.getUserInput().trim();
-		
-		return newTaskName;
+		_taskTree.updateStartTime(task, newStartTime);
+		_taskTree.updateEndTime(task, newEndTime);
+		_taskTree.updatePriority(task, newPriority);
+		return String.format(MSG_TASKUPDATED, _taskID);
 	}
 
 }
