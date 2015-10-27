@@ -1,10 +1,7 @@
 package storage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -33,6 +30,9 @@ import util.TimeUtil;
 
 public class TaskFileHandler {
 
+	private final String TAG_TASK = "task";
+	private final String TAG_ID = "id";
+	
 	private ArrayList<Task> _tasks;
 	private Document _doc;
 	private Element _root;
@@ -80,8 +80,8 @@ public class TaskFileHandler {
 		String[] headers = { "title", "startTime", "endTime", "flag", "priority" };
 		//Task t = new Task("Add add method", 1447252200000L, 1452868200000L, FLAG_TYPE.NULL, PRIORITY_TYPE.HIGH);
 	
-		Element newTask = _doc.createElement("task");
-		newTask.setAttribute("id", "" + id);
+		Element newTask = _doc.createElement(TAG_TASK);
+		newTask.setAttribute(TAG_ID, String.valueOf(id));
 	
 		_root.appendChild(newTask);
 	
@@ -116,19 +116,24 @@ public class TaskFileHandler {
 		for (int i = 0; i < nl.getLength(); i++) {
 			switch (i) {
 				case (0):
-					nl.item(i).setTextContent(t.getName());
+					String taskName = t.getName();
+					nl.item(i).setTextContent(taskName);
 					break;
 				case (1):
-					nl.item(i).setTextContent(TimeUtil.getFormattedDate(t.getStartTime()));
+					String startTime = TimeUtil.getFormattedDate(t.getStartTime());
+					nl.item(i).setTextContent(startTime);
 					break;
 				case (2):
-					nl.item(i).setTextContent(TimeUtil.getFormattedDate(t.getEndTime()));
+					String endTime = TimeUtil.getFormattedDate(t.getEndTime());
+					nl.item(i).setTextContent(endTime);
 					break;
 				case (3):
-					nl.item(i).setTextContent(String.valueOf(t.getFlag()));
+					String markStatus = t.getFlag().toString();
+					nl.item(i).setTextContent(markStatus);
 					break;
 				case (4):
-					nl.item(i).setTextContent(String.valueOf(t.getPriority()));
+					String priorityString = t.getPriority().toString();
+					nl.item(i).setTextContent(priorityString);
 					break;
 			}
 		}
@@ -138,14 +143,14 @@ public class TaskFileHandler {
 		
 		Element e;
 		Node nNode;
-		NodeList nList = _doc.getElementsByTagName("task");
+		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
 		
 		for (int i = 0; i < nList.getLength(); i++) {
 			nNode = nList.item(i);
 			
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				e = (Element)nNode;
-				if (e.getAttribute("id").equals(id+"")) {
+				if (e.getAttribute(TAG_ID).equals(String.valueOf(id))) {
 					return e;
 				}
 			}
@@ -154,20 +159,20 @@ public class TaskFileHandler {
 	}
 	
 	/*
-	 * Reorganizes the ID number in XML file in ascending order
+	 * Reformats the ID number in XML file to ascending order
 	 */
 	private void optimizeID() {
 		
 		Element e;
 		Node nNode;
-		NodeList nList = _doc.getElementsByTagName("task");
+		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
 		
 		for (int i = 0; i < nList.getLength(); i++) {
 			nNode = nList.item(i);
 			
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				e = (Element) nNode;
-				e.setAttribute("id", String.valueOf(i));
+				e.setAttribute(TAG_ID, String.valueOf(i));
 			}
 		}
 		
@@ -188,7 +193,7 @@ public class TaskFileHandler {
 		
 		Element eElement;
 		Node nNode;
-		NodeList nList = _doc.getElementsByTagName("task");
+		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
 		Task t;
 		
 		for (int i = 0; i < nList.getLength(); i++) {
@@ -197,7 +202,7 @@ public class TaskFileHandler {
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				eElement = (Element) nNode;
 				
-				int id = Integer.parseInt(eElement.getAttribute("id"));
+				int id = Integer.parseInt(eElement.getAttribute(TAG_ID));
 				
 				String title = retrieveElement(eElement, "title");
 				long startTime = TimeUtil.getLongTime(retrieveElement(eElement, "startTime"));
@@ -228,20 +233,12 @@ public class TaskFileHandler {
 
 	private PRIORITY_TYPE detPriority(String s) {
 		switch (s) {
-		case "VERY_HIGH":
-			return PRIORITY_TYPE.VERY_HIGH;
 		case "HIGH":
 			return PRIORITY_TYPE.HIGH;
-		case "ABOVE_NORMAL":
-			return PRIORITY_TYPE.ABOVE_NORMAL;
 		case "NORMAL":
 			return PRIORITY_TYPE.NORMAL;
-		case "BELOW_NORMAL":
-			return PRIORITY_TYPE.BELOW_NORMAL;
 		case "LOW":
 			return PRIORITY_TYPE.LOW;
-		case "VERY_LOW":
-			return PRIORITY_TYPE.VERY_LOW;
 		default:
 			return PRIORITY_TYPE.NORMAL;
 		}
@@ -299,19 +296,24 @@ public class TaskFileHandler {
 		Element e = _doc.createElement(s);
 		switch (s) {
 		case "title":
-			e.appendChild(_doc.createTextNode(t.getName()));
+			String taskName = t.getName();
+			e.appendChild(_doc.createTextNode(taskName));
 			break;
 		case "startTime":
-			e.appendChild(_doc.createTextNode(TimeUtil.getFormattedDate(t.getStartTime())));
+			String startTime = TimeUtil.getFormattedDate(t.getStartTime());
+			e.appendChild(_doc.createTextNode(startTime));
 			break;
 		case "endTime":
-			e.appendChild(_doc.createTextNode(TimeUtil.getFormattedDate(t.getEndTime())));
+			String endTime = TimeUtil.getFormattedDate(t.getEndTime());
+			e.appendChild(_doc.createTextNode(endTime));
 			break;
 		case "flag":
-			e.appendChild(_doc.createTextNode("" + t.getFlag()));
+			String markStatus = t.getFlag().toString();
+			e.appendChild(_doc.createTextNode(markStatus));
 			break;
 		case "priority":
-			e.appendChild(_doc.createTextNode("" + t.getPriority()));
+			String priorityString = t.getPriority().toString();
+			e.appendChild(_doc.createTextNode(priorityString));
 			break;
 		}
 		return e;
