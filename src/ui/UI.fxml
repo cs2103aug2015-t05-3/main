@@ -10,9 +10,9 @@
 
 <AnchorPane maxHeight="600.0" maxWidth="816.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.UIController">
    <children>
-      <VBox prefHeight="600.0" prefWidth="816.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox maxHeight="600.0" maxWidth="816.0" minHeight="600.0" minWidth="816.0" prefHeight="600.0" prefWidth="816.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="40.0" prefWidth="817.0">
+            <VBox alignment="CENTER" maxHeight="40.0" maxWidth="785.0" minHeight="40.0" minWidth="785.0" prefHeight="40.0" prefWidth="785.0">
                <children>
                   <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Heading Title" textOrigin="CENTER" wrappingWidth="779.9999990165234">
                      <font>
@@ -27,9 +27,9 @@
                   <Insets left="18.0" right="18.0" />
                </VBox.margin>
             </VBox>
-            <HBox prefHeight="460.0" prefWidth="816.0" spacing="20.0">
+            <HBox maxHeight="460.0" maxWidth="780.0" minHeight="460.0" minWidth="780.0" prefHeight="460.0" prefWidth="780.0" spacing="20.0">
                <children>
-                  <TableView fx:id="tableTimed" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="465.0" prefHeight="458.0" prefWidth="465.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="tableTimed" maxHeight="460.0" maxWidth="467.0" minHeight="440.0" minWidth="465.0" prefHeight="458.0" prefWidth="465.0" HBox.hgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="idTimed" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
                       <TableColumn fx:id="taskTimed" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
@@ -43,7 +43,7 @@
                         <Insets />
                      </HBox.margin>
                   </TableView>
-                  <TableView fx:id="tableFloat" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="440.0" minWidth="264.0" prefHeight="440.0" prefWidth="290.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="tableFloat" maxHeight="460.0" maxWidth="292.0" minHeight="440.0" minWidth="264.0" prefHeight="440.0" prefWidth="290.0" HBox.hgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="idFloat" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
                         <TableColumn fx:id="taskFloat" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
@@ -61,16 +61,16 @@
                   <Insets bottom="5.0" left="18.0" right="18.0" />
                </VBox.margin>
             </HBox>
-            <VBox alignment="CENTER" prefHeight="0.0" prefWidth="780.0" VBox.vgrow="ALWAYS">
+            <VBox alignment="CENTER" maxHeight="75.0" maxWidth="785.0" minHeight="75.0" minWidth="785.0" prefHeight="75.0" prefWidth="785.0" VBox.vgrow="ALWAYS">
                <children>
                   <Text fx:id="cmdMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Subtitle" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999949932098" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets left="5.0" top="10.0" />
                      </VBox.margin>
                   </Text>
-                  <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="780.0" VBox.vgrow="ALWAYS">
+                  <HBox alignment="CENTER_LEFT" maxHeight="48.0" maxWidth="785.0" minHeight="48.0" minWidth="785.0" prefHeight="48.0" prefWidth="785.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TextField fx:id="input" onAction="#enterPressed" prefHeight="50.0" prefWidth="1314.0" promptText="Enter command here">
+                        <TextField fx:id="input" maxHeight="38.0" maxWidth="785.0" minHeight="38.0" minWidth="785.0" onAction="#enterPressed" prefHeight="38.0" prefWidth="785.0" promptText="Enter command here">
                            <HBox.margin>
                               <Insets bottom="10.0" />
                            </HBox.margin></TextField>
