@@ -2,7 +2,11 @@ package logic.command;
 
 import java.util.List;
 
+import constants.CmdParameters;
 import taskCollections.Task;
+import taskCollections.Attributes.TYPE;
+import taskCollections.Task.PRIORITY_TYPE;
+import taskCollections.Task.FLAG_TYPE;
 
 
 public class CmdList extends Command {
@@ -21,22 +25,26 @@ public class CmdList extends Command {
 	@Override
 	public CommandAction execute(){
 		
+		String outputMsg;
+		boolean isUndoable = false; //List is undoable
+		
 		if(_taskTree.size() == 0){
-			String outputMsg = MSG_EMPTY_TASKTREE;
-			boolean isUndoable = false;
+			outputMsg = MSG_EMPTY_TASKTREE;
+			isUndoable = false;
 			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
-		List<Task> taskList = getAllTask();
-		String outputMsg = String.format(MSG_TOTAL_TASK, taskList.size());
-		boolean isUndoable = false;
+		String optionalParam = getOptionalFields()[0];
+		List<Task> taskList = proccessParam(optionalParam);
+		outputMsg = String.format(MSG_TOTAL_TASK, taskList.size());
+		isUndoable = false;
 		return new CommandAction(outputMsg, isUndoable, taskList);
 		
 	}
 	
 	@Override
 	public CommandAction undo(){
-		//do nothing (List should not have undo)
+		//do nothing (List should not have undo)     
 		return null;
 	}
 	
@@ -52,11 +60,65 @@ public class CmdList extends Command {
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[]{};
+		return new String[]{ CmdParameters.PARAM_NAME_LIST_FLAG };
+	}
+	
+	private List<Task> getUndoneTask(){
+		return _taskTree.searchFlag(FLAG_TYPE.NULL);
+	}
+	
+	private List<Task> getDoneTask(){
+		return _taskTree.searchFlag(FLAG_TYPE.DONE);
+	}
+	
+	private List<Task> getPriorityTask(){
+		
+		/*
+		PRIORITY_TYPE priorityType;
+		switch(paramPriorityType){
+			case "HIGH":
+				priorityType = PRIORITY_TYPE.HIGH;
+				break;
+			case "NORMAL":
+				priorityType = PRIORITY_TYPE.NORMAL;
+				break;
+			case "LOW":
+				priorityType = PRIORITY_TYPE.LOW;
+				break;
+			default:
+				priorityType = PRIORITY_TYPE.NORMAL;
+				break;
+		}
+		*/
+		
+		return _taskTree.getSortedList(TYPE.PRIORITY);
+		
 	}
 	
 	private List<Task> getAllTask(){
 		return _taskTree.getList();
+	}
+	
+	private List<Task> proccessParam(String param){
+		
+		List<Task> taskList;
+		
+		switch(param){
+			case CmdParameters.PARAM_VALUE_LIST_ALL:
+				taskList = getAllTask();
+				break;
+			case CmdParameters.PARAM_VALUE_LIST_DONE:
+				taskList = getDoneTask();
+				break;
+			case CmdParameters.PARAM_VALUE_LIST_PRIORITY:
+				taskList = getPriorityTask();
+				break;
+			default:
+				taskList = getUndoneTask();
+				break;
+		}
+		
+		return taskList;
 	}
 	
 }
