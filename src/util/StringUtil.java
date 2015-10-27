@@ -101,15 +101,27 @@ public class StringUtil {
 	 * @return The following string if searchTerm is found, null if it isn't
 	 */
 	public static String getStringAfter(String fullString, String searchTerm, String stopAt) {
-		String regexString = Pattern.quote(searchTerm) + "(.*?)" + Pattern.quote(stopAt);
-		Pattern pattern = Pattern.compile(regexString);
-		Matcher matcher = pattern.matcher(fullString);
-
-		if (matcher.find()) {
-			return matcher.group(1);
-		} else {
-			return null;
+		String [] tokens = fullString.split(" ");
+		StringBuilder result = new StringBuilder();
+		int i = 0;
+		if(searchTerm != null && !searchTerm.isEmpty()){
+			System.out.println("L");
+			for(; i < tokens.length;i++){
+				if(tokens[i].equals(searchTerm)){
+					break;
+				}
+			}
+			i++;
 		}
+	
+		for(; i < tokens.length;i++){
+			if(tokens[i].contains(stopAt)){
+				break;
+			} else {
+				result.append(tokens[i] + " ");
+			}
+		}
+		return result.length() == 0 ? null : result.toString();
 	}
 	
 	public static String trim(String s){

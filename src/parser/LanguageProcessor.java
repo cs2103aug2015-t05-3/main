@@ -20,12 +20,12 @@ public class LanguageProcessor{
 	private static TimeProcessor timeP;
 
 	private String getTaskName(String userCmd) {
-		userCmd = StringUtil.getStringAfter(userCmd,"",DelimiterConstants.INPUT_TASK_DELIMITER);
+		userCmd = StringUtil.getStringAfter(userCmd,"",DelimiterConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
 	
 	private String getTaskID(String userCmd){
-		String id = StringUtil.removeFirstWord(userCmd);
+		String id = userCmd;
 		if(id != null){
 			try{
 				Integer.parseInt(id);
@@ -42,25 +42,48 @@ public class LanguageProcessor{
 	}
 	
 	private String removeDelimiters(String s){
-		return s;
+		if(s == null){
+			return null;
+		}
+		return s.replaceAll("(-\\S+)\\s?", "");
 	}
 	
 	private String getEndTime(String userCmd){
-		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.INPUT_TASK_SPECIFIER_ENDTIME, 
-				DelimiterConstants.INPUT_TASK_DELIMITER);
+		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_ENDTIME, 
+				DelimiterConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
 	
 	private String getStartTime(String userCmd){
-		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.INPUT_TASK_SPECIFIER_STARTTIME, 
-				DelimiterConstants.INPUT_TASK_DELIMITER);
+		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_STARTTIME, 
+				DelimiterConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
 	
 	private String getPriority(String userCmd){
-		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.INPUT_TASK_SPECIFIER_PRIORITY, 
-				DelimiterConstants.INPUT_TASK_DELIMITER);
+		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_PRIORITY, 
+				DelimiterConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
+	}
+	
+	private String getMarkOption(String userCmd){
+		if(userCmd.contains(DelimiterConstants.TASK_MARK_UNMARK)){
+			return CmdParameters.PARAM_VALUE_MARK_UNMARK;
+		} else {
+			return null;
+		}
+	}
+	
+	private String getListOption(String userCmd){
+		if(userCmd.contains(DelimiterConstants.TASK_FILTER_ALL)){
+			return CmdParameters.PARAM_VALUE_LIST_ALL;
+		} else if (userCmd.contains(DelimiterConstants.TASK_FILTER_DONE)){
+			return CmdParameters.PARAM_VALUE_LIST_DONE;
+ 		} else if (userCmd.contains(DelimiterConstants.TASK_SPECIFIER_PRIORITY)){
+ 			return CmdParameters.PARAM_VALUE_LIST_PRIORITY;
+ 		} else {
+ 			return null;
+ 		}
 	}
 	
 	public boolean init(String cmdFileName){
@@ -130,6 +153,12 @@ public class LanguageProcessor{
 			break;
 		case CmdParameters.PARAM_NAME_TASK_PRIORITY:
 			paramValue = getPriority(fullParam);
+			break;
+		case CmdParameters.PARAM_NAME_MARK_FLAG:
+			paramValue = getMarkOption(fullParam);
+			break;
+		case CmdParameters.PARAM_NAME_LIST_FLAG:
+			paramValue = getListOption(fullParam);
 			break;
 		}
 
