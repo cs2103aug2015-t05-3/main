@@ -45,21 +45,6 @@ public class TaskFileHandler {
 		
 		_tasks = new ArrayList<>();
 		_xmlFile = new File(fileName);
-
-		if (!_xmlFile.exists()) { 
-			PrintWriter writer;
-			try {
-				writer = new PrintWriter(fileName, "UTF-8");
-				writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
-				writer.println("<tasklist>");
-				writer.println("</tasklist>");
-				writer.close();
-			} catch (FileNotFoundException e) {
-				System.err.println("File Not Found");
-			} catch (UnsupportedEncodingException e) {
-				System.err.println("Unsupported Encoding");
-			}			
-		}
 			
 		dbFactory = DocumentBuilderFactory.newInstance();
 		try {
@@ -261,21 +246,6 @@ public class TaskFileHandler {
 			return PRIORITY_TYPE.NORMAL;
 		}
 	}
-
-	/*
-	private void display() {
-		for (Task t : tasks) {
-			System.out.println(t.getId());
-			System.out.println(t.getName());
-			System.out.println(TimeUtil.getFormattedDate(t.getStartTime()));
-			System.out.println(TimeUtil.getFormattedDate(t.getEndTime()));
-			System.out.println(t.getFlag());
-			System.out.println(t.getPriority());
-
-			System.out.println();
-		}
-	}
-	*/
 
 	/**
 	 * Remove text nodes that are used for indentation.
