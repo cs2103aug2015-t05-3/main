@@ -34,8 +34,8 @@ public class CmdList extends Command {
 			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
-		String optionalParam = getOptionalFields()[0];
-		List<Task> taskList = proccessParam(optionalParam);
+		String optionalParameter = getOptionalFields()[0];
+		List<Task> taskList = proccessParameter(optionalParameter);
 		outputMsg = String.format(MSG_TOTAL_TASK, taskList.size());
 		isUndoable = false;
 		return new CommandAction(outputMsg, isUndoable, taskList);
@@ -99,11 +99,11 @@ public class CmdList extends Command {
 		return _taskTree.getList();
 	}
 	
-	private List<Task> proccessParam(String param){
+	private List<Task> proccessParameter(String parameter){
 		
 		List<Task> taskList;
 		
-		switch(param){
+		switch(parameter){
 			case CmdParameters.PARAM_VALUE_LIST_ALL:
 				taskList = getAllTask();
 				break;

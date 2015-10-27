@@ -87,7 +87,6 @@ public class CmdDelete extends Command {
 	}
 	
 	private Task proccessTaskID(String paramTaskID){
-		
 		int taskID = Integer.parseInt(paramTaskID);
 		return _taskTree.getTask(taskID);
 	}

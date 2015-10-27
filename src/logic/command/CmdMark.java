@@ -1,7 +1,5 @@
 package logic.command;
 
-import java.util.List;
-
 import constants.CmdParameters;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
@@ -12,60 +10,51 @@ public class CmdMark extends Command{
 	 * Constants
 	 */	
 	// Message constants
-	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
-	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
-	private static final String MSG_ISNTANCEFOUND = "[%1%s] instances of \"%2$s\" found";
 	private static final String MSG_TASKMARKED = "Marked: \"%1$s\"";
 	private static final String MSG_TASKUNMARKED = "Unmarked: \"%1$s\"";
+	private static final String MSG_TASKALREADYMARKED = "Task: \"%1$s\" already marked";
+	private static final String MSG_TASKALREADYUNMARKED = "Task: \"%1$s\" already marked";
 	
 	/*
 	 * Variables for internal use
 	 */
 	private Task _task;
-	private String _taskName;
-	private int _taskID;
-	private boolean _isID;
 	
 	public CmdMark() {
 
-	}
-
-	public CmdMark(String taskName) {
-		_taskName = taskName;
-	}
-
-	public CmdMark(int taskID) {
-		_taskID = taskID;
 	}
 	
 	@Override
 	public CommandAction execute() {
 		
+		String outputMsg;
+		boolean isUndoable;
+		
+		
 		//Try undo first
 		_task = getTask();
 		if(isUndo()){
-			String outputMsg = toggleMarkTask(_task);
-			boolean isUndoable = true;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
+			if(isMarked(_task)){
+				outputMsg = unmarkTask(_task);
+			}else{
+				outputMsg = markTask(_task);
+			}
+			isUndoable = true;
+			return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
 		}
 				
-		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
-		if (parameter == null || parameter.equals("")) {
-			boolean isUndoable = false;
-			return new CommandAction(MSG_TASKUNSPECIFIED, isUndoable, _taskTree.getList());
+		
+		String paramTaskID = getRequiredFields()[0];
+		_task = proccessTaskID(paramTaskID);
+		if(_task == null){
+			outputMsg = MSG_TASKIDNOTFOUND;
+			isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
 		}
 				
-		CmdSearch search = new CmdSearch();
-		_isID = search.isInteger(parameter);
-		if(_isID){
-			_taskID = Integer.parseInt(parameter);
-		} else {
-			_taskName = parameter;
-		}
-		List<Task> taskList = search.searchTask(_isID, _taskID, _taskName);
-				
-		return processList(taskList);
+		String optionalParameter = getOptionalFields()[0];
+		return proccessParameter(optionalParameter);
 	}
 
 	@Override
@@ -80,12 +69,12 @@ public class CmdMark extends Command{
 
 	@Override
 	public String[] getRequiredFields() {
-		return new String[] { CmdParameters.PARAM_NAME_CMD_SEARCH };
+		return new String[] { CmdParameters.PARAM_NAME_TASK_ID };
 	}
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[]{};
+		return new String[] { CmdParameters.PARAM_NAME_MARK_FLAG };
 	}
 
 	private boolean isUndo(){
@@ -96,11 +85,11 @@ public class CmdMark extends Command{
 		}
 	}
 	
-	private String toggleMarkTask(Task task){
+	private boolean isMarked(Task task){
 		if(task.getFlag() == FLAG_TYPE.NULL){
-			return markTask(task);
+			return false;
 		}else{
-			return unmarkTask(task);
+			return true;
 		}
 	}
 	
@@ -118,32 +107,35 @@ public class CmdMark extends Command{
 		return outputMsg;
 	}
 	
-	private CommandAction processList(List<Task> taskList){
+	private Task proccessTaskID(String paramTaskID){
+		int taskID = Integer.parseInt(paramTaskID);
+		return _taskTree.getTask(taskID);
+	}
+	
+	private CommandAction proccessParameter(String parameter){
 		
-		//Case 1: List is empty (nothing found)
-		if(taskList.isEmpty()){
-			String outputMsg = "";
-			if(_isID){
-				outputMsg = String.format(MSG_TASKIDNOTFOUND, _taskID);
+		String outputMsg;
+		boolean isUndoable;
+		
+		if(parameter == null){
+			if(_task.getFlag() == FLAG_TYPE.DONE){
+				outputMsg = String.format(MSG_TASKALREADYMARKED, _task.getName());
+				isUndoable = false;
 			}else{
-				outputMsg = String.format(MSG_TASKNAMENOTFOUND, _taskName);
-			}	 
-			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
+				outputMsg = markTask(_task);
+				isUndoable = true;
+			}
+		}else{
+			if(_task.getFlag() == FLAG_TYPE.NULL){
+				outputMsg = String.format(MSG_TASKALREADYUNMARKED, _task.getName());
+				isUndoable = false;
+			}else{
+				outputMsg = unmarkTask(_task);
+				isUndoable = true;
+			}
 		}
 		
-		//Case 2: List.size > 1 (more than 1 instance found)
-		if(taskList.size() > 1){
-			String outputMsg = String.format(MSG_ISNTANCEFOUND, _taskName);
-			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, taskList);
-		}
-		
-		//Case 3: List.size == 1 (task to be deleted found)
-		_task = taskList.get(0);
-		String outputMsg = toggleMarkTask(_task);
-		boolean isUndoable = true;
-		return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
+		return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
 	}
 	
 }

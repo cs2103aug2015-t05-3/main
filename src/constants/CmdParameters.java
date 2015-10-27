@@ -20,7 +20,9 @@ public class CmdParameters {
 	public static final String PARAM_VALUE_TASK_PRIORITY_VERYLOW = "tpvl";
 	public static final String PARAM_NAME_CMD_SEARCH = "cs";
 	public static final String PARAM_NAME_LIST_FLAG = "lf";
+	public static final String PARAM_NAME_MARK_FLAG = "mf";
 	public static final String PARAM_VALUE_LIST_DONE = "ld";
 	public static final String PARAM_VALUE_LIST_ALL = "la";
 	public static final String PARAM_VALUE_LIST_PRIORITY = "lp";
+	public static final String PARAM_VALUE_MARK_UNMARK = "um";
 }
