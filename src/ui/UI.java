@@ -13,7 +13,7 @@ import javafx.scene.layout.*;;
 public class UI extends Application {
 
 	private static final String RESOURCE_FILEPATH = "UI.fxml";
-	private static final String ICON_FILEPATH = "bal.png";
+	private static final String ICON_FILEPATH = "icon.png";
 	private static final String APP_TITLE = "TaskBuddy v0.2";
 
 	private static UIController uiController;
