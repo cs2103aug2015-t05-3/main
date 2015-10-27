@@ -1,8 +1,8 @@
 package parser;
 
 import logic.command.*;
+import util.StringUtil;
 import constants.CmdParameters;
-import constants.UIFieldIndex;
 
 /**
  * Translates and breaks natural language down for computation
@@ -11,7 +11,7 @@ import constants.UIFieldIndex;
  *
  */
 
-public class LanguageProcessor {
+public class LanguageProcessor{
 	/*
 	 * Variables
 	 */
@@ -19,14 +19,49 @@ public class LanguageProcessor {
 	private static CommandProcessor cmdP;
 	private static TimeProcessor timeP;
 
-	/*private String getTaskName(String userCmd) {
-		userCmd = StringUtil.removeFirstWord(userCmd);
-		return userCmd;
+	private String getTaskName(String userCmd) {
+		userCmd = StringUtil.getStringAfter(userCmd,"",DelimiterConstants.INPUT_TASK_DELIMITER);
+		return StringUtil.trim(userCmd);
+	}
+	
+	private String getTaskID(String userCmd){
+		String id = StringUtil.removeFirstWord(userCmd);
+		if(id != null){
+			try{
+				Integer.parseInt(id);
+				return id;
+			} catch (NumberFormatException e){
+				return null;
+			}
+		}
+		return null;
 	}
 	
 	private String getSearchTerm(String userCmd){
-		return StringUtil.removeFirstWord(userCmd);
-	}*/
+		return removeDelimiters(userCmd);
+	}
+	
+	private String removeDelimiters(String s){
+		return s;
+	}
+	
+	private String getEndTime(String userCmd){
+		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.INPUT_TASK_SPECIFIER_ENDTIME, 
+				DelimiterConstants.INPUT_TASK_DELIMITER);
+		return StringUtil.trim(userCmd);
+	}
+	
+	private String getStartTime(String userCmd){
+		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.INPUT_TASK_SPECIFIER_STARTTIME, 
+				DelimiterConstants.INPUT_TASK_DELIMITER);
+		return StringUtil.trim(userCmd);
+	}
+	
+	private String getPriority(String userCmd){
+		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.INPUT_TASK_SPECIFIER_PRIORITY, 
+				DelimiterConstants.INPUT_TASK_DELIMITER);
+		return StringUtil.trim(userCmd);
+	}
 	
 	public boolean init(String cmdFileName){
 		cmdP = CommandProcessor.getInstance();
@@ -34,15 +69,18 @@ public class LanguageProcessor {
 		return cmdP.initCmdList(cmdFileName);
 	}
 	
-	public Command resolveCmd(String[] userCmd) {
-		if(cmdP == null){ // Not initialised yet
+	public Command resolveCmd(String userCmd) {
+		if(cmdP == null){ // If this is not initialised yet, do not allow any operations
 			return null;
 		}
-		String cmd = cmdP.getCmd(userCmd[UIFieldIndex.INPUT_CMD]);
+		String cmd = cmdP.getCmd(userCmd);
 		Command toExecute = cmdP.getCmdType(cmd);
 		if (toExecute == null) {
 			return null;
 		}
+		// Remove the command from the string
+		userCmd = StringUtil.removeFirstWord(userCmd);
+		
 		for (String requiredField : toExecute.getRequiredFields()) {
 			String paramValue = extractParameter(requiredField, userCmd);
 			if(paramValue == null){
@@ -72,35 +110,40 @@ public class LanguageProcessor {
 	 *            parameter value from
 	 * @return The extracted parameter value, or null if extraction is not successful
 	 */
-	private String extractParameter(String paramName, String[] fullParam) {
+	private String extractParameter(String paramName, String fullParam) {
 		String paramValue = null;
 		switch (paramName) {
 		case CmdParameters.PARAM_NAME_TASK_NAME:
-			paramValue = fullParam[UIFieldIndex.INPUT_TASKNAME];
+			paramValue = getTaskName(fullParam);
 			break;
 		case CmdParameters.PARAM_NAME_TASK_ID:
-			paramValue = isID(fullParam[UIFieldIndex.INPUT_TASKID]) ?
-					fullParam[UIFieldIndex.INPUT_TASKID] : null;
+			paramValue = getTaskID(fullParam);
 			break;
 		case CmdParameters.PARAM_NAME_CMD_SEARCH:
-			paramValue = fullParam[UIFieldIndex.INPUT_SEARCH];//TODO: Split into id or task name
+			paramValue = getSearchTerm(fullParam);
 			break;
 		case CmdParameters.PARAM_NAME_TASK_ENDTIME:
-			long time = timeP.resolveTime(fullParam[UIFieldIndex.INPUT_ENDTIME]);
-			paramValue = (time == TimeProcessor.TIME_INVALID) ? null : Long.toString(time);
+			paramValue = resolveTime(getEndTime(fullParam));
 			break;
 		case CmdParameters.PARAM_NAME_TASK_STARTTIME:
-			time = timeP.resolveTime(fullParam[UIFieldIndex.INPUT_STARTTIME]);
-			paramValue = (time == TimeProcessor.TIME_INVALID) ? null : Long.toString(time);
+			paramValue = resolveTime(getStartTime(fullParam));
 			break;
 		case CmdParameters.PARAM_NAME_TASK_PRIORITY:
-			paramValue = fullParam[UIFieldIndex.INPUT_PRIORITY];
+			paramValue = getPriority(fullParam);
 			break;
 		}
 
 		return paramValue;
 	}
 	
+	private String resolveTime(String timeS){
+		if(timeS == null){
+			return null;
+		}
+		long time = timeP.resolveTime(timeS);
+		return time == TimeProcessor.TIME_INVALID ? null : Long.toString(time);
+	}
+	/*
 	private boolean isID(String id){
 		try{
 			Integer.parseInt(id);
@@ -108,5 +151,5 @@ public class LanguageProcessor {
 		} catch (NumberFormatException e){
 			return false;
 		}
-	}
+	}*/
 }

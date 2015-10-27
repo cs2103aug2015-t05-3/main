@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtil {
-	
+
 	private static final String tokenDelim = " ";
 
 	/**
@@ -34,32 +34,87 @@ public class StringUtil {
 			return tokens[1];
 		}
 	}
-	
+
 	/**
-	 * Takes in a search term (word), and look for it in a full string. Returns true if
-	 * that word is found, false if it isn't
+	 * Takes in a search term (word), and look for it in a full string. Returns
+	 * true if that word is found, false if it isn't
 	 */
-	public static boolean containsWord(String searchIn, String searchTerm){
+	public static boolean containsWord(String searchIn, String searchTerm) {
 		String regex = "\\b" + searchTerm + "\\b";
-		
+
 		Matcher m = Pattern.compile(regex).matcher(searchIn);
-		
+
 		return m.find();
 	}
-	
+
 	/**
-	 * Takes in a search term (word), look for it, then return the word following the search term
-	 * @param fullString 
-	 * 		The full string to search in
-	 * @param afterWord 
-	 * 		The search term (a word) NOTE: Support for multiple search terms using | is not supported yet
-	 * @return The following word if afterWord is found, null if it isn't
+	 * Takes in a search term, look for it, then return the word following the
+	 * search term
+	 * 
+	 * @param fullString
+	 *            The full string to search in
+	 * @param searchTerm
+	 *            The search term
+	 * @return The following word if searchTerm is found, null if it isn't
 	 */
-	public static String getWordAfter(String fullString, String afterWord){
-		Matcher m = Pattern.compile("\\b"+afterWord+"\\b\\s\\b(.*){1}\\b").matcher(fullString);
-		if(m.find()){
+	public static String getWordAfter(String fullString, String searchTerm) {
+		Matcher m = Pattern.compile("\\b" + Pattern.quote(searchTerm) + "\\b\\s\\b(.*){1}\\b").matcher(fullString);
+		if (m.find()) {
 			String tokens[] = m.group(1).split(" ");
 			return tokens[0];
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Takes in a search term, look for it, then return the entire string
+	 * following the search term
+	 * 
+	 * @param fullString
+	 *            The full string to search in
+	 * @param searchTerm
+	 *            The search term
+	 * @return The following string if searchTerm is found, null if it isn't
+	 */
+	public static String getStringAfter(String fullString, String searchTerm) {
+		Matcher m = Pattern.compile(Pattern.quote(searchTerm) + "(.*)").matcher(fullString);
+		if (m.find()) {
+			return m.group(1);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Takes in a search term, look for it, then return the string following the
+	 * search term, before stopAt
+	 * 
+	 * @param fullString
+	 *            The full string to search in
+	 * @param searchTerm
+	 *            The search term NOTE: Support for multiple search terms using
+	 *            | is not supported yet
+	 * @param stopAt
+	 *            The term to stop the string search at its first occurrence, if
+	 *            it is found
+	 * @return The following string if searchTerm is found, null if it isn't
+	 */
+	public static String getStringAfter(String fullString, String searchTerm, String stopAt) {
+		String regexString = Pattern.quote(searchTerm) + "(.*?)" + Pattern.quote(stopAt);
+		Pattern pattern = Pattern.compile(regexString);
+		Matcher matcher = pattern.matcher(fullString);
+
+		if (matcher.find()) {
+			return matcher.group(1);
+		} else {
+			return null;
+		}
+	}
+	
+	public static String trim(String s){
+		if(s != null){
+			return s.trim();
 		} else {
 			return null;
 		}
