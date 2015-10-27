@@ -20,7 +20,7 @@ public class UIHelper {
 	 * Returns a string of the user input. Triggered on enter press.
 	 */
 
-	public static String[] getUserInput() {
+	public static String getUserInput() {
 		return UIController.getInput();
 	}
 

@@ -59,7 +59,7 @@ public class UIController implements Initializable {
 
 	private static UI ui;
 	//private static Semaphore lock;
-	private static ArrayList<String[]> inputBuffer = new ArrayList<>();
+	private static ArrayList<String> inputBuffer = new ArrayList<>();
 
 	final static ObservableList<UITaskTimed> dataTimed = FXCollections.observableArrayList();
 	final static ObservableList<UITaskFloat> dataFloat = FXCollections.observableArrayList();
@@ -110,7 +110,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-	public static String[] getInput() {
+	public static String getInput() {
 		synchronized (inputBuffer) {
             // wait for input from field
             while (inputBuffer.isEmpty()) {
@@ -240,14 +240,9 @@ public class UIController implements Initializable {
 
 	// Event methods
 	public void enterPressed() {
-		//String in = input.getText().trim();
 
 		synchronized (inputBuffer) {
-            String[] in = new String[UIFieldIndex.INPUT_BUFFSIZE];
-            // TODO: Convert to array
-            in[0] = input.getText().trim();
-
-            uiHotFix(in); //TODO Re-implement this
+            String in = input.getText().trim();
 
 			inputBuffer.add(in);
             inputBuffer.notify();
@@ -255,23 +250,6 @@ public class UIController implements Initializable {
 
 		// Other classes will do the job.
 		clearInput();
-	}
-
-	// Debugging codes
-	private void uiHotFix(String[] in) {
-
-		String emptyStr = "";
-		String spaceStr = " ";
-		String splitRegex = "\\s+";
-
-		for (int i = 1; i < in.length; i++) {
-        	in[i] = emptyStr;
-        }
-        if (in[0].contains(spaceStr)) {
-        	String[] splited = in[0].split(splitRegex, 2);
-            in[0] = splited[0];
-            in[1] = splited[1];
-        }
 	}
 
 	// Debugging code
