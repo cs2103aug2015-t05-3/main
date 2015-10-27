@@ -1,7 +1,10 @@
 package storage;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
@@ -23,6 +26,19 @@ public class SettingsFileHandler {
 		_settingsFile = new File (_fileName);
 		
 		if (_settingsFile.exists()) {
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(_settingsFile));
+				_taskFileLocation = br.readLine();
+				br.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
 			return true;
 		} else {
 			return false;
