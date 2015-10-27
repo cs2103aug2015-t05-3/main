@@ -44,7 +44,7 @@ public class CmdSearch extends Command {
 		String parameter = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
 		if (parameter == null || parameter.equals("")) {
 			boolean isUndoable = false;
-			return new CommandAction(MSG_TASKUNSPECIFIED, isUndoable, _taskTree.getList());
+			return new CommandAction(MSG_TASKUNSPECIFIED, isUndoable, null);
 		}
 		
 		_isID = isInteger(parameter);

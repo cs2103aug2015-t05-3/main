@@ -50,7 +50,7 @@ public class CmdMark extends Command{
 		if(_task == null){
 			outputMsg = MSG_TASKIDNOTFOUND;
 			isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
+			return new CommandAction(outputMsg, isUndoable, null);
 		}
 				
 		String optionalParameter = getOptionalFields()[0];
