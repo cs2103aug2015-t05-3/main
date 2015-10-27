@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import constants.UIFieldIndex;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -37,9 +36,7 @@ public class UIController implements Initializable {
 	private static final String VAR_TABLE_STRING_PRIORITY = "priority";
 
 	@FXML private Text cmdMsg;
-	private static Text cmdMsgReference;
 	@FXML private Text pendingMsg;
-	private static Text pendingMsgReference;
 	@FXML private TableColumn<UITaskTimed, String> idTimed;
 	@FXML private TableColumn<UITaskTimed, String> taskTimed;
 	@FXML private TableColumn<UITaskTimed, String> sDate;
@@ -54,24 +51,23 @@ public class UIController implements Initializable {
 	//TODO remove this
 	private int debugTestingIndex = 100;
 
-	private static List<Task> _floatingTaskList;
-	private static List<Task> _nonFloatingTaskList;
+	private List<Task> _floatingTaskList;
+	private List<Task> _nonFloatingTaskList;
 
 	private static UI ui;
-	//private static Semaphore lock;
-	private static ArrayList<String> inputBuffer = new ArrayList<>();
 
-	final static ObservableList<UITaskTimed> dataTimed = FXCollections.observableArrayList();
-	final static ObservableList<UITaskFloat> dataFloat = FXCollections.observableArrayList();
+	//private static Semaphore lock;
+	private ArrayList<String> inputBuffer = new ArrayList<>();
+
+	final ObservableList<UITaskTimed> dataTimed = FXCollections.observableArrayList();
+	final ObservableList<UITaskFloat> dataFloat = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
 		// Text fields
-		cmdMsgReference = cmdMsg;
-		cmdMsgReference.setText(MSG_CMD_WELCOME);
-		pendingMsgReference = pendingMsg;
-		pendingMsgReference.setText(MSG_PENDING_HELLO);
+		cmdMsg.setText(MSG_CMD_WELCOME);
+		pendingMsg.setText(MSG_PENDING_HELLO);
 
 		// Table
 		idTimed.setCellValueFactory(  new PropertyValueFactory<UITaskTimed, String>(VAR_TABLE_STRING_ID));
@@ -95,22 +91,31 @@ public class UIController implements Initializable {
 		tableFloat.setFocusTraversable(false);
 	}
 
-	public static void createUI() {
+	public UIController() {}
+
+	// Create UI
+	static void createUI() {
 		if (ui == null) {
 			ui = new UI();
+
 			new Thread() {
 				@Override
 				public void run() {
-					javafx.application.Application.launch(UI.class);
+					javafx.application.Application.launch(ui.getClass());
 				}
-				//ui.run();
 			}.start();
-			//inputBuffer = new ArrayList<>();
-			//lock = new Semaphore(1);
+
+			while(!ui.isInitialised()) {
+				try {
+				    Thread.sleep(0);
+				} catch(InterruptedException ex) {
+				    Thread.currentThread().interrupt();
+				}
+			}
 		}
 	}
 
-	public static String getInput() {
+	String getInput() {
 		synchronized (inputBuffer) {
             // wait for input from field
             while (inputBuffer.isEmpty()) {
@@ -123,15 +128,15 @@ public class UIController implements Initializable {
         }
 	}
 
-	public static void setOutputMsg(String a){
+	void setOutputMsg(String a){
 		try {
-			cmdMsgReference.setText(a);
+			cmdMsg.setText(a);
 		} catch (NullPointerException e) {
 			return;
 		}
 	}
 
-	public static void seperateTaskList(List<Task> taskList){
+	void seperateTaskList(List<Task> taskList){
 		_nonFloatingTaskList = new ArrayList<Task>();
 		_floatingTaskList = new ArrayList<Task>();
 
@@ -149,7 +154,7 @@ public class UIController implements Initializable {
 		generateTable();
 	}
 
-	private static boolean isFloating(Task task){
+	private boolean isFloating(Task task){
 		if(task.getEndTime() == 0){
 			return true;
 		}else{
@@ -157,7 +162,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-	private static void generateTable() {
+	private void generateTable() {
 		dataTimed.clear();
 		dataFloat.clear();
 
@@ -173,7 +178,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-	public void clearInput(){
+	void clearInput(){
 		input.clear();
 	}
 
