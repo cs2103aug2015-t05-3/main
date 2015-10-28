@@ -6,7 +6,7 @@ import constants.CmdParameters;
 
 /**
  * Translates and breaks natural language down for computation
- * 
+ *
  * @author Yan Chan Min Oo
  *
  */
@@ -23,7 +23,7 @@ public class LanguageProcessor{
 		userCmd = StringUtil.getStringAfter(userCmd,"",DelimiterConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
-	
+
 	private String getTaskID(String userCmd){
 		String id = userCmd;
 		if(id != null){
@@ -36,36 +36,36 @@ public class LanguageProcessor{
 		}
 		return null;
 	}
-	
+
 	private String getSearchTerm(String userCmd){
 		return removeDelimiters(userCmd);
 	}
-	
+
 	private String removeDelimiters(String s){
 		if(s == null){
 			return null;
 		}
 		return s.replaceAll("(-\\S+)\\s?", "");
 	}
-	
+
 	private String getEndTime(String userCmd){
-		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_ENDTIME, 
+		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_ENDTIME,
 				DelimiterConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
-	
+
 	private String getStartTime(String userCmd){
-		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_STARTTIME, 
+		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_STARTTIME,
 				DelimiterConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
-	
+
 	private String getPriority(String userCmd){
-		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_PRIORITY, 
+		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_PRIORITY,
 				DelimiterConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
-	
+
 	private String getMarkOption(String userCmd){
 		if(userCmd.contains(DelimiterConstants.TASK_MARK_UNMARK)){
 			return CmdParameters.PARAM_VALUE_MARK_UNMARK;
@@ -73,8 +73,12 @@ public class LanguageProcessor{
 			return null;
 		}
 	}
-	
+
 	private String getListOption(String userCmd){
+		if (userCmd == null) {		//TODO Hotfix
+			return null;			//TODO Hotfix
+		}							//TODO Hotfix
+
 		if(userCmd.contains(DelimiterConstants.TASK_FILTER_ALL)){
 			return CmdParameters.PARAM_VALUE_LIST_ALL;
 		} else if (userCmd.contains(DelimiterConstants.TASK_FILTER_DONE)){
@@ -85,13 +89,13 @@ public class LanguageProcessor{
  			return null;
  		}
 	}
-	
+
 	public boolean init(String cmdFileName){
 		cmdP = CommandProcessor.getInstance();
 		timeP = TimeProcessor.getInstance();
 		return cmdP.initCmdList(cmdFileName);
 	}
-	
+
 	public Command resolveCmd(String userCmd) {
 		if(cmdP == null){ // If this is not initialised yet, do not allow any operations
 			return null;
@@ -103,7 +107,7 @@ public class LanguageProcessor{
 		}
 		// Remove the command from the string
 		userCmd = StringUtil.removeFirstWord(userCmd);
-		
+
 		for (String requiredField : toExecute.getRequiredFields()) {
 			String paramValue = extractParameter(requiredField, userCmd);
 			if(paramValue == null){
@@ -125,7 +129,7 @@ public class LanguageProcessor{
 	/**
 	 * Analyses the full parameter string, and extracts the necessary info
 	 * specified by paramName. Does validation and conversion of parameters as well
-	 * 
+	 *
 	 * @param paramName
 	 *            The type of parameter to extract
 	 * @param fullParam
@@ -164,7 +168,7 @@ public class LanguageProcessor{
 
 		return paramValue;
 	}
-	
+
 	private String resolveTime(String timeS){
 		if(timeS == null){
 			return null;
