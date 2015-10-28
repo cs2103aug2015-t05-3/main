@@ -8,30 +8,30 @@ public class CmdMark extends Command{
 
 	/*
 	 * Constants
-	 */	
+	 */
 	// Message constants
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
 	private static final String MSG_TASKMARKED = "Marked: \"%1$s\"";
 	private static final String MSG_TASKUNMARKED = "Unmarked: \"%1$s\"";
 	private static final String MSG_TASKALREADYMARKED = "Task: \"%1$s\" already marked";
 	private static final String MSG_TASKALREADYUNMARKED = "Task: \"%1$s\" already marked";
-	
+
 	/*
 	 * Variables for internal use
 	 */
 	private Task _task;
-	
+
 	public CmdMark() {
 
 	}
-	
+
 	@Override
 	public CommandAction execute() {
-		
+
 		String outputMsg;
 		boolean isUndoable;
-		
-		
+
+
 		//Try undo first
 		_task = getTask();
 		if(isUndo()){
@@ -43,8 +43,8 @@ public class CmdMark extends Command{
 			isUndoable = true;
 			return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
 		}
-				
-		
+
+
 		String paramTaskID = getRequiredFields()[0];
 		_task = proccessTaskID(paramTaskID);
 		if(_task == null){
@@ -52,7 +52,7 @@ public class CmdMark extends Command{
 			isUndoable = false;
 			return new CommandAction(outputMsg, isUndoable, null);
 		}
-				
+
 		String optionalParameter = getOptionalFields()[0];
 		return proccessParameter(optionalParameter);
 	}
@@ -84,7 +84,7 @@ public class CmdMark extends Command{
 			return true;
 		}
 	}
-	
+
 	private boolean isMarked(Task task){
 		if(task.getFlag() == FLAG_TYPE.NULL){
 			return false;
@@ -92,31 +92,32 @@ public class CmdMark extends Command{
 			return true;
 		}
 	}
-	
+
 	private String markTask(Task task){
 		String outputMsg = "";
 		_taskTree.updateFlag(task, FLAG_TYPE.DONE);
 		outputMsg = String.format(MSG_TASKMARKED, task.getName());
 		return outputMsg;
 	}
-	
+
 	private String unmarkTask(Task task){
 		String outputMsg = "";
 		_taskTree.updateFlag(task, FLAG_TYPE.NULL);
 		outputMsg = String.format(MSG_TASKUNMARKED, task.getName());
 		return outputMsg;
 	}
-	
+
 	private Task proccessTaskID(String paramTaskID){
+		paramTaskID = getParameterValue(paramTaskID); // TODO hotfix
 		int taskID = Integer.parseInt(paramTaskID);
 		return _taskTree.getTask(taskID);
 	}
-	
+
 	private CommandAction proccessParameter(String parameter){
-		
+
 		String outputMsg;
 		boolean isUndoable;
-		
+
 		if(parameter == null){
 			if(_task.getFlag() == FLAG_TYPE.DONE){
 				outputMsg = String.format(MSG_TASKALREADYMARKED, _task.getName());
@@ -134,8 +135,8 @@ public class CmdMark extends Command{
 				isUndoable = true;
 			}
 		}
-		
+
 		return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
 	}
-	
+
 }

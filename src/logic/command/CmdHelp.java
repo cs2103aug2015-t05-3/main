@@ -8,65 +8,64 @@ public class CmdHelp extends Command{
 
 	/*
 	 * Constants
-	 */	
+	 */
 	// Message constants
 	private static final String MSG_HELP = "Help shown";
-	
+
 	// Help constants
 	private static final String HELP_ALL =
 			"<html>"
-			+ "<h1>[List of Commands]</h1>"
+			+ "<h1>List of Commands</h1>"
 			+ "<tr>"
-			+ "<th>Operation</th>"
-			+ "<th>Command</th>"
-			+ "</tr>"	
-			+ "<tr>"
-			+ "<td>Add a task</td>"
-			+ "<td>add &lt;task name&gt;</td>"
+				+ "<th>Operation</th>"
+				+ "<th>Command</th>"
 			+ "</tr>"
 			+ "<tr>"
-			+ "<td>Delete a task</td>"
-			+ "<td>delete &lt;task name&gt;</td>"
+				+ "<td>Add a task</td>"
+				+ "<td>add &lt;task name&gt;</td>"
 			+ "</tr>"
 			+ "<tr>"
-			+ "<td>Update a task</td>"
-			+ "<td>update &lt;task name&gt;</td>"
+				+ "<td>Delete a task</td>"
+				+ "<td>delete &lt;task name&gt;</td>"
 			+ "</tr>"
 			+ "<tr>"
-			+ "<td>Search task(s)</td>"
-			+ "<td>search &lt;task name&gt;</td>"
+				+ "<td>Update a task</td>"
+				+ "<td>update &lt;task name&gt;</td>"
 			+ "</tr>"
 			+ "<tr>"
-			+ "<td>List task(s)</td>"
-			+ "<td>list</td>"
+				+ "<td>Search task(s)</td>"
+				+ "<td>search &lt;task name&gt;</td>"
 			+ "</tr>"
 			+ "<tr>"
-			+ "<td>Mark a task(s)</td>"
-			+ "<td>mark &lt;task name&gt;</td>"
+				+ "<td>List task(s)</td>"
+				+ "<td>list</td>"
 			+ "</tr>"
 			+ "<tr>"
-			+ "<td>Undo</td>"
-			+ "<td>undo</td>"
+				+ "<td>Mark a task(s)</td>"
+				+ "<td>mark &lt;task name&gt;</td>"
 			+ "</tr>"
 			+ "<tr>"
-			+ "<td>Exit TaskBuddy</td>"
-			+ "<td>exit</td>"
+				+ "<td>Undo</td>"
+				+ "<td>undo</td>"
 			+ "</tr>"
-			+"</html>"
-			;
+			+ "<tr>"
+				+ "<td>Exit TaskBuddy</td>"
+				+ "<td>exit</td>"
+			+ "</tr>"
+			+ "</html>";
 
 	public CmdHelp(){
-		
+
 	}
-	
-	/* 
+
+	/*
 	// For testing JOptionPane
 	public static void main(String[] args){
 		CmdHelp help = new CmdHelp();
 		help.execute();
 	}
 	*/
-	
+
 	@Override
 	public CommandAction execute(){
 		try {
@@ -84,18 +83,18 @@ public class CmdHelp extends Command{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		JOptionPane.showMessageDialog(null, HELP_ALL);
 		boolean isUndoable = false;
 		return new CommandAction(MSG_HELP, isUndoable, null);
 	}
-	
+
 	@Override
 	public CommandAction undo(){
 		//do nothing (Help should not have undo)
 		return null;
 	}
-	
+
 	@Override
 	public boolean isUndoable(){
 		return false;
@@ -111,5 +110,5 @@ public class CmdHelp extends Command{
 		// TODO Auto-generated method stub
 		return new String[]{};
 	}
-	
+
 }
