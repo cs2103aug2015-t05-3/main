@@ -27,7 +27,7 @@ public class UIController implements Initializable {
 	 */
 
 	private static final String MSG_CMD_WELCOME = "Welcome! Loading your stuffs";
-	private static final String MSG_PENDING_HELLO = "Hello Jim,";
+	private static final String MSG_PENDING_HELLO = "Hello %s,";
 
 	private static final String VAR_TABLE_STRING_ID = "id";
 	private static final String VAR_TABLE_STRING_TASK = "task";
@@ -67,7 +67,8 @@ public class UIController implements Initializable {
 
 		// Text fields
 		cmdMsg.setText(MSG_CMD_WELCOME);
-		pendingMsg.setText(MSG_PENDING_HELLO);
+		String username = System.getProperty("user.name");
+		pendingMsg.setText(String.format(MSG_PENDING_HELLO, username));
 
 		// Table
 		idTimed.setCellValueFactory(  new PropertyValueFactory<UITaskTimed, String>(VAR_TABLE_STRING_ID));
