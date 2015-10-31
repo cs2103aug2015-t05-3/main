@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,14 +14,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import parser.TimeProcessor;
 import taskCollections.Task;
-import taskCollections.Task.PRIORITY_TYPE;
 
 public class UIController implements Initializable {
 
@@ -29,15 +32,24 @@ public class UIController implements Initializable {
 
 	private static final String MSG_CMD_WELCOME = "Welcome! Loading your stuffs";
 	private static final String MSG_PENDING_HELLO = "Hello %s,";
+	private static final String MSG_EMPTY = "";
 
 	private static final String VAR_TABLE_STRING_ID = "id";
 	private static final String VAR_TABLE_STRING_TASK = "task";
 	private static final String VAR_TABLE_STRING_SDATE = "sDate";
 
 	@FXML
+	private Text pendingMsg;
+	@FXML
+	private Text tableFloatHeader;
+	@FXML
+	private Text tableTimedHeader;
+	@FXML
+	private Text timeDateMsg;
+	@FXML
 	private Text cmdMsg;
 	@FXML
-	private Text pendingMsg;
+	private Text syntaxMsg;
 	@FXML
 	private TableColumn<UITask, String> idTimed;
 	@FXML
@@ -55,9 +67,6 @@ public class UIController implements Initializable {
 	@FXML
 	private TextField input;
 
-	// TODO remove this
-	private int debugTestingIndex = 100;
-
 	private List<Task> _floatingTaskList;
 	private List<Task> _nonFloatingTaskList;
 
@@ -74,17 +83,40 @@ public class UIController implements Initializable {
 		// Text fields
 		cmdMsg.setText(MSG_CMD_WELCOME);
 		String username = System.getProperty("user.name");
-
 		pendingMsg.setText(String.format(MSG_PENDING_HELLO, username));
+		syntaxMsg.setText(MSG_EMPTY);
 
 		// Table
 		idTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
-		taskTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
 		sDate.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
 
-		idTimed.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
-		taskTimed.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
-		sDate.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
+		taskTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
+
+		tableTimed.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
+			@Override
+			public TableRow<UITask> call(TableView<UITask> tableView) {
+				final TableRow<UITask> row = new TableRow<UITask>() {
+					@Override
+					protected void updateItem(UITask task, boolean empty) {
+						super.updateItem(task, empty);
+
+						try {
+							String text = this.getItem().getTask();
+
+							if (text != null) {
+								System.out.println(this.getItem().getTask());
+								this.setTextFill(Color.RED);
+								getStyleClass().add("highlightedRow");
+							}
+						} catch (NullPointerException e) {
+							System.err.println("");
+						}
+					}
+				};
+
+				return row;
+			}
+		});
 
 		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
 		taskFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
@@ -102,53 +134,6 @@ public class UIController implements Initializable {
 	}
 
 	public UIController() {
-	}
-
-	private TableCell<UITask, String> updateColor() {
-		TableCell<UITask, String> cell = new TableCell<UITask, String>() {
-			@Override
-			public void updateItem(String item, boolean empty) {
-				String[] stringArr = splitStr(item);
-				super.updateItem(item, empty);
-				
-				if (!isEmpty()) {
-					if (stringArr[1].contains("HIGH")) {
-						this.setTextFill(Color.RED);
-					} else if (stringArr[1].contains("LOW")) {
-						this.setTextFill(Color.LAWNGREEN);
-					}
-					item = stringArr[0];
-					setText(item);
-				}
-				
-			}
-		};
-		return cell;
-	}
-
-	/*
-	 * Takes in a string value appended with priority, return as String array.
-	 * 
-	 * Sample Input: Buy Milk+NORMAL
-	 * 
-	 * Returns: String Array with [Buy Milk] and [NORMAL] as the data.
-	 */
-	private String[] splitStr(String item) {
-		try {
-			String[] toReturn = new String[2];
-			int index = item.length() - 1; // points to last index of String
-
-			while (item.charAt(index) != '+') { // locate where the '+' is at
-				index--;
-			}
-
-			toReturn[0] = item.substring(0, index);
-			toReturn[1] = item.substring(index + 1);
-			
-			return toReturn;			
-		} catch (NullPointerException e) {
-			return null;
-		}
 	}
 
 	// Create UI
@@ -187,9 +172,25 @@ public class UIController implements Initializable {
 		}
 	}
 
-	void setOutputMsg(String a) {
+	void setOutputMsg(String str) {
 		try {
-			cmdMsg.setText(a);
+			cmdMsg.setText(str);
+		} catch (NullPointerException e) {
+			return;
+		}
+	}
+
+	void timeDateMsg(String str) {
+		try {
+			timeDateMsg.setText(str);
+		} catch (NullPointerException e) {
+			return;
+		}
+	}
+
+	void syntaxMsg(String str) {
+		try {
+			syntaxMsg.setText(str);
 		} catch (NullPointerException e) {
 			return;
 		}
@@ -225,38 +226,26 @@ public class UIController implements Initializable {
 		}
 	}
 
-	private String appendPriority(String toAppend, PRIORITY_TYPE p) {
-		toAppend = toAppend + "+" + p;
-		return toAppend;
-	}
-
 	private void generateTable() {
 
 		TimeProcessor tp = TimeProcessor.getInstance();
+		String generatedString = null;
 
 		dataTimed.clear();
 		dataFloat.clear();
 
 		for (Task t : _nonFloatingTaskList) {
-			String id = String.valueOf(t.getId());
-			String task = t.getName();
-			String generatedString = null;
-
 			if (t.getStartTime() == 0) {
 				generatedString = tp.getFormattedDate(t.getEndTime());
 			} else {
 				generatedString = tp.getFormattedDate(t.getStartTime(), t.getEndTime());
 			}
-			id = appendPriority(id, t.getPriority());
-			task = appendPriority(task, t.getPriority());
-			generatedString = appendPriority(generatedString, t.getPriority());
-
-			UITask ui1 = new UITask(id, task, generatedString);
+			UITask ui1 = new UITask(t.getId(), t.getName(), generatedString);
 			dataTimed.add(ui1);
 		}
 
 		for (Task t : _floatingTaskList) {
-			UITask ui2 = new UITask(String.valueOf(t.getId()), t.getName());
+			UITask ui2 = new UITask(t.getId(), t.getName());
 			dataFloat.add(ui2);
 		}
 	}
@@ -266,23 +255,23 @@ public class UIController implements Initializable {
 	}
 
 	public static class UITask {
-		private final SimpleStringProperty id;
+		private final SimpleIntegerProperty id;
 		private final SimpleStringProperty task;
 		private final SimpleStringProperty sDate;
 
-		private UITask(String id, String task, String dateString) {
-			this.id = new SimpleStringProperty(id);
+		private UITask(int id, String task, String dateString) {
+			this.id = new SimpleIntegerProperty(id);
 			this.task = new SimpleStringProperty(task);
 			this.sDate = new SimpleStringProperty(dateString);
 		}
 
-		private UITask(String id, String task) {
-			this.id = new SimpleStringProperty(id);
+		private UITask(int id, String task) {
+			this.id = new SimpleIntegerProperty(id);
 			this.task = new SimpleStringProperty(task);
 			this.sDate = null;
 		}
 
-		public String getId() {
+		public int getId() {
 			return id.get();
 		}
 
@@ -313,10 +302,10 @@ public class UIController implements Initializable {
 	 * // Debugging code public void add() { UITaskTimed t = new
 	 * UITaskTimed(debugTestingIndex--, "Buy Milk from Shop", 1442851200000L,
 	 * 1443283140000L); dataTimed.add(t);
-	 * 
+	 *
 	 * UITaskFloat t1 = new UITaskFloat(debugTestingIndex--, "Go Die in a fire",
 	 * "N"); dataFloat.add(t1); tableTimed.getSortOrder().add(idTimed);
-	 * 
+	 *
 	 * clearInput(); }
 	 */
 	/*
