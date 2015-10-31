@@ -2,6 +2,8 @@ package ui;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -18,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import taskCollections.Task;
+import taskCollections.comparators.EndTimeComparator;
 import util.TimeUtil;
 
 public class UIController implements Initializable {
@@ -61,6 +64,7 @@ public class UIController implements Initializable {
 
 	final ObservableList<UITaskTimed> dataTimed = FXCollections.observableArrayList();
 	final ObservableList<UITaskFloat> dataFloat = FXCollections.observableArrayList();
+	
 
 	@Override
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -85,7 +89,7 @@ public class UIController implements Initializable {
 		tableTimed.setItems(dataTimed);
 		tableFloat.setItems(dataFloat);
 
-		tableTimed.getSortOrder().add(idTimed);
+		//tableTimed.getSortOrder().add(idTimed);
 
 		// Focus Settings
 		tableTimed.setFocusTraversable(false);
@@ -138,6 +142,7 @@ public class UIController implements Initializable {
 	}
 
 	void seperateTaskList(List<Task> taskList){
+		
 		_nonFloatingTaskList = new ArrayList<Task>();
 		_floatingTaskList = new ArrayList<Task>();
 
@@ -152,6 +157,9 @@ public class UIController implements Initializable {
 		//Remaining tasks are all non-floating
 		_nonFloatingTaskList = taskList;
 
+		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.EndTimeComparator());
+		//Collections.sort(_floatingTaskList);
+		
 		generateTable();
 	}
 
