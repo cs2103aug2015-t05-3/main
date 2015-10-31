@@ -14,7 +14,7 @@
          <children>
             <VBox alignment="CENTER" maxHeight="40.0" maxWidth="785.0" minHeight="40.0" minWidth="785.0" prefHeight="40.0" prefWidth="785.0">
                <children>
-                  <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Heading Title" textOrigin="CENTER" wrappingWidth="779.9999990165234">
+                  <Text fx:id="timeDateMsg" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="CurrentTimeDate" textAlignment="RIGHT" textOrigin="CENTER" wrappingWidth="779.9999990165234">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -22,46 +22,67 @@
                         <Insets left="5.0" top="5.0" />
                      </VBox.margin>
                   </Text>
+                  <Text fx:id="pendingMsg" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="WelcomeText" textOrigin="CENTER" wrappingWidth="779.9999990165234">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Text>
                </children>
                <VBox.margin>
                   <Insets left="18.0" right="18.0" />
                </VBox.margin>
             </VBox>
-            <HBox maxHeight="460.0" maxWidth="780.0" minHeight="460.0" minWidth="780.0" prefHeight="460.0" prefWidth="780.0" spacing="20.0">
+            <HBox maxHeight="460.0" maxWidth="780.0" minHeight="420.0" minWidth="780.0" prefHeight="420.0" prefWidth="780.0" spacing="20.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TableView fx:id="tableTimed" maxHeight="460.0" maxWidth="467.0" minHeight="440.0" minWidth="465.0" prefHeight="458.0" prefWidth="465.0" HBox.hgrow="ALWAYS">
-                    <columns>
-                      <TableColumn fx:id="idTimed" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
-                      <TableColumn fx:id="taskTimed" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
-                        <TableColumn fx:id="sDate" minWidth="101.0" prefWidth="101.0" resizable="false" text="Start" />
-                        <TableColumn fx:id="eDate" minWidth="101.0" prefWidth="101.0" resizable="false" text="End" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
+                  <VBox prefHeight="400.0" prefWidth="460.0">
+                     <children>
+                        <Text fx:id="tableTimedHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="TableDate Title" textOrigin="CENTER" wrappingWidth="452.99999901652336">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <TableView fx:id="tableTimed" maxHeight="404.0" maxWidth="467.0" minHeight="397.0" minWidth="200.0" prefHeight="397.0" prefWidth="460.0">
+                          <columns>
+                            <TableColumn fx:id="idTimed" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
+                            <TableColumn fx:id="taskTimed" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
+                              <TableColumn fx:id="sDate" minWidth="101.0" prefWidth="204.0" resizable="false" text="Time" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </TableView>
+                     </children>
+                  </VBox>
+                  <VBox HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
-                  </TableView>
-                  <TableView fx:id="tableFloat" maxHeight="460.0" maxWidth="292.0" minHeight="440.0" minWidth="264.0" prefHeight="440.0" prefWidth="290.0" HBox.hgrow="ALWAYS">
-                     <columns>
-                        <TableColumn fx:id="idFloat" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
-                        <TableColumn fx:id="taskFloat" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
-                        <TableColumn fx:id="priority" minWidth="35.0" prefWidth="35.0" resizable="false" text="P" />
-                     </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </TableView>
+                     <children>
+                        <Text fx:id="tableFloatHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="TableFloat Title" textOrigin="CENTER" wrappingWidth="286.99999901652336">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <TableView fx:id="tableFloat" maxHeight="460.0" maxWidth="292.0" minHeight="244.0" minWidth="264.0" prefHeight="397.0" prefWidth="292.0">
+                           <columns>
+                              <TableColumn fx:id="idFloat" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
+                              <TableColumn fx:id="taskFloat" minWidth="232.0" prefWidth="261.0" resizable="false" text="Task" />
+                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
                </children>
                <VBox.margin>
-                  <Insets bottom="5.0" left="18.0" right="18.0" />
+                  <Insets left="18.0" right="18.0" top="10.0" />
                </VBox.margin>
             </HBox>
-            <VBox alignment="CENTER" maxHeight="75.0" maxWidth="785.0" minHeight="75.0" minWidth="785.0" prefHeight="75.0" prefWidth="785.0" VBox.vgrow="ALWAYS">
+            <VBox alignment="CENTER" maxHeight="178.0" maxWidth="785.0" minHeight="60.0" minWidth="785.0" prefHeight="89.0" prefWidth="785.0" VBox.vgrow="ALWAYS">
                <children>
                   <Text fx:id="cmdMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Subtitle" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="779.9999949932098" VBox.vgrow="ALWAYS">
                      <VBox.margin>
@@ -76,6 +97,7 @@
                            </HBox.margin></TextField>
                      </children>
                   </HBox>
+                  <Text fx:id="syntaxMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="#444444" strokeType="OUTSIDE" strokeWidth="0.0" text="Subtitle" textOrigin="CENTER" wrappingWidth="779.9999949932098" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" left="18.0" right="18.0" />
@@ -85,6 +107,12 @@
                </opaqueInsets>
             </VBox>
          </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
       </VBox>
    </children>
 </AnchorPane>

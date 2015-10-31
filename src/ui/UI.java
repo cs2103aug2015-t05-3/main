@@ -14,7 +14,7 @@ public class UI extends Application {
 
 	private static final String RESOURCE_FILEPATH = "UI.fxml";
 	private static final String ICON_FILEPATH = "icon.png";
-	private static final String APP_TITLE = "TaskBuddy v0.2";
+	private static final String APP_TITLE = "TaskBuddy v0.3";
 
 	private static UIController uiController;
 	private static boolean isInitialised;

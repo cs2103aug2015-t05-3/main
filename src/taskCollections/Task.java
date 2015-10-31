@@ -485,6 +485,34 @@ public class Task implements Comparable<Task> {
 	}
 
 	/**
+	 * Compares the starting and ending time of this {@code Task} instance with another.
+	 *
+	 * @param rhs
+	 *            a {@code Task} to be compared with this {@code Task}
+	 *
+	 * @return the value 0 if the time of this {@code Task} is equal to
+	 *         the argument {@code Task}; a value less than 0 if this
+	 *         time is numerically less than the argument time; a value
+	 *         greater than 0 this time is numerically greater than the
+	 *         argument time.
+	 */
+	public int compareTimeTo(Task rhs) {
+
+		Long thisTime = this.getStartTime();
+		if (thisTime == Task.DATE_NULL) {
+			thisTime = this.getEndTime();
+		}
+
+		Long rhsTime = rhs.getStartTime();
+		if (rhsTime == Task.DATE_NULL) {
+			rhsTime = rhs.getEndTime();
+		}
+
+		int result = thisTime.compareTo(rhsTime);
+		return handleDuplicatedAttributes(this, rhs, result);
+	}
+
+	/**
 	 * Compares the flag of this {@code Task} instance with another.
 	 *
 	 * @param rhs
