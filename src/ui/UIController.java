@@ -3,26 +3,24 @@ package ui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import parser.TimeProcessor;
 import taskCollections.Task;
-import taskCollections.comparators.EndTimeComparator;
-import util.TimeUtil;
 
 public class UIController implements Initializable {
 
@@ -32,13 +30,18 @@ public class UIController implements Initializable {
 
 	private static final String MSG_CMD_WELCOME = "Welcome! Loading your stuffs";
 	private static final String MSG_PENDING_HELLO = "Hello %s,";
+	private static final String MSG_EMPTY = "";
 
 	private static final String VAR_TABLE_STRING_ID = "id";
 	private static final String VAR_TABLE_STRING_TASK = "task";
 	private static final String VAR_TABLE_STRING_SDATE = "sDate";
 
-	@FXML private Text cmdMsg;
 	@FXML private Text pendingMsg;
+	@FXML private Text tableFloatHeader;
+	@FXML private Text tableTimedHeader;
+	@FXML private Text timeDateMsg;
+	@FXML private Text cmdMsg;
+	@FXML private Text syntaxMsg;
 	@FXML private TableColumn<UITask, String> idTimed;
 	@FXML private TableColumn<UITask, String> taskTimed;
 	@FXML private TableColumn<UITask, String> sDate;
@@ -47,9 +50,6 @@ public class UIController implements Initializable {
 	@FXML private TableView<UITask> tableTimed;
 	@FXML private TableView<UITask> tableFloat;
 	@FXML private TextField input;
-
-	//TODO remove this
-	private int debugTestingIndex = 100;
 
 	private List<Task> _floatingTaskList;
 	private List<Task> _nonFloatingTaskList;
@@ -60,7 +60,6 @@ public class UIController implements Initializable {
 
 	final ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	final ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
-	
 
 	@Override
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -69,6 +68,7 @@ public class UIController implements Initializable {
 		cmdMsg.setText(MSG_CMD_WELCOME);
 		String username = System.getProperty("user.name");
 		pendingMsg.setText(String.format(MSG_PENDING_HELLO, username));
+		syntaxMsg.setText(MSG_EMPTY);
 
 		// Table
 		idTimed.setCellValueFactory(
@@ -77,6 +77,24 @@ public class UIController implements Initializable {
 				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
 		sDate.setCellValueFactory(
 				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
+
+		taskTimed.setCellFactory((TableColumn<UITask, String> param) -> {
+			TableCell<UITask, String> cell = new TableCell<UITask, String>(){
+		        	@Override
+	                public void updateItem(String item, boolean empty) {
+	                    super.updateItem(item, empty);
+	                    if (!isEmpty()) {
+	                        this.setTextFill(Color.RED);
+	                        // Get fancy and change color based on data
+	                        if(item.contains("@")) {
+	                            this.setTextFill(Color.BLUEVIOLET);
+	                        }
+	                        setText(item);
+	                    }
+	                }
+		        };
+		        return cell;
+		    });
 
 		idFloat.setCellValueFactory(
 				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
@@ -132,16 +150,32 @@ public class UIController implements Initializable {
         }
 	}
 
-	void setOutputMsg(String a){
+	void setOutputMsg(String str){
 		try {
-			cmdMsg.setText(a);
+			cmdMsg.setText(str);
+		} catch (NullPointerException e) {
+			return;
+		}
+	}
+
+	void timeDateMsg(String str){
+		try {
+			timeDateMsg.setText(str);
+		} catch (NullPointerException e) {
+			return;
+		}
+	}
+
+	void syntaxMsg(String str){
+		try {
+			syntaxMsg.setText(str);
 		} catch (NullPointerException e) {
 			return;
 		}
 	}
 
 	void seperateTaskList(List<Task> taskList){
-		
+
 		_nonFloatingTaskList = new ArrayList<Task>();
 		_floatingTaskList = new ArrayList<Task>();
 
@@ -156,10 +190,10 @@ public class UIController implements Initializable {
 		//Remaining tasks are all non-floating
 		_nonFloatingTaskList = taskList;
 
-		Collections.sort(_nonFloatingTaskList, 
+		Collections.sort(_nonFloatingTaskList,
 				new taskCollections.comparators.EndTimeComparator());
 		//Collections.sort(_floatingTaskList);
-		
+
 		generateTable();
 	}
 
@@ -172,10 +206,10 @@ public class UIController implements Initializable {
 	}
 
 	private void generateTable() {
-		
+
 		TimeProcessor tp = TimeProcessor.getInstance();
 		String generatedString = null;
-		
+
 		dataTimed.clear();
 		dataFloat.clear();
 
@@ -185,9 +219,7 @@ public class UIController implements Initializable {
 			} else {
 				generatedString = tp.getFormattedDate(t.getStartTime(), t.getEndTime());
 			}
-			System.out.println(generatedString);
 			UITask ui1 = new UITask(t.getId(), t.getName(), generatedString);
-			System.out.println("Get: " + ui1.getSDate());
 			dataTimed.add(ui1);
 		}
 
@@ -211,7 +243,7 @@ public class UIController implements Initializable {
 			this.task = new SimpleStringProperty(task);
 			this.sDate = new SimpleStringProperty(dateString);
 		}
-		
+
 		private UITask(int id, String task) {
 			this.id = new SimpleIntegerProperty(id);
 			this.task = new SimpleStringProperty(task);
@@ -225,7 +257,7 @@ public class UIController implements Initializable {
 		public String getTask() {
 			return task.get();
 		}
-		
+
 		public String getSDate() {
 			return sDate.get();
 		}
