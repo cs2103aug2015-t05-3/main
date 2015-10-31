@@ -187,6 +187,7 @@ public class UIController implements Initializable {
 			}
 			System.out.println(generatedString);
 			UITask ui1 = new UITask(t.getId(), t.getName(), generatedString);
+			System.out.println("Get: " + ui1.getSDate());
 			dataTimed.add(ui1);
 		}
 
@@ -225,7 +226,7 @@ public class UIController implements Initializable {
 			return task.get();
 		}
 		
-		public String getsDate() {
+		public String getSDate() {
 			return sDate.get();
 		}
 	}
