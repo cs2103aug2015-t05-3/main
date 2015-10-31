@@ -5,7 +5,7 @@
  */
 package parser;
 
-public class DelimiterConstants {
+public class ParserConstants {
 		public static final String DELIMITER_TOKEN = "-";
 
 		public static final String TASK_SPECIFIER_STARTTIME = DELIMITER_TOKEN + "sd";
@@ -20,4 +20,8 @@ public class DelimiterConstants {
 		public static final String TASK_SETTING_OPENFILE = DELIMITER_TOKEN + "of";
 		
 		public static final String TASK_MARK_UNMARK = DELIMITER_TOKEN + "um";
+		
+		public static final String[] TASK_PRIORITY_HIGH = {"high","h"};
+		public static final String[] TASK_PRIORITY_NORM = {"norm","normal","n"};
+		public static final String[] TASK_PRIORITY_LOW = {"low","l"};
 }
