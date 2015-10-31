@@ -45,7 +45,7 @@
                           <columns>
                             <TableColumn fx:id="idTimed" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
                             <TableColumn fx:id="taskTimed" minWidth="232.0" prefWidth="232.0" resizable="false" text="Task" />
-                              <TableColumn fx:id="sDate" minWidth="101.0" prefWidth="204.0" resizable="false" text="Time" />
+                              <TableColumn fx:id="sDate" editable="false" maxWidth="195.0" minWidth="101.0" prefWidth="198.0" resizable="false" text="Time" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -69,7 +69,7 @@
                         <TableView fx:id="tableFloat" maxHeight="460.0" maxWidth="292.0" minHeight="244.0" minWidth="264.0" prefHeight="397.0" prefWidth="292.0">
                            <columns>
                               <TableColumn fx:id="idFloat" minWidth="30.0" prefWidth="30.0" resizable="false" text="ID" />
-                              <TableColumn fx:id="taskFloat" minWidth="232.0" prefWidth="261.0" resizable="false" text="Task" />
+                              <TableColumn fx:id="taskFloat" maxWidth="260.0" minWidth="232.0" prefWidth="261.0" resizable="false" text="Task" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -97,7 +97,7 @@
                            </HBox.margin></TextField>
                      </children>
                   </HBox>
-                  <Text fx:id="syntaxMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="#444444" strokeType="OUTSIDE" strokeWidth="0.0" text="Subtitle" textOrigin="CENTER" wrappingWidth="779.9999949932098" />
+                  <Text fx:id="syntaxMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="#444444" strokeType="OUTSIDE" strokeWidth="0.0" text="add -sd {} -ed {} -p {}" textOrigin="CENTER" wrappingWidth="779.9999949932098" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" left="18.0" right="18.0" />
