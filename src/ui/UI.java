@@ -7,12 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.Parent;
 import javafx.scene.layout.*;;
 
 public class UI extends Application {
 
-	private static final String RESOURCE_FILEPATH = "UI.fxml";
+	private static final String STYLESHEET_FILEPATH = "ui/UIStylesheet.css";
+	private static final String RESOURCE_FILEPATH = "assets/UI.fxml";
 	private static final String ICON_FILEPATH = "icon.png";
 	private static final String APP_TITLE = "TaskBuddy v0.3";
 
@@ -33,6 +33,8 @@ public class UI extends Application {
 			stage.setScene(scene);
 			stage.setResizable(false);
 			stage.show();
+
+			scene.getStylesheets().add(STYLESHEET_FILEPATH);
 
 			isInitialised = true;
 		} catch (IOException e) {

@@ -34,7 +34,7 @@
             </VBox>
             <HBox maxHeight="460.0" maxWidth="780.0" minHeight="420.0" minWidth="780.0" prefHeight="420.0" prefWidth="780.0" spacing="20.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox prefHeight="400.0" prefWidth="460.0">
+                  <VBox prefHeight="400.0" prefWidth="460.0" stylesheets="@UIStylesheet.css">
                      <children>
                         <Text fx:id="tableTimedHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="TableDate Title" textOrigin="CENTER" wrappingWidth="452.99999901652336">
                            <font>
@@ -91,13 +91,20 @@
                   </Text>
                   <HBox alignment="CENTER_LEFT" maxHeight="48.0" maxWidth="785.0" minHeight="48.0" minWidth="785.0" prefHeight="48.0" prefWidth="785.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TextField fx:id="input" maxHeight="38.0" maxWidth="785.0" minHeight="38.0" minWidth="785.0" onAction="#enterPressed" prefHeight="38.0" prefWidth="785.0" promptText="Enter command here">
+                        <TextField fx:id="input" maxHeight="38.0" maxWidth="785.0" minHeight="38.0" minWidth="785.0" onAction="#enterPressed" prefHeight="38.0" prefWidth="785.0" promptText="Enter command here" HBox.hgrow="ALWAYS">
                            <HBox.margin>
-                              <Insets bottom="10.0" />
+                              <Insets />
                            </HBox.margin></TextField>
                      </children>
                   </HBox>
-                  <Text fx:id="syntaxMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="#444444" strokeType="OUTSIDE" strokeWidth="0.0" text="add -sd {} -ed {} -p {}" textOrigin="CENTER" wrappingWidth="779.9999949932098" />
+                  <Text fx:id="syntaxMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="#444444" strokeType="OUTSIDE" strokeWidth="0.0" text="add -sd {} -ed {} -p {}" textOrigin="CENTER" wrappingWidth="779.9999949932098">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </Text>
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" left="18.0" right="18.0" />
