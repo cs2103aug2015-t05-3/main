@@ -20,7 +20,7 @@ public class LanguageProcessor{
 	private static TimeProcessor timeP;
 
 	private String getTaskName(String userCmd) {
-		userCmd = StringUtil.getStringAfter(userCmd,"",DelimiterConstants.DELIMITER_TOKEN);
+		userCmd = StringUtil.getStringAfter(userCmd,"",ParserConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
 
@@ -49,25 +49,47 @@ public class LanguageProcessor{
 	}
 
 	private String getEndTime(String userCmd){
-		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_ENDTIME,
-				DelimiterConstants.DELIMITER_TOKEN);
+		userCmd = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_ENDTIME,
+				ParserConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
 
 	private String getStartTime(String userCmd){
-		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_STARTTIME,
-				DelimiterConstants.DELIMITER_TOKEN);
+		userCmd = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_STARTTIME,
+				ParserConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(userCmd);
 	}
 
 	private String getPriority(String userCmd){
-		userCmd = StringUtil.getStringAfter(userCmd, DelimiterConstants.TASK_SPECIFIER_PRIORITY,
-				DelimiterConstants.DELIMITER_TOKEN);
-		return StringUtil.trim(userCmd);
+		String priority = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_PRIORITY,
+				ParserConstants.DELIMITER_TOKEN);
+		if (priority == null){
+			return null;
+		}
+		return resolvePriority(priority);
+	}
+	
+	private String resolvePriority(String priority){
+		for(String aPriority : ParserConstants.TASK_PRIORITY_HIGH){
+			if(aPriority.equalsIgnoreCase(priority)){
+				return CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH;
+			}
+		}
+		for(String aPriority : ParserConstants.TASK_PRIORITY_NORM){
+			if(aPriority.equalsIgnoreCase(priority)){
+				return CmdParameters.PARAM_VALUE_TASK_PRIORITY_NORM;
+			}
+		}
+		for(String aPriority : ParserConstants.TASK_PRIORITY_LOW){
+			if(aPriority.equalsIgnoreCase(priority)){
+				return CmdParameters.PARAM_VALUE_TASK_PRIORITY_LOW;
+			}
+		}
+		return null;
 	}
 
 	private String getMarkOption(String userCmd){
-		if(userCmd.contains(DelimiterConstants.TASK_MARK_UNMARK)){
+		if(userCmd.contains(ParserConstants.TASK_MARK_UNMARK)){
 			return CmdParameters.PARAM_VALUE_MARK_UNMARK;
 		} else {
 			return null;
@@ -79,11 +101,11 @@ public class LanguageProcessor{
 			return null;			//TODO Hotfix
 		}							//TODO Hotfix
 
-		if(userCmd.contains(DelimiterConstants.TASK_FILTER_ALL)){
+		if(userCmd.contains(ParserConstants.TASK_FILTER_ALL)){
 			return CmdParameters.PARAM_VALUE_LIST_ALL;
-		} else if (userCmd.contains(DelimiterConstants.TASK_FILTER_DONE)){
+		} else if (userCmd.contains(ParserConstants.TASK_FILTER_DONE)){
 			return CmdParameters.PARAM_VALUE_LIST_DONE;
- 		} else if (userCmd.contains(DelimiterConstants.TASK_SPECIFIER_PRIORITY)){
+ 		} else if (userCmd.contains(ParserConstants.TASK_SPECIFIER_PRIORITY)){
  			return CmdParameters.PARAM_VALUE_LIST_PRIORITY;
  		} else {
  			return null;
@@ -122,7 +144,6 @@ public class LanguageProcessor{
 				toExecute.setParameter(optionalField, paramValue);
 			}
 		}
-
 		return toExecute;
 	}
 
