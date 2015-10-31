@@ -1,0 +1,9 @@
+.root {
+	-fx-background-color:#FBFBFB;
+}
+
+.highlightedRow {
+    -fx-background-insets: 0, 1, 2;
+    -fx-background: #ffb6c1;
+    -fx-text-fill: #ffb6c1 !important;
+}

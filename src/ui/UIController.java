@@ -14,11 +14,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import parser.TimeProcessor;
 import taskCollections.Task;
 
@@ -36,20 +38,34 @@ public class UIController implements Initializable {
 	private static final String VAR_TABLE_STRING_TASK = "task";
 	private static final String VAR_TABLE_STRING_SDATE = "sDate";
 
-	@FXML private Text pendingMsg;
-	@FXML private Text tableFloatHeader;
-	@FXML private Text tableTimedHeader;
-	@FXML private Text timeDateMsg;
-	@FXML private Text cmdMsg;
-	@FXML private Text syntaxMsg;
-	@FXML private TableColumn<UITask, String> idTimed;
-	@FXML private TableColumn<UITask, String> taskTimed;
-	@FXML private TableColumn<UITask, String> sDate;
-	@FXML private TableColumn<UITask, String> idFloat;
-	@FXML private TableColumn<UITask, String> taskFloat;
-	@FXML private TableView<UITask> tableTimed;
-	@FXML private TableView<UITask> tableFloat;
-	@FXML private TextField input;
+	@FXML
+	private Text pendingMsg;
+	@FXML
+	private Text tableFloatHeader;
+	@FXML
+	private Text tableTimedHeader;
+	@FXML
+	private Text timeDateMsg;
+	@FXML
+	private Text cmdMsg;
+	@FXML
+	private Text syntaxMsg;
+	@FXML
+	private TableColumn<UITask, String> idTimed;
+	@FXML
+	private TableColumn<UITask, String> taskTimed;
+	@FXML
+	private TableColumn<UITask, String> sDate;
+	@FXML
+	private TableColumn<UITask, String> idFloat;
+	@FXML
+	private TableColumn<UITask, String> taskFloat;
+	@FXML
+	private TableView<UITask> tableTimed;
+	@FXML
+	private TableView<UITask> tableFloat;
+	@FXML
+	private TextField input;
 
 	private List<Task> _floatingTaskList;
 	private List<Task> _nonFloatingTaskList;
@@ -71,49 +87,54 @@ public class UIController implements Initializable {
 		syntaxMsg.setText(MSG_EMPTY);
 
 		// Table
-		idTimed.setCellValueFactory(
-				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
-		taskTimed.setCellValueFactory(
-				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
-		sDate.setCellValueFactory(
-				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
+		idTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
+		sDate.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
 
-		taskTimed.setCellFactory((TableColumn<UITask, String> param) -> {
-			TableCell<UITask, String> cell = new TableCell<UITask, String>(){
-		        	@Override
-	                public void updateItem(String item, boolean empty) {
-	                    super.updateItem(item, empty);
-	                    if (!isEmpty()) {
-	                        this.setTextFill(Color.RED);
-	                        // Get fancy and change color based on data
-	                        if(item.contains("@")) {
-	                            this.setTextFill(Color.BLUEVIOLET);
-	                        }
-	                        setText(item);
-	                    }
-	                }
-		        };
-		        return cell;
-		    });
+		taskTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
 
-		idFloat.setCellValueFactory(
-				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
-		taskFloat.setCellValueFactory(
-				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
+		tableTimed.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
+			@Override
+			public TableRow<UITask> call(TableView<UITask> tableView) {
+				final TableRow<UITask> row = new TableRow<UITask>() {
+					@Override
+					protected void updateItem(UITask task, boolean empty) {
+						super.updateItem(task, empty);
 
-		//idTimed.setSortType(TableColumn.SortType.ASCENDING);
+						try {
+							String text = this.getItem().getTask();
+
+							if (text != null) {
+								System.out.println(this.getItem().getTask());
+								this.setTextFill(Color.RED);
+								getStyleClass().add("highlightedRow");
+							}
+						} catch (NullPointerException e) {
+							System.err.println("");
+						}
+					}
+				};
+
+				return row;
+			}
+		});
+
+		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
+		taskFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
+
+		// idTimed.setSortType(TableColumn.SortType.ASCENDING);
 
 		tableTimed.setItems(dataTimed);
 		tableFloat.setItems(dataFloat);
 
-		//tableTimed.getSortOrder().add(idTimed);
+		// tableTimed.getSortOrder().add(idTimed);
 
 		// Focus Settings
 		tableTimed.setFocusTraversable(false);
 		tableFloat.setFocusTraversable(false);
 	}
 
-	public UIController() {}
+	public UIController() {
+	}
 
 	// Create UI
 	static void createUI() {
@@ -127,11 +148,11 @@ public class UIController implements Initializable {
 				}
 			}.start();
 
-			while(!ui.isInitialised()) {
+			while (!ui.isInitialised()) {
 				try {
-				    Thread.sleep(0);
-				} catch(InterruptedException ex) {
-				    Thread.currentThread().interrupt();
+					Thread.sleep(0);
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
 				}
 			}
 		}
@@ -139,18 +160,19 @@ public class UIController implements Initializable {
 
 	String getInput() {
 		synchronized (inputBuffer) {
-            // wait for input from field
-            while (inputBuffer.isEmpty()) {
-            	try{
-            		inputBuffer.wait();
-            	} catch(InterruptedException e){ }
-            }
+			// wait for input from field
+			while (inputBuffer.isEmpty()) {
+				try {
+					inputBuffer.wait();
+				} catch (InterruptedException e) {
+				}
+			}
 
-            return inputBuffer.remove(0);
-        }
+			return inputBuffer.remove(0);
+		}
 	}
 
-	void setOutputMsg(String str){
+	void setOutputMsg(String str) {
 		try {
 			cmdMsg.setText(str);
 		} catch (NullPointerException e) {
@@ -158,7 +180,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-	void timeDateMsg(String str){
+	void timeDateMsg(String str) {
 		try {
 			timeDateMsg.setText(str);
 		} catch (NullPointerException e) {
@@ -166,7 +188,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-	void syntaxMsg(String str){
+	void syntaxMsg(String str) {
 		try {
 			syntaxMsg.setText(str);
 		} catch (NullPointerException e) {
@@ -174,33 +196,32 @@ public class UIController implements Initializable {
 		}
 	}
 
-	void seperateTaskList(List<Task> taskList){
+	void seperateTaskList(List<Task> taskList) {
 
 		_nonFloatingTaskList = new ArrayList<Task>();
 		_floatingTaskList = new ArrayList<Task>();
 
-		//Iterate through list and remove all floating tasks
-		for(int i=0; i < taskList.size();){
-			if(isFloating(taskList.get(i))){
+		// Iterate through list and remove all floating tasks
+		for (int i = 0; i < taskList.size();) {
+			if (isFloating(taskList.get(i))) {
 				_floatingTaskList.add(taskList.remove(i));
 			} else {
 				i++;
 			}
 		}
-		//Remaining tasks are all non-floating
+		// Remaining tasks are all non-floating
 		_nonFloatingTaskList = taskList;
 
-		Collections.sort(_nonFloatingTaskList,
-				new taskCollections.comparators.EndTimeComparator());
-		//Collections.sort(_floatingTaskList);
+		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.EndTimeComparator());
+		// Collections.sort(_floatingTaskList);
 
 		generateTable();
 	}
 
-	private boolean isFloating(Task task){
-		if(task.getEndTime() == 0){
+	private boolean isFloating(Task task) {
+		if (task.getEndTime() == 0) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -229,7 +250,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-	void clearInput(){
+	void clearInput() {
 		input.clear();
 	}
 
@@ -267,33 +288,27 @@ public class UIController implements Initializable {
 	public void enterPressed() {
 
 		synchronized (inputBuffer) {
-            String in = input.getText().trim();
+			String in = input.getText().trim();
 
 			inputBuffer.add(in);
-            inputBuffer.notify();
-        }
+			inputBuffer.notify();
+		}
 
 		// Other classes will do the job.
 		clearInput();
 	}
 
 	/*
-	// Debugging code
-	public void add() {
-		UITaskTimed t = new UITaskTimed(debugTestingIndex--, "Buy Milk from Shop", 1442851200000L, 1443283140000L);
-		dataTimed.add(t);
-
-		UITaskFloat t1 = new UITaskFloat(debugTestingIndex--, "Go Die in a fire", "N");
-		dataFloat.add(t1);
-		tableTimed.getSortOrder().add(idTimed);
-
-		clearInput();
-	}
-	*/
+	 * // Debugging code public void add() { UITaskTimed t = new
+	 * UITaskTimed(debugTestingIndex--, "Buy Milk from Shop", 1442851200000L,
+	 * 1443283140000L); dataTimed.add(t);
+	 *
+	 * UITaskFloat t1 = new UITaskFloat(debugTestingIndex--, "Go Die in a fire",
+	 * "N"); dataFloat.add(t1); tableTimed.getSortOrder().add(idTimed);
+	 *
+	 * clearInput(); }
+	 */
 	/*
-	public void delete(int id) {
-		dataTimed.remove(id);
-		clearInput();
-	}
-	*/
+	 * public void delete(int id) { dataTimed.remove(id); clearInput(); }
+	 */
 }
