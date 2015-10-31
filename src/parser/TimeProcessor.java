@@ -46,7 +46,6 @@ public class TimeProcessor {
 				setCurrentDay(parsedTime);
 				setCurrentMonth(parsedTime);
 				setCurrentYear(parsedTime);
-				//System.out.println(parsedTime.getTime());
 				return parsedTime.getTime();
 			} catch (ParseException e){ }
 		}
@@ -69,8 +68,16 @@ public class TimeProcessor {
 				return parsedTime.getTime();
 			} catch (ParseException e){ }
 		}
-		//System.out.println(time+" !!");
+		
 		return TIME_INVALID;
+	}
+	
+	public String getFormattedDate(long endTime){
+		return "By Wed 2359";
+	}
+	
+	public String getFormattedDate(long startTime, long endTime){
+		return "Wed 2359 to Thur 2359";
 	}
 	
 	private void setCurrentDay(Date date){
