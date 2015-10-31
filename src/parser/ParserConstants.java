@@ -8,6 +8,7 @@ package parser;
 public class ParserConstants {
 		public static final String DELIMITER_TOKEN = "-";
 
+		public static final String TASK_SPECIFIER_TASKNAME = DELIMITER_TOKEN + "name";
 		public static final String TASK_SPECIFIER_STARTTIME = DELIMITER_TOKEN + "sd";
 		public static final String TASK_SPECIFIER_ENDTIME = DELIMITER_TOKEN + "ed";
 		public static final String TASK_SPECIFIER_PRIORITY = DELIMITER_TOKEN + "p";
