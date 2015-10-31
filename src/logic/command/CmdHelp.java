@@ -13,6 +13,7 @@ public class CmdHelp extends Command{
 	private static final String MSG_HELP = "Help shown";
 
 	// Help constants
+	private static final String HELP_INFO_HELP = "help [<command>]";
 	private static final String HELP_ALL =
 			"<html>"
 			+ "<h1>List of Commands</h1>"
@@ -109,6 +110,11 @@ public class CmdHelp extends Command{
 	public String[] getOptionalFields() {
 		// TODO Auto-generated method stub
 		return new String[]{};
+	}
+	
+	@Override
+	public String getHelpInfo(){
+		return HELP_INFO_HELP;
 	}
 
 }

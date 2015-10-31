@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import constants.CmdParameters;
+import parser.ParserConstants;
 import taskCollections.Task;
 
 public class CmdSearch extends Command {
@@ -18,6 +19,8 @@ public class CmdSearch extends Command {
 	private static final String MSG_TASKFOUND = "Task \"%1$s\" found";
 	private static final String MSG_ISNTANCEFOUND = "[%1$s] instances of \"%2$s\" found";
 
+	//Help Info
+	private static final String HELP_INFO_SEARCH = "search <keyword>";
 	
 	/*
 	 * Variables for internal use
@@ -79,6 +82,11 @@ public class CmdSearch extends Command {
 	@Override
 	public String[] getOptionalFields() {
 		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME};
+	}
+	
+	@Override
+	public String getHelpInfo(){
+		return HELP_INFO_SEARCH;
 	}
 	
 	public List<Task> searchTask(boolean isID, int taskID, String taskName){

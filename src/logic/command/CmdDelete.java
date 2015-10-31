@@ -18,6 +18,9 @@ public class CmdDelete extends Command {
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
 	private static final String MSG_TASKDELETED = "Deleted : \"%1$s\"";
 
+	//Help Info
+	private static final String HELP_INFO_DELETE = "delete <task_ID>";
+	
 	/*
 	 * Variables for internal use
 	 */
@@ -76,6 +79,11 @@ public class CmdDelete extends Command {
 	@Override
 	public String[] getOptionalFields() {
 		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME};
+	}
+	
+	@Override
+	public String getHelpInfo(){
+		return HELP_INFO_DELETE;
 	}
 	
 	private boolean isUndo(){

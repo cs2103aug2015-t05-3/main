@@ -1,6 +1,7 @@
 package logic.command;
 
 import constants.CmdParameters;
+import parser.ParserConstants;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
 
@@ -16,6 +17,9 @@ public class CmdMark extends Command{
 	private static final String MSG_TASKALREADYMARKED = "Task: \"%1$s\" already marked";
 	private static final String MSG_TASKALREADYUNMARKED = "Task: \"%1$s\" already marked";
 
+	//Help Info
+	private static final String HELP_INFO_MARK = "mark <task_ID> [%1$s]";
+	
 	/*
 	 * Variables for internal use
 	 */
@@ -77,6 +81,11 @@ public class CmdMark extends Command{
 		return new String[] { CmdParameters.PARAM_NAME_MARK_FLAG };
 	}
 
+	@Override
+	public String getHelpInfo(){
+		return String.format(HELP_INFO_MARK, ParserConstants.TASK_MARK_UNMARK);
+	}
+	
 	private boolean isUndo(){
 		if(_task == null){
 			return false;
