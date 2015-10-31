@@ -3,6 +3,7 @@ package logic.command;
 import java.util.List;
 
 import constants.CmdParameters;
+import parser.ParserConstants;
 import taskCollections.Task;
 import taskCollections.Attributes.TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
@@ -17,6 +18,9 @@ public class CmdList extends Command {
 	// Message constants
 	private static final String MSG_EMPTY_TASKTREE = "No task to display";
 	private static final String MSG_TOTAL_TASK = "Total tasks in list: [%1$s]";
+	
+	//Help Info
+	private static final String HELP_INFO_LIST = "list [%1$s or %2$s or %3$s <high/normal/low/h/n/l>]";
 	
 	public CmdList(){
 		
@@ -61,6 +65,12 @@ public class CmdList extends Command {
 	@Override
 	public String[] getOptionalFields() {
 		return new String[]{ CmdParameters.PARAM_NAME_LIST_FLAG };
+	}
+	
+	@Override
+	public String getHelpInfo(){
+		return String.format(HELP_INFO_LIST, ParserConstants.TASK_FILTER_ALL, 
+				ParserConstants.TASK_FILTER_DONE, ParserConstants.TASK_SPECIFIER_PRIORITY);
 	}
 	
 	private List<Task> getUndoneTask(){

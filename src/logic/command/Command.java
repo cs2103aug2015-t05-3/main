@@ -62,6 +62,12 @@ public abstract class Command {
 	 * @return List of required parameter names
 	 */
 	public abstract String[] getOptionalFields();
+	
+	/**
+	 * Get the message to display the syntax of a particular command
+	 * @return String of the message
+	 */
+	public abstract String getHelpInfo();
 
 	/**
 	 * Sets the parameters required for some commands. Should be called before calling

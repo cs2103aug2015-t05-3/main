@@ -6,6 +6,7 @@
 package logic.command;
 
 import constants.CmdParameters;
+import parser.ParserConstants;
 import taskCollections.Task;
 import taskCollections.Task.PRIORITY_TYPE;
 import util.TimeUtil;
@@ -20,6 +21,10 @@ public class CmdAdd extends Command {
 	// name";
 	private static final String MSG_TASKADDED = "Added : %1$s";
 	private static final String MSG_TASKNAMENOTGIVEN = "Please enter a task name";
+	
+	//Help Info
+	private static final String HELP_INFO_ADD = 
+			"add <task_name> [%1$s <start_time>] [%2$s <end_time>] [%2$s <end_time>] [%3$s <high/normal/low/h/n/l>]";
 
 	// Error codes
 	/*
@@ -143,5 +148,11 @@ public class CmdAdd extends Command {
 	public String[] getOptionalFields() {
 		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME,
 				CmdParameters.PARAM_NAME_TASK_PRIORITY };
+	}
+	
+	@Override
+	public String getHelpInfo(){
+		return String.format(HELP_INFO_ADD, ParserConstants.TASK_SPECIFIER_STARTTIME,
+				ParserConstants.TASK_SPECIFIER_ENDTIME, ParserConstants.TASK_SPECIFIER_PRIORITY);
 	}
 }

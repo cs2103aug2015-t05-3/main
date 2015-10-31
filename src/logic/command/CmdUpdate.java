@@ -3,6 +3,7 @@ package logic.command;
 import java.util.List;
 
 import constants.CmdParameters;
+import parser.ParserConstants;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
@@ -23,6 +24,10 @@ public class CmdUpdate extends Command {
 	private static final String MSG_TASKUPDATED = "Updated ID: \"%1$s\"";
 	private static final String MSG_INVALIDTIME = "Invalid start/end time given";
 
+	//Help Info
+	private static final String HELP_INFO_UPDATE = 
+			"update <task_ID> [%1$s <task_name>] [%2$s <start_time>] [%3$s <end_time>][%4$s <high/normal/low/h/n/l>]";
+	
 	/*
 	 * Variables for internal use
 	 */
@@ -110,6 +115,13 @@ public class CmdUpdate extends Command {
 				CmdParameters.PARAM_NAME_TASK_ENDTIME, CmdParameters.PARAM_NAME_TASK_PRIORITY };
 	}
 
+	@Override
+	public String getHelpInfo(){
+		return String.format(HELP_INFO_UPDATE, ParserConstants.TASK_SPECIFIER_TASKNAME,
+				ParserConstants.TASK_SPECIFIER_STARTTIME, ParserConstants.TASK_SPECIFIER_ENDTIME,
+				ParserConstants.TASK_SPECIFIER_PRIORITY);
+	}
+	
 	private boolean isUndo(){
 		if(_task == null){
 			return false;

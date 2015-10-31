@@ -2,6 +2,7 @@ package logic.command;
 
 import java.util.List;
 
+import parser.ParserConstants;
 import taskCollections.Task;
 
 public class CmdUndo extends Command {
@@ -12,6 +13,9 @@ public class CmdUndo extends Command {
 	//private static final String MSG_UNDO = "Undo: ";
 	private static final String MSG_UNDOEMPTY = "No commands to undo!";
 
+	//Help Info
+	private static final String HELP_INFO_UNDO = "Just undo...";
+	
 	@Override
 	public CommandAction execute() {
 		Command toUndo = extractHistory();
@@ -47,6 +51,9 @@ public class CmdUndo extends Command {
 		return new String[]{};
 	}
 
-	
+	@Override
+	public String getHelpInfo(){
+		return HELP_INFO_UNDO;
+	}
 	
 }
