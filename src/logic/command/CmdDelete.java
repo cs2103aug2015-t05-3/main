@@ -14,7 +14,6 @@ public class CmdDelete extends Command {
 	 * Constants
 	 */
 	// Message constants
-	private static final String MSG_TASKUNSPECIFIED = "Please specify a task ID";
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
 	private static final String MSG_TASKDELETED = "Deleted : \"%1$s\"";
 
@@ -25,8 +24,6 @@ public class CmdDelete extends Command {
 	 * Variables for internal use
 	 */
 	private Task _task;
-	private String _taskName;
-	private int _taskID;
 
 	private static Logger log = Logger.getLogger("log_CmdDelete");
 	

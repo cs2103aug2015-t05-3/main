@@ -32,9 +32,9 @@ public class CmdUpdate extends Command {
 	 * Variables for internal use
 	 */
 	private Task _task;
-	private String _taskName;
 	private int _taskID;
 
+	//variables for updating
 	private String _newTaskName;
 	private long _newStartTime;
 	private long _newEndTime;
@@ -48,10 +48,6 @@ public class CmdUpdate extends Command {
 
 	public CmdUpdate() {
 
-	}
-
-	public CmdUpdate(String taskName) {
-		_taskName = taskName;
 	}
 
 	@Override
@@ -68,7 +64,7 @@ public class CmdUpdate extends Command {
 			return new CommandAction(outputMsg, isUndoable,  _taskTree.searchFlag(FLAG_TYPE.NULL));
 		}
 
-		String paramTaskID = getRequiredFields()[0];
+		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
 		_task = proccessTaskID(paramTaskID);
 		if(_task == null){
 			outputMsg = MSG_TASKIDNOTFOUND;
@@ -76,8 +72,7 @@ public class CmdUpdate extends Command {
 			return new CommandAction(outputMsg, isUndoable, null);
 		}
 
-		String[] paramOptionalFields = getOptionalFields();
-		proccessOptionalFields(paramOptionalFields);
+		proccessOptionalFields();
 		if(isInvalidTime(_newStartTime, _newEndTime)){
 			outputMsg = MSG_INVALIDTIME;
 			isUndoable = false;
@@ -131,38 +126,42 @@ public class CmdUpdate extends Command {
 	}
 
 	private Task proccessTaskID(String paramTaskID){
-		paramTaskID = getParameterValue(paramTaskID); // TODO hotfix
 		int taskID = Integer.parseInt(paramTaskID);
 		_taskID = taskID;
 		return _taskTree.getTask(taskID);
 	}
 
-	private void proccessOptionalFields(String[] paramOptionalFields){
-
-		if(paramOptionalFields[0] != null){
-			_newTaskName = paramOptionalFields[0];
-		}else{
+	private void proccessOptionalFields(){
+		
+		String paramTaskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
+		if(paramTaskName == null || paramTaskName.equals("")){
 			_newTaskName = _task.getName();
-		}
-
-		if(paramOptionalFields[1] != null){
-			_newStartTime = Long.parseLong(paramOptionalFields[1]);
 		}else{
+			_newTaskName = paramTaskName;
+		}
+		//System.out.println(_newTaskName);
+
+		String paramStartTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_STARTTIME);
+		try{
+			_newStartTime = Long.parseLong(paramStartTime);
+		}catch(Exception e){
 			_newStartTime = _task.getStartTime();
 		}
-
-		if(paramOptionalFields[2] != null){
-			_newEndTime = Long.parseLong(paramOptionalFields[2]);
-		}else{
+		
+		String paramEndTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_ENDTIME);
+		try{
+			_newEndTime = Long.parseLong(paramEndTime);
+		}catch(Exception e){
 			_newEndTime = _task.getEndTime();
 		}
 
-		if(paramOptionalFields[3] != null){
-			_newPriority = getPriorityType(paramOptionalFields[3]);
-		}else{
+		String paramPriority = getParameterValue(CmdParameters.PARAM_NAME_TASK_PRIORITY);
+		if(paramPriority == null || paramPriority.equals("")){
 			_newPriority = _task.getPriority();
+		}else{
+			_newPriority = getPriorityType(paramPriority);
 		}
-
+		
 	}
 
 	private PRIORITY_TYPE getPriorityType(String priorityParam){

@@ -49,7 +49,7 @@ public class CmdMark extends Command{
 		}
 
 
-		String paramTaskID = getRequiredFields()[0];
+		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
 		_task = proccessTaskID(paramTaskID);
 		if(_task == null){
 			outputMsg = MSG_TASKIDNOTFOUND;
@@ -57,7 +57,7 @@ public class CmdMark extends Command{
 			return new CommandAction(outputMsg, isUndoable, null);
 		}
 
-		String optionalParameter = getOptionalFields()[0];
+		String optionalParameter = getParameterValue(CmdParameters.PARAM_VALUE_MARK_UNMARK);
 		return proccessParameter(optionalParameter);
 	}
 
@@ -105,6 +105,7 @@ public class CmdMark extends Command{
 	private String markTask(Task task){
 		String outputMsg = "";
 		_taskTree.updateFlag(task, FLAG_TYPE.DONE);
+		System.out.println(task.getId());
 		outputMsg = String.format(MSG_TASKMARKED, task.getName());
 		return outputMsg;
 	}
@@ -117,7 +118,6 @@ public class CmdMark extends Command{
 	}
 
 	private Task proccessTaskID(String paramTaskID){
-		paramTaskID = getParameterValue(paramTaskID); // TODO hotfix
 		int taskID = Integer.parseInt(paramTaskID);
 		return _taskTree.getTask(taskID);
 	}

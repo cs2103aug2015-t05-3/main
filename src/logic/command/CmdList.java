@@ -38,7 +38,7 @@ public class CmdList extends Command {
 			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
 		}
 		
-		String optionalParameter = getOptionalFields()[0];
+		String optionalParameter = getParameterValue(CmdParameters.PARAM_NAME_LIST_FLAG);
 		List<Task> taskList = proccessParameter(optionalParameter);
 		outputMsg = String.format(MSG_TOTAL_TASK, taskList.size());
 		isUndoable = false;
@@ -81,27 +81,29 @@ public class CmdList extends Command {
 		return _taskTree.searchFlag(FLAG_TYPE.DONE);
 	}
 	
-	private List<Task> getPriorityTask(){
+	private List<Task> getPriorityTask(String priority){
 		
-		/*
+		if(priority == null){
+			priority = "";
+		}
+		
 		PRIORITY_TYPE priorityType;
-		switch(paramPriorityType){
-			case "HIGH":
+		switch(priority){
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH:
 				priorityType = PRIORITY_TYPE.HIGH;
 				break;
-			case "NORMAL":
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_NORM:
 				priorityType = PRIORITY_TYPE.NORMAL;
 				break;
-			case "LOW":
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_LOW:
 				priorityType = PRIORITY_TYPE.LOW;
 				break;
 			default:
 				priorityType = PRIORITY_TYPE.NORMAL;
 				break;
 		}
-		*/
 		
-		return _taskTree.getSortedList(TYPE.PRIORITY);
+		return _taskTree.searchPriority(priorityType);
 		
 	}
 	
@@ -110,6 +112,10 @@ public class CmdList extends Command {
 	}
 	
 	private List<Task> proccessParameter(String parameter){
+		
+		if(parameter == null){
+			parameter = "";
+		}
 		
 		List<Task> taskList;
 		
@@ -121,7 +127,8 @@ public class CmdList extends Command {
 				taskList = getDoneTask();
 				break;
 			case CmdParameters.PARAM_VALUE_LIST_PRIORITY:
-				taskList = getPriorityTask();
+				String paramPriority = getParameterValue(CmdParameters.PARAM_NAME_TASK_PRIORITY);
+				taskList = getPriorityTask(paramPriority);
 				break;
 			default:
 				taskList = getUndoneTask();
