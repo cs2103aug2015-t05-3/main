@@ -20,8 +20,13 @@ public class LanguageProcessor{
 	private static TimeProcessor timeP;
 
 	private String getTaskName(String userCmd) {
-		userCmd = StringUtil.getStringAfter(userCmd,"",ParserConstants.DELIMITER_TOKEN);
-		return StringUtil.trim(userCmd);
+		String taskName = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_TASKNAME, 
+				ParserConstants.DELIMITER_TOKEN);
+		if(taskName != null){
+			return taskName;
+		}
+		taskName = StringUtil.getStringAfter(userCmd,"",ParserConstants.DELIMITER_TOKEN);
+		return StringUtil.trim(taskName);
 	}
 
 	private String getTaskID(String userCmd){
