@@ -14,11 +14,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import parser.TimeProcessor;
 import taskCollections.Task;
 import taskCollections.comparators.EndTimeComparator;
@@ -77,7 +82,25 @@ public class UIController implements Initializable {
 				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
 		sDate.setCellValueFactory(
 				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
-
+		
+		taskTimed.setCellFactory((TableColumn<UITask, String> param) -> {
+			TableCell<UITask, String> cell = new TableCell<UITask, String>(){
+		        	@Override
+	                public void updateItem(String item, boolean empty) {
+	                    super.updateItem(item, empty);
+	                    if (!isEmpty()) {
+	                        this.setTextFill(Color.RED);
+	                        // Get fancy and change color based on data
+	                        if(item.contains("@")) {
+	                            this.setTextFill(Color.BLUEVIOLET);
+	                        }
+	                        setText(item);
+	                    }
+	                }
+		        };
+		        return cell;
+		    });
+				
 		idFloat.setCellValueFactory(
 				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
 		taskFloat.setCellValueFactory(
@@ -185,9 +208,7 @@ public class UIController implements Initializable {
 			} else {
 				generatedString = tp.getFormattedDate(t.getStartTime(), t.getEndTime());
 			}
-			System.out.println(generatedString);
 			UITask ui1 = new UITask(t.getId(), t.getName(), generatedString);
-			System.out.println("Get: " + ui1.getSDate());
 			dataTimed.add(ui1);
 		}
 
