@@ -127,6 +127,7 @@ public class LanguageProcessor{
 	public boolean init(String cmdFileName){
 		cmdP = CommandProcessor.getInstance();
 		timeP = TimeProcessor.getInstance();
+		parseLog = Logger.getLogger("parselog");
 		return cmdP.initCmdList(cmdFileName);
 	}
 
