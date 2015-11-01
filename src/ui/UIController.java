@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import parser.CommandProcessor;
 import parser.TimeProcessor;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
@@ -88,20 +92,31 @@ public class UIController implements Initializable {
 
 		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
 		taskFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
-		
+
 		idFloat.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
 		taskFloat.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
-
-		// idTimed.setSortType(TableColumn.SortType.ASCENDING);
 
 		tableTimed.setItems(dataTimed);
 		tableFloat.setItems(dataFloat);
 
-		// tableTimed.getSortOrder().add(idTimed);
-
 		// Focus Settings
 		tableTimed.setFocusTraversable(false);
 		tableFloat.setFocusTraversable(false);
+
+		input.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+				if (isValidCmd(input.getText().trim())) {
+					System.out.println("command accepted");
+				}
+			}
+		});
+
+	}
+
+	private boolean isValidCmd(String input) {
+		return CommandProcessor.getInstance().getEffectiveCmd(input) == null ? false : true;
 	}
 
 	public UIController() {
@@ -113,26 +128,26 @@ public class UIController implements Initializable {
 			public void updateItem(String item, boolean empty) {
 				String[] stringArr = splitStr(item);
 				super.updateItem(item, empty);
-				
+
 				if (!isEmpty()) {
 					if (stringArr[1].contains("M")) {
 						this.setTextFill(Color.valueOf("#bdbdbd"));
 					} else if (stringArr[1].contains("L")) {
 						this.setTextFill(Color.LAWNGREEN);
 					} else if (stringArr[1].contains("H")) {
-						this.setTextFill(Color.RED);						
+						this.setTextFill(Color.RED);
 					}
-					
+
 					if (stringArr[1].contains("O") && !stringArr[1].contains("M")) {
-						this.setStyle("-fx-font-weight: bold");						
+						this.setStyle("-fx-font-weight: bold");
 					} else {
 						this.setStyle("-fx-font-weight: normal");
 					}
-					
+
 					item = stringArr[0];
 					setText(item);
 				}
-				
+
 			}
 		};
 		return cell;
@@ -141,9 +156,9 @@ public class UIController implements Initializable {
 	/*
 	 * Takes in a string value appended with Flags (see appendFlags(),
 	 * return as String array.
-	 * 
+	 *
 	 * Sample Input: Buy Milk+PMO
-	 * 
+	 *
 	 * Returns: String Array with [Buy Milk] and [flags] as the data.
 	 */
 	private String[] splitStr(String item) {
@@ -157,8 +172,8 @@ public class UIController implements Initializable {
 
 			toReturn[0] = item.substring(0, index);
 			toReturn[1] = item.substring(index + 1);
-			
-			return toReturn;			
+
+			return toReturn;
 		} catch (NullPointerException e) {
 			return null;
 		}
@@ -246,16 +261,16 @@ public class UIController implements Initializable {
 	private String appendFlags(String toAppend, Task t) {
 		char priority = t.getPriority().toString().charAt(0);
 		String doneStr = "";
-		
+
 		if (t.getFlag() == FLAG_TYPE.DONE) {
 			doneStr = "M"; //signify marked. to refactor
 		}
 		toAppend = toAppend + "+" + priority + doneStr;
-		
+
 		if (TimeUtil.isBeforeNow(t.getEndTime()) && t.getEndTime() != 0) {
 			toAppend += "O"; //overdue
-		}		
-		
+		}
+
 		return toAppend;
 	}
 
@@ -287,10 +302,10 @@ public class UIController implements Initializable {
 		for (Task t : _floatingTaskList) {
 			String id = String.valueOf(t.getId());
 			String task = t.getName();
-			
+
 			id = appendFlags(id, t);
 			task = appendFlags(task, t);
-			
+
 			UITask ui2 = new UITask(id, task);
 			dataFloat.add(ui2);
 		}
@@ -316,10 +331,10 @@ public class UIController implements Initializable {
 	 * // Debugging code public void add() { UITaskTimed t = new
 	 * UITaskTimed(debugTestingIndex--, "Buy Milk from Shop", 1442851200000L,
 	 * 1443283140000L); dataTimed.add(t);
-	 * 
+	 *
 	 * UITaskFloat t1 = new UITaskFloat(debugTestingIndex--, "Go Die in a fire",
 	 * "N"); dataFloat.add(t1); tableTimed.getSortOrder().add(idTimed);
-	 * 
+	 *
 	 * clearInput(); }
 	 */
 	/*
