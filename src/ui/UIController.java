@@ -3,8 +3,11 @@ package ui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.ResourceBundle;
+import java.util.Stack;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,6 +20,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import logic.command.Command;
@@ -66,8 +71,16 @@ public class UIController implements Initializable {
 	private ArrayList<String> inputBuffer = new ArrayList<>();
 	ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
-
-	public UIController() {}
+	
+	private Queue<String> masterQ;
+	private Stack<String> upStack;
+	private Stack<String> downStack;
+	
+	public UIController() {
+		masterQ = new LinkedList<String>();
+		upStack = new Stack<String>();
+		downStack = new Stack<String>();
+	}
 
 	@Override
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -364,11 +377,43 @@ public class UIController implements Initializable {
 
 		synchronized (inputBuffer) {
 			String in = input.getText().trim();
-
+			masterQ.add(in);
+			
+			//can put the following into a method			
+			resetStacks();
+			// end method
+			
+			
 			inputBuffer.add(in);
 			inputBuffer.notify();
 		}
 		clearInput();
 	}
 
+	private void resetStacks() {
+		Queue<String> toStack = new LinkedList<String>(masterQ);
+		
+		upStack.clear();
+		downStack.clear();
+		
+		while(!toStack.isEmpty()) {
+			upStack.push(toStack.poll());
+		}
+	}
+		
+	public void showHistory(KeyEvent ke) {
+		if (ke.getCode().equals(KeyCode.UP)) {
+			if (!upStack.isEmpty()) {
+				String history = upStack.pop();
+				downStack.push(history);
+				setInput(history);
+			}
+		} else if (ke.getCode().equals(KeyCode.DOWN)) {
+			if (!downStack.isEmpty()) {
+				String history = downStack.pop();
+				upStack.push(history);
+				setInput(history);
+			}
+		}
+	}
 }
