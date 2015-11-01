@@ -19,10 +19,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import logic.command.Command;
 import parser.CommandProcessor;
 import parser.TimeProcessor;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
+import util.StringUtil;
 import util.TimeUtil;
 
 public class UIController implements Initializable {
@@ -33,34 +35,29 @@ public class UIController implements Initializable {
 
 	private static final String MSG_CMD_WELCOME = "Welcome! Loading your stuffs";
 	private static final String MSG_PENDING_HELLO = "Hello %s,";
+	private static final String MSG_EMPTY = "";
+
+	private static final String EMPTY_STRING = "";
 
 	private static final String VAR_TABLE_STRING_ID = "id";
 	private static final String VAR_TABLE_STRING_TASK = "task";
 	private static final String VAR_TABLE_STRING_SDATE = "sDate";
 
-	@FXML
-	private Text cmdMsg;
-	@FXML
-	private Text pendingMsg;
-	@FXML
-	private TableColumn<UITask, String> idTimed;
-	@FXML
-	private TableColumn<UITask, String> taskTimed;
-	@FXML
-	private TableColumn<UITask, String> sDate;
-	@FXML
-	private TableColumn<UITask, String> idFloat;
-	@FXML
-	private TableColumn<UITask, String> taskFloat;
-	@FXML
-	private TableView<UITask> tableTimed;
-	@FXML
-	private TableView<UITask> tableFloat;
-	@FXML
-	private TextField input;
-
-	// TODO remove this
-	private int debugTestingIndex = 100;
+	//TODO added
+	@FXML private Text pendingMsg;
+	@FXML private Text tableFloatHeader;
+	@FXML private Text tableTimedHeader;
+	@FXML private Text timeDateMsg;
+	@FXML private Text cmdMsg;
+	@FXML private Text syntaxMsg;
+	@FXML private TableColumn<UITask, String> idTimed;
+	@FXML private TableColumn<UITask, String> taskTimed;
+	@FXML private TableColumn<UITask, String> sDate;
+	@FXML private TableColumn<UITask, String> idFloat;
+	@FXML private TableColumn<UITask, String> taskFloat;
+	@FXML private TableView<UITask> tableTimed;
+	@FXML private TableView<UITask> tableFloat;
+	@FXML private TextField input;
 
 	private List<Task> _floatingTaskList;
 	private List<Task> _nonFloatingTaskList;
@@ -105,20 +102,43 @@ public class UIController implements Initializable {
 		tableTimed.setFocusTraversable(false);
 		tableFloat.setFocusTraversable(false);
 
+		// Command help tips listener
 		input.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-
-				if (isValidCmd(input.getText().trim())) {
-					System.out.println("command accepted");
-				}
+				processSyntaxMessage(oldValue, newValue);
 			}
 		});
-
 	}
 
 	private boolean isValidCmd(String input) {
 		return CommandProcessor.getInstance().getEffectiveCmd(input) == null ? false : true;
+	}
+
+	//TODO added
+	private void processSyntaxMessage(String oldValue, String newValue) {
+		String oldCommand = EMPTY_STRING;
+		String newCommand = EMPTY_STRING;
+
+		if (oldValue != null) {
+			oldCommand = StringUtil.getFirstWord(oldValue);
+		}
+		if (newValue != null) {
+			newCommand = StringUtil.getFirstWord(newValue);
+		}
+
+		if (newCommand.equals(oldCommand)) {
+			return;
+		} else {
+			if (isValidCmd(newCommand)) {
+				CommandProcessor cp = parser.CommandProcessor.getInstance();
+				Command commandType = cp.getCmdType(newCommand);
+				String syntaxMessage = newCommand + " " + commandType.getHelpInfo();
+				syntaxMsg(syntaxMessage);
+			} else {
+				syntaxMsg(MSG_EMPTY);
+			}
+		}
 	}
 
 	public UIController() {
@@ -231,6 +251,22 @@ public class UIController implements Initializable {
 		}
 	}
 
+	void timeDateMsg(String str) {
+		try {
+			timeDateMsg.setText(str);
+		} catch (NullPointerException e) {
+			return;
+		}
+	}
+
+	void syntaxMsg(String str) {
+		try {
+			syntaxMsg.setText(str);
+		} catch (NullPointerException e) {
+			return;
+		}
+	}
+
 	void seperateTaskList(List<Task> taskList) {
 
 		_nonFloatingTaskList = new ArrayList<Task>();
@@ -285,7 +321,7 @@ public class UIController implements Initializable {
 	private void generateTable() {
 
 		TimeProcessor tp = TimeProcessor.getInstance();
-		
+
 		dataTimed.clear();
 		dataFloat.clear();
 
@@ -318,7 +354,7 @@ public class UIController implements Initializable {
 			UITask ui2 = new UITask(id, task);
 			dataFloat.add(ui2);
 		}
-		
+
 		tableTimed.setItems(dataTimed);
 		tableFloat.setItems(dataFloat);
 	}
