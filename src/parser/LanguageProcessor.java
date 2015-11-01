@@ -31,12 +31,13 @@ public class LanguageProcessor{
 	private static final String LOG_MSG_NOPARAM = "No parameters given";
 
 	private String getTaskName(String userCmd) {
+		String taskName = StringUtil.getStringAfter(userCmd,"",ParserConstants.DELIMITER_TOKEN);
+		return StringUtil.trim(taskName);
+	}
+	
+	private String getTaskSName(String userCmd){
 		String taskName = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_TASKNAME, 
 				ParserConstants.DELIMITER_TOKEN);
-		if(taskName != null){
-			return taskName;
-		}
-		taskName = StringUtil.getStringAfter(userCmd,"",ParserConstants.DELIMITER_TOKEN);
 		return StringUtil.trim(taskName);
 	}
 
@@ -190,6 +191,9 @@ public class LanguageProcessor{
 		switch (paramName) {
 		case CmdParameters.PARAM_NAME_TASK_NAME:
 			paramValue = getTaskName(fullParam);
+			break;
+		case CmdParameters.PARAM_NAME_TASK_SNAME:
+			paramValue = getTaskSName(fullParam);
 			break;
 		case CmdParameters.PARAM_NAME_TASK_ID:
 			paramValue = getTaskID(fullParam);

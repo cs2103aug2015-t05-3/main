@@ -7,6 +7,7 @@ package constants;
 
 public class CmdParameters {
 	public static final String PARAM_NAME_TASK_NAME = "ttn";
+	public static final String PARAM_NAME_TASK_SNAME = "ttsn";
 	public static final String PARAM_NAME_TASK_ID = "tid";
 	public static final String PARAM_NAME_TASK_STARTTIME = "tst";
 	public static final String PARAM_NAME_TASK_ENDTIME = "tet";
