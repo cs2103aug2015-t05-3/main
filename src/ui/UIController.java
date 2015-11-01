@@ -120,10 +120,10 @@ public class UIController implements Initializable {
 		String oldCommand = EMPTY_STRING;
 		String newCommand = EMPTY_STRING;
 
-		if (oldValue != null) {
+		if (!oldValue.isEmpty() || oldValue != null) {
 			oldCommand = StringUtil.getFirstWord(oldValue);
 		}
-		if (newValue != null) {
+		if (!newValue.isEmpty() || newValue != null) {
 			newCommand = StringUtil.getFirstWord(newValue);
 		}
 
