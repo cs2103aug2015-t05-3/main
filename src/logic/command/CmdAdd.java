@@ -8,6 +8,7 @@ package logic.command;
 import constants.CmdParameters;
 import parser.ParserConstants;
 import taskCollections.Task;
+import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
 import util.TimeUtil;
 
@@ -81,7 +82,7 @@ public class CmdAdd extends Command {
 			long taskEndTimeL = TimeUtil.sysStringToLongTime(taskEndTime);
 			
 			if(!isValidTime(taskStartTimeL, taskEndTimeL)){
-				return new CommandAction(MSG_STARTAFTEREND, false, _taskTree.getList());
+				return new CommandAction(MSG_STARTAFTEREND, false, _taskTree.searchFlag(FLAG_TYPE.NULL));
 			}
 
 			// Convert the priority to a format we can use for storing
@@ -92,7 +93,7 @@ public class CmdAdd extends Command {
 
 		_taskTree.add(addTask);
 
-		return new CommandAction(String.format(MSG_TASKADDED, taskName), true, _taskTree.getList());
+		return new CommandAction(String.format(MSG_TASKADDED, taskName), true, _taskTree.searchFlag(FLAG_TYPE.NULL));
 	}
 
 	@Override

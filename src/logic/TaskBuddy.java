@@ -115,7 +115,7 @@ public class TaskBuddy {
 		if(outputMsg != null){
 			UIHelper.setOutputMsg(outputMsg);
 		}
-		if(action.getTaskList() != null){
+		if(tasksToDisplay != null){
 			UIHelper.setTableOutput(tasksToDisplay);
 		}
 		if(action.isUndoable()){
