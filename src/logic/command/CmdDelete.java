@@ -45,7 +45,7 @@ public class CmdDelete extends Command {
 		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
 		_task = proccessTaskID(paramTaskID);
 		if(_task == null){
-			String outputMsg = MSG_TASKIDNOTFOUND;
+			String outputMsg = String.format(MSG_TASKIDNOTFOUND, paramTaskID);
 			boolean isUndoable = false;
 			return new CommandAction(outputMsg, isUndoable, null);
 		}
