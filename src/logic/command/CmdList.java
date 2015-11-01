@@ -64,7 +64,7 @@ public class CmdList extends Command {
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[]{ CmdParameters.PARAM_NAME_LIST_FLAG };
+		return new String[]{ CmdParameters.PARAM_NAME_LIST_FLAG, CmdParameters.PARAM_NAME_TASK_PRIORITY };
 	}
 	
 	@Override
@@ -86,7 +86,7 @@ public class CmdList extends Command {
 		if(priority == null){
 			priority = "";
 		}
-		
+		System.out.println(priority);
 		PRIORITY_TYPE priorityType;
 		switch(priority){
 			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH:
