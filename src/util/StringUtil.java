@@ -130,5 +130,14 @@ public class StringUtil {
 			return null;
 		}
 	}
+	
+	public static String getFirstNumber(String searchTerm){
+		Matcher m = Pattern.compile("-?\\d+").matcher(searchTerm);
+		if(m.find()){
+			return m.group();
+		} else {
+			return null;
+		}
+	}
 
 }
