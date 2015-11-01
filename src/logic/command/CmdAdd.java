@@ -21,10 +21,11 @@ public class CmdAdd extends Command {
 	// name";
 	private static final String MSG_TASKADDED = "Added : %1$s";
 	private static final String MSG_TASKNAMENOTGIVEN = "Please enter a task name";
+	private static final String MSG_STARTAFTEREND = "Specified start time should be before end time";
 	
 	//Help Info
 	private static final String HELP_INFO_ADD = 
-			"add <task_name> [%1$s <start_time>] [%2$s <end_time>] [%2$s <end_time>] [%3$s <high/normal/low/h/n/l>]";
+			"add <task_name> [%1$s <start_time>] [%2$s <end_time>] [%2$s <end_time>] [%3$s high/normal/low/h/n/l]";
 
 	// Error codes
 	/*
@@ -78,6 +79,10 @@ public class CmdAdd extends Command {
 			// calculation
 			long taskStartTimeL = TimeUtil.sysStringToLongTime(taskStartTime);
 			long taskEndTimeL = TimeUtil.sysStringToLongTime(taskEndTime);
+			
+			if(!isValidTime(taskStartTimeL, taskEndTimeL)){
+				return new CommandAction(MSG_STARTAFTEREND, false, _taskTree.getList());
+			}
 
 			// Convert the priority to a format we can use for storing
 			PRIORITY_TYPE taskPriorityP = getPriorityValue(taskPriority);
@@ -137,6 +142,13 @@ public class CmdAdd extends Command {
 		default:
 			return PRIORITY_TYPE.NORMAL;
 		}
+	}
+	
+	private boolean isValidTime(long startTime, long endTime){
+		if(startTime != 0){
+			return endTime > startTime;
+		} 
+		return true;
 	}
 
 	@Override
