@@ -15,7 +15,7 @@ public class CmdMark extends Command{
 	private static final String MSG_TASKMARKED = "Marked: \"%1$s\"";
 	private static final String MSG_TASKUNMARKED = "Unmarked: \"%1$s\"";
 	private static final String MSG_TASKALREADYMARKED = "Task: \"%1$s\" already marked";
-	private static final String MSG_TASKALREADYUNMARKED = "Task: \"%1$s\" already marked";
+	private static final String MSG_TASKALREADYUNMARKED = "Task: \"%1$s\" already unmarked";
 
 	//Help Info
 	private static final String HELP_INFO_MARK = "mark <task_ID> [%1$s]";
@@ -57,7 +57,7 @@ public class CmdMark extends Command{
 			return new CommandAction(outputMsg, isUndoable, null);
 		}
 
-		String optionalParameter = getParameterValue(CmdParameters.PARAM_VALUE_MARK_UNMARK);
+		String optionalParameter = getParameterValue(CmdParameters.PARAM_NAME_MARK_FLAG);
 		return proccessParameter(optionalParameter);
 	}
 
@@ -126,8 +126,8 @@ public class CmdMark extends Command{
 
 		String outputMsg;
 		boolean isUndoable;
-
-		if(parameter == null){
+		System.out.println(parameter);
+		if(parameter != CmdParameters.PARAM_VALUE_MARK_UNMARK){
 			if(_task.getFlag() == FLAG_TYPE.DONE){
 				outputMsg = String.format(MSG_TASKALREADYMARKED, _task.getName());
 				isUndoable = false;
