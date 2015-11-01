@@ -59,8 +59,8 @@ public class UI extends Application {
 		return isInitialised;
 	}
 
-	public static Stage getUIHelpOverlayStage() {
-		return uiHelpOverlayStage;
+	public void showUIHelpOverlayStage() {
+		uiHelpOverlayStage.show();
 	}
 
 	public void run() {

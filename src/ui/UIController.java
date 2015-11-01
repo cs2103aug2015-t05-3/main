@@ -281,6 +281,10 @@ public class UIController implements Initializable {
 		}
 	}
 
+	void showUIHelpOverlay() {
+		ui.showUIHelpOverlayStage();
+	}
+
 	private void generateTable() {
 
 		TimeProcessor tp = TimeProcessor.getInstance();
