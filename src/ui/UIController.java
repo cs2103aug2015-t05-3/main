@@ -119,8 +119,7 @@ public class UIController implements Initializable {
 										getStyleClass().add("lowPriority");
 										break;
 									}
-									
-									
+
 								}
 							}
 						} catch (NullPointerException e) {
@@ -148,10 +147,18 @@ public class UIController implements Initializable {
 
 							if (text != null) {
 								// System.out.println(this.getItem().getTask());
-								if (this.getItem().getTask().contains("cs2010")) {
-									getStyleClass().add("fancytext");
+								if (this.getItem().getIsDone()) {
+									getStyleClass().add("marked");
 								} else {
-									getStyleClass().add("fancytext1");
+									switch (this.getItem().getPriority()) {
+									case "HIGH":
+										getStyleClass().add("highPriority");
+										break;
+									case "LOW":
+										getStyleClass().add("lowPriority");
+										break;
+									}
+
 								}
 							}
 						} catch (NullPointerException e) {
@@ -159,7 +166,6 @@ public class UIController implements Initializable {
 						}
 					}
 				};
-
 				return row;
 			}
 		});
@@ -280,15 +286,15 @@ public class UIController implements Initializable {
 			} else {
 				generatedString = tp.getFormattedDate(t.getStartTime(), t.getEndTime());
 			}
-			
-			UITask ui1 = new UITask(t.getId(), t.getName(), generatedString, 
-					String.valueOf(t.getPriority()),String.valueOf(t.getFlag()));
+
+			UITask ui1 = new UITask(t.getId(), t.getName(), generatedString, String.valueOf(t.getPriority()),
+					String.valueOf(t.getFlag()));
 			dataTimed.add(ui1);
 		}
 
 		for (Task t : _floatingTaskList) {
-			UITask ui2 = new UITask(t.getId(), t.getName(), 
-					String.valueOf(t.getPriority()), String.valueOf(t.getFlag()));
+			UITask ui2 = new UITask(t.getId(), t.getName(), String.valueOf(t.getPriority()),
+					String.valueOf(t.getFlag()));
 			dataFloat.add(ui2);
 		}
 	}
