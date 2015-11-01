@@ -82,7 +82,7 @@ public class LanguageProcessor{
 		if (priority == null){
 			return null;
 		}
-		return resolvePriority(priority);
+		return resolvePriority(priority.trim());
 	}
 	
 	private String resolvePriority(String priority){

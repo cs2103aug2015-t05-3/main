@@ -1,10 +1,5 @@
 package logic.command;
 
-import java.util.List;
-
-import parser.ParserConstants;
-import taskCollections.Task;
-
 public class CmdUndo extends Command {
 	
 	/*
@@ -20,15 +15,7 @@ public class CmdUndo extends Command {
 	public CommandAction execute() {
 		Command toUndo = extractHistory();
 		
-		//return toUndo == null ? MSG_UNDOEMPTY : MSG_UNDO + toUndo.undo();
-		
-		if(toUndo == null){
-			String outputMsg = MSG_UNDOEMPTY;
-			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, null);
-		}
-		
-		return toUndo.undo();
+		return toUndo == null ? new CommandAction(MSG_UNDOEMPTY,false,null) : toUndo.undo();
 	}
 
 	@Override

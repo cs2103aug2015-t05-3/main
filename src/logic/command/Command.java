@@ -123,11 +123,11 @@ public abstract class Command {
 	 * @return The last command which was executed
 	 */
 	protected static Command extractHistory(){
-		if (history.isEmpty()) {	//TODO Hotfix
-			return null;			//TODO Hotfix
-		} else {					//TODO Hotfix
+		if (history.isEmpty()) {	
+			return null;			
+		} else {					
 			return history.pop();
-		}							//TODO Hotfix
+		}							
 	}
 
 	public static void init(String taskFileName){
