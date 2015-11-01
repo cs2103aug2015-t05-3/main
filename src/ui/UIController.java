@@ -125,7 +125,7 @@ public class UIController implements Initializable {
 						this.setTextFill(Color.RED);						
 					}
 					
-					if (stringArr[1].contains("O")) {
+					if (stringArr[1].contains("O") && !stringArr[1].contains("M")) {
 						this.setStyle("-fx-font-weight: bold");						
 					} else {
 						this.setStyle("-fx-font-weight: normal");
