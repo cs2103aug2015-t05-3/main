@@ -69,8 +69,8 @@ public class UIController implements Initializable {
 
 	private ArrayList<String> inputBuffer = new ArrayList<>();
 
-	final ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
-	final ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
+	ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
+	ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -96,8 +96,10 @@ public class UIController implements Initializable {
 		idFloat.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
 		taskFloat.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
 
+		/*
 		tableTimed.setItems(dataTimed);
 		tableFloat.setItems(dataFloat);
+		*/
 
 		// Focus Settings
 		tableTimed.setFocusTraversable(false);
@@ -136,6 +138,8 @@ public class UIController implements Initializable {
 						this.setTextFill(Color.LAWNGREEN);
 					} else if (stringArr[1].contains("H")) {
 						this.setTextFill(Color.RED);
+					} else if (stringArr[1].contains("N")) {
+						this.setTextFill(Color.BLACK);
 					}
 
 					if (stringArr[1].contains("O") && !stringArr[1].contains("M")) {
@@ -146,6 +150,10 @@ public class UIController implements Initializable {
 
 					item = stringArr[0];
 					setText(item);
+				} else {
+					setText(item);
+					this.setStyle("-fx-font-weight: normal");
+					this.setTextFill(Color.BLACK);
 				}
 
 			}
@@ -277,9 +285,10 @@ public class UIController implements Initializable {
 	private void generateTable() {
 
 		TimeProcessor tp = TimeProcessor.getInstance();
-
+		
 		dataTimed.clear();
 		dataFloat.clear();
+
 
 		for (Task t : _nonFloatingTaskList) {
 			String id = String.valueOf(t.getId());
@@ -309,6 +318,9 @@ public class UIController implements Initializable {
 			UITask ui2 = new UITask(id, task);
 			dataFloat.add(ui2);
 		}
+		
+		tableTimed.setItems(dataTimed);
+		tableFloat.setItems(dataFloat);
 	}
 
 	void clearInput() {
