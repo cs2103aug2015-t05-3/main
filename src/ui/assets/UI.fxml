@@ -97,7 +97,7 @@
                            </HBox.margin></TextField>
                      </children>
                   </HBox>
-                  <Text fx:id="syntaxMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="#444444" strokeType="OUTSIDE" strokeWidth="0.0" text="add -sd {} -ed {} -p {}" textOrigin="CENTER" wrappingWidth="779.9999949932098">
+                  <Text fx:id="syntaxMsg" boundsType="LOGICAL_VERTICAL_CENTER" fill="#444444" strokeType="OUTSIDE" strokeWidth="0.0" textOrigin="CENTER" wrappingWidth="779.9999949932098">
                      <font>
                         <Font size="15.0" />
                      </font>

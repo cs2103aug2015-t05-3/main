@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,7 +19,6 @@ import javafx.scene.text.Text;
 import parser.TimeProcessor;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
-import taskCollections.Task.PRIORITY_TYPE;
 import util.TimeUtil;
 
 public class UIController implements Initializable {
@@ -311,8 +309,6 @@ public class UIController implements Initializable {
 			inputBuffer.add(in);
 			inputBuffer.notify();
 		}
-
-		// Other classes will do the job.
 		clearInput();
 	}
 
