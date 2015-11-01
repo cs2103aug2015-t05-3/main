@@ -17,7 +17,6 @@ public class CmdUpdate extends Command {
 	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
 	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
-	//private static final String MSG_TASKUPDATED = "Updated : \"%1$s\" to \"%2$s\"";
 	private static final String MSG_ISNTANCEFOUND = "[%1$s] instances of \"%2$s\" found";
 	private static final String MSG_TASKNOTUPDATED = "Empty String. Task not updated";
 	private static final String MSG_TASKNOCHANGE = "No changes was made";
@@ -67,7 +66,7 @@ public class CmdUpdate extends Command {
 		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
 		_task = proccessTaskID(paramTaskID);
 		if(_task == null){
-			outputMsg = MSG_TASKIDNOTFOUND;
+			outputMsg = String.format(MSG_TASKIDNOTFOUND, paramTaskID);
 			isUndoable = false;
 			return new CommandAction(outputMsg, isUndoable, null);
 		}
