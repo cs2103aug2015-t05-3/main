@@ -18,6 +18,11 @@
 	-fx-text-fill: green;
 }
 
+.normalPriority .table-cell{
+    -fx-font: 14px Calibri;
+	-fx-text-fill: black;
+}
+
 .marked .table-cell{
     -fx-font: 14px Calibri;
 	-fx-text-fill: #bdbdbd;
