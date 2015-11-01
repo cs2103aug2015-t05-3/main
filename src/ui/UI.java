@@ -13,18 +13,22 @@ public class UI extends Application {
 
 	private static final String STYLESHEET_FILEPATH = "ui/assets/UIStylesheet.css";
 	private static final String RESOURCE_FILEPATH = "assets/UI.fxml";
+	private static final String HELP_FILEPATH = "assets/UIHelpOverlay.fxml";
 	private static final String ICON_FILEPATH = "assets/icon.png";
 	private static final String APP_TITLE = "TaskBuddy v0.4";
 
 	private static UIController uiController;
+	private static Stage uiHelpOverlayStage;
 	private static boolean isInitialised;
 
 	@Override
 	public void start(Stage stage) {
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(RESOURCE_FILEPATH));
+		FXMLLoader loaderHelp = new FXMLLoader(getClass().getResource(HELP_FILEPATH));
 		try {
 			AnchorPane root = (AnchorPane) loader.load();
+			AnchorPane rootHelp = (AnchorPane) loaderHelp.load();
 
 			uiController = loader.getController();
 			Scene scene = new Scene(root);
@@ -33,6 +37,10 @@ public class UI extends Application {
 			stage.setScene(scene);
 			stage.setResizable(false);
 			stage.show();
+
+			uiHelpOverlayStage = new Stage();
+			Scene sceneHelp = new Scene(rootHelp);
+			uiHelpOverlayStage.setScene(sceneHelp);
 
 			scene.getStylesheets().add(STYLESHEET_FILEPATH);
 
@@ -49,6 +57,10 @@ public class UI extends Application {
 
 	public boolean isInitialised() {
 		return isInitialised;
+	}
+
+	public static Stage getUIHelpOverlayStage() {
+		return uiHelpOverlayStage;
 	}
 
 	public void run() {
