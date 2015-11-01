@@ -96,4 +96,8 @@ public class TimeUtil {
 		temp.setTimeInMillis(time);
 		return temp.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
 	}
+	
+	public static boolean isBeforeNow(long time){
+		return getDayDifference(time) < 0;
+	}
 }
