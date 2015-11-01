@@ -61,7 +61,7 @@
                         <Insets />
                      </HBox.margin>
                      <children>
-                        <Text fx:id="tableFloatHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="TableFloat Title" textOrigin="CENTER" wrappingWidth="286.99999901652336">
+                        <Text fx:id="tableFloatHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="without time" textOrigin="CENTER" wrappingWidth="286.99999901652336">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -121,6 +121,5 @@
             <Insets top="10.0" />
          </padding>
       </VBox>
-      <DialogPane />
    </children>
 </AnchorPane>
