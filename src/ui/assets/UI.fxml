@@ -36,7 +36,7 @@
                <children>
                   <VBox prefHeight="400.0" prefWidth="460.0" stylesheets="@UIStylesheet.css">
                      <children>
-                        <Text fx:id="tableTimedHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="TableDate Title" textOrigin="CENTER" wrappingWidth="452.99999901652336">
+                        <Text fx:id="tableTimedHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="with time" textOrigin="CENTER" wrappingWidth="452.99999901652336">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -91,7 +91,7 @@
                   </Text>
                   <HBox alignment="CENTER_LEFT" maxHeight="48.0" maxWidth="785.0" minHeight="48.0" minWidth="785.0" prefHeight="48.0" prefWidth="785.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TextField fx:id="input" maxHeight="38.0" maxWidth="785.0" minHeight="38.0" minWidth="785.0" onAction="#enterPressed" prefHeight="38.0" prefWidth="785.0" promptText="Enter command here" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="input" maxHeight="38.0" maxWidth="785.0" minHeight="38.0" minWidth="785.0" onAction="#enterPressed" onKeyPressed="#showHistory" prefHeight="38.0" prefWidth="785.0" promptText="Enter command here" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin></TextField>
@@ -121,5 +121,6 @@
             <Insets top="10.0" />
          </padding>
       </VBox>
+      <DialogPane />
    </children>
 </AnchorPane>
