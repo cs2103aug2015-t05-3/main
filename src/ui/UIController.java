@@ -118,12 +118,14 @@ public class UIController implements Initializable {
 									case "LOW":
 										getStyleClass().add("lowPriority");
 										break;
+									default:
+										getStyleClass().add("normalPriority");
 									}
 
 								}
 							}
 						} catch (NullPointerException e) {
-							System.err.println("");
+							getStyleClass().add("normalPriority");
 						}
 					}
 				};
@@ -157,12 +159,14 @@ public class UIController implements Initializable {
 									case "LOW":
 										getStyleClass().add("lowPriority");
 										break;
+									default:
+										getStyleClass().add("normalPriority");
 									}
 
 								}
 							}
 						} catch (NullPointerException e) {
-							System.err.println("");
+							getStyleClass().add("normalPriority");
 						}
 					}
 				};
