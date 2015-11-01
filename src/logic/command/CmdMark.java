@@ -52,7 +52,7 @@ public class CmdMark extends Command{
 		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
 		_task = proccessTaskID(paramTaskID);
 		if(_task == null){
-			outputMsg = MSG_TASKIDNOTFOUND;
+			outputMsg = String.format(MSG_TASKIDNOTFOUND, paramTaskID);
 			isUndoable = false;
 			return new CommandAction(outputMsg, isUndoable, null);
 		}
