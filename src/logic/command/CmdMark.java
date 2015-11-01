@@ -18,7 +18,7 @@ public class CmdMark extends Command{
 	private static final String MSG_TASKALREADYUNMARKED = "Task: \"%1$s\" already unmarked";
 
 	//Help Info
-	private static final String HELP_INFO_MARK = "mark <task_ID> [%1$s]";
+	private static final String HELP_INFO_MARK = "<task_ID> [%1$s]";
 	
 	/*
 	 * Variables for internal use

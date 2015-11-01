@@ -13,7 +13,7 @@ public class CmdHelp extends Command{
 	private static final String MSG_HELP = "Help shown";
 
 	// Help constants
-	private static final String HELP_INFO_HELP = "help [<command>]";
+	private static final String HELP_INFO_HELP = "[<command>]";
 	private static final String HELP_ALL =
 			"<html>"
 			+ "<h1>List of Commands</h1>"

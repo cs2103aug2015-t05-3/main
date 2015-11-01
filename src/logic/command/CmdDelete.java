@@ -18,7 +18,7 @@ public class CmdDelete extends Command {
 	private static final String MSG_TASKDELETED = "Deleted : \"%1$s\"";
 
 	//Help Info
-	private static final String HELP_INFO_DELETE = "delete <task_ID>";
+	private static final String HELP_INFO_DELETE = "<task_ID>";
 	
 	/*
 	 * Variables for internal use

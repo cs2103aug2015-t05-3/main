@@ -20,7 +20,7 @@ public class CmdList extends Command {
 	private static final String MSG_TOTAL_TASK = "Total tasks in list: [%1$s]";
 	
 	//Help Info
-	private static final String HELP_INFO_LIST = "list [%1$s or %2$s or %3$s <high/normal/low/h/n/l>]";
+	private static final String HELP_INFO_LIST = "[%1$s or %2$s or %3$s <high/normal/low/h/n/l>]";
 	
 	public CmdList(){
 		

@@ -26,7 +26,7 @@ public class CmdUpdate extends Command {
 
 	//Help Info
 	private static final String HELP_INFO_UPDATE = 
-			"update <task_ID> [%1$s <task_name>] [%2$s <start_time>] [%3$s <end_time>][%4$s <high/normal/low/h/n/l>]";
+			"<task_ID> [%1$s <task_name>] [%2$s <start_time>] [%3$s <end_time>][%4$s <high/normal/low/h/n/l>]";
 	
 	/*
 	 * Variables for internal use
@@ -106,7 +106,7 @@ public class CmdUpdate extends Command {
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[] { CmdParameters.PARAM_NAME_TASK_NAME, CmdParameters.PARAM_NAME_TASK_STARTTIME,
+		return new String[] { CmdParameters.PARAM_NAME_TASK_SNAME, CmdParameters.PARAM_NAME_TASK_STARTTIME,
 				CmdParameters.PARAM_NAME_TASK_ENDTIME, CmdParameters.PARAM_NAME_TASK_PRIORITY };
 	}
 
@@ -133,13 +133,15 @@ public class CmdUpdate extends Command {
 
 	private void proccessOptionalFields(){
 		
-		String paramTaskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_NAME);
+		String paramTaskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_SNAME);
 		if(paramTaskName == null || paramTaskName.equals("")){
 			_newTaskName = _task.getName();
+			System.out.println("if: "+_task.getName());
 		}else{
 			_newTaskName = paramTaskName;
+			System.out.println("else: "+paramTaskName);
 		}
-		//System.out.println(_newTaskName);
+		System.out.println(_newTaskName);
 
 		String paramStartTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_STARTTIME);
 		try{
@@ -188,7 +190,7 @@ public class CmdUpdate extends Command {
 
 	private boolean isInvalidTime(long newStartTime, long newEndTime){
 
-		if((newEndTime-newStartTime) > 0){
+		if((newEndTime-newStartTime) <= 0){
 			return true;
 		}
 

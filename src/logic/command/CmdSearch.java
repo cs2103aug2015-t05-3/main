@@ -17,7 +17,7 @@ public class CmdSearch extends Command {
 	private static final String MSG_ISNTANCEFOUND = "[%1$s] instances of \"%2$s\" found";
 
 	//Help Info
-	private static final String HELP_INFO_SEARCH = "search <keyword>";
+	private static final String HELP_INFO_SEARCH = "<keyword>";
 	
 	/*
 	 * Variables for internal use

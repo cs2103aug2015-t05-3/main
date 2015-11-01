@@ -26,7 +26,7 @@ public class CmdAdd extends Command {
 	
 	//Help Info
 	private static final String HELP_INFO_ADD = 
-			"add <task_name> [%1$s <start_time>] [%2$s <end_time>] [%2$s <end_time>] [%3$s high/normal/low/h/n/l]";
+			"<task_name> [%1$s <start_time>] [%2$s <end_time>] [%2$s <end_time>] [%3$s high/normal/low/h/n/l]";
 
 	// Error codes
 	/*
