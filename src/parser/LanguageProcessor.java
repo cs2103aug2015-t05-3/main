@@ -134,6 +134,9 @@ public class LanguageProcessor{
 		}
 		// Remove the command from the string
 		userCmd = StringUtil.removeFirstWord(userCmd);
+		if(userCmd == null){
+			return null;
+		}
 
 		for (String requiredField : toExecute.getRequiredFields()) {
 			String paramValue = extractParameter(requiredField, userCmd);

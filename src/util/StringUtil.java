@@ -105,7 +105,6 @@ public class StringUtil {
 		StringBuilder result = new StringBuilder();
 		int i = 0;
 		if(searchTerm != null && !searchTerm.isEmpty()){
-			System.out.println("L");
 			for(; i < tokens.length;i++){
 				if(tokens[i].equals(searchTerm)){
 					break;

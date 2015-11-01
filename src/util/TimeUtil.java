@@ -7,12 +7,16 @@ package util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TimeUtil {
 
 	private static SimpleDateFormat _df1 = new SimpleDateFormat("EEEE: dd/MM/yy HH:mm 'GMT'Z");
 	private static SimpleDateFormat _df2 = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private static Calendar now = Calendar.getInstance();
+	private static Calendar temp = Calendar.getInstance();
+
 	/**
 	 * Converts a system time in string to long format.
 	 * 
@@ -29,32 +33,33 @@ public class TimeUtil {
 	/**
 	 * 
 	 * Converts a long time to date format
+	 * 
 	 * @return date in sample format: Tuesday: 29/09/15 20:15 GMT+0800
 	 */
 	public static String getFormattedDate(long time) {
-		
+
 		if (time == 0L) {
 			return "0";
 		}
-		
+
 		Date date = new Date(time);
 		String dateText = _df1.format(date);
 		return dateText;
 	}
-	
+
 	/**
 	 * Converts a date to long time
-	 * @return long time
-	 * ToDo: Refactor this
+	 * 
+	 * @return long time ToDo: Refactor this
 	 */
 	public static long getLongTime(String sDate) {
-		
+
 		if (sDate.equals("0")) {
 			return 0L;
 		}
-		
+
 		try {
-			Date date = (Date)_df1.parse(sDate);
+			Date date = (Date) _df1.parse(sDate);
 			return date.getTime();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -62,20 +67,33 @@ public class TimeUtil {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * 
 	 * Converts a long time to date format for display.
+	 * 
 	 * @return date in sample format: 29/09/15 20:15
 	 */
 	public static String getUIFormattedDate(long time) {
-		
+
 		if (time == 0L) {
 			return "0";
 		}
-		
+
 		Date date = new Date(time);
 		String dateText = _df2.format(date);
 		return dateText;
+	}
+
+	public static int getWeekDifference(long time) {
+		now.setTimeInMillis(System.currentTimeMillis());
+		temp.setTimeInMillis(time);
+		return temp.get(Calendar.WEEK_OF_YEAR) - now.get(Calendar.WEEK_OF_YEAR);
+	}
+
+	public static int getDayDifference(long time) {
+		now.setTimeInMillis(System.currentTimeMillis());
+		temp.setTimeInMillis(time);
+		return temp.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
 	}
 }
