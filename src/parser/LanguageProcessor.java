@@ -2,6 +2,9 @@ package parser;
 
 import logic.command.*;
 import util.StringUtil;
+
+import java.util.logging.Logger;
+
 import constants.CmdParameters;
 
 /**
@@ -18,6 +21,14 @@ public class LanguageProcessor{
 	//private static LanguageProcessor langProcessor;
 	private static CommandProcessor cmdP;
 	private static TimeProcessor timeP;
+	private static Logger parseLog;
+	
+	/*
+	 * Constant
+	 */
+	private static final String LOG_FORMAT_RESULT = "%1$s: %2$s | %3$s"; // <User input>: <Parsed result/message> [Optional message]
+	private static final String LOG_MSG_INVALIDCMD = "Invalid command";
+	private static final String LOG_MSG_NOPARAM = "No parameters given";
 
 	private String getTaskName(String userCmd) {
 		String taskName = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_TASKNAME, 
@@ -30,7 +41,7 @@ public class LanguageProcessor{
 	}
 
 	private String getTaskID(String userCmd){
-		String id = userCmd;
+		String id = StringUtil.getFirstNumber(userCmd);
 		if(id != null){
 			try{
 				Integer.parseInt(id);
@@ -102,10 +113,6 @@ public class LanguageProcessor{
 	}
 
 	private String getListOption(String userCmd){
-		if (userCmd == null) {		//TODO Hotfix
-			return null;			//TODO Hotfix
-		}							//TODO Hotfix
-
 		if(userCmd.contains(ParserConstants.TASK_FILTER_ALL)){
 			return CmdParameters.PARAM_VALUE_LIST_ALL;
 		} else if (userCmd.contains(ParserConstants.TASK_FILTER_DONE)){
@@ -127,27 +134,38 @@ public class LanguageProcessor{
 		if(cmdP == null){ // If this is not initialised yet, do not allow any operations
 			return null;
 		}
-		String cmd = cmdP.getCmd(userCmd);
-		Command toExecute = cmdP.getCmdType(cmd);
-		if (toExecute == null) {
+		
+		String cmd = cmdP.getCmd(userCmd); // Extract the command from input
+		Command toExecute = cmdP.getCmdType(cmd); // Look up the command table
+		
+		if (toExecute == null) { // Not a valid command since look up in cmd table failed
+			parseLog.info(String.format(LOG_FORMAT_RESULT, userCmd,"", LOG_MSG_INVALIDCMD));
 			return null;
 		}
-		// Remove the command from the string
-		userCmd = StringUtil.removeFirstWord(userCmd);
-		if(userCmd == null){
-			return toExecute;
+		
+		
+		String param = StringUtil.removeFirstWord(userCmd);// Remove the command from the string, leaving just the parameters behind
+		if(param == null){ // No parameters to process
+			if(toExecute.getRequiredFields().length == 0){ // No required fields, valid cmd
+				parseLog.info(String.format(LOG_FORMAT_RESULT,userCmd,"",LOG_MSG_NOPARAM));
+				return toExecute;
+			} else {
+				return null;
+			}
 		}
 
+		// Extract all fields which are declared in commands
 		for (String requiredField : toExecute.getRequiredFields()) {
-			String paramValue = extractParameter(requiredField, userCmd);
-			if(paramValue == null){
+			String paramValue = extractParameter(requiredField, param);
+			System.out.println(requiredField+": "+paramValue);
+			if(paramValue == null){ // Invalid command since required fields arent available
 				return null;
 			}
 			toExecute.setParameter(requiredField, paramValue);
 		}
-
 		for (String optionalField : toExecute.getOptionalFields()) {
-			String paramValue = extractParameter(optionalField, userCmd);
+			String paramValue = extractParameter(optionalField, param);
+			System.out.println(optionalField+": "+paramValue);
 			if(paramValue != null){
 				toExecute.setParameter(optionalField, paramValue);
 			}
