@@ -15,6 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -34,14 +35,11 @@ import util.TimeUtil;
 
 public class UIController implements Initializable {
 
-	/*
-	 * Tutorial video from https://www.youtube.com/watch?v=dF48KdNH1g4
-	 */
-
 	// Message string constants
 	private static final String MSG_CMD_WELCOME = "Welcome! Loading your stuffs";
 	private static final String MSG_PENDING_HELLO = "Hello %s,";
 	private static final String MSG_EMPTY = "";
+	private static final String MSG_EMPTY_TABLE = "Nothing here";
 
 	// Utility string constants
 	private static final String EMPTY_STRING = "";
@@ -71,11 +69,11 @@ public class UIController implements Initializable {
 	private ArrayList<String> inputBuffer = new ArrayList<>();
 	ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
-	
+
 	private Queue<String> masterQ;
 	private Stack<String> upStack;
 	private Stack<String> downStack;
-	
+
 	public UIController() {
 		masterQ = new LinkedList<String>();
 		upStack = new Stack<String>();
@@ -105,6 +103,9 @@ public class UIController implements Initializable {
 
 		idFloat.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
 		taskFloat.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
+
+		tableTimed.setPlaceholder(new Label(MSG_EMPTY_TABLE));
+		tableFloat.setPlaceholder(new Label(MSG_EMPTY_TABLE));
 
 		// Focus Settings
 		tableTimed.setFocusTraversable(false);
@@ -378,12 +379,12 @@ public class UIController implements Initializable {
 		synchronized (inputBuffer) {
 			String in = input.getText().trim();
 			masterQ.add(in);
-			
-			//can put the following into a method			
+
+			//can put the following into a method
 			resetStacks();
 			// end method
-			
-			
+
+
 			inputBuffer.add(in);
 			inputBuffer.notify();
 		}
@@ -392,15 +393,15 @@ public class UIController implements Initializable {
 
 	private void resetStacks() {
 		Queue<String> toStack = new LinkedList<String>(masterQ);
-		
+
 		upStack.clear();
 		downStack.clear();
-		
+
 		while(!toStack.isEmpty()) {
 			upStack.push(toStack.poll());
 		}
 	}
-		
+
 	public void showHistory(KeyEvent ke) {
 		if (ke.getCode().equals(KeyCode.UP)) {
 			if (!upStack.isEmpty()) {
