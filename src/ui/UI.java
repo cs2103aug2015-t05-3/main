@@ -14,7 +14,7 @@ public class UI extends Application {
 	private static final String STYLESHEET_FILEPATH = "ui/assets/UIStylesheet.css";
 	private static final String RESOURCE_FILEPATH = "assets/UI.fxml";
 	private static final String ICON_FILEPATH = "assets/icon.png";
-	private static final String APP_TITLE = "TaskBuddy v0.3";
+	private static final String APP_TITLE = "TaskBuddy v0.4";
 
 	private static UIController uiController;
 	private static boolean isInitialised;

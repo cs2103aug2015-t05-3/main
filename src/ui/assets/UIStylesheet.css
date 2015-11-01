@@ -5,5 +5,24 @@
 .highlightedRow {
     -fx-background-insets: 0, 1, 2;
     -fx-background: #ffb6c1;
-    -fx-text-fill: #ffb6c1 !important;
+    -fx-text-fill: #ffb6c1;
+}
+
+.highPriority .table-cell {
+    -fx-font: 14px Calibri;
+    -fx-text-fill: red;
+}
+
+.lowPriority .table-cell{
+    -fx-font: 14px Calibri;
+	-fx-text-fill: green;
+}
+
+.marked .table-cell{
+    -fx-font: 14px Calibri;
+	-fx-text-fill: #bdbdbd;
+}
+
+.overdue .table-cell{
+    -fx-font-weight: bold;
 }

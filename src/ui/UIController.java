@@ -77,6 +77,9 @@ public class UIController implements Initializable {
 	final ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	final ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
 
+	public UIController() {
+	}
+
 	@Override
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
@@ -104,9 +107,52 @@ public class UIController implements Initializable {
 							String text = this.getItem().getTask();
 
 							if (text != null) {
-								System.out.println(this.getItem().getTask());
-								this.setTextFill(Color.RED);
-								getStyleClass().add("highlightedRow");
+								// System.out.println(this.getItem().getTask());
+								if (this.getItem().getIsDone()) {
+									getStyleClass().add("marked");
+								} else {
+									switch (this.getItem().getPriority()) {
+									case "HIGH":
+										getStyleClass().add("highPriority");
+										break;
+									case "LOW":
+										getStyleClass().add("lowPriority");
+										break;
+									}
+									
+									
+								}
+							}
+						} catch (NullPointerException e) {
+							System.err.println("");
+						}
+					}
+				};
+				return row;
+			}
+		});
+
+		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
+		taskFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
+
+		tableFloat.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
+			@Override
+			public TableRow<UITask> call(TableView<UITask> tableView) {
+				final TableRow<UITask> row = new TableRow<UITask>() {
+					@Override
+					protected void updateItem(UITask task, boolean empty) {
+						super.updateItem(task, empty);
+
+						try {
+							String text = this.getItem().getTask();
+
+							if (text != null) {
+								// System.out.println(this.getItem().getTask());
+								if (this.getItem().getTask().contains("cs2010")) {
+									getStyleClass().add("fancytext");
+								} else {
+									getStyleClass().add("fancytext1");
+								}
 							}
 						} catch (NullPointerException e) {
 							System.err.println("");
@@ -118,9 +164,6 @@ public class UIController implements Initializable {
 			}
 		});
 
-		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
-		taskFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
-
 		// idTimed.setSortType(TableColumn.SortType.ASCENDING);
 
 		tableTimed.setItems(dataTimed);
@@ -131,9 +174,6 @@ public class UIController implements Initializable {
 		// Focus Settings
 		tableTimed.setFocusTraversable(false);
 		tableFloat.setFocusTraversable(false);
-	}
-
-	public UIController() {
 	}
 
 	// Create UI
@@ -240,48 +280,21 @@ public class UIController implements Initializable {
 			} else {
 				generatedString = tp.getFormattedDate(t.getStartTime(), t.getEndTime());
 			}
-			UITask ui1 = new UITask(t.getId(), t.getName(), generatedString);
+			
+			UITask ui1 = new UITask(t.getId(), t.getName(), generatedString, 
+					String.valueOf(t.getPriority()),String.valueOf(t.getFlag()));
 			dataTimed.add(ui1);
 		}
 
 		for (Task t : _floatingTaskList) {
-			UITask ui2 = new UITask(t.getId(), t.getName());
+			UITask ui2 = new UITask(t.getId(), t.getName(), 
+					String.valueOf(t.getPriority()), String.valueOf(t.getFlag()));
 			dataFloat.add(ui2);
 		}
 	}
 
 	void clearInput() {
 		input.clear();
-	}
-
-	public static class UITask {
-		private final SimpleIntegerProperty id;
-		private final SimpleStringProperty task;
-		private final SimpleStringProperty sDate;
-
-		private UITask(int id, String task, String dateString) {
-			this.id = new SimpleIntegerProperty(id);
-			this.task = new SimpleStringProperty(task);
-			this.sDate = new SimpleStringProperty(dateString);
-		}
-
-		private UITask(int id, String task) {
-			this.id = new SimpleIntegerProperty(id);
-			this.task = new SimpleStringProperty(task);
-			this.sDate = null;
-		}
-
-		public int getId() {
-			return id.get();
-		}
-
-		public String getTask() {
-			return task.get();
-		}
-
-		public String getSDate() {
-			return sDate.get();
-		}
 	}
 
 	// Event methods
