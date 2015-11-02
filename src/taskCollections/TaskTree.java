@@ -238,8 +238,7 @@ public class TaskTree {
 	 *         modified
 	 */
 	public boolean updateFlag(Task task, FLAG_TYPE newValue) {
-		task.setFlag(newValue);
-		return updateAttributeTree(task, task, TYPE.FLAG);
+		return updateAttributeTree(task, task, newValue, TYPE.FLAG);
 	}
 
 	/**
@@ -258,6 +257,25 @@ public class TaskTree {
 		return updateAttributeTree(task, task, TYPE.PRIORITY);
 	}
 
+	private boolean updateAttributeTree(Task oldTask, Task newTask, FLAG_TYPE newFlag, TYPE taskAttributeType) {
+		int treeType = taskAttributeType.getValue();
+
+		boolean isReplaced, isAdded, isRemoved;
+		isReplaced = isAdded = isRemoved = false;
+
+		isRemoved = _taskTrees.get(treeType).remove(oldTask);
+		newTask.setFlag(newFlag);
+		if (isRemoved) {
+			isAdded = _taskTrees.get(treeType).add(newTask);
+		}
+		isReplaced = isAdded & isRemoved;
+
+		if (isReplaced) {
+			pushUpdateToStorage(oldTask, newTask);
+		}
+		return isReplaced;
+	}
+
 	private boolean updateAttributeTree(Task oldTask, Task newTask, TYPE taskAttributeType) {
 
 		int treeType = taskAttributeType.getValue();
@@ -266,6 +284,8 @@ public class TaskTree {
 		isReplaced = isAdded = isRemoved = false;
 
 		isRemoved = _taskTrees.get(treeType).remove(oldTask);
+
+		//TODO BUG Task not found
 		if (isRemoved) {
 			isAdded = _taskTrees.get(treeType).add(newTask);
 		}
