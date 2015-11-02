@@ -175,8 +175,24 @@ public class TaskTree {
 	 *         modified
 	 */
 	public boolean updateName(Task task, String newValue) {
-		task.setName(newValue);
-		return updateAttributeTree(task, task, TYPE.NAME);
+		TYPE taskAttributeType = TYPE.NAME;
+		boolean isAdded, isRemoved, isReplaced;
+		isReplaced = isAdded = isRemoved = false;
+
+		isRemoved = removeFromAttributeTree(task, taskAttributeType);
+
+		if (isRemoved) {
+			task.setName(newValue);
+			isAdded = addToAttributeTree(task, taskAttributeType);
+		}
+
+		isReplaced = isRemoved & isAdded;
+
+		if (isReplaced) {
+			pushUpdateToStorage(task);
+		}
+
+		return isReplaced;
 	}
 
 	/**
@@ -192,6 +208,7 @@ public class TaskTree {
 	 */
 	public void updateDescription(Task task, String newValue) {
 		task.setDescription(newValue);
+		pushUpdateToStorage(task);
 	}
 
 	/**
@@ -206,8 +223,24 @@ public class TaskTree {
 	 *         modified
 	 */
 	public boolean updateStartTime(Task task, long newValue) {
-		task.setStartTime(newValue);
-		return updateAttributeTree(task, task, TYPE.START_TIME);
+		TYPE taskAttributeType = TYPE.START_TIME;
+		boolean isAdded, isRemoved, isReplaced;
+		isReplaced = isAdded = isRemoved = false;
+
+		isRemoved = removeFromAttributeTree(task, taskAttributeType);
+
+		if (isRemoved) {
+			task.setStartTime(newValue);
+			isAdded = addToAttributeTree(task, taskAttributeType);
+		}
+
+		isReplaced = isRemoved & isAdded;
+
+		if (isReplaced) {
+			pushUpdateToStorage(task);
+		}
+
+		return isReplaced;
 	}
 
 	/**
@@ -222,8 +255,24 @@ public class TaskTree {
 	 *         modified
 	 */
 	public boolean updateEndTime(Task task, long newValue) {
-		task.setEndTime(newValue);
-		return updateAttributeTree(task, task, TYPE.END_TIME);
+		TYPE taskAttributeType = TYPE.END_TIME;
+		boolean isAdded, isRemoved, isReplaced;
+		isReplaced = isAdded = isRemoved = false;
+
+		isRemoved = removeFromAttributeTree(task, taskAttributeType);
+
+		if (isRemoved) {
+			task.setEndTime(newValue);
+			isAdded = addToAttributeTree(task, taskAttributeType);
+		}
+
+		isReplaced = isRemoved & isAdded;
+
+		if (isReplaced) {
+			pushUpdateToStorage(task);
+		}
+
+		return isReplaced;
 	}
 
 	/**
@@ -238,7 +287,24 @@ public class TaskTree {
 	 *         modified
 	 */
 	public boolean updateFlag(Task task, FLAG_TYPE newValue) {
-		return updateAttributeTree(task, task, newValue, TYPE.FLAG);
+		TYPE taskAttributeType = TYPE.FLAG;
+		boolean isAdded, isRemoved, isReplaced;
+		isReplaced = isAdded = isRemoved = false;
+
+		isRemoved = removeFromAttributeTree(task, taskAttributeType);
+
+		if (isRemoved) {
+			task.setFlag(newValue);
+			isAdded = addToAttributeTree(task, taskAttributeType);
+		}
+
+		isReplaced = isRemoved & isAdded;
+
+		if (isReplaced) {
+			pushUpdateToStorage(task);
+		}
+
+		return isReplaced;
 	}
 
 	/**
@@ -253,48 +319,40 @@ public class TaskTree {
 	 *         modified
 	 */
 	public boolean updatePriority(Task task, PRIORITY_TYPE newValue) {
-		task.setPriority(newValue);
-		return updateAttributeTree(task, task, TYPE.PRIORITY);
-	}
-
-	private boolean updateAttributeTree(Task oldTask, Task newTask, FLAG_TYPE newFlag, TYPE taskAttributeType) {
-		int treeType = taskAttributeType.getValue();
-
-		boolean isReplaced, isAdded, isRemoved;
+		TYPE taskAttributeType = TYPE.PRIORITY;
+		boolean isAdded, isRemoved, isReplaced;
 		isReplaced = isAdded = isRemoved = false;
 
-		isRemoved = _taskTrees.get(treeType).remove(oldTask);
-		newTask.setFlag(newFlag);
+		isRemoved = removeFromAttributeTree(task, taskAttributeType);
+
 		if (isRemoved) {
-			isAdded = _taskTrees.get(treeType).add(newTask);
+			task.setPriority(newValue);
+			isAdded = addToAttributeTree(task, taskAttributeType);
 		}
-		isReplaced = isAdded & isRemoved;
+
+		isReplaced = isRemoved & isAdded;
 
 		if (isReplaced) {
-			pushUpdateToStorage(oldTask, newTask);
+			pushUpdateToStorage(task);
 		}
+
 		return isReplaced;
 	}
 
-	private boolean updateAttributeTree(Task oldTask, Task newTask, TYPE taskAttributeType) {
-
+	private boolean removeFromAttributeTree(Task oldTask, TYPE taskAttributeType) {
 		int treeType = taskAttributeType.getValue();
 
-		boolean isReplaced, isAdded, isRemoved;
-		isReplaced = isAdded = isRemoved = false;
-
+		boolean isRemoved = false;
 		isRemoved = _taskTrees.get(treeType).remove(oldTask);
+		return isRemoved;
+	}
 
-		//TODO BUG Task not found
-		if (isRemoved) {
-			isAdded = _taskTrees.get(treeType).add(newTask);
-		}
-		isReplaced = isAdded & isRemoved;
+	private boolean addToAttributeTree(Task newTask, TYPE taskAttributeType) {
+		int treeType = taskAttributeType.getValue();
 
-		if (isReplaced) {
-			pushUpdateToStorage(oldTask, newTask);
-		}
-		return isReplaced;
+		boolean isAdded = false;
+		isAdded = _taskTrees.get(treeType).add(newTask);
+		return isAdded;
 	}
 
 	// TaskTree Task operation: Search and query
@@ -701,6 +759,15 @@ public class TaskTree {
 		isPullSuccessful &= _fileHandler.delete(taskId);
 
 		return isPullSuccessful;
+	}
+
+	/**
+	 * Update a new task to storage file.
+	 *
+	 * @throws Exception
+	 */
+	private boolean pushUpdateToStorage(Task task) {
+		return pushUpdateToStorage(task, task);
 	}
 
 	/**
