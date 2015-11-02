@@ -86,6 +86,8 @@ public class TimeUtil {
 	}
 
 	public static int getWeekDifference(long time) {
+		now.setFirstDayOfWeek(Calendar.MONDAY);
+		temp.setFirstDayOfWeek(Calendar.MONDAY);
 		now.setTimeInMillis(System.currentTimeMillis());
 		temp.setTimeInMillis(time);
 		return temp.get(Calendar.WEEK_OF_YEAR) - now.get(Calendar.WEEK_OF_YEAR);
