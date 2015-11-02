@@ -14,12 +14,8 @@ public class CmdUpdate extends Command {
 	 * Constants
 	 */
 	// Message constants
-	private static final String MSG_TASKUNSPECIFIED = "Please specify a task name";
-	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
-	private static final String MSG_ISNTANCEFOUND = "[%1$s] instances of \"%2$s\" found";
-	private static final String MSG_TASKNOTUPDATED = "Empty String. Task not updated";
-	private static final String MSG_TASKNOCHANGE = "No changes was made";
+	private static final String MSG_TASKNOUPDATE = "No update was made";
 	private static final String MSG_TASKUPDATED = "Updated ID: \"%1$s\"";
 	private static final String MSG_INVALIDTIME = "Invalid start/end time given";
 
@@ -32,6 +28,7 @@ public class CmdUpdate extends Command {
 	 */
 	private Task _task;
 	private int _taskID;
+	private boolean _noParam;
 
 	//variables for updating
 	private String _newTaskName;
@@ -51,7 +48,7 @@ public class CmdUpdate extends Command {
 
 	@Override
 	public CommandAction execute() {
-
+		
 		String outputMsg;
 		boolean isUndoable;
 
@@ -72,6 +69,13 @@ public class CmdUpdate extends Command {
 		}
 
 		proccessOptionalFields();
+		
+		if(_noParam){
+			outputMsg = MSG_TASKNOUPDATE;
+			isUndoable = false;
+			return new CommandAction(outputMsg, isUndoable, null);
+		}
+		
 		if(isInvalidTime(_newStartTime, _newEndTime)){
 			outputMsg = MSG_INVALIDTIME;
 			isUndoable = false;
@@ -131,22 +135,21 @@ public class CmdUpdate extends Command {
 	}
 
 	private void proccessOptionalFields(){
-		
+		int nullParamCounter = 0;
 		String paramTaskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_SNAME);
 		if(paramTaskName == null || paramTaskName.equals("")){
 			_newTaskName = _task.getName();
-			System.out.println("if: "+_task.getName());
+			nullParamCounter++;
 		}else{
 			_newTaskName = paramTaskName;
-			System.out.println("else: "+paramTaskName);
 		}
-		System.out.println(_newTaskName);
 
 		String paramStartTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_STARTTIME);
 		try{
 			_newStartTime = Long.parseLong(paramStartTime);
 		}catch(Exception e){
 			_newStartTime = _task.getStartTime();
+			nullParamCounter++;
 		}
 		
 		String paramEndTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_ENDTIME);
@@ -154,13 +157,19 @@ public class CmdUpdate extends Command {
 			_newEndTime = Long.parseLong(paramEndTime);
 		}catch(Exception e){
 			_newEndTime = _task.getEndTime();
+			nullParamCounter++;
 		}
 
 		String paramPriority = getParameterValue(CmdParameters.PARAM_NAME_TASK_PRIORITY);
 		if(paramPriority == null || paramPriority.equals("")){
 			_newPriority = _task.getPriority();
+			nullParamCounter++;
 		}else{
 			_newPriority = getPriorityType(paramPriority);
+		}
+		
+		if(nullParamCounter == 4){
+			_noParam = true;
 		}
 		
 	}
@@ -188,7 +197,16 @@ public class CmdUpdate extends Command {
 	}
 
 	private boolean isInvalidTime(long newStartTime, long newEndTime){
-
+		
+		System.out.println("NewStartTime: "+newStartTime);
+		System.out.println("NewEndTime: "+newEndTime);
+		System.out.println("prevStartTime: "+_task.getStartTime());
+		System.out.println("prevEndTime: "+_task.getEndTime());
+		
+		if(newStartTime == _task.getStartTime() && newEndTime == _task.getEndTime()){
+			return false;
+		}
+		
 		if((newEndTime-newStartTime) <= 0){
 			return true;
 		}
