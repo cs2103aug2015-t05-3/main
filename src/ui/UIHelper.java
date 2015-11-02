@@ -58,6 +58,10 @@ public class UIHelper {
 		uiController.setOutputMsg(s);
 	}
 
+	public static void showHelpPanel() {
+		uiController.showUIHelpOverlay();
+	}
+
 	public static void setUserInput(String in) {
 		// frame.setInputText(in);
 	}

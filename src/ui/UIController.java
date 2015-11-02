@@ -63,7 +63,8 @@ public class UIController implements Initializable {
 	@FXML private TableView<UITask> tableFloat;
 	@FXML private TextField input;
 
-	private static UI ui;
+	private static UI uI;
+	private static UIController uIController;
 	private List<Task> _floatingTaskList;
 	private List<Task> _nonFloatingTaskList;
 	private ArrayList<String> inputBuffer = new ArrayList<>();
@@ -149,7 +150,6 @@ public class UIController implements Initializable {
 		}
 	}
 
-
 	private TableCell<UITask, String> updateColor() {
 		TableCell<UITask, String> cell = new TableCell<UITask, String>() {
 			@Override
@@ -215,17 +215,17 @@ public class UIController implements Initializable {
 
 	// Create UI
 	static void createUI() {
-		if (ui == null) {
-			ui = new UI();
+		if (uI == null) {
+			uI = new UI();
 
 			new Thread() {
 				@Override
 				public void run() {
-					javafx.application.Application.launch(ui.getClass());
+					javafx.application.Application.launch(uI.getClass());
 				}
 			}.start();
 
-			while (!ui.isInitialised()) {
+			while (!uI.isInitialised()) {
 				try {
 					Thread.sleep(0);
 				} catch (InterruptedException ex) {
@@ -282,7 +282,16 @@ public class UIController implements Initializable {
 	}
 
 	void showUIHelpOverlay() {
-		ui.showUIHelpOverlayStage();
+		uI.showUIHelpOverlayStage();
+	}
+
+	void hideUIHelpOverlay() {
+		uI.hideUIHelpOverlayStage();
+	}
+
+	static UIController getUIController() {
+		uIController = UI.getController();
+		return uIController;
 	}
 
 	private void generateTable() {
