@@ -46,7 +46,7 @@ public class TimeProcessor {
 	
 	private TimeProcessor(){
 		sdf = new SimpleDateFormat();
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+		sdf.setTimeZone(TimeZone.getDefault());
 		now = Calendar.getInstance(TimeZone.getDefault());
 		temp = Calendar.getInstance(TimeZone.getDefault());
 		now.setFirstDayOfWeek(Calendar.MONDAY);
@@ -80,6 +80,7 @@ public class TimeProcessor {
 					temp.add(Calendar.DAY_OF_YEAR, 1);
 				} while(temp.get(Calendar.DAY_OF_WEEK) != day);
 				temp.set(Calendar.HOUR_OF_DAY, hour);
+				System.out.println(hour +" "+min);
 				temp.set(Calendar.MINUTE, min);
 				temp.set(Calendar.SECOND, 0);
 				//temp.set(Calendar.MONTH, now.get(Calendar.MONTH));
