@@ -18,7 +18,6 @@ public class CmdUndo extends Command {
 	@Override
 	public CommandAction execute() {
 		Command toUndo = extractHistory();
-		System.out.println("Undo History: " + toUndo);
 		
 		if(toUndo == null){
 			return new CommandAction(MSG_UNDOEMPTY,false,null);
