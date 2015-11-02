@@ -46,13 +46,15 @@ public class TimeProcessor {
 	
 	private TimeProcessor(){
 		sdf = new SimpleDateFormat();
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+		sdf.setTimeZone(TimeZone.getDefault());
 		now = Calendar.getInstance(TimeZone.getDefault());
 		temp = Calendar.getInstance(TimeZone.getDefault());
+		now.setFirstDayOfWeek(Calendar.MONDAY);
+		temp.setFirstDayOfWeek(Calendar.MONDAY);
 	}
 	
 	public long resolveTime(String time){
-		time = time.replaceAll("\\s|,", ""); // Remove whitespaces and commas
+		time = time.replaceAll("\\s|,|/", ""); // Remove whitespaces and commas
 		
 		for(String pattern : PATTERN_IN_TIME){
 			sdf.applyPattern(pattern);
@@ -70,11 +72,23 @@ public class TimeProcessor {
 			sdf.applyPattern(pattern);
 			try{
 				temp.setTime(sdf.parse(time));
-				temp.set(Calendar.MONTH, now.get(Calendar.MONTH));
-				temp.set(Calendar.YEAR,now.get(Calendar.YEAR));
-				while(temp.before(now)){
+				int day = temp.get(Calendar.DAY_OF_WEEK);
+				int hour = temp.get(Calendar.HOUR_OF_DAY);
+				int min = temp.get(Calendar.MINUTE);
+				temp.setTimeInMillis(System.currentTimeMillis());
+				do {
+					temp.add(Calendar.DAY_OF_YEAR, 1);
+				} while(temp.get(Calendar.DAY_OF_WEEK) != day);
+				temp.set(Calendar.HOUR_OF_DAY, hour);
+				System.out.println(hour +" "+min);
+				temp.set(Calendar.MINUTE, min);
+				temp.set(Calendar.SECOND, 0);
+				//temp.set(Calendar.MONTH, now.get(Calendar.MONTH));
+				//temp.set(Calendar.YEAR,now.get(Calendar.YEAR));
+				/*while(temp.before(now)){
+					System.out.println(temp.get(Calendar.DAY_OF_YEAR)+" "+now.get(Calendar.DAY_OF_YEAR));
 					temp.add(Calendar.DAY_OF_YEAR, 7);
-				}
+				}*/
 				
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }

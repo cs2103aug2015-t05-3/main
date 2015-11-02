@@ -24,6 +24,7 @@ public class CmdMark extends Command{
 	 * Variables for internal use
 	 */
 	private Task _task;
+	private String _optionalParameter;
 
 	public CmdMark() {
 
@@ -57,13 +58,18 @@ public class CmdMark extends Command{
 			return new CommandAction(outputMsg, isUndoable, null);
 		}
 
-		String optionalParameter = getParameterValue(CmdParameters.PARAM_NAME_MARK_FLAG);
-		return proccessParameter(optionalParameter);
+		_optionalParameter = getParameterValue(CmdParameters.PARAM_NAME_MARK_FLAG);
+		return proccessParameter(_optionalParameter);
 	}
 
 	@Override
 	public CommandAction undo() {
-		return null;
+		
+		Command mark = new CmdMark();
+		mark.setTask(_task);
+		mark.setParameter(_optionalParameter, null);
+
+		return mark.execute();
 	}
 
 	@Override

@@ -70,7 +70,7 @@ public class TaskBuddy {
 	private static void initTaskFile(){
 		settings = SettingsFileHandler.getInstance();
 		if(settings.init()){
-			taskFileName = settings.getTaskFile();
+			taskFileName = settings.getTaskFile(); // TODO: if null.. do else
 		} else {
 			do {
 				UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);

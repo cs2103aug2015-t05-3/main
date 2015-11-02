@@ -36,7 +36,7 @@
                <children>
                   <VBox prefHeight="400.0" prefWidth="460.0" stylesheets="@UIStylesheet.css">
                      <children>
-                        <Text fx:id="tableTimedHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="with time" textOrigin="CENTER" wrappingWidth="452.99999901652336">
+                        <Text fx:id="tableTimedHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="With Deadline" textOrigin="CENTER" wrappingWidth="452.99999901652336">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -61,7 +61,7 @@
                         <Insets />
                      </HBox.margin>
                      <children>
-                        <Text fx:id="tableFloatHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="without time" textOrigin="CENTER" wrappingWidth="286.99999901652336">
+                        <Text fx:id="tableFloatHeader" boundsType="LOGICAL_VERTICAL_CENTER" strokeType="OUTSIDE" strokeWidth="0.0" text="Without Deadline" textOrigin="CENTER" wrappingWidth="286.99999901652336">
                            <font>
                               <Font size="16.0" />
                            </font>

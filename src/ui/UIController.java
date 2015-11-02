@@ -352,6 +352,7 @@ public class UIController implements Initializable {
 		_nonFloatingTaskList = taskList;
 
 		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.EndTimeComparator());
+		Collections.sort(_floatingTaskList, new taskCollections.comparators.PriorityComparator());
 		// Collections.sort(_floatingTaskList);
 
 		generateTable();
@@ -427,6 +428,8 @@ public class UIController implements Initializable {
 				String history = downStack.pop();
 				upStack.push(history);
 				setInput(history);
+			} else {
+				setInput("");
 			}
 		}
 	}
