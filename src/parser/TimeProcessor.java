@@ -27,6 +27,7 @@ public class TimeProcessor {
 	private static final String[] PATTERN_IN_DAY = {"Ehha","EHHmm"};
 	private static final String[] PATTERN_IN_MONTHDAY = {"ddMMMhha","ddMMMHHmm",
 			"MMMddhha","MMMddHHmm","ddMMhha","ddMMHHmm","MMddhha","MMddHHmm"};
+	private static final String[] PATTERN_IN_DATE = {""};
 	private static final String PATTERN_OUT_TIME = "HH:mm";
 	private static final String PATTERN_OUT_DAYTIME = "E HH:mm";
 	private static final String PATTERN_OUT_DATETIME = "dd MMM HH:mm";

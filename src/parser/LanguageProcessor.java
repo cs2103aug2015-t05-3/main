@@ -226,7 +226,7 @@ public class LanguageProcessor{
 			return null;
 		}
 		long time = timeP.resolveTime(timeS);
-		return time == TimeProcessor.TIME_INVALID ? null : Long.toString(time);
+		return Long.toString(time);
 	}
 	/*
 	private boolean isID(String id){
