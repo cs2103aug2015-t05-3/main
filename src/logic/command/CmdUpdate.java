@@ -1,7 +1,6 @@
 package logic.command;
 
-import java.util.List;
-
+import util.TimeUtil;
 import constants.CmdParameters;
 import parser.ParserConstants;
 import taskCollections.Task;
@@ -204,10 +203,19 @@ public class CmdUpdate extends Command {
 			return false;
 		}
 		
-		if((newEndTime-newStartTime) <= 0){
+		if(newStartTime == 0 && newEndTime == 0){
+			return false;
+		}
+		
+		if(TimeUtil.compareMinTime(newEndTime, newStartTime)<=0){
 			return true;
 		}
-
+		
+		/*
+		if((newEndTime-newStartTime) < 0){
+			return true;
+		}
+		*/
 		return false;
 	}
 
