@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -25,6 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import logic.command.Command;
 import parser.CommandProcessor;
 import parser.TimeProcessor;
@@ -159,7 +161,11 @@ public class UIController implements Initializable {
 			public void updateItem(String item, boolean empty) {
 				String[] stringArr = splitStr(item);
 				super.updateItem(item, empty);
-
+				
+				this.setAlignment(Pos.CENTER);
+				this.setFont(Font.font(13));
+				
+				
 				if (!isEmpty()) {
 					if (stringArr[1].contains("M")) {
 						this.setTextFill(Color.valueOf("#bdbdbd"));
