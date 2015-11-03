@@ -100,6 +100,8 @@ public class TimeUtil {
 	}
 	
 	public static boolean isBeforeNow(long time){
-		return getDayDifference(time) < 0;
+		now.setTimeInMillis(System.currentTimeMillis());
+		temp.setTimeInMillis(time);
+		return temp.getTime().before(now.getTime());
 	}
 }
