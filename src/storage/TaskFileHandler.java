@@ -38,7 +38,7 @@ public class TaskFileHandler {
 	private Element _root;
 	private File _xmlFile;
 	
-	public TaskFileHandler(String fileName) {
+	public TaskFileHandler(String fileName) throws ParserConfigurationException, SAXException, IOException {
 		
 		DocumentBuilderFactory dbFactory;
 		DocumentBuilder dBuilder;
@@ -47,16 +47,9 @@ public class TaskFileHandler {
 		_xmlFile = new File(fileName);
 			
 		dbFactory = DocumentBuilderFactory.newInstance();
-		try {
 			dBuilder = dbFactory.newDocumentBuilder();
 			_doc = dBuilder.parse(_xmlFile);
-		} catch (ParserConfigurationException e) {
-			System.err.println("Parser Config Error.");
-		} catch (SAXException e) {
-			System.err.println("SAX Exception.");
-		} catch (IOException e) {
-			System.err.println("IO Error.");
-		}
+		
 		
 		_doc.getDocumentElement().normalize();
 		_root = _doc.getDocumentElement();
@@ -319,6 +312,7 @@ public class TaskFileHandler {
 		return e;
 	}
 
+	/*
 	public static void main(String[] args) {
 		TaskFileHandler runT = new TaskFileHandler("tasks.xml");
 		//Task t = new Task("Delete the Task Program", 0L, 0L, FLAG_TYPE.NULL, PRIORITY_TYPE.VERY_HIGH);
@@ -329,4 +323,5 @@ public class TaskFileHandler {
 		//runT.genXML();
 		//runT.display();
 	}
+	*/
 }
