@@ -89,12 +89,9 @@ public class CmdUpdate extends Command {
 
 	@Override
 	public CommandAction undo() {
-
-		Command update = new CmdUpdate();
-		update.setTask(_task);
-		update.setParameter(_prevTaskName, null);
-
-		return update.execute();
+		String outputMsg = updateTask(_task, _prevTaskName, _prevStartTime, _prevEndTime, _prevPriority);
+		boolean isUndoable = true;
+		return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
 	}
 
 	@Override
