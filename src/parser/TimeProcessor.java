@@ -38,7 +38,7 @@ public class TimeProcessor {
 	private static final String FORMAT_LASTWEEK = "Last %1$s";
 	private static final String FORMAT_ENDDATE = "By %1$s (%2$s)";
 	private static final String FORMAT_DUEIN = "In %1$s day(s)";
-	private static final String FORMAT_OVERDUE = "Overdue in %1$s day(s)";
+	private static final String FORMAT_OVERDUE = "Over by %1$s day(s)";
 	private static final String FORMAT_STARTENDDATE = "%1$s to %2$s";
 	/*
 	 * Variables
@@ -118,10 +118,13 @@ public class TimeProcessor {
 	
 	public String getFormattedDate(long endTime){
 		int daysDiff = TimeUtil.getDayDifference(endTime);
-		if(daysDiff < 0){
-			
+		String extraMsg;
+		if(daysDiff < 0){ // Overdue
+			extraMsg = String.format(FORMAT_OVERDUE, -daysDiff);
+		} else {
+			extraMsg = String.format(FORMAT_DUEIN, daysDiff);
 		}
-		return String.format(FORMAT_ENDDATE, getRelativeDate(endTime), daysDiff);
+		return String.format(FORMAT_ENDDATE, getRelativeDate(endTime), extraMsg);
 	}
 	
 	public String getFormattedDate(long startTime, long endTime){
