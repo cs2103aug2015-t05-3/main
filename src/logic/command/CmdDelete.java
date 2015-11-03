@@ -58,7 +58,7 @@ public class CmdDelete extends Command {
 
 	@Override
 	public CommandAction undo() {
-		Command add = new CmdAdd();
+		Command add = new CmdAdd(_task.getName());
 		add.setTask(_task);
 		return add.execute();
 	}
