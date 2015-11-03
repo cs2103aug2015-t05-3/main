@@ -35,7 +35,7 @@ public class TimeProcessor {
 	private static final String FORMAT_YTD = "Ytd %1$s";
 	private static final String FORMAT_NEXTWEEK = "Next %1$s";
 	private static final String FORMAT_LASTWEEK = "Last %1$s";
-	private static final String FORMAT_ENDDATE = "By %1$s";
+	private static final String FORMAT_ENDDATE = "By %1$s (In %2$s days)";
 	private static final String FORMAT_STARTENDDATE = "%1$s to %2$s";
 	/*
 	 * Variables
@@ -55,6 +55,10 @@ public class TimeProcessor {
 	
 	public long resolveTime(String time){
 		time = time.replaceAll("\\s|,|/", ""); // Remove whitespaces and commas
+		
+		if(time.equals(TIME_INVALID)){
+			return TIME_INVALID;
+		}
 		
 		for(String pattern : PATTERN_IN_TIME){
 			sdf.applyPattern(pattern);
@@ -107,7 +111,8 @@ public class TimeProcessor {
 	}
 	
 	public String getFormattedDate(long endTime){
-		return String.format(FORMAT_ENDDATE, getRelativeDate(endTime));
+		int daysDiff = TimeUtil.getDayDifference(endTime);
+		return String.format(FORMAT_ENDDATE, getRelativeDate(endTime), daysDiff);
 	}
 	
 	public String getFormattedDate(long startTime, long endTime){
