@@ -36,7 +36,9 @@ public class TimeProcessor {
 	private static final String FORMAT_YTD = "Ytd %1$s";
 	private static final String FORMAT_NEXTWEEK = "Next %1$s";
 	private static final String FORMAT_LASTWEEK = "Last %1$s";
-	private static final String FORMAT_ENDDATE = "By %1$s (In %2$s days)";
+	private static final String FORMAT_ENDDATE = "By %1$s (%2$s)";
+	private static final String FORMAT_DUEIN = "In %1$s day(s)";
+	private static final String FORMAT_OVERDUE = "Overdue in %1$s day(s)";
 	private static final String FORMAT_STARTENDDATE = "%1$s to %2$s";
 	/*
 	 * Variables
@@ -69,6 +71,7 @@ public class TimeProcessor {
 				temp.set(Calendar.HOUR_OF_DAY, dtime.getHours());
 				temp.set(Calendar.MINUTE, dtime.getMinutes());
 				temp.set(Calendar.SECOND, 0);
+				temp.set(Calendar.MILLISECOND, 0);
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }
 		}
@@ -80,6 +83,7 @@ public class TimeProcessor {
 				int day = temp.get(Calendar.DAY_OF_WEEK);
 				int hour = temp.get(Calendar.HOUR_OF_DAY);
 				int min = temp.get(Calendar.MINUTE);
+
 				temp.setTimeInMillis(System.currentTimeMillis());
 				do {
 					temp.add(Calendar.DAY_OF_YEAR, 1);
@@ -88,6 +92,7 @@ public class TimeProcessor {
 				System.out.println(hour +" "+min);
 				temp.set(Calendar.MINUTE, min);
 				temp.set(Calendar.SECOND, 0);
+				temp.set(Calendar.MILLISECOND, 0);
 				//temp.set(Calendar.MONTH, now.get(Calendar.MONTH));
 				//temp.set(Calendar.YEAR,now.get(Calendar.YEAR));
 				/*while(temp.before(now)){
@@ -113,6 +118,9 @@ public class TimeProcessor {
 	
 	public String getFormattedDate(long endTime){
 		int daysDiff = TimeUtil.getDayDifference(endTime);
+		if(daysDiff < 0){
+			
+		}
 		return String.format(FORMAT_ENDDATE, getRelativeDate(endTime), daysDiff);
 	}
 	

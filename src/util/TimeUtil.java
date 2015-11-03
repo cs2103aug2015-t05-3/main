@@ -104,4 +104,20 @@ public class TimeUtil {
 		temp.setTimeInMillis(time);
 		return temp.getTime().before(now.getTime());
 	}
+	
+	public static int compareMinTime(long t1, long t2){
+		temp.setTimeInMillis(t1);
+		temp.set(Calendar.SECOND, 0);
+		temp.set(Calendar.MILLISECOND, 0);
+		t1 = temp.getTimeInMillis();
+		
+		temp.setTimeInMillis(t2);
+		temp.set(Calendar.SECOND, 0);
+		temp.set(Calendar.MILLISECOND, 0);
+		t2 = temp.getTimeInMillis();
+		
+		System.out.println(t1+" "+t2);
+		
+		return Long.compare(t1, t2);
+	}
 }

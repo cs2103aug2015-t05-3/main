@@ -146,10 +146,7 @@ public class CmdAdd extends Command {
 	}
 	
 	private boolean isValidTime(long startTime, long endTime){
-		if(startTime != 0){
-			return endTime > startTime;
-		} 
-		return true;
+		return TimeUtil.compareMinTime(startTime, endTime) < 0;
 	}
 
 	@Override
