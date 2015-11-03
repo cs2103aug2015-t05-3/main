@@ -1,6 +1,10 @@
 /**
  * Resolves time from user input
  * 
+ * Supported date formats (after removing white spaces, comma, and - :
+ * Hpm(), HHMM(24 hour format)
+ * <Short day> Hpm, HHMM
+ * 
  */
 package parser;
 
@@ -27,7 +31,7 @@ public class TimeProcessor {
 	private static final String[] PATTERN_IN_DAY = {"Ehha","EHHmm"};
 	private static final String[] PATTERN_IN_MONTHDAY = {"ddMMMhha","ddMMMHHmm",
 			"MMMddhha","MMMddHHmm","ddMMhha","ddMMHHmm","MMddhha","MMddHHmm"};
-	private static final String[] PATTERN_IN_DATE = {""};
+	private static final String[] PATTERN_IN_DATE = {""};//24 Jul 15 T/ 240715 T/ 
 	private static final String PATTERN_OUT_TIME = "HH:mm";
 	private static final String PATTERN_OUT_DAYTIME = "E HH:mm";
 	private static final String PATTERN_OUT_DATETIME = "dd MMM HH:mm";
