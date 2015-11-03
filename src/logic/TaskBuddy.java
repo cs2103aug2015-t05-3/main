@@ -51,11 +51,11 @@ public class TaskBuddy {
 	private static void init(){
 		initLog();
 		UIHelper.createUI();
-		initTaskFile();
 		lp = new LanguageProcessor();
 		if(!lp.init(cmdFileName)){
 			log.severe("TaskBuddy: Cmd list init failed");
 		}
+		initTaskFile();
 		Command.init(taskFileName);
 		initTasks();
 	}
@@ -70,13 +70,22 @@ public class TaskBuddy {
 	private static void initTaskFile(){
 		settings = SettingsFileHandler.getInstance();
 		if(settings.init()){
-			taskFileName = settings.getTaskFile(); // TODO: if null.. do else
+			if (settings.taskFileCheck()) {
+				taskFileName = settings.getTaskFile(); // TODO: if null.. do else
+			} else {
+				do {
+					UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);
+					taskFileName = UIHelper.getUserInput();
+					settings.alterSettingsFile(taskFileName);
+					settings.initializeTaskFile();
+				} while((taskFileName = settings.getTaskFile()) == null);
+			}
 		} else {
 			do {
 				UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);
 				taskFileName = UIHelper.getUserInput();
 				settings.alterSettingsFile(taskFileName);
-				settings.createTaskFile();
+				settings.initializeTaskFile();
 			} while((taskFileName = settings.getTaskFile()) == null);
 		}
 	}

@@ -141,6 +141,10 @@ public class UIController implements Initializable {
 			newCommand = StringUtil.getFirstWord(newValue);
 		}
 
+		if (newCommand.equals(null)) {
+			return;
+		}
+		
 		if (newCommand.equals(oldCommand)) {
 			return;
 		} else {
@@ -163,7 +167,7 @@ public class UIController implements Initializable {
 				super.updateItem(item, empty);
 				
 				this.setAlignment(Pos.CENTER);
-				this.setFont(Font.font(13));
+				//this.setFont(Font.font(13));
 				
 				
 				if (!isEmpty()) {
