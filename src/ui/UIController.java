@@ -9,6 +9,7 @@ import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,7 +25,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import logic.command.Command;
 import parser.CommandProcessor;
 import parser.TimeProcessor;
@@ -48,12 +48,15 @@ public class UIController implements Initializable {
 	private static final String VAR_TABLE_STRING_SDATE = "sDate";
 
 	// FXML constants
-	@FXML private Text pendingMsg;
-	@FXML private Text tableFloatHeader;
-	@FXML private Text tableTimedHeader;
-	@FXML private Text timeDateMsg;
-	@FXML private Text cmdMsg;
-	@FXML private Text syntaxMsg;
+	@FXML private Label pendingMsg;
+	@FXML private Label timeDateMsg;
+	@FXML private Label cmdMsg;
+	@FXML private Label syntaxMsg;
+	@FXML private Label tableFloatHeader;
+	@FXML private Label tableTimedHeader;
+	@FXML private Label overdueCount;
+	@FXML private Label pendingCount;
+	@FXML private Label doneCount;
 	@FXML private TableColumn<UITask, String> idTimed;
 	@FXML private TableColumn<UITask, String> taskTimed;
 	@FXML private TableColumn<UITask, String> sDate;
@@ -84,7 +87,7 @@ public class UIController implements Initializable {
 	@Override
 	public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
-		// Text fields
+		// Label fields
 		cmdMsg.setText(MSG_CMD_WELCOME);
 		String username = System.getProperty("user.name");
 
@@ -258,11 +261,18 @@ public class UIController implements Initializable {
 	}
 
 	void setOutputMsg(String a) {
-		try {
-			cmdMsg.setText(a);
-		} catch (NullPointerException e) {
-			return;
-		}
+		// TODO temporary fix for illegalState
+
+		Platform.runLater(new Runnable() {
+		    @Override
+		    public void run() {
+		    	try {
+					cmdMsg.setText(a);
+				} catch (NullPointerException e) {
+					return;
+				}
+		    }
+		});
 	}
 
 	void setTimeDateMsg(String str) {
@@ -276,6 +286,30 @@ public class UIController implements Initializable {
 	void setSyntaxMsg(String str) {
 		try {
 			syntaxMsg.setText(str);
+		} catch (NullPointerException e) {
+			return;
+		}
+	}
+
+	void setDoneCount(String str) {
+		try {
+			doneCount.setText(str);
+		} catch (NullPointerException e) {
+			return;
+		}
+	}
+
+	void setPendingCount(String str) {
+		try {
+			pendingCount.setText(str);
+		} catch (NullPointerException e) {
+			return;
+		}
+	}
+
+	void setOverdueCount(String str) {
+		try {
+			overdueCount.setText(str);
 		} catch (NullPointerException e) {
 			return;
 		}
