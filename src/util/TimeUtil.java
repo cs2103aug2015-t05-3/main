@@ -116,8 +116,6 @@ public class TimeUtil {
 		temp.set(Calendar.MILLISECOND, 0);
 		t2 = temp.getTimeInMillis();
 		
-		System.out.println(t1+" "+t2);
-		
 		return Long.compare(t1, t2);
 	}
 }
