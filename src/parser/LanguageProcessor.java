@@ -29,15 +29,16 @@ public class LanguageProcessor{
 	private static final String LOG_FORMAT_RESULT = "%1$s: %2$s | %3$s"; // <User input>: <Parsed result/message> [Optional message]
 	private static final String LOG_MSG_INVALIDCMD = "Invalid command";
 	private static final String LOG_MSG_NOPARAM = "No parameters given";
+	private static final String REGEX_LIMIT = ParserConstants.DELIMITER_TOKEN + "\\w+";
 
 	private String getTaskName(String userCmd) {
-		String taskName = StringUtil.getStringAfter(userCmd,"",ParserConstants.DELIMITER_TOKEN);
+		String taskName = StringUtil.getStringAfter(userCmd,"",REGEX_LIMIT);
 		return StringUtil.trim(taskName);
 	}
 	
 	private String getTaskSName(String userCmd){
 		String taskName = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_TASKNAME, 
-				ParserConstants.DELIMITER_TOKEN);
+				REGEX_LIMIT);
 		return StringUtil.trim(taskName);
 	}
 
@@ -67,19 +68,19 @@ public class LanguageProcessor{
 
 	private String getEndTime(String userCmd){
 		userCmd = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_ENDTIME,
-				ParserConstants.DELIMITER_TOKEN);
+				REGEX_LIMIT);
 		return StringUtil.trim(userCmd);
 	}
 
 	private String getStartTime(String userCmd){
 		userCmd = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_STARTTIME,
-				ParserConstants.DELIMITER_TOKEN);
+				REGEX_LIMIT);
 		return StringUtil.trim(userCmd);
 	}
 
 	private String getPriority(String userCmd){
 		String priority = StringUtil.getStringAfter(userCmd, ParserConstants.TASK_SPECIFIER_PRIORITY,
-				ParserConstants.DELIMITER_TOKEN);
+				REGEX_LIMIT);
 		if (priority == null){
 			return null;
 		}

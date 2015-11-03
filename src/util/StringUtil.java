@@ -96,7 +96,7 @@ public class StringUtil {
 	 *            The search term NOTE: Support for multiple search terms using
 	 *            | is not supported yet
 	 * @param stopAt
-	 *            The term to stop the string search at its first occurrence, if
+	 *            The term to stop the string search at its first regex match, if
 	 *            it is found
 	 * @return The following string if searchTerm is found, null if it isn't
 	 */
@@ -114,7 +114,7 @@ public class StringUtil {
 		}
 	
 		for(; i < tokens.length;i++){
-			if(tokens[i].contains(stopAt)){
+			if(tokens[i].matches(stopAt)){
 				break;
 			} else {
 				result.append(tokens[i] + " ");
