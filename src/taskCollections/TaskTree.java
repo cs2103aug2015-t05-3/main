@@ -3,6 +3,10 @@ package taskCollections;
 import java.util.List;
 import java.util.TreeSet;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import storage.TaskFileHandler;
 import taskCollections.Attributes;
 import taskCollections.Attributes.TYPE;
@@ -10,6 +14,7 @@ import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
 import taskCollections.comparators.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -61,7 +66,7 @@ public class TaskTree {
 	 *            directed to the storage XML file for tasks.
 	 *
 	 */
-	private static void init(String taskFilePath) {
+	private static boolean init(String taskFilePath) {
 
 		_taskTree = new TaskTree();
 
@@ -78,8 +83,9 @@ public class TaskTree {
 		fromValueHandler = Task.getVirtualTask();
 
 		// Fill TaskTree from file storage
-		iniTaskFileHandler(taskFilePath);
+		boolean isValidFile = iniTaskFileHandler(taskFilePath);
 		pullFromStorage();
+		return isValidFile;
 	}
 
 	/**
@@ -811,7 +817,14 @@ public class TaskTree {
 	 * @param taskFilePath
 	 *            directed to the storage XML file for tasks.
 	 */
-	private static void iniTaskFileHandler(String taskFilePath) {
-		_fileHandler = new TaskFileHandler(taskFilePath);
+	private static boolean iniTaskFileHandler(String taskFilePath) {
+
+		try {
+			_fileHandler = new TaskFileHandler(taskFilePath);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }
