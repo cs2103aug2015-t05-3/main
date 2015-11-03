@@ -161,7 +161,7 @@ public class UIController implements Initializable {
 					if (stringArr[1].contains("M")) {
 						this.setTextFill(Color.valueOf("#bdbdbd"));
 					} else if (stringArr[1].contains("L")) {
-						this.setTextFill(Color.LAWNGREEN);
+						this.setTextFill(Color.FORESTGREEN);
 					} else if (stringArr[1].contains("H")) {
 						this.setTextFill(Color.RED);
 					} else if (stringArr[1].contains("N")) {
