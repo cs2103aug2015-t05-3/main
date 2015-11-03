@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +13,9 @@ import org.junit.Test;
 import logic.command.Command;
 import logic.command.CommandAction;
 import parser.LanguageProcessor;
-import storage.SettingsFileHandler;
 import taskCollections.Attributes;
 import taskCollections.Task;
-import taskCollections.Task.FLAG_TYPE;
-import taskCollections.Task.PRIORITY_TYPE;
-import ui.UIHelper;
+import taskCollections.Task.*;
 
 public class IntTest {
 	/*
@@ -46,8 +41,23 @@ public class IntTest {
 		
 		holdingTasks.add(new Task("test",0,0,FLAG_TYPE.NULL,PRIORITY_TYPE.NORMAL));
 		assertTrue(testInput("add test", String.format(MSG_TASKADDED, "test"), true, false));
+		holdingTasks.add(new Task("priorityTest",0,0,FLAG_TYPE.NULL,PRIORITY_TYPE.HIGH));
+		assertTrue(testInput("+ priorityTest -p h", String.format(MSG_TASKADDED, "priorityTest"), true, false));
 	}
 
+	/**
+	 * Tests an input
+	 * @param input
+	 * 			The command to test
+	 * @param output
+	 * 			The expected output message from executing the command
+	 * @param isValidCmd
+	 * 			Denotes whether the input command is a valid command found in the command table
+	 * @param isFilteredOutput
+	 * 			True if checking is to be done on filteredTasks, false if checking is done on holdingTasks
+	 * @return
+	 * 			True if the given output and task collection are correct. False otherwise
+	 */
 	private boolean testInput(String input, String output, boolean isValidCmd, boolean isFilteredOutput){
 		
 		Command toExecute = lp.resolveCmd(input);
@@ -71,6 +81,16 @@ public class IntTest {
 
 	}
 	
+	/**
+	 * Compares 2 lists of tasks to check if they are equal
+	 * @param mainList
+	 * 			The expected output list
+	 * @param checkList
+	 * 			The list which is produced from executing commands. Elements will be removed from this list
+	 * 			during the comparison test
+	 * @return
+	 * 			True if both lists are equal, false otherwise
+	 */
 	private boolean compareTask(List<Task> mainList, List<Task> checkList){
 		mainTask:
 		for(Task mainTask : mainList){
