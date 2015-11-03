@@ -20,6 +20,11 @@ public class StringUtil {
 	public static String getFirstWord(String input) {
 		assert input != null;
 		assert !input.isEmpty();
+		String[] tokens = input.split(tokenDelim);
+		
+		if(tokens.length < 1){
+			return null;
+		}
 		return input.split(tokenDelim)[0];
 	}
 

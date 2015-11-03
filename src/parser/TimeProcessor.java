@@ -1,9 +1,11 @@
 /**
  * Resolves time from user input
  * 
- * Supported date formats (after removing white spaces, comma, and - :
- * Hpm(), HHMM(24 hour format)
- * <Short day> Hpm, HHMM
+ * Examples of supported date formats (after removing white spaces, comma, and slash :
+ * Time for today: 4pm / 2359 (24 hour format)
+ * Next specified day with time: Wed <time> / Wednesday <time>
+ * Date with month and time: 24 Jul <time> / Jul 24 <time> / 2407 <time> 
+ * Date with month, year and time: 24 Jul 15 <time> / 240715 <time>
  * 
  */
 package parser;
@@ -28,10 +30,10 @@ public class TimeProcessor {
 	public static final long TIME_INVALID = 0;
 	private static SimpleDateFormat sdf;
 	private static final String[] PATTERN_IN_TIME = {"hha","HHmm"};
-	private static final String[] PATTERN_IN_DAY = {"Ehha","EHHmm"};
+	private static final String[] PATTERN_IN_DAY = {"Ehha","EEEEhha","EHHmm","EEEEHHmm"};
 	private static final String[] PATTERN_IN_MONTHDAY = {"ddMMMhha","ddMMMHHmm",
-			"MMMddhha","MMMddHHmm","ddMMhha","ddMMHHmm","MMddhha","MMddHHmm"};
-	private static final String[] PATTERN_IN_DATE = {""};//24 Jul 15 T/ 240715 T/ 
+			"MMMddhha","MMMddHHmm","ddMMhha","ddMMHHmm"};
+	private static final String[] PATTERN_IN_DATE = {"ddMMMyyhha","ddMMMyyHHmm","ddMMyyhha","ddMMyyHHmm"}; 
 	private static final String PATTERN_OUT_TIME = "HH:mm";
 	private static final String PATTERN_OUT_DAYTIME = "E HH:mm";
 	private static final String PATTERN_OUT_DATETIME = "dd MMM HH:mm";
@@ -61,21 +63,27 @@ public class TimeProcessor {
 	}
 	
 	public long resolveTime(String time){
-		time = time.replaceAll("\\s|,|/", ""); // Remove whitespaces and commas
+		time = time.replaceAll("\\s|,|/", ""); // Remove whitespaces and commas and slash
 		
 		if(time.equals(TIME_INVALID)){
 			return TIME_INVALID;
 		}
 		
-		for(String pattern : PATTERN_IN_TIME){
+		for(String pattern : PATTERN_IN_DATE){
 			sdf.applyPattern(pattern);
 			try{
-				Date dtime = sdf.parse(time);
-				temp.setTimeInMillis(System.currentTimeMillis());
-				temp.set(Calendar.HOUR_OF_DAY, dtime.getHours());
-				temp.set(Calendar.MINUTE, dtime.getMinutes());
-				temp.set(Calendar.SECOND, 0);
-				temp.set(Calendar.MILLISECOND, 0);
+				temp.setTime(sdf.parse(time));
+				System.out.println("year");
+				return temp.getTimeInMillis();
+			} catch (ParseException e){ }
+		}
+		
+		for(String pattern : PATTERN_IN_MONTHDAY){
+			sdf.applyPattern(pattern);
+			try{
+				temp.setTime(sdf.parse(time));
+				temp.set(Calendar.YEAR,now.get(Calendar.YEAR));
+				System.out.println("month");
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }
 		}
@@ -97,22 +105,22 @@ public class TimeProcessor {
 				temp.set(Calendar.MINUTE, min);
 				temp.set(Calendar.SECOND, 0);
 				temp.set(Calendar.MILLISECOND, 0);
-				//temp.set(Calendar.MONTH, now.get(Calendar.MONTH));
-				//temp.set(Calendar.YEAR,now.get(Calendar.YEAR));
-				/*while(temp.before(now)){
-					System.out.println(temp.get(Calendar.DAY_OF_YEAR)+" "+now.get(Calendar.DAY_OF_YEAR));
-					temp.add(Calendar.DAY_OF_YEAR, 7);
-				}*/
+				System.out.println("day");
 				
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }
 		}
 		
-		for(String pattern : PATTERN_IN_MONTHDAY){
+		for(String pattern : PATTERN_IN_TIME){
 			sdf.applyPattern(pattern);
 			try{
-				temp.setTime(sdf.parse(time));
-				temp.set(Calendar.YEAR,now.get(Calendar.YEAR));
+				Date dtime = sdf.parse(time);
+				temp.setTimeInMillis(System.currentTimeMillis());
+				temp.set(Calendar.HOUR_OF_DAY, dtime.getHours());
+				temp.set(Calendar.MINUTE, dtime.getMinutes());
+				temp.set(Calendar.SECOND, 0);
+				temp.set(Calendar.MILLISECOND, 0);
+				System.out.println("time");
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }
 		}
