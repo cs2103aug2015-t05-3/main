@@ -22,6 +22,8 @@ public class CmdUpdate extends Command {
 	private static final String HELP_INFO_UPDATE = 
 			"<task_ID> [%1$s <task_name>] [%2$s <start_time>] [%3$s <end_time>][%4$s <high/normal/low/h/n/l>]";
 	
+	private static final int NO_TIME = 0;
+	
 	/*
 	 * Variables for internal use
 	 */
@@ -203,7 +205,7 @@ public class CmdUpdate extends Command {
 			return false;
 		}
 		
-		if(newStartTime == 0 && newEndTime == 0){
+		if(newStartTime == NO_TIME && newEndTime == NO_TIME){
 			return false;
 		}
 		
