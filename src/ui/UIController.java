@@ -25,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.command.Command;
@@ -67,6 +68,7 @@ public class UIController implements Initializable {
 	@FXML private TableView<UITask> tableTimed;
 	@FXML private TableView<UITask> tableFloat;
 	@FXML private TextField input;
+	@FXML private AnchorPane anchor;
 
 	private static UI uI;
 	private static UIController uIController;
