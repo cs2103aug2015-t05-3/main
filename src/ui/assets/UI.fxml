@@ -108,8 +108,11 @@
                <children>
                   <Label fx:id="cmdMsg" alignment="CENTER" prefHeight="27.0" prefWidth="981.0" text="Subtitle" textAlignment="CENTER" textFill="RED">
                      <VBox.margin>
-                        <Insets top="20.0" />
+                        <Insets top="15.0" />
                      </VBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
                   </Label>
                   <HBox alignment="CENTER_LEFT" maxHeight="48.0" maxWidth="1249.0" minHeight="48.0" minWidth="785.0" prefHeight="48.0" prefWidth="1249.0" VBox.vgrow="ALWAYS">
                      <children>
