@@ -20,18 +20,19 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.util.Callback;
 import logic.command.Command;
 import parser.CommandProcessor;
-import parser.TimeProcessor;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
+import taskCollections.Task.PRIORITY_TYPE;
 import util.StringUtil;
 import util.TimeUtil;
 
@@ -48,6 +49,15 @@ public class UIController implements Initializable {
 	private static final String VAR_TABLE_STRING_ID = "id";
 	private static final String VAR_TABLE_STRING_TASK = "task";
 	private static final String VAR_TABLE_STRING_SDATE = "sDate";
+
+	// CSS node constants
+	private static final String CSS_PRIORITY_HIGH = "highPriority";
+	private static final String CSS_PRIORITY_NORMAL = "normalPriority";
+	private static final String CSS_PRIORITY_LOW = "lowPriority";
+	private static final String CSS_FLAG_NULL = "undone";
+	private static final String CSS_FLAG_DONE = "done";
+	private static final String CSS_OVERDUE = "overdue";
+	private static final String CSS_CURRENT = "current";
 
 	// FXML constants
 	@FXML private Label pendingMsg;
@@ -106,15 +116,104 @@ public class UIController implements Initializable {
 		taskTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
 		sDate.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
 
-		idTimed.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
-		taskTimed.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
-		sDate.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
+		tableTimed.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
+			@Override
+			public TableRow<UITask> call(TableView<UITask> tableView) {
+				final TableRow<UITask> row = new TableRow<UITask>() {
+					@Override
+					protected void updateItem(UITask task, boolean empty) {
+						super.updateItem(task, empty);
+
+						if (this.getItem() != null) {
+
+							UITask uITask = this.getItem();
+							PRIORITY_TYPE priorityCheck = uITask.getPriority();
+							FLAG_TYPE flagCheck = uITask.getFlag();
+							long endTime = uITask.getEndTime();
+							boolean isOverdue = TimeUtil.isBeforeNow(endTime) && endTime != Task.DATE_NULL;
+							boolean isPriorityNormal = false;
+
+							if (priorityCheck == PRIORITY_TYPE.HIGH) {
+								getStyleClass().add(CSS_PRIORITY_HIGH);
+								isPriorityNormal = true;
+							} else if (priorityCheck == PRIORITY_TYPE.LOW) {
+								getStyleClass().add(CSS_PRIORITY_LOW);
+								isPriorityNormal = true;
+							} else if (priorityCheck == PRIORITY_TYPE.NORMAL) {
+								getStyleClass().add(CSS_PRIORITY_NORMAL);
+								isPriorityNormal = false;
+							} else {
+								isPriorityNormal = false;
+							}
+
+							if (flagCheck == FLAG_TYPE.DONE) {
+								getStyleClass().add(CSS_FLAG_DONE);
+							} else if (!isPriorityNormal) {
+								getStyleClass().add(CSS_FLAG_NULL);
+							}
+
+							if (isOverdue) {
+								getStyleClass().add(CSS_OVERDUE);
+							} else {
+								getStyleClass().add(CSS_CURRENT);
+							}
+						}
+					}
+				};
+				return row;
+			}
+		});
 
 		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
 		taskFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
 
-		idFloat.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
-		taskFloat.setCellFactory((TableColumn<UITask, String> param) -> updateColor());
+		tableFloat.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
+			@Override
+			public TableRow<UITask> call(TableView<UITask> tableView) {
+				final TableRow<UITask> row = new TableRow<UITask>() {
+					@Override
+					protected void updateItem(UITask task, boolean empty) {
+						super.updateItem(task, empty);
+
+						if (this.getItem() != null) {
+
+							UITask uITask = this.getItem();
+							PRIORITY_TYPE priorityCheck = uITask.getPriority();
+							FLAG_TYPE flagCheck = uITask.getFlag();
+							long endTime = uITask.getEndTime();
+							boolean isOverdue = TimeUtil.isBeforeNow(endTime) && endTime != Task.DATE_NULL;
+							boolean isPriorityNormal = false;
+
+							if (priorityCheck == PRIORITY_TYPE.HIGH) {
+								getStyleClass().add(CSS_PRIORITY_HIGH);
+								isPriorityNormal = true;
+							} else if (priorityCheck == PRIORITY_TYPE.LOW) {
+								getStyleClass().add(CSS_PRIORITY_LOW);
+								isPriorityNormal = true;
+							} else if (priorityCheck == PRIORITY_TYPE.NORMAL) {
+								getStyleClass().add(CSS_PRIORITY_NORMAL);
+								isPriorityNormal = false;
+							} else {
+								isPriorityNormal = false;
+							}
+
+							if (flagCheck == FLAG_TYPE.DONE) {
+								getStyleClass().add(CSS_FLAG_DONE);
+							} else if (!isPriorityNormal) {
+								getStyleClass().add(CSS_FLAG_NULL);
+							}
+
+							if (isOverdue) {
+								getStyleClass().add(CSS_OVERDUE);
+							} else {
+								getStyleClass().add(CSS_CURRENT);
+							}
+						}
+					}
+				};
+				return row;
+			}
+		});
 
 		tableTimed.setPlaceholder(new Label(MSG_EMPTY_TABLE));
 		tableFloat.setPlaceholder(new Label(MSG_EMPTY_TABLE));
@@ -162,73 +261,6 @@ public class UIController implements Initializable {
 			} else {
 				setSyntaxMsg(MSG_EMPTY);
 			}
-		}
-	}
-
-	private TableCell<UITask, String> updateColor() {
-		TableCell<UITask, String> cell = new TableCell<UITask, String>() {
-			@Override
-			public void updateItem(String item, boolean empty) {
-				String[] stringArr = splitStr(item);
-				super.updateItem(item, empty);
-
-				this.setAlignment(Pos.CENTER);
-				//this.setFont(Font.font(13));
-
-
-				if (!isEmpty()) {
-					if (stringArr[1].contains("M")) {
-						this.setTextFill(Color.valueOf("#bdbdbd"));
-					} else if (stringArr[1].contains("L")) {
-						this.setTextFill(Color.FORESTGREEN);
-					} else if (stringArr[1].contains("H")) {
-						this.setTextFill(Color.RED);
-					} else if (stringArr[1].contains("N")) {
-						this.setTextFill(Color.BLACK);
-					}
-
-					if (stringArr[1].contains("O") && !stringArr[1].contains("M")) {
-						this.setStyle("-fx-font-weight: bold");
-					} else {
-						this.setStyle("-fx-font-weight: normal");
-					}
-
-					item = stringArr[0];
-					setText(item);
-				} else {
-					setText(item);
-					this.setStyle("-fx-font-weight: normal");
-					this.setTextFill(Color.BLACK);
-				}
-
-			}
-		};
-		return cell;
-	}
-
-	/*
-	 * Takes in a string value appended with Flags (see appendFlags(),
-	 * return as String array.
-	 *
-	 * Sample Input: Buy Milk+PMO
-	 *
-	 * Returns: String Array with [Buy Milk] and [flags] as the data.
-	 */
-	private String[] splitStr(String item) {
-		try {
-			String[] toReturn = new String[2];
-			int index = item.length() - 1; // points to last index of String
-
-			while (item.charAt(index) != '+') { // locate where the '+' is at
-				index--;
-			}
-
-			toReturn[0] = item.substring(0, index);
-			toReturn[1] = item.substring(index + 1);
-
-			return toReturn;
-		} catch (NullPointerException e) {
-			return null;
 		}
 	}
 
@@ -346,39 +378,15 @@ public class UIController implements Initializable {
 
 	private void generateTable() {
 
-		TimeProcessor tp = TimeProcessor.getInstance();
-
 		dataTimed.clear();
 		dataFloat.clear();
 
-
 		for (Task t : _nonFloatingTaskList) {
-			String id = String.valueOf(t.getId());
-			String task = t.getName();
-			String generatedString = null;
-
-			if (t.getStartTime() == 0) {
-				generatedString = tp.getFormattedDate(t.getEndTime());
-			} else {
-				generatedString = tp.getFormattedDate(t.getStartTime(), t.getEndTime());
-			}
-			id = appendFlags(id, t);
-			task = appendFlags(task, t);
-			generatedString = appendFlags(generatedString, t);
-
-			UITask ui1 = new UITask(id, task, generatedString);
-			dataTimed.add(ui1);
+			dataTimed.add(new UITask(t));
 		}
 
 		for (Task t : _floatingTaskList) {
-			String id = String.valueOf(t.getId());
-			String task = t.getName();
-
-			id = appendFlags(id, t);
-			task = appendFlags(task, t);
-
-			UITask ui2 = new UITask(id, task);
-			dataFloat.add(ui2);
+			dataFloat.add(new UITask(t));
 		}
 
 		tableTimed.setItems(dataTimed);

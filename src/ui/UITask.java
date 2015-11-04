@@ -1,23 +1,17 @@
 package ui;
 
-import javafx.beans.property.SimpleStringProperty;
 import parser.TimeProcessor;
 import taskCollections.Task;
+import taskCollections.Task.FLAG_TYPE;
+import taskCollections.Task.PRIORITY_TYPE;
 
 public class UITask {
 	private static final String EMPTY_STRING = "";
 
-	private final SimpleStringProperty id;
-	private final SimpleStringProperty task;
-	private final SimpleStringProperty sDate;
 	private Task taskObj;
 
 	public UITask(Task taskObj) {
 		this.taskObj = taskObj;
-		this.id = getSimpleString(taskObj.getId());
-		this.task = getSimpleString(taskObj.getName());
-		String sDate = getSDateString(taskObj);
-		this.sDate = getSimpleString(sDate);
 	}
 
 	private String getSDateString(Task taskObj) {
@@ -37,35 +31,28 @@ public class UITask {
 		return dateStr;
 	}
 
-	public UITask(String id, String task, String dateString) {
-		this.id = new SimpleStringProperty(id);
-		this.task = new SimpleStringProperty(task);
-		this.sDate = new SimpleStringProperty(dateString);
-	}
-
-	public UITask(String id, String task) {
-		this.id = new SimpleStringProperty(id);
-		this.task = new SimpleStringProperty(task);
-		this.sDate = null;
-	}
-
 	public String getId() {
-		return id.get();
+		return String.valueOf(taskObj.getId());
 	}
 
 	public String getTask() {
-		return task.get();
+		return taskObj.getName();
 	}
 
 	public String getSDate() {
-		return sDate.get();
+		return getSDateString(taskObj);
 	}
 
-	SimpleStringProperty getSimpleString(int integer) {
-		return getSimpleString(String.valueOf(integer));
+	public long getEndTime() {
+		return taskObj.getEndTime();
 	}
 
-	SimpleStringProperty getSimpleString(String str) {
-		return new SimpleStringProperty(str);
+	public PRIORITY_TYPE getPriority() {
+		return taskObj.getPriority();
 	}
+
+	public FLAG_TYPE getFlag() {
+		return taskObj.getFlag();
+	}
+
 }
