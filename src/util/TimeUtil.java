@@ -96,6 +96,8 @@ public class TimeUtil {
 	public static int getDayDifference(long time) {
 		now.setTimeInMillis(System.currentTimeMillis());
 		temp.setTimeInMillis(time);
+		int daysDiff = 0;
+		//if(temp.get(Calendar.YEAR) > )
 		return temp.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
 	}
 	

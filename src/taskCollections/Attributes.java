@@ -28,7 +28,7 @@ public final class Attributes {
 			this.value = value;
 		}
 
-		int getValue() {
+		public int getValue() {
 			return value;
 		}
 
