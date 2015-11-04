@@ -77,7 +77,7 @@ public class UI extends Application {
 
 	public void showUIHelpOverlayStage() {
 
-		// Platform.runLater is required to modify UI after the JavaFx thread is started.
+		// TestPlatform.runLater is required to modify UI after the JavaFx thread is started.
 		Platform.runLater(new Runnable() {
 		    @Override
 		    public void run() {
