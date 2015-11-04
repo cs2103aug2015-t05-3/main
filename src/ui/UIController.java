@@ -95,6 +95,12 @@ public class UIController implements Initializable {
 
 		pendingMsg.setText(String.format(MSG_PENDING_HELLO, username));
 
+		//TODO unimplemented label field
+		timeDateMsg.setText(EMPTY_STRING);
+		overdueCount.setText(EMPTY_STRING);
+		pendingCount.setText(EMPTY_STRING);
+		doneCount.setText(EMPTY_STRING);
+
 		// Table
 		idTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
 		taskTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
@@ -144,7 +150,7 @@ public class UIController implements Initializable {
 		if (newCommand.equals(null)) {
 			return;
 		}
-		
+
 		if (newCommand.equals(oldCommand)) {
 			return;
 		} else {
@@ -165,11 +171,11 @@ public class UIController implements Initializable {
 			public void updateItem(String item, boolean empty) {
 				String[] stringArr = splitStr(item);
 				super.updateItem(item, empty);
-				
+
 				this.setAlignment(Pos.CENTER);
 				//this.setFont(Font.font(13));
-				
-				
+
+
 				if (!isEmpty()) {
 					if (stringArr[1].contains("M")) {
 						this.setTextFill(Color.valueOf("#bdbdbd"));
