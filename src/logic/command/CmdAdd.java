@@ -103,11 +103,6 @@ public class CmdAdd extends Command {
 		return delete.execute();
 	}
 
-	@Override
-	public boolean isUndoable() {
-		return true;
-	}
-
 	/*
 	 * Validates the parameters which are to be added to the task
 	 */

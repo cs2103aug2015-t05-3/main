@@ -5,7 +5,7 @@ import parser.ParserConstants;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
 
-public class CmdMark extends Command{
+public class CmdMark extends Command {
 
 	/*
 	 * Constants
@@ -17,14 +17,15 @@ public class CmdMark extends Command{
 	private static final String MSG_TASKALREADYMARKED = "Task: \"%1$s\" already marked";
 	private static final String MSG_TASKALREADYUNMARKED = "Task: \"%1$s\" already unmarked";
 
-	//Help Info
+	// Help Info
 	private static final String HELP_INFO_MARK = "<task_ID> [%1$s]";
-	
+
 	/*
 	 * Variables for internal use
 	 */
 	private Task _task;
-	private String _optionalParameter;
+	private int _taskID;
+	private boolean _isUnmarkParam;
 
 	public CmdMark() {
 
@@ -33,48 +34,29 @@ public class CmdMark extends Command{
 	@Override
 	public CommandAction execute() {
 
-		String outputMsg;
-		boolean isUndoable;
-
-
-		//Try undo first
-		_task = getTask();
-		if(isUndo()){
-			if(isMarked(_task)){
-				outputMsg = unmarkTask(_task);
-			}else{
-				outputMsg = markTask(_task);
-			}
-			isUndoable = true;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
+		if (!hasTaskToMark()) {
+			return new CommandAction(String.format(MSG_TASKIDNOTFOUND, _taskID), false, null);
 		}
 
-
-		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
-		_task = proccessTaskID(paramTaskID);
-		if(_task == null){
-			outputMsg = String.format(MSG_TASKIDNOTFOUND, paramTaskID);
-			isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, null);
+		proccessOptionalParam();
+		if (_isUnmarkParam) {
+			return unmarkTask(_task);
+		} else {
+			return markTask(_task);
 		}
 
-		_optionalParameter = getParameterValue(CmdParameters.PARAM_NAME_MARK_FLAG);
-		return proccessParameter(_optionalParameter);
 	}
 
 	@Override
 	public CommandAction undo() {
-		
-		Command mark = new CmdMark();
-		mark.setTask(_task);
-		mark.setParameter(_optionalParameter, null);
 
-		return mark.execute();
-	}
+		// reverse order in undo
+		if (_isUnmarkParam) {
+			return markTask(_task);
+		} else {
+			return unmarkTask(_task);
+		}
 
-	@Override
-	public boolean isUndoable() {
-		return true;
 	}
 
 	@Override
@@ -88,70 +70,63 @@ public class CmdMark extends Command{
 	}
 
 	@Override
-	public String getHelpInfo(){
+	public String getHelpInfo() {
 		return String.format(HELP_INFO_MARK, ParserConstants.TASK_MARK_UNMARK);
 	}
-	
-	private boolean isUndo(){
-		if(_task == null){
+
+	private boolean hasTaskToMark() {
+		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
+		_task = proccessTaskID(paramTaskID);
+		if (_task == null || _task.equals("")) {
 			return false;
-		}else{
+		} else {
 			return true;
 		}
 	}
 
-	private boolean isMarked(Task task){
-		if(task.getFlag() == FLAG_TYPE.NULL){
+	private Task proccessTaskID(String paramTaskID) {
+		_taskID = Integer.parseInt(paramTaskID);
+		return _taskTree.getTask(_taskID);
+	}
+
+	private void proccessOptionalParam() {
+		String optionalParam = getParameterValue(CmdParameters.PARAM_NAME_MARK_FLAG);
+		if (optionalParam != CmdParameters.PARAM_VALUE_MARK_UNMARK) {
+			_isUnmarkParam = false;
+		} else {
+			_isUnmarkParam = true;
+		}
+	}
+
+	private boolean isMarked(Task task) {
+		if (task.getFlag() == FLAG_TYPE.NULL) {
 			return false;
-		}else{
+		} else {
 			return true;
 		}
 	}
 
-	private String markTask(Task task){
-		String outputMsg = "";
-		_taskTree.updateFlag(task, FLAG_TYPE.DONE);
-		System.out.println(task.getId());
-		outputMsg = String.format(MSG_TASKMARKED, task.getName());
-		return outputMsg;
-	}
-
-	private String unmarkTask(Task task){
-		String outputMsg = "";
-		_taskTree.updateFlag(task, FLAG_TYPE.NULL);
-		outputMsg = String.format(MSG_TASKUNMARKED, task.getName());
-		return outputMsg;
-	}
-
-	private Task proccessTaskID(String paramTaskID){
-		int taskID = Integer.parseInt(paramTaskID);
-		return _taskTree.getTask(taskID);
-	}
-
-	private CommandAction proccessParameter(String parameter){
-
-		String outputMsg;
-		boolean isUndoable;
-		System.out.println(parameter);
-		if(parameter != CmdParameters.PARAM_VALUE_MARK_UNMARK){
-			if(_task.getFlag() == FLAG_TYPE.DONE){
-				outputMsg = String.format(MSG_TASKALREADYMARKED, _task.getName());
-				isUndoable = false;
-			}else{
-				outputMsg = markTask(_task);
-				isUndoable = true;
-			}
-		}else{
-			if(_task.getFlag() == FLAG_TYPE.NULL){
-				outputMsg = String.format(MSG_TASKALREADYUNMARKED, _task.getName());
-				isUndoable = false;
-			}else{
-				outputMsg = unmarkTask(_task);
-				isUndoable = true;
-			}
+	private CommandAction markTask(Task task) {
+		if (isMarked(task)) {
+			return new CommandAction(String.format(MSG_TASKALREADYMARKED, _task.getName()), false,
+					_taskTree.searchFlag(FLAG_TYPE.NULL));
+		} else {
+			_taskTree.updateFlag(task, FLAG_TYPE.DONE);
+			return new CommandAction(String.format(MSG_TASKMARKED, task.getName()), true,
+					_taskTree.searchFlag(FLAG_TYPE.NULL));
 		}
+	}
 
-		return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
+	private CommandAction unmarkTask(Task task) {
+		if (isMarked(task)) {
+			_taskTree.updateFlag(task, FLAG_TYPE.NULL);
+			return new CommandAction(String.format(MSG_TASKUNMARKED, task.getName()), true,
+					_taskTree.searchFlag(FLAG_TYPE.NULL));
+		} else {
+
+			return new CommandAction(String.format(MSG_TASKALREADYUNMARKED, _task.getName()), false,
+					_taskTree.searchFlag(FLAG_TYPE.NULL));
+		}
 	}
 
 }

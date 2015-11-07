@@ -4,91 +4,88 @@ import java.util.List;
 
 import constants.CmdParameters;
 import parser.ParserConstants;
+
 import taskCollections.Task;
-import taskCollections.Attributes.TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
 import taskCollections.Task.FLAG_TYPE;
 
-
 public class CmdList extends Command {
-	
+
 	/*
 	 * Constants
 	 */
 	// Message constants
 	private static final String MSG_EMPTY_TASKTREE = "No tasks to display";
 	private static final String MSG_TOTAL_TASK = "Total tasks in list: [%1$s]";
-	
-	//Help Info
+
+	// Help Info
 	private static final String HELP_INFO_LIST = "[%1$s or %2$s or %3$s <high/normal/low/h/n/l>]";
-	
-	public CmdList(){
-		
+
+	// Variable constants
+	private static final int EMPTY_LIST = 0;
+
+	public CmdList() {
+
 	}
-	
+
 	@Override
-	public CommandAction execute(){
-		
-		String outputMsg;
-		boolean isUndoable = false; //List is undoable
-		
-		if(_taskTree.size() == 0){
-			outputMsg = MSG_EMPTY_TASKTREE;
-			isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.getList());
+	public CommandAction execute() {
+
+		if (isEmptyTaskList()) {
+			return new CommandAction(MSG_EMPTY_TASKTREE, false, _taskTree.getList());
 		}
-		
+
 		String optionalParameter = getParameterValue(CmdParameters.PARAM_NAME_LIST_FLAG);
 		List<Task> taskList = proccessParameter(optionalParameter);
-		outputMsg = String.format(MSG_TOTAL_TASK, taskList.size());
-		isUndoable = false;
-		return new CommandAction(outputMsg, isUndoable, taskList);
-		
+		return new CommandAction(String.format(MSG_TOTAL_TASK, taskList.size()), false, taskList);
+
 	}
-	
+
 	@Override
-	public CommandAction undo(){
-		//do nothing (List should not have undo)     
+	public CommandAction undo() {
+		// do nothing (List should not have undo)
 		return null;
 	}
-	
-	@Override
-	public boolean isUndoable(){
-		return false;
-	}
-	
+
 	@Override
 	public String[] getRequiredFields() {
-		return new String[]{};
+		return new String[] {};
 	}
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[]{ CmdParameters.PARAM_NAME_LIST_FLAG, CmdParameters.PARAM_NAME_TASK_PRIORITY };
+		return new String[] { CmdParameters.PARAM_NAME_LIST_FLAG, CmdParameters.PARAM_NAME_TASK_PRIORITY };
 	}
-	
+
 	@Override
-	public String getHelpInfo(){
-		return String.format(HELP_INFO_LIST, ParserConstants.TASK_FILTER_ALL, 
-				ParserConstants.TASK_FILTER_DONE, ParserConstants.TASK_SPECIFIER_PRIORITY);
+	public String getHelpInfo() {
+		return String.format(HELP_INFO_LIST, ParserConstants.TASK_FILTER_ALL, ParserConstants.TASK_FILTER_DONE,
+				ParserConstants.TASK_SPECIFIER_PRIORITY);
 	}
-	
-	private List<Task> getUndoneTask(){
+
+	private boolean isEmptyTaskList() {
+		if (_taskTree.size() == EMPTY_LIST) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private List<Task> getUndoneTask() {
 		return _taskTree.searchFlag(FLAG_TYPE.NULL);
 	}
-	
-	private List<Task> getDoneTask(){
+
+	private List<Task> getDoneTask() {
 		return _taskTree.searchFlag(FLAG_TYPE.DONE);
 	}
-	
-	private List<Task> getPriorityTask(String priority){
-		
-		if(priority == null){
+
+	private List<Task> getPriorityTask(String priority) {
+
+		if (priority == null) {
 			priority = "";
 		}
-		System.out.println(priority);
 		PRIORITY_TYPE priorityType;
-		switch(priority){
+		switch (priority) {
 			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH:
 				priorityType = PRIORITY_TYPE.HIGH;
 				break;
@@ -102,24 +99,24 @@ public class CmdList extends Command {
 				priorityType = PRIORITY_TYPE.NORMAL;
 				break;
 		}
-		
+
 		return _taskTree.searchPriority(priorityType);
-		
+
 	}
-	
-	private List<Task> getAllTask(){
+
+	private List<Task> getAllTask() {
 		return _taskTree.getList();
 	}
-	
-	private List<Task> proccessParameter(String parameter){
-		
-		if(parameter == null){
+
+	private List<Task> proccessParameter(String parameter) {
+
+		if (parameter == null) {
 			parameter = "";
 		}
-		
+
 		List<Task> taskList;
-		
-		switch(parameter){
+
+		switch (parameter) {
 			case CmdParameters.PARAM_VALUE_LIST_ALL:
 				taskList = getAllTask();
 				break;
@@ -134,8 +131,8 @@ public class CmdList extends Command {
 				taskList = getUndoneTask();
 				break;
 		}
-		
+
 		return taskList;
 	}
-	
+
 }
