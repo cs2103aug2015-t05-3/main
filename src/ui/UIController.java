@@ -176,8 +176,8 @@ public class UIController implements Initializable {
 			PRIORITY_TYPE priorityCheck = uITask.getPriority();
 			FLAG_TYPE flagCheck = uITask.getFlag();
 
-			// Clear all css element before adding new style to it
-			tableRow.getStyleClass().clear();
+			// Clear all custom css element before adding new style to it
+			removeAllCSSElement(tableRow);
 
 			// Check priority
 			boolean isPriorityNormal = false;
@@ -210,11 +210,18 @@ public class UIController implements Initializable {
 				tableRow.getStyleClass().add(CSS_CURRENT);
 			}
 		} else {
-			tableRow.getStyleClass().clear();
-			tableRow.getStyleClass().add(CSS_PRIORITY_NORMAL);
-			tableRow.getStyleClass().add(CSS_FLAG_NULL);
-			tableRow.getStyleClass().add(CSS_CURRENT);
+			removeAllCSSElement(tableRow);
 		}
+	}
+
+	void removeAllCSSElement(TableRow<UITask> tableRow) {
+		tableRow.getStyleClass().remove(CSS_PRIORITY_HIGH);
+		tableRow.getStyleClass().remove(CSS_PRIORITY_NORMAL);
+		tableRow.getStyleClass().remove(CSS_PRIORITY_LOW);
+		tableRow.getStyleClass().remove(CSS_FLAG_NULL);
+		tableRow.getStyleClass().remove(CSS_FLAG_DONE);
+		tableRow.getStyleClass().remove(CSS_OVERDUE);
+		tableRow.getStyleClass().remove(CSS_CURRENT);
 	}
 
 	// Create UI
