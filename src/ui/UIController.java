@@ -54,12 +54,9 @@ public class UIController implements Initializable {
 
 	// CSS node constants
 	private static final String CSS_PRIORITY_HIGH = "highPriority";
-	private static final String CSS_PRIORITY_NORMAL = "normalPriority";
 	private static final String CSS_PRIORITY_LOW = "lowPriority";
-	private static final String CSS_FLAG_NULL = "undone";
 	private static final String CSS_FLAG_DONE = "done";
 	private static final String CSS_OVERDUE = "overdue";
-	private static final String CSS_CURRENT = "current";
 
 	// FXML constants
 	@FXML private Label pendingMsg;
@@ -250,10 +247,10 @@ public class UIController implements Initializable {
 			while (inputBuffer.isEmpty()) {
 				try {
 					inputBuffer.wait();
-				} catch (InterruptedException e) {}
-				//TODO check for unimplemented method
+				} catch (InterruptedException e) {
+					System.err.println(e);
+				}
 			}
-
 			return inputBuffer.remove(0);
 		}
 	}
@@ -267,8 +264,6 @@ public class UIController implements Initializable {
 	}
 
 	void setOutputMsg(String str) {
-		// TODO temporary fix for illegalState
-
 		Platform.runLater(new Runnable() {
 		    @Override
 		    public void run() {
