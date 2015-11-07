@@ -2,32 +2,31 @@
 	-fx-background-color:#FBFBFB;
 }
 
-.highlightedRow {
-    -fx-background-insets: 0, 1, 2;
-    -fx-background: #ffb6c1;
-    -fx-text-fill: #ffb6c1;
-}
-
 .highPriority .table-cell {
-    -fx-font: 14px Calibri;
-    -fx-text-fill: red;
-}
 
-.lowPriority .table-cell{
-    -fx-font: 14px Calibri;
-	-fx-text-fill: green;
+    -fx-text-fill: RED;
 }
 
 .normalPriority .table-cell{
-    -fx-font: 14px Calibri;
-	-fx-text-fill: black;
+	-fx-text-fill: BLACK;
 }
 
-.marked .table-cell{
-    -fx-font: 14px Calibri;
-	-fx-text-fill: #bdbdbd;
+.lowPriority .table-cell{
+	-fx-text-fill: FORESTGREEN;
 }
 
-.overdue .table-cell{
+.done .table-cell{
+	-fx-text-fill: #BDBDBD;
+}
+
+.undone .table-cell{
+	-fx-text-fill: BLACK;
+}
+
+.current .table-cell {
+	-fx-font-weight: normal;
+}
+
+.overdue .table-cell {
     -fx-font-weight: bold;
 }

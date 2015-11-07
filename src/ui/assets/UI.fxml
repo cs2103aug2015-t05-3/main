@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
@@ -8,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="681.0" maxWidth="1000.0" minHeight="600.0" minWidth="1000.0" prefHeight="620.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.UIController">
+<AnchorPane fx:id="anchorPane" maxHeight="681.0" maxWidth="1000.0" minHeight="600.0" minWidth="1000.0" prefHeight="620.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.UIController">
    <children>
       <VBox maxHeight="600.0" maxWidth="816.0" minHeight="600.0" minWidth="816.0" prefHeight="600.0" prefWidth="816.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -106,17 +107,23 @@
             </HBox>
             <VBox alignment="CENTER" maxHeight="178.0" maxWidth="1100.0" minHeight="60.0" minWidth="785.0" prefHeight="95.0" prefWidth="1100.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Label fx:id="cmdMsg" alignment="CENTER" prefHeight="27.0" prefWidth="981.0" text="Subtitle" textAlignment="CENTER" textFill="RED">
+                  <Label fx:id="cmdMsg" alignment="CENTER" prefHeight="27.0" prefWidth="981.0" text="Subtitle" textAlignment="CENTER" textFill="#002dff">
                      <VBox.margin>
-                        <Insets top="20.0" />
+                        <Insets top="15.0" />
                      </VBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                   </Label>
                   <HBox alignment="CENTER_LEFT" maxHeight="48.0" maxWidth="1249.0" minHeight="48.0" minWidth="785.0" prefHeight="48.0" prefWidth="1249.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TextField fx:id="input" maxHeight="38.0" maxWidth="1062.0" minHeight="38.0" minWidth="785.0" onAction="#enterPressed" onKeyPressed="#showHistory" prefHeight="38.0" prefWidth="1062.0" promptText="Enter command here" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="input" maxHeight="38.0" maxWidth="1062.0" minHeight="38.0" minWidth="785.0" onAction="#enterPressed" onKeyPressed="#showHistory" prefHeight="38.0" prefWidth="1062.0" promptText="Enter command here" style="-fx-background-color: ;" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets />
-                           </HBox.margin></TextField>
+                           </HBox.margin>
+                           <font>
+                              <Font size="16.0" />
+                           </font></TextField>
                      </children>
                   </HBox>
                   <Label fx:id="syntaxMsg" prefHeight="27.0" prefWidth="981.0" textAlignment="CENTER" textFill="#444444">

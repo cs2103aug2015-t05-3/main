@@ -16,7 +16,7 @@ public class CmdList extends Command {
 	 * Constants
 	 */
 	// Message constants
-	private static final String MSG_EMPTY_TASKTREE = "No task to display";
+	private static final String MSG_EMPTY_TASKTREE = "No tasks to display";
 	private static final String MSG_TOTAL_TASK = "Total tasks in list: [%1$s]";
 	
 	//Help Info
