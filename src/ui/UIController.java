@@ -400,7 +400,7 @@ public class UIController implements Initializable {
 			newCommand = StringUtil.getFirstWord(newValue);
 		}
 
-		if (newCommand.equals(null)) {
+		if (newCommand == null) {
 			return;
 		}
 
