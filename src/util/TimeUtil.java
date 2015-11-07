@@ -9,11 +9,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class TimeUtil {
 
 	private static SimpleDateFormat _df1 = new SimpleDateFormat("EEEE: dd/MM/yy HH:mm 'GMT'Z");
-	private static SimpleDateFormat _df2 = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private static SimpleDateFormat _uidf = new SimpleDateFormat("EEEE, dd/MM/yy");
 	private static Calendar now = Calendar.getInstance();
 	private static Calendar temp = Calendar.getInstance();
 
@@ -63,16 +64,15 @@ public class TimeUtil {
 			return date.getTime();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return -1;
 		}
-		return 0;
 	}
 
 	/**
 	 * 
 	 * Converts a long time to date format for display.
 	 * 
-	 * @return date in sample format: 29/09/15 20:15
+	 * @return date in sample format: Tuesday, 29/09/15
 	 */
 	public static String getUIFormattedDate(long time) {
 
@@ -81,7 +81,7 @@ public class TimeUtil {
 		}
 
 		Date date = new Date(time);
-		String dateText = _df2.format(date);
+		String dateText = _uidf.format(date);
 		return dateText;
 	}
 
@@ -96,9 +96,14 @@ public class TimeUtil {
 	public static int getDayDifference(long time) {
 		now.setTimeInMillis(System.currentTimeMillis());
 		temp.setTimeInMillis(time);
-		int daysDiff = 0;
-		//if(temp.get(Calendar.YEAR) > )
-		return temp.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
+		boolean isBefore = isBeforeNow(temp.getTimeInMillis());
+		long diff = isBefore ? now.getTimeInMillis() - temp.getTimeInMillis() : 
+			temp.getTimeInMillis() - now.getTimeInMillis();
+		long daysDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+		if(isBefore){
+			daysDiff = -daysDiff;
+		}
+		return (int)daysDiff;
 	}
 	
 	public static boolean isBeforeNow(long time){

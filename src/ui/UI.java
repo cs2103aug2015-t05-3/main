@@ -10,7 +10,6 @@ import javafx.stage.StageStyle;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;;
 
 public class UI extends Application {
 
@@ -19,7 +18,7 @@ public class UI extends Application {
 	private static final String STYLESHEET_FILEPATH = "ui/assets/UIStylesheet.css";
 	private static final String ICON_FILEPATH = "assets/UIIcon.png";
 
-	private static final String APP_TITLE = "TaskBuddy v0.4";
+	private static final String APP_TITLE = "TaskBuddy";
 
 	private static UIController uIController;
 	private static UIHelpOverlayController uIHelpOverlayController;

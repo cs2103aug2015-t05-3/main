@@ -37,13 +37,14 @@ import util.TimeUtil;
 public class UIController implements Initializable {
 
 	// Message string constants
-	private static final String MSG_CMD_WELCOME = "Welcome! Loading your stuffs";
+	private static final String MSG_CMD_WELCOME = "Welcome! Loading your tasks...";
 	private static final String MSG_PENDING_HELLO = "Hello %s,";
 	private static final String MSG_EMPTY = "";
 	private static final String MSG_EMPTY_TABLE = "Nothing here";
 	private static final String MSG_COUNT_OVERDUE = "Overdue [ %s ]";
 	private static final String MSG_COUNT_PENDING = "Pending [ %s ]";
 	private static final String MSG_COUNT_DONE = "Done [ %s ]";
+	private static final String EMPTY_TIME_DATE = "Getting time...";
 
 	// Utility string constants
 	private static final String EMPTY_STRING = "";
@@ -80,6 +81,7 @@ public class UIController implements Initializable {
 	@FXML private TextField input;
 	@FXML private AnchorPane anchor;
 
+	// UI Controller attributes
 	private static UI uI;
 	private static UIController uIController;
 	private List<Task> _floatingTaskList;
@@ -91,6 +93,8 @@ public class UIController implements Initializable {
 	private Queue<String> masterQ;
 	private Stack<String> upStack;
 	private Stack<String> downStack;
+
+
 
 	public UIController() {
 		masterQ = new LinkedList<String>();
@@ -113,7 +117,7 @@ public class UIController implements Initializable {
 		pendingMsg.setText(String.format(MSG_PENDING_HELLO, username));
 
 		//TODO unimplemented label field
-		timeDateMsg.setText(EMPTY_STRING);
+		timeDateMsg.setText(EMPTY_TIME_DATE);
 		overdueCount.setText(EMPTY_STRING);
 		pendingCount.setText(EMPTY_STRING);
 		doneCount.setText(EMPTY_STRING);
@@ -130,7 +134,7 @@ public class UIController implements Initializable {
 					@Override
 					protected void updateItem(UITask task, boolean empty) {
 						super.updateItem(task, empty);
-						updateRowColour(this);
+						manageTableRows(this);
 					}
 				};
 				return row;
@@ -147,7 +151,7 @@ public class UIController implements Initializable {
 					@Override
 					protected void updateItem(UITask task, boolean empty) {
 						super.updateItem(task, empty);
-						updateRowColour(this);
+						manageTableRows(this);
 					}
 				};
 				return row;
@@ -169,7 +173,11 @@ public class UIController implements Initializable {
 		});
 	}
 
-	private void updateRowColour(TableRow<UITask> tableRow) {
+	private void manageTableRows(TableRow<UITask> tableRow) {
+		updateRowsColor(tableRow);
+	}
+
+	private void updateRowsColor(TableRow<UITask> tableRow) {
 		if (!tableRow.isEmpty()) {
 
 			UITask uITask = tableRow.getItem();
@@ -192,8 +200,7 @@ public class UIController implements Initializable {
 
 			// Check overdue
 			long endTime = uITask.getEndTime();
-			boolean isOverdue = TimeUtil.isBeforeNow(endTime) && endTime != Task.DATE_NULL;
-			if (isOverdue) {
+			if (isOverdue(endTime)) {
 				tableRow.getStyleClass().add(CSS_OVERDUE);
 			}
 		} else {
@@ -201,7 +208,14 @@ public class UIController implements Initializable {
 		}
 	}
 
-	void removeAllCSSElement(TableRow<UITask> tableRow) {
+	private boolean isOverdue(long time) {
+		boolean isFloating = time != Task.DATE_NULL;
+		boolean isBeforeNow = TimeUtil.isBeforeNow(time);
+
+		return isBeforeNow && isFloating;
+	}
+
+	private void removeAllCSSElement(TableRow<UITask> tableRow) {
 		tableRow.getStyleClass().remove(CSS_PRIORITY_HIGH);
 		tableRow.getStyleClass().remove(CSS_PRIORITY_LOW);
 		tableRow.getStyleClass().remove(CSS_FLAG_DONE);
@@ -252,19 +266,24 @@ public class UIController implements Initializable {
 		input.clear();
 	}
 
-	void setOutputMsg(String a) {
+	void setOutputMsg(String str) {
 		// TODO temporary fix for illegalState
 
 		Platform.runLater(new Runnable() {
 		    @Override
 		    public void run() {
-		    	cmdMsg.setText(a);
+		    	cmdMsg.setText(str);
 		    }
 		});
 	}
 
 	void setTimeDateMsg(String str) {
-		timeDateMsg.setText(str);
+		Platform.runLater(new Runnable() {
+			@Override
+		    public void run() {
+				timeDateMsg.setText(str);
+		    }
+		});
 	}
 
 	void setSyntaxMsg(String str) {
@@ -384,7 +403,7 @@ public class UIController implements Initializable {
 				upStack.push(history);
 				setInput(history);
 			} else {
-				setInput("");
+				setInput(EMPTY_STRING);
 			}
 		}
 	}

@@ -44,7 +44,7 @@ public class TimeProcessor {
 	private static final String FORMAT_LASTWEEK = "Last %1$s";
 	private static final String FORMAT_ENDDATE = "By %1$s (%2$s)";
 	private static final String FORMAT_DUEIN = "In %1$s day(s)";
-	private static final String FORMAT_OVERDUE = "Over by %1$s day(s)";
+	private static final String FORMAT_OVERDUE = "%1$s day(s) ago";
 	private static final String FORMAT_STARTENDDATE = "%1$s to %2$s";
 	/*
 	 * Variables

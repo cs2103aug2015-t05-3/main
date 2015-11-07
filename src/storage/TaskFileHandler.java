@@ -40,11 +40,14 @@ public class TaskFileHandler {
 	
 	public TaskFileHandler() {}
 	
+	/**
+	 * Attempts to load XML File into ArrayList of Task Objects
+	 * @return true if loading succeeded, false if failed.
+	 */
 	public boolean loadTaskFile(String fileName) {
 		DocumentBuilderFactory dbFactory;
 		DocumentBuilder dBuilder;
 		
-		_tasks = new ArrayList<>();
 		_xmlFile = new File(fileName);
 			
 		dbFactory = DocumentBuilderFactory.newInstance();
@@ -65,8 +68,7 @@ public class TaskFileHandler {
 		_doc.getDocumentElement().normalize();
 		_root = _doc.getDocumentElement();
 		
-		importAllTasks();
-		return true;
+		return importAllTasks();
 	}
 
 	/**
@@ -100,7 +102,6 @@ public class TaskFileHandler {
 	/**
 	 * Delete task from XML file
 	 * @param id
-	 * @throws Exception
 	 */
 	public boolean delete(int id) {
 		Element e = locateID(id);
@@ -111,7 +112,6 @@ public class TaskFileHandler {
 	/**
 	 * Update task to XML file
 	 * @param t
-	 * @throws Exception
 	 */
 	public boolean update(Task t) {
 		Element e = locateID(t.getId());
@@ -192,8 +192,8 @@ public class TaskFileHandler {
 	/*
 	 * Imports all tasks from specified XML file and add them to ArrayList
 	 */
-	private void importAllTasks() {
-		
+	private boolean importAllTasks() {
+		_tasks = new ArrayList<>();
 		optimizeID();
 		
 		Element eElement;
@@ -201,24 +201,38 @@ public class TaskFileHandler {
 		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
 		Task t;
 		
-		for (int i = 0; i < nList.getLength(); i++) {
-			nNode = nList.item(i);
+		try {
+			for (int i = 0; i < nList.getLength(); i++) {
+				nNode = nList.item(i);
 
-			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				eElement = (Element) nNode;
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					eElement = (Element) nNode;
 				
-				int id = Integer.parseInt(eElement.getAttribute(TAG_ID));
+					int id = Integer.parseInt(eElement.getAttribute(TAG_ID));
 				
-				String title = retrieveElement(eElement, "title");
-				long startTime = TimeUtil.getLongTime(retrieveElement(eElement, "startTime"));
-				long endTime = TimeUtil.getLongTime(retrieveElement(eElement, "endTime"));
-				FLAG_TYPE flag = detFlag(retrieveElement(eElement, "flag"));
-				PRIORITY_TYPE priority = detPriority(retrieveElement(eElement, "priority"));
+					String title = retrieveElement(eElement, "title");
+					long startTime = TimeUtil.getLongTime(retrieveElement(eElement, "startTime"));
+					long endTime = TimeUtil.getLongTime(retrieveElement(eElement, "endTime"));
+					
+					if (startTime == -1 || endTime == -1) {
+						return false;
+					}
+					
+					FLAG_TYPE flag = detFlag(retrieveElement(eElement, "flag"));
+					PRIORITY_TYPE priority = detPriority(retrieveElement(eElement, "priority"));
 				
-				t = new Task(id, title, "", startTime, endTime, flag, priority);
-				_tasks.add(t);
+					if (flag == null || priority == null) {
+						return false;
+					}
+					
+					t = new Task(id, title, "", startTime, endTime, flag, priority);
+					_tasks.add(t);
+				}
 			}
+		} catch (Exception e) {
+			return false;
 		}
+		return true;
 	}
 
 	private String retrieveElement(Element e, String s) {
@@ -232,7 +246,7 @@ public class TaskFileHandler {
 		case "DONE":
 			return FLAG_TYPE.DONE;
 		default:
-			return FLAG_TYPE.NULL;
+			return null;
 		}
 	}
 
@@ -245,7 +259,7 @@ public class TaskFileHandler {
 		case "LOW":
 			return PRIORITY_TYPE.LOW;
 		default:
-			return PRIORITY_TYPE.NORMAL;
+			return null;
 		}
 	}
 
