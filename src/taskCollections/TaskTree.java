@@ -3,10 +3,6 @@ package taskCollections;
 import java.util.List;
 import java.util.TreeSet;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
 import storage.TaskFileHandler;
 import taskCollections.Attributes;
 import taskCollections.Attributes.TYPE;
@@ -14,7 +10,6 @@ import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
 import taskCollections.comparators.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
