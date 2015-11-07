@@ -105,14 +105,15 @@ public class UIController implements Initializable {
 	ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
 
-	private Queue<String> masterQ;
-	private Stack<String> upStack;
-	private Stack<String> downStack;
 
+	private LinkedList<String> _leftList;
+	private LinkedList<String> _rightList;
+	private String _holyBuffer;
+	
 	public UIController() {
-		masterQ = new LinkedList<String>();
-		upStack = new Stack<String>();
-		downStack = new Stack<String>();
+		_holyBuffer = EMPTY_STRING;
+		_leftList = new LinkedList<String>();
+		_rightList = new LinkedList<String>();
 	}
 
 	static UIController getUIController() {
@@ -379,9 +380,8 @@ public class UIController implements Initializable {
 
 		synchronized (inputBuffer) {
 			String in = input.getText().trim();
-			masterQ.add(in);
 
-			resetStacks();
+			addToLists(in);
 
 			inputBuffer.add(in);
 			inputBuffer.notify();
@@ -389,23 +389,48 @@ public class UIController implements Initializable {
 		clearInput();
 	}
 
+	private void addToLists(String in) {
+		
+		if (!_holyBuffer.equals(EMPTY_STRING)) {
+			_leftList.offerLast(_holyBuffer);
+			_holyBuffer = EMPTY_STRING;
+		}
+		
+		while (!_rightList.isEmpty()) {
+			_leftList.offerLast(_rightList.removeFirst());
+		}
+		_leftList.offerLast(in);
+	}
+
 	public void showHistory(KeyEvent keyEvent) {
 
 		switch (keyEvent.getCode()) {
 			case UP:
-				if (!upStack.isEmpty()) {
+				if (!_holyBuffer.equals(EMPTY_STRING) && !_leftList.isEmpty()) {
+					_rightList.offerFirst(_holyBuffer);
+					_holyBuffer = EMPTY_STRING;
+				}
+				
+				if (!_leftList.isEmpty()) {
 					String history;
-					history = upStack.pop();
-					downStack.push(history);
+					history = _leftList.pollLast();
+					_holyBuffer = history;
+					//_rightList.offerFirst(history);
 					setInput(history);
 				}
 				keyEvent.consume();
 				break;
 			case DOWN:
-				if (!downStack.isEmpty()) {
+				if (!_holyBuffer.equals(EMPTY_STRING)) {
+					_leftList.offerLast(_holyBuffer);
+					_holyBuffer = EMPTY_STRING;
+				}				
+				
+				if (!_rightList.isEmpty()) {
 					String history;
-					history = downStack.pop();
-					upStack.push(history);
+					history = _rightList.pollFirst();
+					_holyBuffer = history;
+					//_leftList.offerLast(history);
 					setInput(history);
 				} else {
 					setInput(EMPTY_STRING);
@@ -414,17 +439,6 @@ public class UIController implements Initializable {
 				break;
 			default:
 				break;
-		}
-	}
-
-	private void resetStacks() {
-		Queue<String> toStack = new LinkedList<String>(masterQ);
-
-		upStack.clear();
-		downStack.clear();
-
-		while (!toStack.isEmpty()) {
-			upStack.push(toStack.poll());
 		}
 	}
 
