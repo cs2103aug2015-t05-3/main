@@ -28,7 +28,7 @@ public class TaskBuddy {
 	private static final String logFileName = "log.log";
 	private static final String MSG_INVALIDCMD = "Please enter a valid command. For more info, enter help";
 	private static final String MSG_TASKFILE_NOTFOUND = "Please enter the name or location of file to open or create";
-	
+	private static final String MSG_TASKFILE_REPROMPT = "Please enter another file name";
 	/*
 	 * Global variables
 	 */
@@ -57,6 +57,7 @@ public class TaskBuddy {
 		}
 		UIHelper.setDate(TimeUtil.getUIFormattedDate(System.currentTimeMillis()));
 		initTaskFile();
+		System.out.println(taskFileName);
 		Command.init(taskFileName);
 		initTasks();
 	}
@@ -67,35 +68,18 @@ public class TaskBuddy {
 		Command list = new CmdList();
 		resolveCmdAction(list.execute(), list);
 	}
-	
+
 	private static void initTaskFile(){
 		SettingsFileHandler settings = SettingsFileHandler.getInstance();
-		settings.init();
-		while((taskFileName = settings.getTaskFile()) == null){
+		if(!settings.init()){
 			UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);
 			settings.alterSettingsFile(UIHelper.getUserInput());
-			settings.initializeTaskFile();
 		}
-		
-		/*if(settings.init()){ // Settings file found
-			if (settings.taskFileCheck()) {
-				taskFileName = settings.getTaskFile(); // TODO: if null.. do else
-			} else {
-				do {
-					UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);
-					taskFileName = UIHelper.getUserInput();
-					settings.alterSettingsFile(taskFileName);
-					settings.initializeTaskFile();
-				} while((taskFileName = settings.getTaskFile()) == null);
-			}
-		} else {
-			do {
-				UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);
-				taskFileName = UIHelper.getUserInput();
-				settings.alterSettingsFile(taskFileName);
-				settings.initializeTaskFile();
-			} while((taskFileName = settings.getTaskFile()) == null);
-		}*/
+		while(!settings.initializeTaskFile()){
+			UIHelper.setOutputMsg(MSG_TASKFILE_REPROMPT);
+			settings.alterSettingsFile(UIHelper.getUserInput());
+		}
+		taskFileName = settings.getTaskFile();
 	}
 	
 	private static void initLog(){
