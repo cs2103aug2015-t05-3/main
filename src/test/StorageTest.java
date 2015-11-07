@@ -40,7 +40,6 @@ public class StorageTest {
 	@Test
 	public void testCommandFileLoading() {
 		String fileName = "commands.xml";
-		
 		assertEquals(cmd.loadCommandFile(fileName), true);
 	}
 

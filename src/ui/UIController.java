@@ -59,24 +59,42 @@ public class UIController implements Initializable {
 	private static final String CSS_OVERDUE = "overdue";
 
 	// FXML constants
-	@FXML private Label pendingMsg;
-	@FXML private Label timeDateMsg;
-	@FXML private Label cmdMsg;
-	@FXML private Label syntaxMsg;
-	@FXML private Label tableFloatHeader;
-	@FXML private Label tableTimedHeader;
-	@FXML private Label overdueCount;
-	@FXML private Label pendingCount;
-	@FXML private Label doneCount;
-	@FXML private TableColumn<UITask, Integer> idTimed;
-	@FXML private TableColumn<UITask, String> taskTimed;
-	@FXML private TableColumn<UITask, String> sDate;
-	@FXML private TableColumn<UITask, Integer> idFloat;
-	@FXML private TableColumn<UITask, String> taskFloat;
-	@FXML private TableView<UITask> tableTimed;
-	@FXML private TableView<UITask> tableFloat;
-	@FXML private TextField input;
-	@FXML private AnchorPane anchor;
+	@FXML
+	private Label pendingMsg;
+	@FXML
+	private Label timeDateMsg;
+	@FXML
+	private Label cmdMsg;
+	@FXML
+	private Label syntaxMsg;
+	@FXML
+	private Label tableFloatHeader;
+	@FXML
+	private Label tableTimedHeader;
+	@FXML
+	private Label overdueCount;
+	@FXML
+	private Label pendingCount;
+	@FXML
+	private Label doneCount;
+	@FXML
+	private TableColumn<UITask, Integer> idTimed;
+	@FXML
+	private TableColumn<UITask, String> taskTimed;
+	@FXML
+	private TableColumn<UITask, String> sDate;
+	@FXML
+	private TableColumn<UITask, Integer> idFloat;
+	@FXML
+	private TableColumn<UITask, String> taskFloat;
+	@FXML
+	private TableView<UITask> tableTimed;
+	@FXML
+	private TableView<UITask> tableFloat;
+	@FXML
+	private TextField input;
+	@FXML
+	private AnchorPane anchor;
 
 	// UI Controller attributes
 	private static UI uI;
@@ -87,16 +105,15 @@ public class UIController implements Initializable {
 	ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
 
-	private Queue<String> masterQ;
-	private Stack<String> upStack;
-	private Stack<String> downStack;
 
-
-
+	private LinkedList<String> _leftList;
+	private LinkedList<String> _rightList;
+	private String _holyBuffer;
+	
 	public UIController() {
-		masterQ = new LinkedList<String>();
-		upStack = new Stack<String>();
-		downStack = new Stack<String>();
+		_holyBuffer = EMPTY_STRING;
+		_leftList = new LinkedList<String>();
+		_rightList = new LinkedList<String>();
 	}
 
 	static UIController getUIController() {
@@ -113,7 +130,7 @@ public class UIController implements Initializable {
 
 		pendingMsg.setText(String.format(MSG_PENDING_HELLO, username));
 
-		//TODO unimplemented label field
+		// TODO unimplemented label field
 		timeDateMsg.setText(EMPTY_TIME_DATE);
 		overdueCount.setText(EMPTY_STRING);
 		pendingCount.setText(EMPTY_STRING);
@@ -257,6 +274,7 @@ public class UIController implements Initializable {
 
 	void setInput(String str) {
 		input.setText(str);
+		input.positionCaret(str.length());
 	}
 
 	void clearInput() {
@@ -265,19 +283,19 @@ public class UIController implements Initializable {
 
 	void setOutputMsg(String str) {
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	cmdMsg.setText(str);
-		    }
+			@Override
+			public void run() {
+				cmdMsg.setText(str);
+			}
 		});
 	}
 
 	void setTimeDateMsg(String str) {
 		Platform.runLater(new Runnable() {
 			@Override
-		    public void run() {
+			public void run() {
 				timeDateMsg.setText(str);
-		    }
+			}
 		});
 	}
 
@@ -308,6 +326,13 @@ public class UIController implements Initializable {
 		uI.hideUIHelpOverlayStage();
 	}
 
+	/**
+	 * Receive a list of task and display them on the UI Tables. Floating and
+	 * non-floating task will be separated and sorted in its respective table.
+	 *
+	 * @param taskList
+	 *            to be displayed on the UI table
+	 */
 	void generateTablesOutput(List<Task> taskList) {
 		separateTaskList(taskList);
 		sortSeparatedList();
@@ -318,7 +343,7 @@ public class UIController implements Initializable {
 		_floatingTaskList = new ArrayList<Task>();
 		_nonFloatingTaskList = new ArrayList<Task>();
 
-		for (Task task: taskList) {
+		for (Task task : taskList) {
 			if (isFloating(task)) {
 				_floatingTaskList.add(task);
 			} else {
@@ -328,11 +353,7 @@ public class UIController implements Initializable {
 	}
 
 	private boolean isFloating(Task task) {
-		if (task.getEndTime() == 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return task.getEndTime() == Task.DATE_NULL;
 	}
 
 	private void sortSeparatedList() {
@@ -359,12 +380,8 @@ public class UIController implements Initializable {
 
 		synchronized (inputBuffer) {
 			String in = input.getText().trim();
-			masterQ.add(in);
 
-			//can put the following into a method
-			resetStacks();
-			// end method
-
+			addToLists(in);
 
 			inputBuffer.add(in);
 			inputBuffer.notify();
@@ -372,32 +389,56 @@ public class UIController implements Initializable {
 		clearInput();
 	}
 
-	private void resetStacks() {
-		Queue<String> toStack = new LinkedList<String>(masterQ);
-
-		upStack.clear();
-		downStack.clear();
-
-		while(!toStack.isEmpty()) {
-			upStack.push(toStack.poll());
+	private void addToLists(String in) {
+		
+		if (!_holyBuffer.equals(EMPTY_STRING)) {
+			_leftList.offerLast(_holyBuffer);
+			_holyBuffer = EMPTY_STRING;
 		}
+		
+		while (!_rightList.isEmpty()) {
+			_leftList.offerLast(_rightList.removeFirst());
+		}
+		_leftList.offerLast(in);
 	}
 
-	public void showHistory(KeyEvent ke) {
-		if (ke.getCode().equals(KeyCode.UP)) {
-			if (!upStack.isEmpty()) {
-				String history = upStack.pop();
-				downStack.push(history);
-				setInput(history);
-			}
-		} else if (ke.getCode().equals(KeyCode.DOWN)) {
-			if (!downStack.isEmpty()) {
-				String history = downStack.pop();
-				upStack.push(history);
-				setInput(history);
-			} else {
-				setInput(EMPTY_STRING);
-			}
+	public void showHistory(KeyEvent keyEvent) {
+
+		switch (keyEvent.getCode()) {
+			case UP:
+				if (!_holyBuffer.equals(EMPTY_STRING) && !_leftList.isEmpty()) {
+					_rightList.offerFirst(_holyBuffer);
+					_holyBuffer = EMPTY_STRING;
+				}
+				
+				if (!_leftList.isEmpty()) {
+					String history;
+					history = _leftList.pollLast();
+					_holyBuffer = history;
+					//_rightList.offerFirst(history);
+					setInput(history);
+				}
+				keyEvent.consume();
+				break;
+			case DOWN:
+				if (!_holyBuffer.equals(EMPTY_STRING)) {
+					_leftList.offerLast(_holyBuffer);
+					_holyBuffer = EMPTY_STRING;
+				}				
+				
+				if (!_rightList.isEmpty()) {
+					String history;
+					history = _rightList.pollFirst();
+					_holyBuffer = history;
+					//_leftList.offerLast(history);
+					setInput(history);
+				} else {
+					setInput(EMPTY_STRING);
+				}
+				keyEvent.consume();
+				break;
+			default:
+				break;
 		}
 	}
 

@@ -3,7 +3,6 @@
  * @author Zander Chai
  */
 
-//Source: http://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
 
 package storage;
 
@@ -27,6 +26,10 @@ import org.xml.sax.SAXException;
 
 public class CommandFileHandler {
 	
+	private final int BYTE_ARRAY_NUMBER = 1024;
+	private final int EOF_NUMBER = -1;
+	private final int OFFSET_NUMBER = 0;
+	
 	private final String TAG_COMMAND = "command";
 	private final String TAG_CATEGORY = "category";
 	private final String TAG_WORD = "word";
@@ -40,6 +43,11 @@ public class CommandFileHandler {
 		
 	}
 	
+	/**
+	 * Attempts to load XML file elements into Document object
+	 * @param fileName
+	 * @return true if successful, false otherwise
+	 */
 	public boolean loadCommandFile(String fileName) {
 		DocumentBuilderFactory dbFactory;
 		DocumentBuilder dBuilder;
@@ -65,9 +73,12 @@ public class CommandFileHandler {
 		}
 	}
 	
-	public boolean generateCommandFile(String newFile) {
-		newFile = "commands.xml";
-		
+	/**
+	 * Copies commands.xml from resource package to program directory
+	 * @param newFileStr
+	 * @return true is successful, false if failed
+	 */
+	public boolean generateCommandFile(String newFile) {	
 		boolean check = fileCopyFromResource(newFile);		
 		check = loadCommandFile(newFile) && check;
 		parseCmd();
@@ -85,19 +96,17 @@ public class CommandFileHandler {
 			try {
 				outputStream = new FileOutputStream(newFileStr);
 				int read = 0;
-				byte[] bytes = new byte[1024];
-				while ((read = inputStream.read(bytes)) != -1) {
-					outputStream.write(bytes, 0, read);
+				byte[] bytes = new byte[BYTE_ARRAY_NUMBER];
+				while ((read = inputStream.read(bytes)) != EOF_NUMBER) {
+					outputStream.write(bytes, OFFSET_NUMBER, read);
 				}
 				inputStream.close();
 				outputStream.close();
 				return true;
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			}
