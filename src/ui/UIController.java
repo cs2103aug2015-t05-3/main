@@ -284,12 +284,12 @@ public class UIController implements Initializable {
 	}
 
 	void setDoneCount(int count) {
-		String str = String.format(MSG_COUNT_OVERDUE, count);
+		String str = String.format(MSG_COUNT_DONE, count);
 		doneCount.setText(str);
 	}
 
 	void setPendingCount(int count) {
-		String str = String.format(MSG_COUNT_OVERDUE, count);
+		String str = String.format(MSG_COUNT_PENDING, count);
 		pendingCount.setText(str);
 	}
 
@@ -352,27 +352,6 @@ public class UIController implements Initializable {
 		} else {
 			return false;
 		}
-	}
-
-	/*
-	 * Appends Priority: L for low, N for normal, H for high
-	 * Appends Marked: M if task is marked.
-	 * Appends Overdue: O if task is overdue.
-	 */
-	private String appendFlags(String toAppend, Task t) {
-		char priority = t.getPriority().toString().charAt(0);
-		String doneStr = "";
-
-		if (t.getFlag() == FLAG_TYPE.DONE) {
-			doneStr = "M"; //signify marked. to refactor
-		}
-		toAppend = toAppend + "+" + priority + doneStr;
-
-		if (TimeUtil.isBeforeNow(t.getEndTime()) && t.getEndTime() != 0) {
-			toAppend += "O"; //overdue
-		}
-
-		return toAppend;
 	}
 
 	// Event methods
