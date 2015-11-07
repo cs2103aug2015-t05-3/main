@@ -45,11 +45,6 @@ public class CmdSearch extends Command {
 	}
 
 	@Override
-	public boolean isUndoable() {
-		return false;
-	}
-
-	@Override
 	public String[] getRequiredFields() {
 		return new String[] { CmdParameters.PARAM_NAME_CMD_SEARCH };
 	}

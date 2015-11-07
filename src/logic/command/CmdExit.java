@@ -21,11 +21,6 @@ public class CmdExit extends Command {
 	}
 
 	@Override
-	public boolean isUndoable() {
-		return false;
-	}
-
-	@Override
 	public String[] getRequiredFields() {
 		return new String[] {};
 	}

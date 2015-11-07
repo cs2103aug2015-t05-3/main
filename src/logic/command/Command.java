@@ -45,12 +45,6 @@ public abstract class Command {
 	public abstract CommandAction undo();
 
 	/**
-	 * Determines if the command supports the undo function
-	 * @return True if command supports undo function, false if it does not
-	 */
-	public abstract boolean isUndoable();
-
-	/**
 	 * Get the list of fields that are required to run this command
 	 * @return List of required parameter names
 	 *

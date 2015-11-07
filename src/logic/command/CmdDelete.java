@@ -56,11 +56,6 @@ public class CmdDelete extends Command {
 	}
 
 	@Override
-	public boolean isUndoable() {
-		return true;
-	}
-
-	@Override
 	public String[] getRequiredFields() {
 		return new String[] { CmdParameters.PARAM_NAME_TASK_ID };
 	}
