@@ -41,7 +41,7 @@ public class SettingsFileHandler {
 				BufferedReader br = new BufferedReader(new FileReader(_settingsFile));
 				input = br.readLine();
 				if (input.contains(FILE_PATH_TEXT)) {
-					input.replace(FILE_PATH_TEXT, EMPTY_STRING);
+					input = input.replace(FILE_PATH_TEXT, EMPTY_STRING);
 					_taskFileLocation = input;
 					br.close();
 					return true;

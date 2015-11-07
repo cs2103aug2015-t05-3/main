@@ -107,6 +107,12 @@ public class CommandFileHandler {
 		return _cmdTable;
 	}
 
+	/**
+	 * Stores each custom command into a category as laid out
+	 * in commands.xml.
+	 * 
+	 * The HashMap mappings are <word | category>
+	 */
 	private void parseCmd() {
 		Element eElement;
 		Node nNode;
@@ -120,8 +126,13 @@ public class CommandFileHandler {
 				String category = eElement.getAttribute(TAG_CATEGORY);
 				
 				for (int j = 0; j < eElement.getElementsByTagName(TAG_WORD).getLength(); j++) {
-					String word = eElement.getElementsByTagName(TAG_WORD).item(j).getTextContent();
-					_cmdTable.put(word, category);
+					String word = eElement.getElementsByTagName(TAG_WORD).item(j)
+							.getTextContent();
+					
+					//if existing key(word) is already found in HashMap, ignore it. 					
+					if (!_cmdTable.containsKey(word)) {
+						_cmdTable.put(word, category);
+					}
 				}
 			}
 		}
