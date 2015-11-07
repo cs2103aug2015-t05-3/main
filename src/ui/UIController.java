@@ -122,43 +122,55 @@ public class UIController implements Initializable {
 			@Override
 			public TableRow<UITask> call(TableView<UITask> tableView) {
 				final TableRow<UITask> row = new TableRow<UITask>() {
+
 					@Override
 					protected void updateItem(UITask task, boolean empty) {
 						super.updateItem(task, empty);
 
-						if (this.getItem() != null) {
+						if (!this.isEmpty()) {
 
 							UITask uITask = this.getItem();
 							PRIORITY_TYPE priorityCheck = uITask.getPriority();
 							FLAG_TYPE flagCheck = uITask.getFlag();
-							long endTime = uITask.getEndTime();
-							boolean isOverdue = TimeUtil.isBeforeNow(endTime) && endTime != Task.DATE_NULL;
-							boolean isPriorityNormal = false;
 
+							// Clear all css element before adding new style to it
+							getStyleClass().clear();
+
+							// Check priority
+							boolean isPriorityNormal = false;
 							if (priorityCheck == PRIORITY_TYPE.HIGH) {
 								getStyleClass().add(CSS_PRIORITY_HIGH);
-								isPriorityNormal = true;
+								isPriorityNormal = false;
 							} else if (priorityCheck == PRIORITY_TYPE.LOW) {
 								getStyleClass().add(CSS_PRIORITY_LOW);
-								isPriorityNormal = true;
+								isPriorityNormal = false;
 							} else if (priorityCheck == PRIORITY_TYPE.NORMAL) {
 								getStyleClass().add(CSS_PRIORITY_NORMAL);
-								isPriorityNormal = false;
+								isPriorityNormal = true;
 							} else {
 								isPriorityNormal = false;
 							}
 
+							// Check flag
 							if (flagCheck == FLAG_TYPE.DONE) {
 								getStyleClass().add(CSS_FLAG_DONE);
-							} else if (!isPriorityNormal) {
+							} else if (isPriorityNormal) {
 								getStyleClass().add(CSS_FLAG_NULL);
 							}
 
+							// Check overdue
+							long endTime = uITask.getEndTime();
+							boolean isOverdue = TimeUtil.isBeforeNow(endTime) && endTime != Task.DATE_NULL;
 							if (isOverdue) {
 								getStyleClass().add(CSS_OVERDUE);
 							} else {
 								getStyleClass().add(CSS_CURRENT);
 							}
+						} else {
+							getStyleClass().clear();
+							getStyleClass().add(CSS_PRIORITY_NORMAL);
+							getStyleClass().add(CSS_FLAG_NULL);
+							getStyleClass().add(CSS_CURRENT);
 						}
 					}
 				};
@@ -177,39 +189,50 @@ public class UIController implements Initializable {
 					protected void updateItem(UITask task, boolean empty) {
 						super.updateItem(task, empty);
 
-						if (this.getItem() != null) {
+						if (!this.isEmpty()) {
 
 							UITask uITask = this.getItem();
 							PRIORITY_TYPE priorityCheck = uITask.getPriority();
 							FLAG_TYPE flagCheck = uITask.getFlag();
-							long endTime = uITask.getEndTime();
-							boolean isOverdue = TimeUtil.isBeforeNow(endTime) && endTime != Task.DATE_NULL;
-							boolean isPriorityNormal = false;
 
+							// Clear all css element before adding new style to it
+							getStyleClass().clear();
+
+							// Check priority
+							boolean isPriorityNormal = false;
 							if (priorityCheck == PRIORITY_TYPE.HIGH) {
 								getStyleClass().add(CSS_PRIORITY_HIGH);
-								isPriorityNormal = true;
+								isPriorityNormal = false;
 							} else if (priorityCheck == PRIORITY_TYPE.LOW) {
 								getStyleClass().add(CSS_PRIORITY_LOW);
-								isPriorityNormal = true;
+								isPriorityNormal = false;
 							} else if (priorityCheck == PRIORITY_TYPE.NORMAL) {
 								getStyleClass().add(CSS_PRIORITY_NORMAL);
-								isPriorityNormal = false;
+								isPriorityNormal = true;
 							} else {
 								isPriorityNormal = false;
 							}
 
+							// Check flag
 							if (flagCheck == FLAG_TYPE.DONE) {
 								getStyleClass().add(CSS_FLAG_DONE);
-							} else if (!isPriorityNormal) {
+							} else if (isPriorityNormal) {
 								getStyleClass().add(CSS_FLAG_NULL);
 							}
 
+							// Check overdue
+							long endTime = uITask.getEndTime();
+							boolean isOverdue = TimeUtil.isBeforeNow(endTime) && endTime != Task.DATE_NULL;
 							if (isOverdue) {
 								getStyleClass().add(CSS_OVERDUE);
 							} else {
 								getStyleClass().add(CSS_CURRENT);
 							}
+						} else {
+							getStyleClass().clear();
+							getStyleClass().add(CSS_PRIORITY_NORMAL);
+							getStyleClass().add(CSS_FLAG_NULL);
+							getStyleClass().add(CSS_CURRENT);
 						}
 					}
 				};
