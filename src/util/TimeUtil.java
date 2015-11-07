@@ -63,9 +63,8 @@ public class TimeUtil {
 			return date.getTime();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return -1;
 		}
-		return 0;
 	}
 
 	/**
