@@ -13,10 +13,14 @@ import javafx.scene.layout.*;
 
 public class UI extends Application {
 
+	// File path
 	private static final String RESOURCE_FILEPATH = "assets/UI.fxml";
 	private static final String HELP_FILEPATH = "assets/UIHelpOverlay.fxml";
-	private static final String STYLESHEET_FILEPATH = "ui/assets/UIStylesheet.css";
+	private static final String UI_STYLESHEET_FILEPATH = "ui/assets/UIStylesheet.css";
 	private static final String ICON_FILEPATH = "assets/UIIcon.png";
+
+	// Message String constants
+	private static final String ERR_LOADING_FILE = "Error loading files required to display UI";
 
 	private static final String APP_TITLE = "TaskBuddy";
 
@@ -45,6 +49,8 @@ public class UI extends Application {
 			uiMainstage.getIcons().add(new Image(getClass().getResourceAsStream(ICON_FILEPATH)));
 			uiMainstage.setScene(uiMainScene);
 			uiMainstage.setResizable(false);
+			uiMainstage.setOnCloseRequest(e -> System.exit(0));
+			uiMainScene.getStylesheets().add(UI_STYLESHEET_FILEPATH);
 			uiMainstage.show();
 
 			AnchorPane uiHelpRoot = (AnchorPane) uIHelpLoader.load();
@@ -52,13 +58,11 @@ public class UI extends Application {
 			uIHelpScene = new Scene(uiHelpRoot);
 			uIHelpStage.setScene(uIHelpScene);
 			uIHelpStage.initStyle(StageStyle.UTILITY);
-			uiMainScene.getStylesheets().add(STYLESHEET_FILEPATH);
 
 			isInitialised = true;
 
 		} catch (IOException e) {
-			e.printStackTrace();
-			//TODO exit program?
+			System.err.println(ERR_LOADING_FILE);
 		}
 	}
 
@@ -76,23 +80,23 @@ public class UI extends Application {
 
 	public void showUIHelpOverlayStage() {
 
-		// TestPlatform.runLater is required to modify UI after the JavaFx thread is started.
+		// Platform.runLater is required to modify UI after starting JavaFx thread.
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	uIHelpStage.show();
-		    }
+			@Override
+			public void run() {
+				uIHelpStage.show();
+			}
 		});
 	}
 
 	public void hideUIHelpOverlayStage() {
 
-		// Platform.runLater is required to modify UI after the JavaFx thread is started.
+		// Platform.runLater is required to modify UI after starting JavaFx thread.
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	uIHelpStage.hide();
-		    }
+			@Override
+			public void run() {
+				uIHelpStage.hide();
+			}
 		});
 	}
 

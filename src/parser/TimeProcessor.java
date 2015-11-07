@@ -133,6 +133,8 @@ public class TimeProcessor {
 		String extraMsg;
 		if(daysDiff < 0){ // Overdue
 			extraMsg = String.format(FORMAT_OVERDUE, -daysDiff);
+		} else if (daysDiff == 0){
+			extraMsg = "";
 		} else {
 			extraMsg = String.format(FORMAT_DUEIN, daysDiff);
 		}

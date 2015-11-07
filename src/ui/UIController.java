@@ -54,12 +54,9 @@ public class UIController implements Initializable {
 
 	// CSS node constants
 	private static final String CSS_PRIORITY_HIGH = "highPriority";
-	private static final String CSS_PRIORITY_NORMAL = "normalPriority";
 	private static final String CSS_PRIORITY_LOW = "lowPriority";
-	private static final String CSS_FLAG_NULL = "undone";
 	private static final String CSS_FLAG_DONE = "done";
 	private static final String CSS_OVERDUE = "overdue";
-	private static final String CSS_CURRENT = "current";
 
 	// FXML constants
 	@FXML private Label pendingMsg;
@@ -250,10 +247,10 @@ public class UIController implements Initializable {
 			while (inputBuffer.isEmpty()) {
 				try {
 					inputBuffer.wait();
-				} catch (InterruptedException e) {}
-				//TODO check for unimplemented method
+				} catch (InterruptedException e) {
+					System.err.println(e);
+				}
 			}
-
 			return inputBuffer.remove(0);
 		}
 	}
@@ -267,8 +264,6 @@ public class UIController implements Initializable {
 	}
 
 	void setOutputMsg(String str) {
-		// TODO temporary fix for illegalState
-
 		Platform.runLater(new Runnable() {
 		    @Override
 		    public void run() {
@@ -313,44 +308,23 @@ public class UIController implements Initializable {
 		uI.hideUIHelpOverlayStage();
 	}
 
-	private void generateTable() {
-
-		dataTimed.clear();
-		dataFloat.clear();
-
-		for (Task t : _nonFloatingTaskList) {
-			dataTimed.add(new UITask(t));
-		}
-
-		for (Task t : _floatingTaskList) {
-			dataFloat.add(new UITask(t));
-		}
-
-		tableTimed.setItems(dataTimed);
-		tableFloat.setItems(dataFloat);
+	void generateTablesOutput(List<Task> taskList) {
+		separateTaskList(taskList);
+		sortSeparatedList();
+		displayTables();
 	}
 
-	void seperateTaskList(List<Task> taskList) {
-
-		_nonFloatingTaskList = new ArrayList<Task>();
+	private void separateTaskList(List<Task> taskList) {
 		_floatingTaskList = new ArrayList<Task>();
+		_nonFloatingTaskList = new ArrayList<Task>();
 
-		// Iterate through list and remove all floating tasks
-		for (int i = 0; i < taskList.size();) {
-			if (isFloating(taskList.get(i))) {
-				_floatingTaskList.add(taskList.remove(i));
+		for (Task task: taskList) {
+			if (isFloating(task)) {
+				_floatingTaskList.add(task);
 			} else {
-				i++;
+				_nonFloatingTaskList.add(task);
 			}
 		}
-		// Remaining tasks are all non-floating
-		_nonFloatingTaskList = taskList;
-
-		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.EndTimeComparator());
-		Collections.sort(_floatingTaskList, new taskCollections.comparators.PriorityComparator());
-		// Collections.sort(_floatingTaskList);
-
-		generateTable();
 	}
 
 	private boolean isFloating(Task task) {
@@ -359,6 +333,25 @@ public class UIController implements Initializable {
 		} else {
 			return false;
 		}
+	}
+
+	private void sortSeparatedList() {
+		Collections.sort(_floatingTaskList, new taskCollections.comparators.PriorityComparator());
+		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
+	}
+
+	private void displayTables() {
+		displayTable(tableTimed, dataTimed, _nonFloatingTaskList);
+		displayTable(tableFloat, dataFloat, _floatingTaskList);
+	}
+
+	private void displayTable(TableView<UITask> tableView, ObservableList<UITask> dataList, List<Task> taskList) {
+
+		dataList.clear();
+		for (Task t : taskList) {
+			dataList.add(new UITask(t));
+		}
+		tableView.setItems(dataList);
 	}
 
 	// Event methods

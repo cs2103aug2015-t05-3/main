@@ -30,9 +30,15 @@ import util.TimeUtil;
 
 public class TaskFileHandler {
 
+	private final int XML_INDENTAMT = 4;
 	private final String TAG_TASK = "task";
 	private final String TAG_ID = "id";
-	
+	private final String TAG_TITLE = "title";
+	private final String TAG_STARTTIME = "startTime";
+	private final String TAG_ENDTIME = "endTime";
+	private final String TAG_FLAG = "flag";
+	private final String TAG_PRIORITY = "priority";
+		
 	private ArrayList<Task> _tasks;
 	private Document _doc;
 	private Element _root;
@@ -81,10 +87,11 @@ public class TaskFileHandler {
 	/**
 	 * Adds new task to XML file
 	 * @param t
+	 * @returns true if operation succeeded, false if failed.
 	 */
 	public boolean add(Task t) {
 		int id = t.getId();
-		String[] headers = { "title", "startTime", "endTime", "flag", "priority" };
+		String[] headers = { TAG_TITLE, TAG_STARTTIME, TAG_ENDTIME, TAG_FLAG, TAG_PRIORITY };
 		//Task t = new Task("Add add method", 1447252200000L, 1452868200000L, FLAG_TYPE.NULL, PRIORITY_TYPE.HIGH);
 	
 		Element newTask = _doc.createElement(TAG_TASK);
@@ -102,6 +109,7 @@ public class TaskFileHandler {
 	/**
 	 * Delete task from XML file
 	 * @param id
+	 * @returns true if operation succeeded, false if failed.
 	 */
 	public boolean delete(int id) {
 		Element e = locateID(id);
@@ -112,6 +120,7 @@ public class TaskFileHandler {
 	/**
 	 * Update task to XML file
 	 * @param t
+	 * @returns true if operation succeeded, false if failed.
 	 */
 	public boolean update(Task t) {
 		Element e = locateID(t.getId());
@@ -144,99 +153,32 @@ public class TaskFileHandler {
 		}
 		return genXML();
 	}
-	private Element locateID(int id) {
-		
-		Element e;
-		Node nNode;
-		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
-		
-		for (int i = 0; i < nList.getLength(); i++) {
-			nNode = nList.item(i);
-			
-			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				e = (Element)nNode;
-				if (e.getAttribute(TAG_ID).equals(String.valueOf(id))) {
-					return e;
-				}
-			}
-		}
-		return null;
-	}
 	
-	/*
-	 * Reformats the ID number in XML file to ascending order
-	 */
-	private void optimizeID() {
-		
-		Element e;
-		Node nNode;
-		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
-		
-		for (int i = 0; i < nList.getLength(); i++) {
-			nNode = nList.item(i);
-			
-			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				e = (Element) nNode;
-				e.setAttribute(TAG_ID, String.valueOf(i));
-			}
+	private Element addElement(String s, Task t) {
+		Element e = _doc.createElement(s);
+		switch (s) {
+		case "title":
+			String taskName = t.getName();
+			e.appendChild(_doc.createTextNode(taskName));
+			break;
+		case "startTime":
+			String startTime = TimeUtil.getFormattedDate(t.getStartTime());
+			e.appendChild(_doc.createTextNode(startTime));
+			break;
+		case "endTime":
+			String endTime = TimeUtil.getFormattedDate(t.getEndTime());
+			e.appendChild(_doc.createTextNode(endTime));
+			break;
+		case "flag":
+			String markStatus = t.getFlag().toString();
+			e.appendChild(_doc.createTextNode(markStatus));
+			break;
+		case "priority":
+			String priorityString = t.getPriority().toString();
+			e.appendChild(_doc.createTextNode(priorityString));
+			break;
 		}
-		
-		try {
-			genXML();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	}
-
-	/*
-	 * Imports all tasks from specified XML file and add them to ArrayList
-	 */
-	private boolean importAllTasks() {
-		_tasks = new ArrayList<>();
-		optimizeID();
-		
-		Element eElement;
-		Node nNode;
-		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
-		Task t;
-		
-		try {
-			for (int i = 0; i < nList.getLength(); i++) {
-				nNode = nList.item(i);
-
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					eElement = (Element) nNode;
-				
-					int id = Integer.parseInt(eElement.getAttribute(TAG_ID));
-				
-					String title = retrieveElement(eElement, "title");
-					long startTime = TimeUtil.getLongTime(retrieveElement(eElement, "startTime"));
-					long endTime = TimeUtil.getLongTime(retrieveElement(eElement, "endTime"));
-					
-					if (startTime == -1 || endTime == -1) {
-						return false;
-					}
-					
-					FLAG_TYPE flag = detFlag(retrieveElement(eElement, "flag"));
-					PRIORITY_TYPE priority = detPriority(retrieveElement(eElement, "priority"));
-				
-					if (flag == null || priority == null) {
-						return false;
-					}
-					
-					t = new Task(id, title, "", startTime, endTime, flag, priority);
-					_tasks.add(t);
-				}
-			}
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-
-	private String retrieveElement(Element e, String s) {
-		return e.getElementsByTagName(s).item(0).getTextContent();
+		return e;
 	}
 
 	private FLAG_TYPE detFlag(String s) {
@@ -263,13 +205,101 @@ public class TaskFileHandler {
 		}
 	}
 
+	private boolean genXML() {
+		return printFile(_doc, XML_INDENTAMT);
+	}
+
+	/*
+	 * Imports all tasks from specified XML file and add them to ArrayList
+	 */
+	private boolean importAllTasks() {
+		_tasks = new ArrayList<>();
+		optimizeID();
+		
+		Element eElement;
+		Node nNode;
+		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
+		Task t;
+		
+		try {
+			for (int i = 0; i < nList.getLength(); i++) {
+				nNode = nList.item(i);
+	
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					eElement = (Element) nNode;
+				
+					int id = Integer.parseInt(eElement.getAttribute(TAG_ID));
+				
+					String title = retrieveElement(eElement, TAG_TITLE);
+					long startTime = TimeUtil.getLongTime(retrieveElement(eElement, TAG_STARTTIME));
+					long endTime = TimeUtil.getLongTime(retrieveElement(eElement, TAG_ENDTIME));
+					
+					if (startTime == -1 || endTime == -1) {
+						return false;
+					}
+					
+					FLAG_TYPE flag = detFlag(retrieveElement(eElement, TAG_FLAG));
+					PRIORITY_TYPE priority = detPriority(retrieveElement(eElement, TAG_PRIORITY));
+				
+					if (flag == null || priority == null) {
+						return false;
+					}
+					
+					t = new Task(id, title, "", startTime, endTime, flag, priority);
+					_tasks.add(t);
+				}
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	private Element locateID(int id) {
+		
+		Element e;
+		Node nNode;
+		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
+		
+		for (int i = 0; i < nList.getLength(); i++) {
+			nNode = nList.item(i);
+			
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				e = (Element)nNode;
+				if (e.getAttribute(TAG_ID).equals(String.valueOf(id))) {
+					return e;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/*
+	 * Reformats the ID number in XML file to ascending order, starting from 0.
+	 */
+	private void optimizeID() {
+		
+		Element e;
+		Node nNode;
+		NodeList nList = _doc.getElementsByTagName(TAG_TASK);
+		
+		for (int i = 0; i < nList.getLength(); i++) {
+			nNode = nList.item(i);
+			
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				e = (Element) nNode;
+				e.setAttribute(TAG_ID, String.valueOf(i));
+			}
+		}
+		genXML();
+	}
+
 	/**
 	 * Remove text nodes that are used for indentation.
 	 * 
 	 * @param Node
 	 */
-	// Source: https://stackoverflow.com/a/31421664
-	private static void removeEmptyText(Node node) {
+	private void removeEmptyText(Node node) {
 		Node child = node.getFirstChild();
 		while (child != null) {
 			Node sibling = child.getNextSibling();
@@ -280,6 +310,10 @@ public class TaskFileHandler {
 				removeEmptyText(child);
 			child = sibling;
 		}
+	}
+
+	private String retrieveElement(Element e, String s) {
+		return e.getElementsByTagName(s).item(0).getTextContent();
 	}
 
 	private boolean printFile(Document document, int indent) {
@@ -305,37 +339,6 @@ public class TaskFileHandler {
 			return false;
 		}
 
-	}
-
-	private boolean genXML() {
-		return printFile(_doc, 4);
-	}
-
-	private Element addElement(String s, Task t) {
-		Element e = _doc.createElement(s);
-		switch (s) {
-		case "title":
-			String taskName = t.getName();
-			e.appendChild(_doc.createTextNode(taskName));
-			break;
-		case "startTime":
-			String startTime = TimeUtil.getFormattedDate(t.getStartTime());
-			e.appendChild(_doc.createTextNode(startTime));
-			break;
-		case "endTime":
-			String endTime = TimeUtil.getFormattedDate(t.getEndTime());
-			e.appendChild(_doc.createTextNode(endTime));
-			break;
-		case "flag":
-			String markStatus = t.getFlag().toString();
-			e.appendChild(_doc.createTextNode(markStatus));
-			break;
-		case "priority":
-			String priorityString = t.getPriority().toString();
-			e.appendChild(_doc.createTextNode(priorityString));
-			break;
-		}
-		return e;
 	}
 
 	/*
