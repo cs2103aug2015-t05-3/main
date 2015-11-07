@@ -819,12 +819,7 @@ public class TaskTree {
 	 */
 	private static boolean iniTaskFileHandler(String taskFilePath) {
 
-		try {
-			_fileHandler = new TaskFileHandler(taskFilePath);
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+		_fileHandler = new TaskFileHandler();
+		return _fileHandler.loadTaskFile(taskFilePath);
 	}
 }
