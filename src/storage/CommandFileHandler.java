@@ -8,11 +8,11 @@
 package storage;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -30,7 +30,7 @@ public class CommandFileHandler {
 	private final String TAG_COMMAND = "command";
 	private final String TAG_CATEGORY = "category";
 	private final String TAG_WORD = "word";
-	private final String _commandResource = "src/resources/commands.xml";
+	private final String _commandResource = "resources/commands.xml";
 	
 	private Document _doc;
 	private File _xmlFile;
@@ -68,7 +68,7 @@ public class CommandFileHandler {
 	public boolean generateCommandFile(String newFile) {
 		newFile = "commands.xml";
 		
-		boolean check = fileCopy(_commandResource, newFile);		
+		boolean check = fileCopyFromResource(newFile);		
 		check = loadCommandFile(newFile) && check;
 		parseCmd();
 		return check;
@@ -94,32 +94,33 @@ public class CommandFileHandler {
 		}
 	}
 	
-	public boolean fileCopy(String toCopy, String newFileStr) {
+	public boolean fileCopyFromResource(String newFileStr) {
 		File newFile = new File(newFileStr);
 		newFile.delete();
 
-		File file = new File(toCopy);
-		FileChannel inputChannel = null;
-		FileChannel outputChannel = null;
-
-		try {
-			FileInputStream fis = new FileInputStream(file);
-			inputChannel = fis.getChannel();
-			FileOutputStream fos = new FileOutputStream(newFile);
-			outputChannel = fos.getChannel();
-			outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
-			inputChannel.close();
-			outputChannel.close();
-			fis.close();
-			fos.close();
-			return true;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		InputStream inputStream = this.getClass().getClassLoader()
+				.getResourceAsStream(_commandResource);
+		
+		OutputStream outputStream = null;
+			try {
+				outputStream = new FileOutputStream(newFileStr);
+				int read = 0;
+				byte[] bytes = new byte[1024];
+				while ((read = inputStream.read(bytes)) != -1) {
+					outputStream.write(bytes, 0, read);
+				}
+				inputStream.close();
+				outputStream.close();
+				return true;
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
 	}
 	
 	public HashMap<String, String> getCmdTable() {

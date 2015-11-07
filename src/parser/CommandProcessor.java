@@ -46,7 +46,11 @@ public class CommandProcessor {
 	
 	public boolean initCmdList(String cmdFileName) {
 		try {
-			cmdTable = new CommandFileHandler(cmdFileName).getCmdTable();
+			CommandFileHandler cf = new CommandFileHandler();
+			if(!cf.loadCommandFile(cmdFileName)){
+				cf.generateCommandFile(cmdFileName);
+			}
+			cmdTable = cf.getCmdTable();
 			addDefaultCmds();
 			return true;
 		} catch (Exception e) {
