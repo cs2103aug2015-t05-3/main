@@ -10,7 +10,6 @@ import javafx.stage.StageStyle;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;;
 
 public class UI extends Application {
 
