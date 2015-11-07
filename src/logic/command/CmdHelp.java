@@ -2,7 +2,7 @@ package logic.command;
 
 import ui.UIHelper;
 
-public class CmdHelp extends Command{
+public class CmdHelp extends Command {
 
 	/*
 	 * Constants
@@ -13,42 +13,39 @@ public class CmdHelp extends Command{
 	// Help constants
 	private static final String HELP_INFO_HELP = "[<command>]";
 
-	public CmdHelp(){
+	public CmdHelp() {
 
 	}
 
 	@Override
-	public CommandAction execute(){
-
+	public CommandAction execute() {
 		UIHelper.showHelpPanel();
-		boolean isUndoable = false;
-		return new CommandAction(MSG_HELP, isUndoable, null);
+		return new CommandAction(MSG_HELP, false, null);
 	}
 
 	@Override
-	public CommandAction undo(){
-		//do nothing (Help should not have undo)
+	public CommandAction undo() {
+		// do nothing (Help should not have undo)
 		return null;
 	}
 
 	@Override
-	public boolean isUndoable(){
+	public boolean isUndoable() {
 		return false;
 	}
 
 	@Override
 	public String[] getRequiredFields() {
-		return new String[]{};
+		return new String[] {};
 	}
 
 	@Override
 	public String[] getOptionalFields() {
-		// TODO Auto-generated method stub
-		return new String[]{};
+		return new String[] {};
 	}
 
 	@Override
-	public String getHelpInfo(){
+	public String getHelpInfo() {
 		return HELP_INFO_HELP;
 	}
 

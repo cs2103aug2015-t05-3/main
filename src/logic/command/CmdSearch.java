@@ -3,6 +3,7 @@ package logic.command;
 import java.util.List;
 
 import constants.CmdParameters;
+
 import taskCollections.Task;
 
 public class CmdSearch extends Command {
@@ -11,8 +12,8 @@ public class CmdSearch extends Command {
 	 * Constants
 	 */	
 	// Message constants
-	private static final String MSG_TASKUNSPECIFIED = "Please specify a keyword to search";
-	private static final String MSG_TASKNAMENOTFOUND = "Specified task \"%1$s\" not found";
+	private static final String MSG_KEYWORD_UNSPECIFIED = "Please specify a keyword to search";
+	private static final String MSG_KEYWORD_NOTFOUND = "Specified keyword \"%1$s\" not found";
 	private static final String MSG_TASKFOUND = "Task \"%1$s\" found";
 	private static final String MSG_ISNTANCEFOUND = "[%1$s] instances of \"%2$s\" found";
 
@@ -29,19 +30,12 @@ public class CmdSearch extends Command {
 	}
 
 	@Override
-	public CommandAction execute() {
-		
-		_keyword = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
-		if (_keyword == null || _keyword.equals("")) {
-			boolean isUndoable = false;
-			return new CommandAction(MSG_TASKUNSPECIFIED, isUndoable, null);
+	public CommandAction execute() {	
+		if (!hasKeywordToSearch()) {
+			return new CommandAction(MSG_KEYWORD_UNSPECIFIED, false, null);
 		}
 		
-		List<Task> taskList = searchTask(_keyword);
-		String outputMsg = getOutputMsg(taskList);
-		boolean isUndoable = false;
-		
-		return new CommandAction(outputMsg, isUndoable, taskList);
+		return searchKeyword();
 	}
 
 	@Override
@@ -70,16 +64,31 @@ public class CmdSearch extends Command {
 		return HELP_INFO_SEARCH;
 	}
 	
-	public List<Task> searchTask(String keyword){
-		System.out.println(keyword);
+	private boolean hasKeywordToSearch(){
+		_keyword = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
+		if (_keyword == null || _keyword.equals("")) {
+			return false;
+		}else{
+			return true;
+		}
+		
+	}
+	
+	private CommandAction searchKeyword(){		
+		List<Task> taskList = getTaskList(_keyword);
+		String outputMsg = getOutputMsg(taskList);
+		return new CommandAction(outputMsg, false, taskList);
+	}
+	
+	private List<Task> getTaskList(String keyword){
 		return _taskTree.searchName(keyword);
 	}
 	
-	public String getOutputMsg(List<Task> taskList){
+	private String getOutputMsg(List<Task> taskList){
 		
 		//Case 1 : List isEmpty
 		if(taskList.isEmpty()){
-			return String.format(MSG_TASKNAMENOTFOUND, _keyword);
+			return String.format(MSG_KEYWORD_NOTFOUND, _keyword);
 		}
 
 		//Case 2 : List.size > 1 (Since ID is unique)
