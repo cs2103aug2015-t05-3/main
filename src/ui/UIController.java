@@ -397,7 +397,7 @@ public class UIController implements Initializable {
 				upStack.push(history);
 				setInput(history);
 			} else {
-				setInput(EMPTY_STRING);
+				setInput("");
 			}
 		}
 	}
