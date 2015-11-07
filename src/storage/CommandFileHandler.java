@@ -74,26 +74,6 @@ public class CommandFileHandler {
 		return check;
 	}
 	
-	private void parseCmd() {
-		Element eElement;
-		Node nNode;
-		NodeList nList = _doc.getElementsByTagName(TAG_COMMAND);
-		
-		for (int i = 0; i < nList.getLength(); i++) {
-			nNode = nList.item(i);
-					
-			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				eElement = (Element) nNode;				
-				String category = eElement.getAttribute(TAG_CATEGORY);
-				
-				for (int j = 0; j < eElement.getElementsByTagName(TAG_WORD).getLength(); j++) {
-					String word = eElement.getElementsByTagName(TAG_WORD).item(j).getTextContent();
-					_cmdTable.put(word, category);
-				}
-			}
-		}
-	}
-	
 	public boolean fileCopyFromResource(String newFileStr) {
 		File newFile = new File(newFileStr);
 		newFile.delete();
@@ -125,6 +105,26 @@ public class CommandFileHandler {
 	
 	public HashMap<String, String> getCmdTable() {
 		return _cmdTable;
+	}
+
+	private void parseCmd() {
+		Element eElement;
+		Node nNode;
+		NodeList nList = _doc.getElementsByTagName(TAG_COMMAND);
+		
+		for (int i = 0; i < nList.getLength(); i++) {
+			nNode = nList.item(i);
+					
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				eElement = (Element) nNode;				
+				String category = eElement.getAttribute(TAG_CATEGORY);
+				
+				for (int j = 0; j < eElement.getElementsByTagName(TAG_WORD).getLength(); j++) {
+					String word = eElement.getElementsByTagName(TAG_WORD).item(j).getTextContent();
+					_cmdTable.put(word, category);
+				}
+			}
+		}
 	}
 	
 	/*
