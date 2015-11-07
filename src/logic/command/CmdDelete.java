@@ -1,10 +1,9 @@
 package logic.command;
 
-import java.util.List;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import constants.CmdParameters;
+
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
 
@@ -17,16 +16,17 @@ public class CmdDelete extends Command {
 	private static final String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
 	private static final String MSG_TASKDELETED = "Deleted : \"%1$s\"";
 
-	//Help Info
+	// Help Info
 	private static final String HELP_INFO_DELETE = "<task_ID>";
-	
+
 	/*
 	 * Variables for internal use
 	 */
 	private Task _task;
+	private int _taskID;
 
 	private static Logger log = Logger.getLogger("log_CmdDelete");
-	
+
 	public CmdDelete() {
 
 	}
@@ -34,26 +34,18 @@ public class CmdDelete extends Command {
 	@Override
 	public CommandAction execute() {
 
-		//Try undo first
+		// Try undo first
 		_task = getTask();
-		if(isUndo()){
-			String outputMsg = deleteTask(_task);
-			boolean isUndoable = true;
-			return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
+		if (isUndo()) {
+			return deleteTask(_task);
 		}
-		
-		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
-		_task = proccessTaskID(paramTaskID);
-		if(_task == null){
-			String outputMsg = String.format(MSG_TASKIDNOTFOUND, paramTaskID);
-			boolean isUndoable = false;
-			return new CommandAction(outputMsg, isUndoable, null);
+
+		if (!hasTaskToDelete()) {
+			return new CommandAction(String.format(MSG_TASKIDNOTFOUND, _taskID), false, null);
 		}
-		
-		String outputMsg = deleteTask(_task);
-		boolean isUndoable = true;
-		return new CommandAction(outputMsg, isUndoable, _taskTree.searchFlag(FLAG_TYPE.NULL));
-		
+
+		return deleteTask(_task);
+
 	}
 
 	@Override
@@ -75,31 +67,42 @@ public class CmdDelete extends Command {
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME};
+		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME };
 	}
-	
+
 	@Override
-	public String getHelpInfo(){
+	public String getHelpInfo() {
 		return HELP_INFO_DELETE;
 	}
-	
-	private boolean isUndo(){
-		if(_task == null){
+
+	private boolean isUndo() {
+		if (_task == null) {
 			return false;
-		}else{
+		} else {
 			return true;
 		}
 	}
-	
-	private Task proccessTaskID(String paramTaskID){
-		int taskID = Integer.parseInt(paramTaskID);
-		return _taskTree.getTask(taskID);
+
+	private boolean hasTaskToDelete() {
+		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
+		_task = proccessTaskID(paramTaskID);
+		if (_task == null || _task.equals("")) {
+			return false;
+		} else {
+			return true;
+		}
+
 	}
-	
-	private String deleteTask(Task task){
+
+	private Task proccessTaskID(String paramTaskID) {
+		_taskID = Integer.parseInt(paramTaskID);
+		return _taskTree.getTask(_taskID);
+	}
+
+	private CommandAction deleteTask(Task task) {
 		_taskTree.remove(task);
-		return String.format(MSG_TASKDELETED, _task.getName());
+		return new CommandAction(String.format(MSG_TASKDELETED, _task.getName()), true,
+				_taskTree.searchFlag(FLAG_TYPE.NULL));
 	}
-	
-	
+
 }
