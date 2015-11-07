@@ -3,6 +3,8 @@ package storage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,25 +32,28 @@ import util.TimeUtil;
 
 public class TaskFileHandler {
 
-	private final int XML_INDENTAMT = 4;
-	private final String EMPTY_TEXT = "";
-	private final String PRIORITY_HIGH = "HIGH";
-	private final String PRIORITY_NORMAL = "NORMAL";
-	private final String PRIORITY_LOW = "LOW";
-	private final String MARKED_TASK = "DONE";
-	private final String UNMARKED_TASK = "NULL";	
-	private final String TAG_TASK = "task";
-	private final String TAG_ID = "id";
-	private final String TAG_TITLE = "title";
-	private final String TAG_STARTTIME = "startTime";
-	private final String TAG_ENDTIME = "endTime";
-	private final String TAG_FLAG = "flag";
-	private final String TAG_PRIORITY = "priority";
+	private static final int XML_INDENTAMT = 4;
+	private static final String EMPTY_STRING = "";
+	private static final String PRIORITY_HIGH = "HIGH";
+	private static final String PRIORITY_NORMAL = "NORMAL";
+	private static final String PRIORITY_LOW = "LOW";
+	private static final String MARKED_TASK = "DONE";
+	private static final String UNMARKED_TASK = "NULL";	
+	private static final String TAG_TASK = "task";
+	private static final String TAG_ID = "id";
+	private static final String TAG_TITLE = "title";
+	private static final String TAG_STARTTIME = "startTime";
+	private static final String TAG_ENDTIME = "endTime";
+	private static final String TAG_FLAG = "flag";
+	private static final String TAG_PRIORITY = "priority";
 	
 	private ArrayList<Task> _tasks;
 	private Document _doc;
 	private Element _root;
 	private File _xmlFile;
+	
+	private static final Logger logger =
+	        Logger.getLogger(TaskFileHandler.class.getName());
 	
 	public TaskFileHandler() {}
 	
@@ -67,13 +72,13 @@ public class TaskFileHandler {
 				dBuilder = dbFactory.newDocumentBuilder();
 				_doc = dBuilder.parse(_xmlFile);
 			} catch (ParserConfigurationException e) {
-				System.err.println("Parser Config Error.");
+				logger.log(Level.SEVERE, "Parser Config Error", e);
 				return false;
 			} catch (SAXException e) {
-				System.err.println("SAX Exception.");
+				logger.log(Level.SEVERE, "SAX Error", e);
 				return false;
 			} catch (IOException e) {
-				System.err.println("IO Error.");
+				logger.log(Level.SEVERE, "IO Error", e);
 				return false;
 			}
 		
@@ -92,7 +97,7 @@ public class TaskFileHandler {
 
 	/**
 	 * Adds new task to XML file
-	 * @param t
+	 * @param t Task Object
 	 * @returns true if operation succeeded, false if failed.
 	 */
 	public boolean add(Task t) {
@@ -113,7 +118,7 @@ public class TaskFileHandler {
 	
 	/**
 	 * Delete task from XML file
-	 * @param id
+	 * @param id ID number of Task
 	 * @returns true if operation succeeded, false if failed.
 	 */
 	public boolean delete(int id) {
@@ -124,7 +129,7 @@ public class TaskFileHandler {
 	
 	/**
 	 * Update task to XML file
-	 * @param t
+	 * @param t Task Object
 	 * @returns true if operation succeeded, false if failed.
 	 */
 	public boolean update(Task t) {
@@ -261,7 +266,7 @@ public class TaskFileHandler {
 						return false;
 					}
 					
-					t = new Task(id, title, EMPTY_TEXT, startTime, endTime, flag, priority);
+					t = new Task(id, title, EMPTY_STRING, startTime, endTime, flag, priority);
 					_tasks.add(t);
 				}
 			}
@@ -349,7 +354,7 @@ public class TaskFileHandler {
 		try {
 			transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + indent);
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", EMPTY_STRING + indent);
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.transform(source, result);
 			return true;

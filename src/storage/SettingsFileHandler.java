@@ -10,8 +10,8 @@ import java.io.UnsupportedEncodingException;
 
 public class SettingsFileHandler {
 
-	private final String EMPTY_STRING = "";
-	private final String FILE_PATH_TEXT = "FILE_PATH: ";
+	private static final String EMPTY_STRING = "";
+	private static final String FILE_PATH_TEXT = "FILE_PATH: ";
 	
 	private String _fileName = "settings.cfg";
 	private String _taskFileLocation;
@@ -111,7 +111,7 @@ public class SettingsFileHandler {
 		}
 	}
 
-	public boolean taskFileCheck() {
+	private boolean taskFileCheck() {
 		File taskFile = new File(_taskFileLocation);
 		return (taskFile.exists());
 	}

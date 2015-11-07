@@ -26,14 +26,14 @@ import org.xml.sax.SAXException;
 
 public class CommandFileHandler {
 	
-	private final int BYTE_ARRAY_NUMBER = 1024;
-	private final int EOF_NUMBER = -1;
-	private final int OFFSET_NUMBER = 0;
+	private static final int BYTE_ARRAY_NUMBER = 1024;
+	private static final int EOF_NUMBER = -1;
+	private static final int OFFSET_NUMBER = 0;
 	
-	private final String TAG_COMMAND = "command";
-	private final String TAG_CATEGORY = "category";
-	private final String TAG_WORD = "word";
-	private final String _commandResource = "resources/commands.xml";
+	private static final String TAG_COMMAND = "command";
+	private static final String TAG_CATEGORY = "category";
+	private static final String TAG_WORD = "word";
+	private static final String _commandResource = "resources/commands.xml";
 	
 	private Document _doc;
 	private File _xmlFile;
@@ -49,6 +49,9 @@ public class CommandFileHandler {
 	 * @return true if successful, false otherwise
 	 */
 	public boolean loadCommandFile(String fileName) {
+		assert fileName != null;
+		assert !fileName.isEmpty();
+		
 		DocumentBuilderFactory dbFactory;
 		DocumentBuilder dBuilder;
 		

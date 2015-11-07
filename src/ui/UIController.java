@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.ResourceBundle;
-import java.util.Stack;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -22,7 +20,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
@@ -391,15 +388,17 @@ public class UIController implements Initializable {
 
 	private void addToLists(String in) {
 		
-		if (!_holyBuffer.equals(EMPTY_STRING)) {
-			_leftList.offerLast(_holyBuffer);
-			_holyBuffer = EMPTY_STRING;
-		}
+		if (!in.isEmpty()) {		
+			if (!_holyBuffer.equals(EMPTY_STRING)) {
+				_leftList.offerLast(_holyBuffer);
+				_holyBuffer = EMPTY_STRING;
+			}
 		
-		while (!_rightList.isEmpty()) {
-			_leftList.offerLast(_rightList.removeFirst());
+			while (!_rightList.isEmpty()) {
+				_leftList.offerLast(_rightList.removeFirst());
+			}
+			_leftList.offerLast(in);
 		}
-		_leftList.offerLast(in);
 	}
 
 	public void showHistory(KeyEvent keyEvent) {
