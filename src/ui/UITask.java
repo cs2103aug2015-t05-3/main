@@ -31,8 +31,8 @@ public class UITask {
 		return dateStr;
 	}
 
-	public String getId() {
-		return String.valueOf(taskObj.getId());
+	public Integer getId() {
+		return taskObj.getId();
 	}
 
 	public String getTask() {

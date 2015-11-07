@@ -70,10 +70,10 @@ public class UIController implements Initializable {
 	@FXML private Label overdueCount;
 	@FXML private Label pendingCount;
 	@FXML private Label doneCount;
-	@FXML private TableColumn<UITask, String> idTimed;
+	@FXML private TableColumn<UITask, Integer> idTimed;
 	@FXML private TableColumn<UITask, String> taskTimed;
 	@FXML private TableColumn<UITask, String> sDate;
-	@FXML private TableColumn<UITask, String> idFloat;
+	@FXML private TableColumn<UITask, Integer> idFloat;
 	@FXML private TableColumn<UITask, String> taskFloat;
 	@FXML private TableView<UITask> tableTimed;
 	@FXML private TableView<UITask> tableFloat;
@@ -119,7 +119,7 @@ public class UIController implements Initializable {
 		doneCount.setText(EMPTY_STRING);
 
 		// Table
-		idTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
+		idTimed.setCellValueFactory(new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
 		taskTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
 		sDate.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
 		tableTimed.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
@@ -137,7 +137,7 @@ public class UIController implements Initializable {
 			}
 		});
 
-		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_ID));
+		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
 		taskFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
 		tableFloat.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
 
