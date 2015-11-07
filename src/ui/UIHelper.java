@@ -65,5 +65,9 @@ public class UIHelper {
 	public static void setUserInput(String in) {
 		// frame.setInputText(in);
 	}
+	
+	public static void setDate(String date){
+		uiController.setTimeDateMsg(date);
+	}
 
 }

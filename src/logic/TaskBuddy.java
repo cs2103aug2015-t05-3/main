@@ -8,11 +8,13 @@ package logic;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 import logic.command.*;
 import ui.UIHelper;
+import util.TimeUtil;
 import parser.LanguageProcessor;
 import storage.SettingsFileHandler;
 import taskCollections.Task;
@@ -24,7 +26,6 @@ public class TaskBuddy {
 	 */
 	private static final String cmdFileName = "commands.xml";
 	private static final String logFileName = "log.log";
-	private static final String FILE_NAME_SETTING = "settings.cfg";
 	private static final String MSG_INVALIDCMD = "Please enter a valid command. For more info, enter help";
 	private static final String MSG_TASKFILE_NOTFOUND = "Please enter the task file location";
 	
@@ -34,7 +35,6 @@ public class TaskBuddy {
 	private static Logger log;
 	private static LanguageProcessor lp;
 	private static String taskFileName;
-	private static SettingsFileHandler settings;
 
 	public static void main(String[] args) {
 		
@@ -55,6 +55,7 @@ public class TaskBuddy {
 		if(!lp.init(cmdFileName)){
 			log.severe("TaskBuddy: Cmd list init failed");
 		}
+		UIHelper.setDate(TimeUtil.getUIFormattedDate(System.currentTimeMillis()));
 		initTaskFile();
 		Command.init(taskFileName);
 		initTasks();
@@ -68,8 +69,8 @@ public class TaskBuddy {
 	}
 	
 	private static void initTaskFile(){
-		settings = SettingsFileHandler.getInstance();
-		if(settings.init()){
+		SettingsFileHandler settings = SettingsFileHandler.getInstance();
+		if(settings.init()){ // Settings file found
 			if (settings.taskFileCheck()) {
 				taskFileName = settings.getTaskFile(); // TODO: if null.. do else
 			} else {
