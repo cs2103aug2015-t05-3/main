@@ -4,9 +4,11 @@ import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -45,6 +47,7 @@ public class UI extends Application {
 			uiMainstage.getIcons().add(new Image(getClass().getResourceAsStream(ICON_FILEPATH)));
 			uiMainstage.setScene(uiMainScene);
 			uiMainstage.setResizable(false);
+			uiMainstage.setOnCloseRequest(e -> System.exit(0));
 			uiMainstage.show();
 
 			AnchorPane uiHelpRoot = (AnchorPane) uIHelpLoader.load();
@@ -58,7 +61,7 @@ public class UI extends Application {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			//TODO exit program?
+			// TODO exit program?
 		}
 	}
 
@@ -76,23 +79,25 @@ public class UI extends Application {
 
 	public void showUIHelpOverlayStage() {
 
-		// TestPlatform.runLater is required to modify UI after the JavaFx thread is started.
+		// TestPlatform.runLater is required to modify UI after the JavaFx
+		// thread is started.
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	uIHelpStage.show();
-		    }
+			@Override
+			public void run() {
+				uIHelpStage.show();
+			}
 		});
 	}
 
 	public void hideUIHelpOverlayStage() {
 
-		// Platform.runLater is required to modify UI after the JavaFx thread is started.
+		// Platform.runLater is required to modify UI after the JavaFx thread is
+		// started.
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	uIHelpStage.hide();
-		    }
+			@Override
+			public void run() {
+				uIHelpStage.hide();
+			}
 		});
 	}
 
