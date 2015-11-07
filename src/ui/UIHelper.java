@@ -50,7 +50,7 @@ public class UIHelper {
 
 	// give the entire list for output generation
 	public static void setTableOutput(List<Task> completeList) {
-		uiController.seperateTaskList(completeList);
+		uiController.generateTablesOutput(completeList);
 	}
 
 	// set UI's output msg

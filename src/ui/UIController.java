@@ -308,25 +308,13 @@ public class UIController implements Initializable {
 		uI.hideUIHelpOverlayStage();
 	}
 
-	private void generateTable() {
-
-		dataTimed.clear();
-		dataFloat.clear();
-
-		for (Task t : _nonFloatingTaskList) {
-			dataTimed.add(new UITask(t));
-		}
-
-		for (Task t : _floatingTaskList) {
-			dataFloat.add(new UITask(t));
-		}
-
-		tableTimed.setItems(dataTimed);
-		tableFloat.setItems(dataFloat);
+	void generateTablesOutput(List<Task> taskList) {
+		separateTaskList(taskList);
+		sortSeparatedList();
+		displayTables();
 	}
 
-	void seperateTaskList(List<Task> taskList) {
-
+	private void separateTaskList(List<Task> taskList) {
 		_floatingTaskList = new ArrayList<Task>();
 		_nonFloatingTaskList = new ArrayList<Task>();
 
@@ -337,11 +325,6 @@ public class UIController implements Initializable {
 				_nonFloatingTaskList.add(task);
 			}
 		}
-
-		Collections.sort(_floatingTaskList, new taskCollections.comparators.PriorityComparator());
-		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
-
-		generateTable();
 	}
 
 	private boolean isFloating(Task task) {
@@ -350,6 +333,25 @@ public class UIController implements Initializable {
 		} else {
 			return false;
 		}
+	}
+
+	private void sortSeparatedList() {
+		Collections.sort(_floatingTaskList, new taskCollections.comparators.PriorityComparator());
+		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
+	}
+
+	private void displayTables() {
+		displayTable(tableTimed, dataTimed, _nonFloatingTaskList);
+		displayTable(tableFloat, dataFloat, _floatingTaskList);
+	}
+
+	private void displayTable(TableView<UITask> tableView, ObservableList<UITask> dataList, List<Task> taskList) {
+
+		dataList.clear();
+		for (Task t : taskList) {
+			dataList.add(new UITask(t));
+		}
+		tableView.setItems(dataList);
 	}
 
 	// Event methods
