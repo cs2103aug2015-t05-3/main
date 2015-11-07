@@ -44,6 +44,9 @@ public class UIController implements Initializable {
 	private static final String MSG_PENDING_HELLO = "Hello %s,";
 	private static final String MSG_EMPTY = "";
 	private static final String MSG_EMPTY_TABLE = "Nothing here";
+	private static final String MSG_COUNT_OVERDUE = "Overdue [ %s ]";
+	private static final String MSG_COUNT_PENDING = "Pending [ %s ]";
+	private static final String MSG_COUNT_DONE = "Done [ %s ]";
 
 	// Utility string constants
 	private static final String EMPTY_STRING = "";
@@ -292,7 +295,9 @@ public class UIController implements Initializable {
 		}
 	}
 
-	void setDoneCount(String str) {
+	void setDoneCount(int count) {
+		String str = String.format(MSG_COUNT_OVERDUE, count);
+
 		try {
 			doneCount.setText(str);
 		} catch (NullPointerException e) {
@@ -300,7 +305,9 @@ public class UIController implements Initializable {
 		}
 	}
 
-	void setPendingCount(String str) {
+	void setPendingCount(int count) {
+		String str = String.format(MSG_COUNT_OVERDUE, count);
+
 		try {
 			pendingCount.setText(str);
 		} catch (NullPointerException e) {
@@ -308,7 +315,9 @@ public class UIController implements Initializable {
 		}
 	}
 
-	void setOverdueCount(String str) {
+	void setOverdueCount(int count) {
+		String str = String.format(MSG_COUNT_OVERDUE, count);
+
 		try {
 			overdueCount.setText(str);
 		} catch (NullPointerException e) {
