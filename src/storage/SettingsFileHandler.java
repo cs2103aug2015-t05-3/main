@@ -29,8 +29,10 @@ public class SettingsFileHandler {
 		return s;
 	}
 
-	/*
-	 * Returns true if settings file is found. Returns false otherwise.
+	/**
+	 * Retrieves location of tasks.xml if settings file is present.
+	 * @return true if settings file is found and location is proper. 
+	 * false otherwise
 	 */
 	public boolean init() {
 		_settingsFile = new File(_fileName);
@@ -63,11 +65,12 @@ public class SettingsFileHandler {
 		}
 	}
 
-	/*
-	 * Returns true if settings file is created successfully. Generates error
-	 * and returns false otherwise.
+	/**
+	 * Modify settings file to include task path
+	 * @param taskFileLocation
+	 * @return true if succeeded, false if failed
 	 */
-	public boolean alterSettingsFile(String taskFileLocation) {		
+	public boolean alterSettingsFile(String taskFileLocation) {
 		try {
 			PrintWriter pw = new PrintWriter(_fileName);
 			_taskFileLocation = taskFileLocation;
@@ -81,8 +84,9 @@ public class SettingsFileHandler {
 		}
 	}
 
-	/*
-	 * Returns true if empty tasks file is created successfully. Returns false
+	/**
+	 * Creates an empty task file
+	 * @return true if empty tasks file is created successfully. Returns false
 	 * otherwise.
 	 */
 	public boolean initializeTaskFile() {
@@ -112,16 +116,17 @@ public class SettingsFileHandler {
 		return (taskFile.exists());
 	}
 
-	/*
-	 * Returns task file location if file is present. Returns null if absent.
+	/**
+	 * Get task file location
+	 * @return task file location if file is present. Returns null if absent.
 	 */
 	public String getTaskFile() {
 		File taskFile = new File(_taskFileLocation);
 
-		if (!taskFile.exists()) {
-			return null;
-		} else {
+		if (taskFile.exists()) {
 			return _taskFileLocation;
+		} else {
+			return null;
 		}
 	}
 }
