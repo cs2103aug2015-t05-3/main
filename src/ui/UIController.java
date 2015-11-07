@@ -327,23 +327,19 @@ public class UIController implements Initializable {
 
 	void seperateTaskList(List<Task> taskList) {
 
-		_nonFloatingTaskList = new ArrayList<Task>();
 		_floatingTaskList = new ArrayList<Task>();
+		_nonFloatingTaskList = new ArrayList<Task>();
 
-		// Iterate through list and remove all floating tasks
-		for (int i = 0; i < taskList.size();) {
-			if (isFloating(taskList.get(i))) {
-				_floatingTaskList.add(taskList.remove(i));
+		for (Task task: taskList) {
+			if (isFloating(task)) {
+				_floatingTaskList.add(task);
 			} else {
-				i++;
+				_nonFloatingTaskList.add(task);
 			}
 		}
-		// Remaining tasks are all non-floating
-		_nonFloatingTaskList = taskList;
 
-		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
 		Collections.sort(_floatingTaskList, new taskCollections.comparators.PriorityComparator());
-		// Collections.sort(_floatingTaskList);
+		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
 
 		generateTable();
 	}
