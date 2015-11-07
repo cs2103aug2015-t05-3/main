@@ -20,7 +20,7 @@ public class UI extends Application {
 	private static final String ICON_FILEPATH = "assets/UIIcon.png";
 
 	// Message String constants
-	private static final String ERR_LOADING_FILE = "Error loading files required to display UI";
+	private static final String ERR_LOADING_FILE = "Error loading UI: ";
 
 	private static final String APP_TITLE = "TaskBuddy";
 
@@ -62,7 +62,7 @@ public class UI extends Application {
 			isInitialised = true;
 
 		} catch (IOException e) {
-			System.err.println(ERR_LOADING_FILE);
+			System.err.println(String.format(ERR_LOADING_FILE, e));
 		}
 	}
 
