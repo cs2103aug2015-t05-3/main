@@ -38,8 +38,9 @@ public class TaskFileHandler {
 	private Element _root;
 	private File _xmlFile;
 	
-	public TaskFileHandler(String fileName) throws ParserConfigurationException, SAXException, IOException {
-		
+	public TaskFileHandler() {}
+	
+	public boolean loadTaskFile(String fileName) {
 		DocumentBuilderFactory dbFactory;
 		DocumentBuilder dBuilder;
 		
@@ -47,14 +48,25 @@ public class TaskFileHandler {
 		_xmlFile = new File(fileName);
 			
 		dbFactory = DocumentBuilderFactory.newInstance();
-			dBuilder = dbFactory.newDocumentBuilder();
-			_doc = dBuilder.parse(_xmlFile);
-		
+			try {
+				dBuilder = dbFactory.newDocumentBuilder();
+				_doc = dBuilder.parse(_xmlFile);
+			} catch (ParserConfigurationException e) {
+				System.err.println("Parser Config Error.");
+				return false;
+			} catch (SAXException e) {
+				System.err.println("SAX Exception.");
+				return false;
+			} catch (IOException e) {
+				System.err.println("IO Error.");
+				return false;
+			}
 		
 		_doc.getDocumentElement().normalize();
 		_root = _doc.getDocumentElement();
 		
 		importAllTasks();
+		return true;
 	}
 
 	/**

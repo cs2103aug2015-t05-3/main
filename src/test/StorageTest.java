@@ -13,9 +13,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import storage.CommandFileHandler;
 import storage.TaskFileHandler;
@@ -24,15 +25,23 @@ import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
 import util.TimeUtil;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StorageTest {
 
 	static CommandFileHandler cmd;
-	static TaskFileHandler task;
+	static TaskFileHandler taskFH;
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		cmd = new CommandFileHandler("commands.xml");
-		task = new TaskFileHandler("tasks.xml");
+		cmd = new CommandFileHandler();
+		taskFH = new TaskFileHandler();
+	}
+	
+	@Test
+	public void testCommandFileLoading() {
+		String fileName = "commands.xml";
+		
+		assertEquals(cmd.loadCommandFile(fileName), true);
 	}
 
 	@Test
@@ -48,8 +57,18 @@ public class StorageTest {
 	}
 
 	@Test
+	public void testAcceptTaskFile() {
+		
+		String backupFile = "tasksOriginal.xml";
+		String fileToUse = "tasks.xml";
+		
+		fileCopy(backupFile, fileToUse);
+		assertEquals(taskFH.loadTaskFile(fileToUse), true);
+	}
+	
+	@Test
 	public void testArrayList() {
-		ArrayList<Task> taskList = task.retrieveTaskList();
+		ArrayList<Task> taskList = taskFH.retrieveTaskList();
 		// t = new Task(id, title, "", startTime, endTime, flag, priority);
 		ArrayList<Task> checker = new ArrayList<>();
 
@@ -73,11 +92,12 @@ public class StorageTest {
 	}
 
 	@Test
-	public void testAdd() {
+	public void testAtAdd() {
 		Task t = new Task(5, "New Task Added for JUnit Testing", "", 0, 0, FLAG_TYPE.DONE, PRIORITY_TYPE.NORMAL);
-		task.add(t);
+		taskFH.add(t);
 		assertEquals(getCheckSum("tasksAdd.xml"), getCheckSum("tasks.xml"));
 	}
+
 
 	@Test
 	public void testUpdateAndDelete() {
@@ -85,41 +105,13 @@ public class StorageTest {
 		long t3End = TimeUtil.getLongTime("Saturday: 31/10/15 20:05 GMT+0800");
 		Task t = new Task(3, "Run Around the Campus 100000 Times", "", t3Start, t3End, FLAG_TYPE.NULL,
 				PRIORITY_TYPE.LOW);
-		task.update(t);
+		taskFH.update(t);
 		assertEquals(getCheckSum("tasksUpdate.xml"), getCheckSum("tasks.xml"));
 		
-		task.delete(4);
+		taskFH.delete(4);
 		assertEquals(getCheckSum("tasksDelete.xml"), getCheckSum("tasks.xml"));
-	}
-	
-	@AfterClass
-	public static void afterClass() {
-		File newFile = new File("tasks.xml");
-		newFile.delete();
+	}	
 
-		File file = new File("tasksOriginal.xml");
-		FileChannel inputChannel = null;
-		FileChannel outputChannel = null;
-
-		try {
-			FileInputStream fis = new FileInputStream(file);
-			inputChannel = fis.getChannel();
-			FileOutputStream fos = new FileOutputStream(newFile);
-			outputChannel = fos.getChannel();
-			outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
-			inputChannel.close();
-			outputChannel.close();
-			fis.close();
-			fos.close();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
 	public String getCheckSum(String file) {
 		
 		StringBuffer sb1 = null;
@@ -150,5 +142,31 @@ public class StorageTest {
 		}
 		
 		return sb1.toString();
+	}
+	
+	public void fileCopy(String toCopy, String newFileStr) {
+		File newFile = new File(newFileStr);
+		newFile.delete();
+
+		File file = new File(toCopy);
+		FileChannel inputChannel = null;
+		FileChannel outputChannel = null;
+
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			inputChannel = fis.getChannel();
+			FileOutputStream fos = new FileOutputStream(newFile);
+			outputChannel = fos.getChannel();
+			outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+			inputChannel.close();
+			outputChannel.close();
+			fis.close();
+			fos.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
