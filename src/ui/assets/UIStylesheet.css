@@ -1,9 +1,15 @@
 .root {
-	-fx-background-color:#FBFBFB;
+	-fx-background-color: #FBFBFB;
+}
+
+.table-column {
+    -fx-alignment: CENTER;
+    -fx-text-fill: BLACK;
+    -fx-font-weight: NORMAL;
+	-fx-font: 12px System;
 }
 
 .highPriority .table-cell {
-
     -fx-text-fill: RED;
 }
 
@@ -24,9 +30,9 @@
 }
 
 .current .table-cell {
-	-fx-font-weight: normal;
+	-fx-font-weight: NORMAL;
 }
 
 .overdue .table-cell {
-    -fx-font-weight: bold;
+    -fx-font-weight: BOLD;
 }

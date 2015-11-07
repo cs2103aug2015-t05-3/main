@@ -179,26 +179,15 @@ public class UIController implements Initializable {
 			// Clear all custom css element before adding new style to it
 			removeAllCSSElement(tableRow);
 
-			// Check priority
-			boolean isPriorityNormal = false;
-			if (priorityCheck == PRIORITY_TYPE.HIGH) {
-				tableRow.getStyleClass().add(CSS_PRIORITY_HIGH);
-				isPriorityNormal = false;
-			} else if (priorityCheck == PRIORITY_TYPE.LOW) {
-				tableRow.getStyleClass().add(CSS_PRIORITY_LOW);
-				isPriorityNormal = false;
-			} else if (priorityCheck == PRIORITY_TYPE.NORMAL) {
-				tableRow.getStyleClass().add(CSS_PRIORITY_NORMAL);
-				isPriorityNormal = true;
-			} else {
-				isPriorityNormal = false;
-			}
-
 			// Check flag
 			if (flagCheck == FLAG_TYPE.DONE) {
 				tableRow.getStyleClass().add(CSS_FLAG_DONE);
-			} else if (isPriorityNormal) {
-				tableRow.getStyleClass().add(CSS_FLAG_NULL);
+			} else {
+				if (priorityCheck == PRIORITY_TYPE.HIGH) {
+					tableRow.getStyleClass().add(CSS_PRIORITY_HIGH);
+				} else if (priorityCheck == PRIORITY_TYPE.LOW) {
+					tableRow.getStyleClass().add(CSS_PRIORITY_LOW);
+				}
 			}
 
 			// Check overdue
@@ -206,8 +195,6 @@ public class UIController implements Initializable {
 			boolean isOverdue = TimeUtil.isBeforeNow(endTime) && endTime != Task.DATE_NULL;
 			if (isOverdue) {
 				tableRow.getStyleClass().add(CSS_OVERDUE);
-			} else {
-				tableRow.getStyleClass().add(CSS_CURRENT);
 			}
 		} else {
 			removeAllCSSElement(tableRow);
@@ -216,12 +203,9 @@ public class UIController implements Initializable {
 
 	void removeAllCSSElement(TableRow<UITask> tableRow) {
 		tableRow.getStyleClass().remove(CSS_PRIORITY_HIGH);
-		tableRow.getStyleClass().remove(CSS_PRIORITY_NORMAL);
 		tableRow.getStyleClass().remove(CSS_PRIORITY_LOW);
-		tableRow.getStyleClass().remove(CSS_FLAG_NULL);
 		tableRow.getStyleClass().remove(CSS_FLAG_DONE);
 		tableRow.getStyleClass().remove(CSS_OVERDUE);
-		tableRow.getStyleClass().remove(CSS_CURRENT);
 	}
 
 	// Create UI
@@ -416,7 +400,7 @@ public class UIController implements Initializable {
 			newCommand = StringUtil.getFirstWord(newValue);
 		}
 
-		if (newCommand.equals(null)) {
+		if (newCommand == null) {
 			return;
 		}
 
