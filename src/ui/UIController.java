@@ -37,13 +37,14 @@ import util.TimeUtil;
 public class UIController implements Initializable {
 
 	// Message string constants
-	private static final String MSG_CMD_WELCOME = "Welcome! Loading your stuffs";
+	private static final String MSG_CMD_WELCOME = "Welcome! Loading your tasks...";
 	private static final String MSG_PENDING_HELLO = "Hello %s,";
 	private static final String MSG_EMPTY = "";
 	private static final String MSG_EMPTY_TABLE = "Nothing here";
 	private static final String MSG_COUNT_OVERDUE = "Overdue [ %s ]";
 	private static final String MSG_COUNT_PENDING = "Pending [ %s ]";
 	private static final String MSG_COUNT_DONE = "Done [ %s ]";
+	private static final String EMPTY_TIME_DATE = "Getting time...";
 
 	// Utility string constants
 	private static final String EMPTY_STRING = "";
@@ -116,7 +117,7 @@ public class UIController implements Initializable {
 		pendingMsg.setText(String.format(MSG_PENDING_HELLO, username));
 
 		//TODO unimplemented label field
-		timeDateMsg.setText(EMPTY_STRING);
+		timeDateMsg.setText(EMPTY_TIME_DATE);
 		overdueCount.setText(EMPTY_STRING);
 		pendingCount.setText(EMPTY_STRING);
 		doneCount.setText(EMPTY_STRING);
@@ -265,19 +266,24 @@ public class UIController implements Initializable {
 		input.clear();
 	}
 
-	void setOutputMsg(String a) {
+	void setOutputMsg(String str) {
 		// TODO temporary fix for illegalState
 
 		Platform.runLater(new Runnable() {
 		    @Override
 		    public void run() {
-		    	cmdMsg.setText(a);
+		    	cmdMsg.setText(str);
 		    }
 		});
 	}
 
 	void setTimeDateMsg(String str) {
-		timeDateMsg.setText(str);
+		Platform.runLater(new Runnable() {
+			@Override
+		    public void run() {
+				timeDateMsg.setText(str);
+		    }
+		});
 	}
 
 	void setSyntaxMsg(String str) {

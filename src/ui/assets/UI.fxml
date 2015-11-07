@@ -117,7 +117,7 @@
                   </Label>
                   <HBox alignment="CENTER_LEFT" maxHeight="48.0" maxWidth="1249.0" minHeight="48.0" minWidth="785.0" prefHeight="48.0" prefWidth="1249.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TextField fx:id="input" maxHeight="38.0" maxWidth="1062.0" minHeight="38.0" minWidth="785.0" onAction="#enterPressed" onKeyPressed="#showHistory" prefHeight="38.0" prefWidth="1062.0" promptText="Enter command here" style="-fx-background-color: ;" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="input" maxHeight="38.0" maxWidth="1062.0" minHeight="38.0" minWidth="785.0" onAction="#enterPressed" onKeyPressed="#showHistory" prefHeight="38.0" prefWidth="1062.0" promptText="Enter command here" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>

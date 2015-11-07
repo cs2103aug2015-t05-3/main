@@ -10,6 +10,9 @@ import java.io.UnsupportedEncodingException;
 
 public class SettingsFileHandler {
 
+	private final String EMPTY_STRING = "";
+	private final String FILE_PATH_TEXT = "FILE_PATH: ";
+	
 	private String _fileName = "settings.cfg";
 	private String _taskFileLocation;
 	private File _settingsFile;
@@ -34,9 +37,18 @@ public class SettingsFileHandler {
 
 		if (_settingsFile.exists()) {
 			try {
+				String input; 
 				BufferedReader br = new BufferedReader(new FileReader(_settingsFile));
-				_taskFileLocation = br.readLine();
-				br.close();
+				input = br.readLine();
+				if (input.contains(FILE_PATH_TEXT)) {
+					input.replace(FILE_PATH_TEXT, EMPTY_STRING);
+					_taskFileLocation = input;
+					br.close();
+					return true;
+				} else {
+					br.close();
+					return false;
+				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -46,7 +58,6 @@ public class SettingsFileHandler {
 				e.printStackTrace();
 				return false;
 			}
-			return true;
 		} else {
 			return false;
 		}
@@ -56,11 +67,11 @@ public class SettingsFileHandler {
 	 * Returns true if settings file is created successfully. Generates error
 	 * and returns false otherwise.
 	 */
-	public boolean alterSettingsFile(String taskFileLocation) {
+	public boolean alterSettingsFile(String taskFileLocation) {		
 		try {
 			PrintWriter pw = new PrintWriter(_fileName);
 			_taskFileLocation = taskFileLocation;
-			pw.println(_taskFileLocation);
+			pw.println(FILE_PATH_TEXT + _taskFileLocation);
 			pw.close();
 			return true;
 		} catch (FileNotFoundException e) {
@@ -113,13 +124,4 @@ public class SettingsFileHandler {
 			return _taskFileLocation;
 		}
 	}
-	/*
-	 * public static void main (String[] args) { SettingsFileHandler lol = new
-	 * SettingsFileHandler(); boolean exists = lol.init();
-	 * System.out.println(exists); if (!exists) {
-	 * lol.alterSettingsFile("D:\\Users\\Zander\\git\\main\\tasks11111.xml");
-	 * System.out.println(lol.getTaskFileLocation());
-	 * 
-	 * } }
-	 */
 }
