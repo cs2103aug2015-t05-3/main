@@ -5,7 +5,7 @@
 		<word>+</word>
 		<word>insert</word>
 	</command>
-	<command category="edit">
+	<command category="update">
 		<word>edit</word>
 		<word>change</word>
 		<word>modify</word>
