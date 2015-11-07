@@ -27,7 +27,7 @@ public class TaskBuddy {
 	private static final String cmdFileName = "commands.xml";
 	private static final String logFileName = "log.log";
 	private static final String MSG_INVALIDCMD = "Please enter a valid command. For more info, enter help";
-	private static final String MSG_TASKFILE_NOTFOUND = "Please enter the task file location";
+	private static final String MSG_TASKFILE_NOTFOUND = "Please enter the name or location of file to open or create";
 	
 	/*
 	 * Global variables
@@ -70,7 +70,14 @@ public class TaskBuddy {
 	
 	private static void initTaskFile(){
 		SettingsFileHandler settings = SettingsFileHandler.getInstance();
-		if(settings.init()){ // Settings file found
+		settings.init();
+		while((taskFileName = settings.getTaskFile()) == null){
+			UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);
+			settings.alterSettingsFile(UIHelper.getUserInput());
+			settings.initializeTaskFile();
+		}
+		
+		/*if(settings.init()){ // Settings file found
 			if (settings.taskFileCheck()) {
 				taskFileName = settings.getTaskFile(); // TODO: if null.. do else
 			} else {
@@ -88,7 +95,7 @@ public class TaskBuddy {
 				settings.alterSettingsFile(taskFileName);
 				settings.initializeTaskFile();
 			} while((taskFileName = settings.getTaskFile()) == null);
-		}
+		}*/
 	}
 	
 	private static void initLog(){
