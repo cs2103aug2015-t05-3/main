@@ -106,7 +106,7 @@ public class UIController implements Initializable {
 	private LinkedList<String> _leftList;
 	private LinkedList<String> _rightList;
 	private String _holyBuffer;
-	
+
 	public UIController() {
 		_holyBuffer = EMPTY_STRING;
 		_leftList = new LinkedList<String>();
@@ -387,13 +387,13 @@ public class UIController implements Initializable {
 	}
 
 	private void addToLists(String in) {
-		
-		if (!in.isEmpty()) {		
+
+		if (!in.isEmpty()) {
 			if (!_holyBuffer.equals(EMPTY_STRING)) {
 				_leftList.offerLast(_holyBuffer);
 				_holyBuffer = EMPTY_STRING;
 			}
-		
+
 			while (!_rightList.isEmpty()) {
 				_leftList.offerLast(_rightList.removeFirst());
 			}
@@ -409,7 +409,7 @@ public class UIController implements Initializable {
 					_rightList.offerFirst(_holyBuffer);
 					_holyBuffer = EMPTY_STRING;
 				}
-				
+
 				if (!_leftList.isEmpty()) {
 					String history;
 					history = _leftList.pollLast();
@@ -423,8 +423,8 @@ public class UIController implements Initializable {
 				if (!_holyBuffer.equals(EMPTY_STRING)) {
 					_leftList.offerLast(_holyBuffer);
 					_holyBuffer = EMPTY_STRING;
-				}				
-				
+				}
+
 				if (!_rightList.isEmpty()) {
 					String history;
 					history = _rightList.pollFirst();

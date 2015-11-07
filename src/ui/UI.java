@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.Scene;
@@ -28,6 +29,7 @@ public class UI extends Application {
 	private static UIHelpOverlayController uIHelpOverlayController;
 	private static Stage uIHelpStage;
 	private static Scene uIHelpScene;
+	private static Scene uiMainScene;
 	private static boolean isInitialised;
 
 	FXMLLoader uIMainLoader;
@@ -44,7 +46,7 @@ public class UI extends Application {
 		try {
 			AnchorPane uiMainRoot = (AnchorPane) uIMainLoader.load();
 			uIController = uIMainLoader.getController();
-			Scene uiMainScene = new Scene(uiMainRoot);
+			uiMainScene = new Scene(uiMainRoot);
 			uiMainstage.setTitle(APP_TITLE);
 			uiMainstage.getIcons().add(new Image(getClass().getResourceAsStream(ICON_FILEPATH)));
 			uiMainstage.setScene(uiMainScene);
@@ -84,7 +86,18 @@ public class UI extends Application {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+
 				uIHelpStage.show();
+
+				Point2D uICenterCoord = getScreenCenterCoor();
+
+				double width = uIHelpStage.getWidth();
+				double startX = uICenterCoord.getX() - width/2;
+				uIHelpStage.setX(startX);
+
+				double height = uIHelpStage.getHeight();
+				double startY = uICenterCoord.getY() - height/2;
+				uIHelpStage.setY(startY);
 			}
 		});
 	}
@@ -98,6 +111,20 @@ public class UI extends Application {
 				uIHelpStage.hide();
 			}
 		});
+	}
+
+	private Point2D getScreenCenterCoor() {
+
+		double xStartPos = uiMainScene.getWindow().getX();
+		double yStartPos = uiMainScene.getWindow().getY();
+
+		double xMidLen = uiMainScene.getWindow().getWidth() / 2;
+		double yMidLen = uiMainScene.getWindow().getHeight() / 2;
+
+		double xPos = xStartPos + xMidLen;
+		double yPos = yStartPos + yMidLen;
+
+		return new Point2D(xPos, yPos);
 	}
 
 	public void run() {
