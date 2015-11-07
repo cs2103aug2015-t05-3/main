@@ -1,32 +1,23 @@
 package logic.command;
 
-import java.util.List;
-
-import taskCollections.Task;
-
 public class CmdUndo extends Command {
-	
+
 	/*
 	 * Constants
 	 */
-	//private static final String MSG_UNDO = "Undo: ";
 	private static final String MSG_UNDOEMPTY = "No commands to undo!";
 
-	//Help Info
+	// Help Info
 	private static final String HELP_INFO_UNDO = "Just undo...";
-	
+
 	@Override
 	public CommandAction execute() {
 		Command toUndo = extractHistory();
-		
-		if(toUndo == null){
-			return new CommandAction(MSG_UNDOEMPTY,false,null);
-		}else{
-			CommandAction undoCommandAction = toUndo.undo();
-			String outputMsg = undoCommandAction.getOutput();
-			boolean isUndoable = false;
-			List<Task> taskList = undoCommandAction.getTaskList();
-			return new CommandAction(outputMsg, isUndoable, taskList);
+
+		if (toUndo == null) {
+			return new CommandAction(MSG_UNDOEMPTY, false, null);
+		} else {
+			return undoCommand(toUndo);
 		}
 	}
 
@@ -42,17 +33,22 @@ public class CmdUndo extends Command {
 
 	@Override
 	public String[] getRequiredFields() {
-		return new String[]{};
+		return new String[] {};
 	}
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[]{};
+		return new String[] {};
 	}
 
 	@Override
-	public String getHelpInfo(){
+	public String getHelpInfo() {
 		return HELP_INFO_UNDO;
 	}
-	
+
+	private CommandAction undoCommand(Command toUndo) {
+		CommandAction undoCommandAction = toUndo.undo();
+		return new CommandAction(undoCommandAction.getOutput(), false, undoCommandAction.getTaskList());
+	}
+
 }
