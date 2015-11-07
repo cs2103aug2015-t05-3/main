@@ -248,8 +248,8 @@ public class UIController implements Initializable {
 			while (inputBuffer.isEmpty()) {
 				try {
 					inputBuffer.wait();
-				} catch (InterruptedException e) {
-				}
+				} catch (InterruptedException e) {}
+				//TODO check for unimplemented method
 			}
 
 			return inputBuffer.remove(0);
@@ -270,59 +270,32 @@ public class UIController implements Initializable {
 		Platform.runLater(new Runnable() {
 		    @Override
 		    public void run() {
-		    	try {
-					cmdMsg.setText(a);
-				} catch (NullPointerException e) {
-					return;
-				}
+		    	cmdMsg.setText(a);
 		    }
 		});
 	}
 
 	void setTimeDateMsg(String str) {
-		try {
-			timeDateMsg.setText(str);
-		} catch (NullPointerException e) {
-			return;
-		}
+		timeDateMsg.setText(str);
 	}
 
 	void setSyntaxMsg(String str) {
-		try {
-			syntaxMsg.setText(str);
-		} catch (NullPointerException e) {
-			return;
-		}
+		syntaxMsg.setText(str);
 	}
 
 	void setDoneCount(int count) {
 		String str = String.format(MSG_COUNT_OVERDUE, count);
-
-		try {
-			doneCount.setText(str);
-		} catch (NullPointerException e) {
-			return;
-		}
+		doneCount.setText(str);
 	}
 
 	void setPendingCount(int count) {
 		String str = String.format(MSG_COUNT_OVERDUE, count);
-
-		try {
-			pendingCount.setText(str);
-		} catch (NullPointerException e) {
-			return;
-		}
+		pendingCount.setText(str);
 	}
 
 	void setOverdueCount(int count) {
 		String str = String.format(MSG_COUNT_OVERDUE, count);
-
-		try {
-			overdueCount.setText(str);
-		} catch (NullPointerException e) {
-			return;
-		}
+		overdueCount.setText(str);
 	}
 
 	void showUIHelpOverlay() {
