@@ -3,56 +3,86 @@
 	<head>
 	<style>
 		body {
-			background-color: #FFFFFF;
+			background-color: #FBFBFB;
 			text-align: center;
+			font-family: "Trebuchet MS", Helvetica, sans-serif;
+		    margin: 0;
+		    padding: 0;
 		}
+
 		table {
-			padding-left: 50px;
+			padding-left: 40px;
 			text-align: left;
-			float: left;
-			width: 100%;
+			width: 350px;
 		}
+
+		table th {
+			text-align: left;
+		}
+
+		table.center {
+		    margin-left:auto;
+		    margin-right:auto;
+		  }
+
 	</style>
 
 	</head>
 	<body>
 		<h1>List of Commands</h1>
-		<table>
+
+		<table class="center">
 			<tr>
 				<th>Operation</th>
 				<th>Command</th>
 			</tr>
 			<tr>
 				<td>Add a task</td>
-				<td>add &lt;task_name&gt;</td>
+				<td>
+					<code>add &lt;task_name&gt;</code>
+				</td>
 			</tr>
 			<tr>
 				<td>Delete a task</td>
-				<td>delete &lt;task_ID&gt;</td>
+				<td>
+					<code>delete &lt;task_ID&gt;</code>
+				</td>
 			</tr>
 			<tr>
 				<td>Update a task</td>
-				<td>update &lt;task_ID&gt;</td>
+				<td>
+					<code>update &lt;task_ID&gt;</code>
+				</td>
 			</tr>
 			<tr>
 				<td>Search task(s)</td>
-				<td>search &lt;keyword&gt;</td>
+				<td>
+					<code>search &lt;keyword&gt;</code>
+				</td>
 			</tr>
 			<tr>
 				<td>List task(s)</td>
-				<td>list</td>
+				<td>
+					<code>list</code>
+				</td>
 			</tr>
 			<tr>
 				<td>Mark a task(s)</td>
-				<td>mark &lt;task_ID&gt;</td>
+				<td>
+					<code>mark &lt;task_ID&gt;</code>
+				</td>
 			</tr>
 			<tr>
 				<td>Undo</td>
-				<td>undo</td>
+				<td>
+					<code>undo</code>
+				</td>
 			</tr>
 			<tr>
 				<td>Exit TaskBuddy</td>
-				<td>exit</td>
+				<td>
+					<code>exit</code>
+				</td>
 			</tr>
 		</table>
 	</body>
