@@ -346,7 +346,7 @@ public class UIController implements Initializable {
 		// Remaining tasks are all non-floating
 		_nonFloatingTaskList = taskList;
 
-		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.EndTimeComparator());
+		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
 		Collections.sort(_floatingTaskList, new taskCollections.comparators.PriorityComparator());
 		// Collections.sort(_floatingTaskList);
 
