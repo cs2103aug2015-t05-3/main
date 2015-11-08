@@ -129,7 +129,7 @@ public class TimeProcessor {
 	}
 	
 	private String padZeros(String date){
-		String dateRemove = "\\s|,|/";
+		String dateDelimit = "\\s|,|/|:"; // Remove 
 		return "";
 	}
 	
