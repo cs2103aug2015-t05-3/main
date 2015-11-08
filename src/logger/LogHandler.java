@@ -4,17 +4,18 @@ import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class LogHandler {
 
 	private static final String LOG_TAG = "log_dev";
 	private static final String LOG_FILE_NAME = LOG_TAG + ".log";
-	private static final String LOG_MESSAGE = "%s: %s";
+	private static final String LOG_MESSAGE_FORMAT = "%s: %s";
 	private static final String APP_NAME = "TaskBuddy";
 
 	// Logger setting
 	private static final Level LOGGING_LEVEL = Level.ALL;
-	private static final boolean IS_APPENDING = false;
+	private static final boolean IS_APPENDING = true;
 
 	private static Logger log;
 
@@ -41,13 +42,14 @@ public class LogHandler {
 	 *            Where this method is being called from
 	 * @param message
 	 *            The string message (or a key in the message catalog)
-	 *
+	 * @deprecated Use {@code getLog()} to get log object and perform logging
+	 *             through the {@code log object}
 	 */
 	public static void log(Level level, String className, String message) {
 		if (log == null) {
 			initLog();
 		}
-		String logMsg = String.format(LOG_MESSAGE, className, message);
+		String logMsg = String.format(LOG_MESSAGE_FORMAT, className, message);
 		log.log(level, logMsg);
 	}
 
@@ -62,6 +64,8 @@ public class LogHandler {
 	 * @param message
 	 *            The string message (or a key in the message catalog)
 	 *
+	 * @deprecated Use {@code getLog()} to get log object and perform logging
+	 *             through the {@code log object}
 	 */
 	public static void log(Level level, Object classObj, String message) {
 		String className = classObj.toString();
@@ -69,12 +73,16 @@ public class LogHandler {
 	}
 
 	private static void initLog() {
-		log = Logger.getLogger(LOG_TAG);
 		try {
-			log.addHandler(new FileHandler(LOG_FILE_NAME, IS_APPENDING));
+			FileHandler logFile = new FileHandler(LOG_FILE_NAME, IS_APPENDING);
+			LogFormatter formatter = new LogFormatter();
+			logFile.setFormatter(formatter);
+
+			log = Logger.getLogger(LOG_TAG);
+			log.addHandler(logFile);
 			log.setLevel(LOGGING_LEVEL);
 		} catch (SecurityException | IOException e) {
-			log.severe(String.format(LOG_MESSAGE, APP_NAME, e));
+			log.severe(String.format(LOG_MESSAGE_FORMAT, APP_NAME, e));
 		}
 	}
 }
