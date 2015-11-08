@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class TimeUtil {
 
 	private static SimpleDateFormat _df1 = new SimpleDateFormat("EEEE: dd/MM/yy HH:mm 'GMT'Z");
-	private static SimpleDateFormat _uidf = new SimpleDateFormat("EEEE, dd/MM/yy");
+	private static SimpleDateFormat _uidf = new SimpleDateFormat("EEEE, dd MMM yy");
 	private static Calendar now = Calendar.getInstance();
 	private static Calendar temp = Calendar.getInstance();
 
@@ -96,6 +96,9 @@ public class TimeUtil {
 	public static int getDayDifference(long time) {
 		now.setTimeInMillis(System.currentTimeMillis());
 		temp.setTimeInMillis(time);
+		if(now.get(Calendar.YEAR) == temp.get(Calendar.YEAR)){
+			return temp.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
+		}
 		boolean isBefore = isBeforeNow(temp.getTimeInMillis());
 		long diff = isBefore ? now.getTimeInMillis() - temp.getTimeInMillis() : 
 			temp.getTimeInMillis() - now.getTimeInMillis();
@@ -103,6 +106,7 @@ public class TimeUtil {
 		if(isBefore){
 			daysDiff = -daysDiff;
 		}
+		
 		return (int)daysDiff;
 	}
 	

@@ -57,6 +57,7 @@ public class TimeProcessor {
 	private TimeProcessor(){
 		sdf = new SimpleDateFormat();
 		sdf.setTimeZone(TimeZone.getDefault());
+		sdf.setLenient(false);
 		now = Calendar.getInstance(TimeZone.getDefault());
 		temp = Calendar.getInstance(TimeZone.getDefault());
 		now.setFirstDayOfWeek(Calendar.MONDAY);
@@ -64,7 +65,7 @@ public class TimeProcessor {
 	}
 	
 	public long resolveTime(String time){
-		time = time.replaceAll("\\s|,|/", ""); // Remove whitespaces and commas and slash
+		time = reformatDate(time);
 		
 		if(time.equals(TIME_NOTSPECIFIED)){
 			return TIME_NOTSPECIFIED;
@@ -128,9 +129,19 @@ public class TimeProcessor {
 		return TIME_INVALIDFORMAT;
 	}
 	
-	private String padZeros(String date){
-		String dateDelimit = "\\s|,|/|:"; // Remove 
-		return "";
+	private String reformatDate(String date){
+		String dateDelimit = "\\s|,|/|:"; // Tokens to delimit fields
+		String fields[] = date.split(dateDelimit);
+		StringBuilder newField =  new StringBuilder();
+		
+		for(String aField : fields){
+			if((aField.length() == 1 && aField.matches("\\d")) || (aField.length() == 3 && aField.matches("\\d{3}"))
+					|| (aField.length() == 4 && aField.matches("\\d[a-zA-Z]{3}"))){
+				aField = "0" + aField;
+			}
+			newField.append(aField);
+		}
+		return newField.toString();
 	}
 	
 	public String getFormattedDate(long endTime){
