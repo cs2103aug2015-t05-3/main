@@ -6,7 +6,7 @@
     -fx-alignment: CENTER;
     -fx-text-fill: BLACK;
     -fx-font-weight: NORMAL;
-	-fx-font: 12px System;
+	-fx-font: 12.0px 'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .highPriority .table-cell {

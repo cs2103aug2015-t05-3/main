@@ -17,12 +17,12 @@
                <children>
                   <Label fx:id="pendingMsg" prefHeight="25.0" prefWidth="684.0" text="WelcomeText">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Segoe UI Bold" size="16.0" />
                      </font>
                   </Label>
                   <Label fx:id="timeDateMsg" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="338.0" text="CurrentTimeDate">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="Segoe UI Bold" size="16.0" />
                      </font>
                   </Label>
                </children>
@@ -34,17 +34,17 @@
                <children>
                   <Label fx:id="overdueCount" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="1000.0" text="Overdue [ ---- ]">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="Segoe UI" size="16.0" />
                      </font>
                   </Label>
                   <Label fx:id="pendingCount" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="1000.0" text="Pending [ ---- ]">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="Segoe UI" size="16.0" />
                      </font>
                   </Label>
                   <Label fx:id="doneCount" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="1000.0" text="Done [ ---- ]">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="Segoe UI" size="16.0" />
                      </font>
                   </Label>
                </children>
@@ -58,7 +58,7 @@
                      <children>
                         <Label fx:id="tableTimedHeader" prefHeight="25.0" prefWidth="388.0" text="With deadline ">
                            <font>
-                              <Font size="16.0" />
+                              <Font name="Segoe UI" size="16.0" />
                            </font>
                         </Label>
                         <TableView fx:id="tableTimed" maxHeight="404.0" maxWidth="714.0" minHeight="397.0" minWidth="200.0" prefHeight="397.0" prefWidth="523.0">
@@ -83,7 +83,7 @@
                      <children>
                         <Label fx:id="tableFloatHeader" prefHeight="25.0" prefWidth="388.0" text="Without deadline">
                            <font>
-                              <Font size="16.0" />
+                              <Font name="Segoe UI" size="16.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -112,7 +112,7 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Segoe UI" size="18.0" />
                      </font>
                   </Label>
                   <HBox alignment="CENTER_LEFT" maxHeight="48.0" maxWidth="1249.0" minHeight="48.0" minWidth="785.0" prefHeight="48.0" prefWidth="1249.0" VBox.vgrow="ALWAYS">
@@ -122,7 +122,7 @@
                               <Insets />
                            </HBox.margin>
                            <font>
-                              <Font size="16.0" />
+                              <Font name="Segoe UI" size="16.0" />
                            </font></TextField>
                      </children>
                   </HBox>
@@ -130,6 +130,9 @@
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin>
+                     <font>
+                        <Font name="Segoe UI" size="12.0" />
+                     </font>
                   </Label>
                </children>
                <VBox.margin>
