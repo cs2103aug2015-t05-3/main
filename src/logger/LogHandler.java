@@ -14,7 +14,7 @@ public class LogHandler {
 
 	// Logger setting
 	private static final Level LOGGING_LEVEL = Level.ALL;
-	private static final boolean IS_APPENDING = true;
+	private static final boolean IS_APPENDING = false;
 
 	private static Logger log;
 
@@ -49,6 +49,23 @@ public class LogHandler {
 		}
 		String logMsg = String.format(LOG_MESSAGE, className, message);
 		log.log(level, logMsg);
+	}
+
+	/**
+	 * Provide consistent method to log across different classes and packages.
+	 *
+	 * @param level
+	 *            One of the message level identifiers, e.g., SEVERE
+	 * @param Object
+	 *            Where this method is being called from. The object name will
+	 *            be generated based on its toString method.
+	 * @param message
+	 *            The string message (or a key in the message catalog)
+	 *
+	 */
+	public static void log(Level level, Object classObj, String message) {
+		String className = classObj.toString();
+		log(level, className, message);
 	}
 
 	private static void initLog() {
