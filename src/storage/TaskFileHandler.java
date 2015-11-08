@@ -324,7 +324,7 @@ public class TaskFileHandler {
 						return false;
 					}
 					
-					t = new Task(id, title, EMPTY_STRING, startTime, endTime, flag, priority);
+					t = new Task(id, title, startTime, endTime, flag, priority);
 					_tasks.add(t);
 				}
 			}
