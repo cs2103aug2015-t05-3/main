@@ -124,7 +124,7 @@ public abstract class Command {
 		}							
 	}
 
-	public static void init(String taskFileName){
-		_taskTree = TaskTree.newTaskTree(taskFileName);
+	public static void init(){
+		_taskTree = TaskTree.getTaskTree();
 	}
 }

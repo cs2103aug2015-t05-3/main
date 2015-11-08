@@ -10,12 +10,6 @@ import taskCollections.Task;
 
 public class UIHelper {
 
-	/*
-	 * private static UIFrame frame;
-	 */
-	// private static Logger log = Logger.getLogger("log");
-	// private static UI user_interface;
-
 	private static UIController uiController;
 
 	/**
@@ -65,9 +59,21 @@ public class UIHelper {
 	public static void setUserInput(String in) {
 		// frame.setInputText(in);
 	}
-	
-	public static void setDate(String date){
+
+	public static void setDate(String date) {
 		uiController.setTimeDateMsg(date);
+	}
+
+	public static void setPendingCount(int count) {
+		uiController.setPendingCount(count);
+	}
+
+	public static void setOverdueCount(int count) {
+		uiController.setOverdueCount(count);
+	}
+
+	public static void setDoneCount(int count) {
+		uiController.setDoneCount(count);
 	}
 
 }

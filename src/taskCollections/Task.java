@@ -73,6 +73,7 @@ public class Task implements Comparable<Task> {
 	 * date.
 	 */
 	public final static int DATE_NULL = 0;
+	public final static int DATE_START = 1;
 	private final static String EMPTY_STRING = "";
 	private final static String TO_STRING_DELIMETER = "|";
 	private final static String TO_STRING_START = "";

@@ -96,21 +96,20 @@ public class UIController implements Initializable {
 	// UI Controller attributes
 	private static UI uI;
 	private static UIController uIController;
-	private List<Task> _floatingTaskList;
-	private List<Task> _nonFloatingTaskList;
+	private List<Task> floatingTaskList;
+	private List<Task> nonFloatingTaskList;
 	private ArrayList<String> inputBuffer = new ArrayList<>();
 	ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
 
-
-	private LinkedList<String> _leftList;
-	private LinkedList<String> _rightList;
-	private String _holyBuffer;
+	private LinkedList<String> leftList;
+	private LinkedList<String> rightList;
+	private String cmdHistoryBuffer;
 
 	public UIController() {
-		_holyBuffer = EMPTY_STRING;
-		_leftList = new LinkedList<String>();
-		_rightList = new LinkedList<String>();
+		cmdHistoryBuffer = EMPTY_STRING;
+		leftList = new LinkedList<String>();
+		rightList = new LinkedList<String>();
 	}
 
 	static UIController getUIController() {
@@ -301,18 +300,33 @@ public class UIController implements Initializable {
 	}
 
 	void setDoneCount(int count) {
-		String str = String.format(MSG_COUNT_DONE, count);
-		doneCount.setText(str);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				String str = String.format(MSG_COUNT_DONE, count);
+				doneCount.setText(str);
+			}
+		});
 	}
 
 	void setPendingCount(int count) {
-		String str = String.format(MSG_COUNT_PENDING, count);
-		pendingCount.setText(str);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				String str = String.format(MSG_COUNT_PENDING, count);
+				pendingCount.setText(str);
+			}
+		});
 	}
 
 	void setOverdueCount(int count) {
-		String str = String.format(MSG_COUNT_OVERDUE, count);
-		overdueCount.setText(str);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				String str = String.format(MSG_COUNT_OVERDUE, count);
+				overdueCount.setText(str);
+			}
+		});
 	}
 
 	void showUIHelpOverlay() {
@@ -337,14 +351,14 @@ public class UIController implements Initializable {
 	}
 
 	private void separateTaskList(List<Task> taskList) {
-		_floatingTaskList = new ArrayList<Task>();
-		_nonFloatingTaskList = new ArrayList<Task>();
+		floatingTaskList = new ArrayList<Task>();
+		nonFloatingTaskList = new ArrayList<Task>();
 
 		for (Task task : taskList) {
 			if (isFloating(task)) {
-				_floatingTaskList.add(task);
+				floatingTaskList.add(task);
 			} else {
-				_nonFloatingTaskList.add(task);
+				nonFloatingTaskList.add(task);
 			}
 		}
 	}
@@ -354,13 +368,13 @@ public class UIController implements Initializable {
 	}
 
 	private void sortSeparatedList() {
-		Collections.sort(_floatingTaskList, new taskCollections.comparators.PriorityComparator());
-		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
+		Collections.sort(floatingTaskList, new taskCollections.comparators.PriorityComparator());
+		Collections.sort(nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
 	}
 
 	private void displayTables() {
-		displayTable(tableTimed, dataTimed, _nonFloatingTaskList);
-		displayTable(tableFloat, dataFloat, _floatingTaskList);
+		displayTable(tableTimed, dataTimed, nonFloatingTaskList);
+		displayTable(tableFloat, dataFloat, floatingTaskList);
 	}
 
 	private void displayTable(TableView<UITask> tableView, ObservableList<UITask> dataList, List<Task> taskList) {
@@ -389,55 +403,55 @@ public class UIController implements Initializable {
 	private void addToLists(String in) {
 
 		if (!in.isEmpty()) {
-			if (!_holyBuffer.equals(EMPTY_STRING)) {
-				_leftList.offerLast(_holyBuffer);
-				_holyBuffer = EMPTY_STRING;
+			if (!cmdHistoryBuffer.equals(EMPTY_STRING)) {
+				leftList.offerLast(cmdHistoryBuffer);
+				cmdHistoryBuffer = EMPTY_STRING;
 			}
 
-			while (!_rightList.isEmpty()) {
-				_leftList.offerLast(_rightList.removeFirst());
+			while (!rightList.isEmpty()) {
+				leftList.offerLast(rightList.removeFirst());
 			}
-			_leftList.offerLast(in);
+			leftList.offerLast(in);
 		}
 	}
 
 	public void showHistory(KeyEvent keyEvent) {
 
 		switch (keyEvent.getCode()) {
-			case UP:
-				if (!_holyBuffer.equals(EMPTY_STRING) && !_leftList.isEmpty()) {
-					_rightList.offerFirst(_holyBuffer);
-					_holyBuffer = EMPTY_STRING;
-				}
+		case UP:
+			if (!cmdHistoryBuffer.equals(EMPTY_STRING) && !leftList.isEmpty()) {
+				rightList.offerFirst(cmdHistoryBuffer);
+				cmdHistoryBuffer = EMPTY_STRING;
+			}
 
-				if (!_leftList.isEmpty()) {
-					String history;
-					history = _leftList.pollLast();
-					_holyBuffer = history;
-					//_rightList.offerFirst(history);
-					setInput(history);
-				}
-				keyEvent.consume();
-				break;
-			case DOWN:
-				if (!_holyBuffer.equals(EMPTY_STRING)) {
-					_leftList.offerLast(_holyBuffer);
-					_holyBuffer = EMPTY_STRING;
-				}
+			if (!leftList.isEmpty()) {
+				String history;
+				history = leftList.pollLast();
+				cmdHistoryBuffer = history;
+				// _rightList.offerFirst(history);
+				setInput(history);
+			}
+			keyEvent.consume();
+			break;
+		case DOWN:
+			if (!cmdHistoryBuffer.equals(EMPTY_STRING)) {
+				leftList.offerLast(cmdHistoryBuffer);
+				cmdHistoryBuffer = EMPTY_STRING;
+			}
 
-				if (!_rightList.isEmpty()) {
-					String history;
-					history = _rightList.pollFirst();
-					_holyBuffer = history;
-					//_leftList.offerLast(history);
-					setInput(history);
-				} else {
-					setInput(EMPTY_STRING);
-				}
-				keyEvent.consume();
-				break;
-			default:
-				break;
+			if (!rightList.isEmpty()) {
+				String history;
+				history = rightList.pollFirst();
+				cmdHistoryBuffer = history;
+				// _leftList.offerLast(history);
+				setInput(history);
+			} else {
+				setInput(EMPTY_STRING);
+			}
+			keyEvent.consume();
+			break;
+		default:
+			break;
 		}
 	}
 
