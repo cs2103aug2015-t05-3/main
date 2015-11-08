@@ -43,7 +43,6 @@ public class TaskTree {
 
 	// For managing comparable argument during query
 	private static Task fromValueHandler;
-	private static final long EARLIEST_START_TIME = 1;
 
 	private final String TO_STRING_OPEN = "[";
 	private final String TO_STRING_CLOSE = "]";
