@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,6 +24,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import logger.LogHandler;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
@@ -46,22 +46,32 @@ public class TaskFileHandler {
 	private static final String TAG_ENDTIME = "endTime";
 	private static final String TAG_FLAG = "flag";
 	private static final String TAG_PRIORITY = "priority";
+
+	private static final String EXCEPTION_PARSER = "Parser Config Exception: %1$s";
+	private static final String EXCEPTION_SAX = "SAX Exception: %1$s";
+	private static final String EXCEPTION_IO = "IO Exception: %1$s";
+	private static final String EXCEPTION_TRANSFORMER = "Transformer Exception: %1$s";
+	private static final String EXCEPTION_TRANSFORMERCFG = "Transformer Config Exception: %1$s";	
 	
 	private ArrayList<Task> _tasks;
 	private Document _doc;
 	private Element _root;
 	private File _xmlFile;
+
 	
-	private static final Logger logger =
-	        Logger.getLogger(TaskFileHandler.class.getName());
-	
-	public TaskFileHandler() {}
+	public TaskFileHandler() {
+		
+	}
 	
 	/**
 	 * Attempts to load XML File into ArrayList of Task Objects
-	 * @return true if loading succeeded, false if failed.
+	 * @return 
+	 * 		true if loading succeeded, false if failed.
 	 */
 	public boolean loadTaskFile(String fileName) {
+		assert fileName != null;
+		assert !fileName.isEmpty();
+		
 		DocumentBuilderFactory dbFactory;
 		DocumentBuilder dBuilder;
 		
@@ -72,13 +82,16 @@ public class TaskFileHandler {
 				dBuilder = dbFactory.newDocumentBuilder();
 				_doc = dBuilder.parse(_xmlFile);
 			} catch (ParserConfigurationException e) {
-				logger.log(Level.SEVERE, "Parser Config Error", e);
+				LogHandler.getLog().log(Level.SEVERE,  
+						(String.format(EXCEPTION_PARSER, e)));
 				return false;
 			} catch (SAXException e) {
-				logger.log(Level.SEVERE, "SAX Error", e);
+				LogHandler.getLog().log(Level.SEVERE,  
+						(String.format(EXCEPTION_SAX, e)));
 				return false;
 			} catch (IOException e) {
-				logger.log(Level.SEVERE, "IO Error", e);
+				LogHandler.getLog().log(Level.SEVERE,  
+						(String.format(EXCEPTION_IO, e)));
 				return false;
 			}
 		
@@ -89,18 +102,25 @@ public class TaskFileHandler {
 	}
 
 	/**
-	 * @return ArrayList<Task> : List of Tasks
+	 * Returns the ArrayList of Task Object
+	 * @return 
+	 * 		ArrayList<Task> : List of Tasks
 	 */
 	public ArrayList<Task> retrieveTaskList() {
+		LogHandler.getLog().log(Level.INFO, "Successful Retrieval from XML File.");
 		return _tasks;
 	}
 
 	/**
 	 * Adds new task to XML file
-	 * @param t Task Object
-	 * @returns true if operation succeeded, false if failed.
+	 * @param t 
+	 * 		Task Object
+	 * @return 
+	 * 		true if operation succeeded, false if failed.
 	 */
 	public boolean add(Task t) {
+		assert t != null;
+		
 		int id = t.getId();
 		String[] headers = { TAG_TITLE, TAG_STARTTIME, TAG_ENDTIME, TAG_FLAG, TAG_PRIORITY };
 	
@@ -113,26 +133,48 @@ public class TaskFileHandler {
 			Element e = addElement(headers[i], t);
 			newTask.appendChild(e);
 		}
-		return genXML();
+		
+		boolean flag = genXML();
+		
+		if (flag) {
+			LogHandler.getLog().log(Level.INFO, "Add Entry to XML File Success.");
+		}
+		
+		return flag;
 	}
 	
 	/**
 	 * Delete task from XML file
-	 * @param id ID number of Task
-	 * @returns true if operation succeeded, false if failed.
+	 * @param id 
+	 * 		ID number of Task
+	 * @return 
+	 * 		true if operation succeeded, false if failed.
 	 */
 	public boolean delete(int id) {
+		assert id >= 0; //there must always be a non-negative id number
+		
 		Element e = locateID(id);
 		_root.removeChild(e);
-		return genXML();
+		
+		boolean flag = genXML();
+		
+		if (flag) {
+			LogHandler.getLog().log(Level.INFO, "Remove Entry from XML File Success.");
+		}
+		
+		return flag;
 	}
 	
 	/**
 	 * Update task to XML file
-	 * @param t Task Object
-	 * @returns true if operation succeeded, false if failed.
+	 * @param t 
+	 * 		Task Object
+	 * @returns 
+	 * 		true if operation succeeded, false if failed.
 	 */
 	public boolean update(Task t) {
+		assert t != null;
+		
 		Element e = locateID(t.getId());
 		
 		NodeList nl = e.getChildNodes();
@@ -161,7 +203,14 @@ public class TaskFileHandler {
 					break;
 			}
 		}
-		return genXML();
+		
+		boolean flag = genXML();
+		
+		if (flag) {
+			LogHandler.getLog().log(Level.INFO, "Updating Entry to XML File Success.");
+		}
+		
+		return flag;
 	}
 	
 	/**
@@ -171,6 +220,11 @@ public class TaskFileHandler {
 	 * @return Element
 	 */
 	private Element addElement(String s, Task t) {
+		assert s != null;
+		assert !s.isEmpty();
+		
+		assert t != null;
+				
 		Element e = _doc.createElement(s);
 		switch (s) {
 			case TAG_TITLE:
@@ -223,7 +277,8 @@ public class TaskFileHandler {
 	
 	/**
 	 * Writes data to XML file with the parameters.
-	 * @return true if succeeded, false if failed
+	 * @return 
+	 * 		true if succeeded, false if failed
 	 */
 	private boolean genXML() {
 		return printFile(_doc, XML_INDENTAMT);
@@ -231,7 +286,8 @@ public class TaskFileHandler {
 
 	/**
 	 * Read data from XML file and stores them in arrayList
-	 * @return true if operation succeeded, false if failed
+	 * @return 
+	 * 		true if operation succeeded, false if failed
 	 */
 	private boolean importAllTasks() {
 		_tasks = new ArrayList<>();
@@ -278,8 +334,10 @@ public class TaskFileHandler {
 
 	/**
 	 * Locate and returns the element in the document list
-	 * @param id the id number of task entry
-	 * @return Element e the task element with the corresponding id
+	 * @param 
+	 * 		id the id number of task entry
+	 * @return 
+	 * 		the task element with the corresponding id
 	 */
 	private Element locateID(int id) {
 		
@@ -322,7 +380,8 @@ public class TaskFileHandler {
 	/**
 	 * Remove text nodes that are used for indentation.
 	 * 
-	 * @param Node A single node in XML file
+	 * @param node 
+	 * 		A single node in XML file
 	 */
 	private void removeEmptyText(Node node) {
 		Node child = node.getFirstChild();
@@ -359,10 +418,12 @@ public class TaskFileHandler {
 			transformer.transform(source, result);
 			return true;
 		} catch (TransformerConfigurationException e) {
-			System.err.println("Transformer Configuration Exeception.");
+			LogHandler.getLog().log(Level.SEVERE,  
+					(String.format(EXCEPTION_TRANSFORMER, e)));
 			return false;
 		} catch (TransformerException e) {
-			System.err.println("Transformer Exeception.");
+			LogHandler.getLog().log(Level.SEVERE,
+					(String.format(EXCEPTION_TRANSFORMERCFG, e)));
 			return false;
 		}
 

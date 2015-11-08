@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,6 +25,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import logger.LogHandler;
+
 public class CommandFileHandler {
 	
 	private static final int BYTE_ARRAY_NUMBER = 1024;
@@ -34,19 +37,24 @@ public class CommandFileHandler {
 	private static final String TAG_CATEGORY = "category";
 	private static final String TAG_WORD = "word";
 	private static final String _commandResource = "resources/commands.xml";
+
+	private static final String EXCEPTION_FILENOTFOUND = "File Not Found Exception: %1$s";
+	private static final String EXCEPTION_IO = "IO Exception: %1$s";
+	private static final String EXCEPTION_PARSER = "Parser Config Exception: %1$s";
+	private static final String EXCEPTION_SAX = "SAX Exception: %1$s";
 	
 	private Document _doc;
 	private File _xmlFile;
 	private HashMap<String, String> _cmdTable;
 	
 	public CommandFileHandler() {
-		
 	}
 	
 	/**
 	 * Attempts to load XML file elements into Document object
 	 * @param fileName
-	 * @return true if successful, false otherwise
+	 * @return 
+	 * 		true if successful, false otherwise
 	 */
 	public boolean loadCommandFile(String fileName) {
 		assert fileName != null;
@@ -65,30 +73,40 @@ public class CommandFileHandler {
 			parseCmd();
 			return true;
 		} catch (ParserConfigurationException e) {
-			System.err.println("Parser Config Error.");
+			LogHandler.getLog().log(Level.SEVERE, 
+					(String.format(EXCEPTION_PARSER, e)));
 			return false;
 		} catch (SAXException e) {
-			System.err.println("SAX Exception.");
+			LogHandler.getLog().log(Level.SEVERE, 
+					(String.format(EXCEPTION_SAX, e)));
 			return false;
 		} catch (IOException e) {
-			System.err.println("IO Error.");
+			LogHandler.getLog().log(Level.SEVERE, 
+					(String.format(EXCEPTION_IO, e)));
 			return false;
 		}
 	}
 	
 	/**
 	 * Copies commands.xml from resource package to program directory
-	 * @param newFileStr
-	 * @return true is successful, false if failed
+	 * @param newFile
+	 * @return 
+	 * 		true is successful, false if failed
 	 */
-	public boolean generateCommandFile(String newFile) {	
+	public boolean generateCommandFile(String newFile) {
+		assert newFile != null;
+		assert !newFile.isEmpty();
+		
 		boolean check = fileCopyFromResource(newFile);		
 		check = loadCommandFile(newFile) && check;
 		parseCmd();
 		return check;
 	}
 	
-	public boolean fileCopyFromResource(String newFileStr) {
+	private boolean fileCopyFromResource(String newFileStr) {
+		assert newFileStr != null;
+		assert !newFileStr.isEmpty();
+		
 		File newFile = new File(newFileStr);
 		newFile.delete();
 
@@ -107,14 +125,18 @@ public class CommandFileHandler {
 				outputStream.close();
 				return true;
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
 				return false;
 			} catch (IOException e) {
-				e.printStackTrace();
+				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_IO, e));
 				return false;
 			}
 	}
 	
+	/**
+	 * Retrieves and returns the command mappings.
+	 * @return the mapping of commands in HashMap.
+	 */
 	public HashMap<String, String> getCmdTable() {
 		return _cmdTable;
 	}

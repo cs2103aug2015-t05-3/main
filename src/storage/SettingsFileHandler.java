@@ -7,11 +7,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+
+import logger.LogHandler;
 
 public class SettingsFileHandler {
 
 	private static final String EMPTY_STRING = "";
 	private static final String FILE_PATH_TEXT = "FILE_PATH: ";
+	
+	private static final String EXCEPTION_FILENOTFOUND = "File Not Found Exception: %1$s";
+	private static final String EXCEPTION_IO = "IO Exception: %1$s";
+	private static final String EXCEPTION_UNSUPPORTEDENCODING = "Unsupported Encoding Exception: %1$s";
 	
 	private String _fileName = "settings.cfg";
 	private String _taskFileLocation;
@@ -31,8 +38,9 @@ public class SettingsFileHandler {
 
 	/**
 	 * Retrieves location of tasks.xml if settings file is present.
-	 * @return true if settings file is found and location is proper. 
-	 * false otherwise
+	 * @return 
+	 * 		true if settings file is found and location is proper. 
+	 * 		false otherwise
 	 */
 	public boolean init() {
 		_settingsFile = new File(_fileName);
@@ -52,12 +60,10 @@ public class SettingsFileHandler {
 					return false;
 				}
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
 				return false;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_IO, e));
 				return false;
 			}
 		} else {
@@ -67,27 +73,31 @@ public class SettingsFileHandler {
 
 	/**
 	 * Modify settings file to include task path
-	 * @param taskFileLocation
-	 * @return true if succeeded, false if failed
+	 * @param 
+	 * 		taskFileLocation file path of task file
+	 * @return 
+	 * 		true if succeeded, false if failed
 	 */
 	public boolean alterSettingsFile(String taskFileLocation) {
+		assert taskFileLocation != null;
+		assert !taskFileLocation.isEmpty();
+		
 		try {
 			PrintWriter pw = new PrintWriter(_fileName);
 			_taskFileLocation = taskFileLocation;
-			pw.println(FILE_PATH_TEXT + _taskFileLocation);
 			pw.close();
 			return true;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
 			return false;
 		}
 	}
 
 	/**
 	 * Creates an empty task file
-	 * @return true if empty tasks file is created successfully. Returns false
-	 * otherwise.
+	 * @return 
+	 * 		true if empty tasks file is created successfully. Returns false
+	 * 		otherwise.
 	 */
 	public boolean initializeTaskFile() {
 		if (taskFileCheck()) {
@@ -102,10 +112,10 @@ public class SettingsFileHandler {
 				pw.close();
 				return true;
 			} catch (FileNotFoundException e) {
-				System.err.println("File Not Found");
+				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
 				return false;
 			} catch (UnsupportedEncodingException e) {
-				System.err.println("Unsupported Encoding");
+				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_UNSUPPORTEDENCODING, e));
 				return false;
 			}
 		}
@@ -118,7 +128,8 @@ public class SettingsFileHandler {
 
 	/**
 	 * Get task file location
-	 * @return task file location if file is present. Returns null if absent.
+	 * @return 
+	 * 		task file location if file is present. Returns null if absent.
 	 */
 	public String getTaskFile() {
 		File taskFile = new File(_taskFileLocation);
