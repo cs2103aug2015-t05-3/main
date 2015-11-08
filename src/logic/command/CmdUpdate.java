@@ -6,12 +6,16 @@ package logic.command;
 
 import util.TimeUtil;
 
+import java.util.logging.Level;
+
 import constants.CmdParameters;
 import parser.ParserConstants;
 
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
+
+import logger.LogHandler;
 
 public class CmdUpdate extends Command {
 
@@ -25,9 +29,14 @@ public class CmdUpdate extends Command {
 	private static final String MSG_INVALIDTIME = "Invalid start/end time given";
 
 	// Help Info
-	private static final String HELP_INFO_UPDATE = "<task_ID> [%1$s <task_name>] [%2$s <start_time>] [%3$s <end_time>][%4$s <high/normal/low/h/n/l>]";
+	private static final String HELP_INFO_UPDATE = "<task_ID> [%1$s <task_name>] [%2$s <start_time>] "
+			+ "[%3$s <end_time>][%4$s <high/normal/low/h/n/l>]";
 
+	//Log Message
+	private static final String LOG_NUMBERFORMATEXCEPTIOM = "Warning: Task ID parameter is not an integer";
+	
 	// Variable constants
+	private static final int INVALID_TASKID = -1;
 	private static final int OPTIONAL_PARAM_EMPTY = 0;
 	private static final int IS_OPTIONAL_PARAM = 1;
 	private static final int NOT_OPTIONAL_PARAM = 0;
@@ -56,18 +65,15 @@ public class CmdUpdate extends Command {
 
 	}
 
-	/**
-	 * Executes the update command
-	 * 
-	 * @return a CommandAction object
-	 */
 	@Override
 	public CommandAction execute() {
 
+		// Check if there is a task to be updated
 		if (!hasTaskToUpdate()) {
 			return new CommandAction(String.format(MSG_TASKIDNOTFOUND, _taskID), false, null);
 		}
 
+		// Initialize optional parameter values
 		if (hasOptionalParam(proccessOptionalFields())) {
 			if (isInvalidTime(_newStartTime, _newEndTime)) {
 				return new CommandAction(MSG_INVALIDTIME, false, null);
@@ -102,15 +108,36 @@ public class CmdUpdate extends Command {
 				ParserConstants.TASK_SPECIFIER_PRIORITY);
 	}
 
-	private Task proccessTaskID(String paramTaskID) {
-		_taskID = Integer.parseInt(paramTaskID);
+	/**
+	 * Process the task ID given by user and returns a Task of the specified ID
+	 * 
+	 * @param paramTaskID
+	 *            a String parameter given by user
+	 * 
+	 * @return a {@code Task} of the specified ID
+	 */
+	private Task processTaskID(String paramTaskID) {
+		assert paramTaskID != null && paramTaskID.equals("");
+
+		try {
+			_taskID = Integer.parseInt(paramTaskID);
+		} catch (NumberFormatException e) {
+			LogHandler.getLog().log(Level.WARNING, LOG_NUMBERFORMATEXCEPTIOM, e);
+			_taskID = INVALID_TASKID;
+		}
+
 		return _taskTree.getTask(_taskID);
 	}
 
+	/**
+	 * Check if a {@code Task} exist to be updated
+	 * 
+	 * @return true if {@code Task} is not null. false if {@code Task} is null.
+	 */
 	private boolean hasTaskToUpdate() {
 
 		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
-		_task = proccessTaskID(paramTaskID);
+		_task = processTaskID(paramTaskID);
 
 		if (_task == null) {
 			return false;
@@ -120,6 +147,12 @@ public class CmdUpdate extends Command {
 
 	}
 
+	/**
+	 * Check if there is/are optional parameter(s) given
+	 * 
+	 * @return true if there is at least one optional parameter. false if there
+	 *         is no optional parameter.
+	 */
 	private boolean hasOptionalParam(int noOfOptionalParam) {
 		if (noOfOptionalParam == OPTIONAL_PARAM_EMPTY) {
 			return false;
@@ -131,23 +164,29 @@ public class CmdUpdate extends Command {
 	/**
 	 * Initializes {@code _newTaskName}, {@code _newStartTime},
 	 * {@code _newEndTime}, {@code _newPriority}, with optional parameters
-	 * 
+	 * values.
 	 *
 	 */
 	private int proccessOptionalFields() {
 
 		int noOfOptionalParam = OPTIONAL_PARAM_EMPTY;
 
-		noOfOptionalParam += proccessTaskName();
-		noOfOptionalParam += proccessStartTime();
-		noOfOptionalParam += proccessEndTime();
-		noOfOptionalParam += proccessPriority();
+		noOfOptionalParam += processTaskName();
+		noOfOptionalParam += processStartTime();
+		noOfOptionalParam += processEndTime();
+		noOfOptionalParam += processPriority();
 
 		return noOfOptionalParam;
 
 	}
 
-	private int proccessTaskName() {
+	/**
+	 * Initializes {@code _newTaskName}, {@code _newStartTime},
+	 * {@code _newEndTime}, {@code _newPriority}, with optional parameters
+	 * values.
+	 *
+	 */
+	private int processTaskName() {
 
 		String paramTaskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_SNAME);
 
@@ -161,7 +200,7 @@ public class CmdUpdate extends Command {
 
 	}
 
-	private int proccessStartTime() {
+	private int processStartTime() {
 
 		String paramStartTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_STARTTIME);
 
@@ -175,7 +214,7 @@ public class CmdUpdate extends Command {
 
 	}
 
-	private int proccessEndTime() {
+	private int processEndTime() {
 
 		String paramEndTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_ENDTIME);
 
@@ -189,7 +228,7 @@ public class CmdUpdate extends Command {
 
 	}
 
-	private int proccessPriority() {
+	private int processPriority() {
 
 		String paramPriority = getParameterValue(CmdParameters.PARAM_NAME_TASK_PRIORITY);
 
@@ -227,6 +266,9 @@ public class CmdUpdate extends Command {
 	}
 
 	private boolean isInvalidTime(long newStartTime, long newEndTime) {
+
+		assert newStartTime >= 0 && newEndTime >= 0;
+
 		if (newStartTime == _task.getStartTime() && newEndTime == _task.getEndTime()) {
 			return false;
 		}

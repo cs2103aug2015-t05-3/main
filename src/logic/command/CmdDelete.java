@@ -1,9 +1,10 @@
 package logic.command;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import constants.CmdParameters;
-
+import logger.LogHandler;
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
 
@@ -18,7 +19,13 @@ public class CmdDelete extends Command {
 
 	// Help Info
 	private static final String HELP_INFO_DELETE = "<task_ID>";
+	
+	//Log Message
+	private static final String LOG_NUMBERFORMATEXCEPTIOM = "Warning: Task ID parameter is not an integer";
 
+	// Variable constant
+	private static final int INVALID_TASKID = -1;
+	
 	/*
 	 * Variables for internal use
 	 */
@@ -90,11 +97,19 @@ public class CmdDelete extends Command {
 	}
 
 	private Task proccessTaskID(String paramTaskID) {
-		_taskID = Integer.parseInt(paramTaskID);
+		assert paramTaskID != null && !paramTaskID.equals("");
+		try{
+			_taskID = Integer.parseInt(paramTaskID);
+		}catch(NumberFormatException e){
+			LogHandler.getLog().log(Level.WARNING, LOG_NUMBERFORMATEXCEPTIOM, e);
+			_taskID = INVALID_TASKID;
+		}
 		return _taskTree.getTask(_taskID);
 	}
 
 	private CommandAction deleteTask(Task task) {
+		assert task != null;
+		
 		_taskTree.remove(task);
 		return new CommandAction(String.format(MSG_TASKDELETED, _task.getName()), true,
 				_taskTree.searchFlag(FLAG_TYPE.NULL));

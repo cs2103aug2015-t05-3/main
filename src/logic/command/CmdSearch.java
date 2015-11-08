@@ -76,11 +76,14 @@ public class CmdSearch extends Command {
 	}
 
 	private List<Task> getTaskList(String keyword) {
+		assert keyword != null && !keyword.equals("");
 		return _taskTree.searchName(keyword);
 	}
 
 	private String getOutputMsg(List<Task> taskList) {
 
+		assert taskList != null;
+		
 		// Case 1 : List isEmpty
 		if (taskList.isEmpty()) {
 			return String.format(MSG_KEYWORD_NOTFOUND, _keyword);
