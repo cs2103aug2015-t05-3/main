@@ -11,6 +11,7 @@ import taskCollections.Task.PRIORITY_TYPE;
 import taskCollections.comparators.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Provides methods for storing and manipulating {@code Task} via
@@ -42,6 +43,7 @@ public class TaskTree {
 
 	// For managing comparable argument during query
 	private static Task fromValueHandler;
+	private static final long EARLIEST_START_TIME = 1;
 
 	private final String TO_STRING_OPEN = "[";
 	private final String TO_STRING_CLOSE = "]";
@@ -722,6 +724,22 @@ public class TaskTree {
 	 */
 	public int size() {
 		return _taskTreeSize;
+	}
+
+	public int getStartTimeRangeCount(long startTime, long endTime) {
+		return queryEndTime(startTime, endTime).size();
+	}
+
+	public int getEndTimeRangeCount(long startTime, long endTime) {
+		return queryEndTime(startTime, endTime).size();
+	}
+
+	public int getFlagCount(FLAG_TYPE flagType) {
+		return searchFlag(flagType).size();
+	}
+
+	public int getPriorityCount(PRIORITY_TYPE priortyType) {
+		return searchPriority(priortyType).size();
 	}
 
 	private void increaseTaskListSize() {
