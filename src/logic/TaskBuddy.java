@@ -18,6 +18,7 @@ import util.TimeUtil;
 import parser.LanguageProcessor;
 import storage.SettingsFileHandler;
 import taskCollections.Task;
+import taskCollections.TaskTree;
 
 public class TaskBuddy {
 	
