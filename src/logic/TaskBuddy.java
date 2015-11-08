@@ -35,6 +35,7 @@ public class TaskBuddy {
 	private static Logger log;
 	private static LanguageProcessor lp;
 	private static String taskFileName;
+	private static TaskTree taskTree;
 
 	public static void main(String[] args) {
 		
@@ -57,8 +58,8 @@ public class TaskBuddy {
 		}
 		UIHelper.setDate(TimeUtil.getUIFormattedDate(System.currentTimeMillis()));
 		initTaskFile();
-		System.out.println(taskFileName);
-		Command.init(taskFileName);
+		initTaskTree(taskFileName);
+		Command.init();
 		initTasks();
 	}
 	
@@ -82,6 +83,10 @@ public class TaskBuddy {
 		taskFileName = settings.getTaskFile();
 	}
 	
+	private static void initTaskTree(String filePath) {
+		taskTree = TaskTree.newTaskTree(filePath);
+	}
+	
 	private static void initLog(){
 		log = Logger.getLogger("log");
 		try {
@@ -95,6 +100,7 @@ public class TaskBuddy {
 	
 	private static void runCommands(){
 		do{
+			setUITasksCount();
 			String in = getInput();
 			Command toExecute = lp.resolveCmd(in);
 			if(toExecute == null){
@@ -107,6 +113,10 @@ public class TaskBuddy {
 			}*/
 			resolveCmdAction(toExecute.execute(), toExecute);
 		} while (true);
+	}
+	
+	private static void setUITasksCount() {
+	  
 	}
 	
 	private static void resolveCmdAction(CommandAction action, Command executed){
