@@ -7,6 +7,11 @@ import java.util.logging.Logger;
 
 public class LogHandler {
 
+	// Logger String Constants
+	public static final String LOG_ENTRY = "ENTRY";
+	public static final String LOG_EXIT = "RETURN";
+
+	// Logger file format
 	private static final String LOG_TAG = "log_dev";
 	private static final String LOG_FILE_NAME = LOG_TAG + ".log";
 	private static final String LOG_MESSAGE_FORMAT = "%s: %s";
