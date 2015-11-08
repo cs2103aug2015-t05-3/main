@@ -64,6 +64,8 @@ public class CmdList extends Command {
 	}
 
 	private boolean isEmptyTaskList() {
+		assert _taskTree != null;
+		
 		if (_taskTree.size() == EMPTY_LIST) {
 			return true;
 		} else {
@@ -72,10 +74,12 @@ public class CmdList extends Command {
 	}
 
 	private List<Task> getUndoneTask() {
+		assert _taskTree != null;
 		return _taskTree.searchFlag(FLAG_TYPE.NULL);
 	}
 
 	private List<Task> getDoneTask() {
+		assert _taskTree != null;
 		return _taskTree.searchFlag(FLAG_TYPE.DONE);
 	}
 
@@ -99,12 +103,14 @@ public class CmdList extends Command {
 				priorityType = PRIORITY_TYPE.NORMAL;
 				break;
 		}
-
+		
+		assert _taskTree != null;
 		return _taskTree.searchPriority(priorityType);
 
 	}
 
 	private List<Task> getAllTask() {
+		assert _taskTree != null;
 		return _taskTree.getList();
 	}
 

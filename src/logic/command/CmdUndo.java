@@ -42,6 +42,9 @@ public class CmdUndo extends Command {
 	}
 
 	private CommandAction undoCommand(Command toUndo) {
+		
+		assert toUndo != null;
+		
 		CommandAction undoCommandAction = toUndo.undo();
 		return new CommandAction(undoCommandAction.getOutput(), false, undoCommandAction.getTaskList());
 	}
