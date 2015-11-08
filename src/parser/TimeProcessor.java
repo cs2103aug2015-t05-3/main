@@ -27,7 +27,8 @@ public class TimeProcessor {
 	/*
 	 * Constants
 	 */
-	public static final long TIME_INVALID = 0;
+	public static final long TIME_NOTSPECIFIED = 0;
+	public static final long TIME_INVALIDFORMAT = -1;
 	private static SimpleDateFormat sdf;
 	private static final String[] PATTERN_IN_TIME = {"hha","HHmm"};
 	private static final String[] PATTERN_IN_DAY = {"Ehha","EEEEhha","EHHmm","EEEEHHmm"};
@@ -42,9 +43,9 @@ public class TimeProcessor {
 	private static final String FORMAT_YTD = "Ytd %1$s";
 	private static final String FORMAT_NEXTWEEK = "Next %1$s";
 	private static final String FORMAT_LASTWEEK = "Last %1$s";
-	private static final String FORMAT_ENDDATE = "By %1$s (%2$s)";
-	private static final String FORMAT_DUEIN = "In %1$s day(s)";
-	private static final String FORMAT_OVERDUE = "%1$s day(s) ago";
+	private static final String FORMAT_ENDDATE = "By %1$s %2$s";
+	private static final String FORMAT_DUEIN = "(In %1$s day(s))";
+	private static final String FORMAT_OVERDUE = "(%1$s day(s) ago)";
 	private static final String FORMAT_STARTENDDATE = "%1$s to %2$s";
 	/*
 	 * Variables
@@ -65,15 +66,15 @@ public class TimeProcessor {
 	public long resolveTime(String time){
 		time = time.replaceAll("\\s|,|/", ""); // Remove whitespaces and commas and slash
 		
-		if(time.equals(TIME_INVALID)){
-			return TIME_INVALID;
+		if(time.equals(TIME_NOTSPECIFIED)){
+			return TIME_NOTSPECIFIED;
 		}
 		
 		for(String pattern : PATTERN_IN_DATE){
 			sdf.applyPattern(pattern);
 			try{
 				temp.setTime(sdf.parse(time));
-				System.out.println("year");
+				System.out.println("year  "+pattern+"   "+time);
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }
 		}
@@ -83,7 +84,7 @@ public class TimeProcessor {
 			try{
 				temp.setTime(sdf.parse(time));
 				temp.set(Calendar.YEAR,now.get(Calendar.YEAR));
-				System.out.println("month");
+				System.out.println("month    "+pattern+"   "+time);
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }
 		}
@@ -101,11 +102,10 @@ public class TimeProcessor {
 					temp.add(Calendar.DAY_OF_YEAR, 1);
 				} while(temp.get(Calendar.DAY_OF_WEEK) != day);
 				temp.set(Calendar.HOUR_OF_DAY, hour);
-				System.out.println(hour +" "+min);
 				temp.set(Calendar.MINUTE, min);
 				temp.set(Calendar.SECOND, 0);
 				temp.set(Calendar.MILLISECOND, 0);
-				System.out.println("day");
+				System.out.println("day   "+pattern+"   "+time);
 				
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }
@@ -120,12 +120,17 @@ public class TimeProcessor {
 				temp.set(Calendar.MINUTE, dtime.getMinutes());
 				temp.set(Calendar.SECOND, 0);
 				temp.set(Calendar.MILLISECOND, 0);
-				System.out.println("time");
+				System.out.println("time   "+pattern+"   "+time);
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }
 		}
 		
-		return TIME_INVALID;
+		return TIME_INVALIDFORMAT;
+	}
+	
+	private String padZeros(String date){
+		String dateRemove = "\\s|,|/";
+		return "";
 	}
 	
 	public String getFormattedDate(long endTime){
