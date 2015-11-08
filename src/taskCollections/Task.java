@@ -78,7 +78,6 @@ public class Task implements Comparable<Task> {
 	private final static String TO_STRING_START = "";
 	private final static String TO_STRING_END = "";
 
-
 	private int id;
 	private String name;
 	private String description;
@@ -106,9 +105,6 @@ public class Task implements Comparable<Task> {
 	 * @param priority
 	 *            the given priority field;
 	 *
-	 * @deprecated Use {@code Task} constructor that support a description
-	 *             instead
-	 *
 	 */
 	public Task(String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		this(name, EMPTY_STRING, startTime, endTime, flag, priority);
@@ -135,9 +131,6 @@ public class Task implements Comparable<Task> {
 	 *            this flag.
 	 * @param priority
 	 *            the given priority field;
-	 *
-	 * @deprecated Use {@code Task} constructor that support a description
-	 *             instead
 	 *
 	 */
 	public Task(int id, String name, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
@@ -167,6 +160,9 @@ public class Task implements Comparable<Task> {
 	 *            this flag.
 	 * @param priority
 	 *            the given priority field;
+	 *
+	 * @deprecated Description field is deprecated. Use the original
+	 *             constructor without description instead.
 	 *
 	 */
 	public Task(int id, String name, String description, long startTime, long endTime, FLAG_TYPE flag,
@@ -207,6 +203,9 @@ public class Task implements Comparable<Task> {
 	 * @param priority
 	 *            the given priority field;
 	 *
+	 * @deprecated Description field will be deprecated. Use the original
+	 *             constructor without description instead.
+	 *
 	 */
 	public Task(String name, String description, long startTime, long endTime, FLAG_TYPE flag, PRIORITY_TYPE priority) {
 		this.id = taskNumber++;
@@ -219,7 +218,8 @@ public class Task implements Comparable<Task> {
 	}
 
 	static Task getVirtualTask() {
-		Task temp = new Task(taskNumber, EMPTY_STRING, EMPTY_STRING, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL);
+		Task temp = new Task(taskNumber, EMPTY_STRING, EMPTY_STRING, DATE_NULL, DATE_NULL, FLAG_TYPE.NULL,
+				PRIORITY_TYPE.NORMAL);
 		taskNumber--;
 		return temp;
 	}
@@ -246,6 +246,7 @@ public class Task implements Comparable<Task> {
 	 * Returns the name of this task in {@code String}.
 	 *
 	 * @return the description of this task.
+	 * @deprecated Description field is deprecated.
 	 */
 	public String getDescription() {
 		return description;
@@ -313,6 +314,7 @@ public class Task implements Comparable<Task> {
 	 *
 	 * @param description
 	 *            the new description for the task.
+	 * @deprecated Description field is deprecated.
 	 */
 	void setDescription(String description) {
 		this.description = description;
@@ -485,16 +487,16 @@ public class Task implements Comparable<Task> {
 	}
 
 	/**
-	 * Compares the starting and ending time of this {@code Task} instance with another.
+	 * Compares the starting and ending time of this {@code Task} instance with
+	 * another.
 	 *
 	 * @param rhs
 	 *            a {@code Task} to be compared with this {@code Task}
 	 *
-	 * @return the value 0 if the time of this {@code Task} is equal to
-	 *         the argument {@code Task}; a value less than 0 if this
-	 *         time is numerically less than the argument time; a value
-	 *         greater than 0 this time is numerically greater than the
-	 *         argument time.
+	 * @return the value 0 if the time of this {@code Task} is equal to the
+	 *         argument {@code Task}; a value less than 0 if this time is
+	 *         numerically less than the argument time; a value greater than 0
+	 *         this time is numerically greater than the argument time.
 	 */
 	public int compareTimeTo(Task rhs) {
 
@@ -586,18 +588,14 @@ public class Task implements Comparable<Task> {
 	 * @return a string representation of this task in the format such as:
 	 *
 	 *         <pre>
-	 *         name | description | startTime | endTime | flag | priority
+	 *         name | startTime | endTime | flag | priority
 	 *         </pre>
 	 */
 	@Override
 	public String toString() {
-		return TO_STRING_START + id +
-		   TO_STRING_DELIMETER + name +
-		   TO_STRING_DELIMETER + description +
-		   TO_STRING_DELIMETER + startTime +
-		   TO_STRING_DELIMETER + endTime +
-		   TO_STRING_DELIMETER + flag +
-		   TO_STRING_DELIMETER + priority +
-		   TO_STRING_END;
+		return TO_STRING_START + id + TO_STRING_DELIMETER + name
+				+ TO_STRING_DELIMETER + startTime + TO_STRING_DELIMETER + endTime
+				+ TO_STRING_DELIMETER + flag
+				+ TO_STRING_DELIMETER + priority + TO_STRING_END;
 	}
 }

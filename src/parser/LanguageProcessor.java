@@ -30,6 +30,7 @@ public class LanguageProcessor{
 	private static final String LOG_MSG_INVALIDCMD = "Invalid command";
 	private static final String LOG_MSG_NOPARAM = "No parameters given";
 	private static final String REGEX_LIMIT = ParserConstants.DELIMITER_TOKEN + "\\w+";
+	private static final String FIELD_INVALID = "";
 
 	private String getTaskName(String userCmd) {
 		String taskName = StringUtil.getStringAfter(userCmd,"",REGEX_LIMIT);
@@ -43,13 +44,13 @@ public class LanguageProcessor{
 	}
 
 	private String getTaskID(String userCmd){
-		String id = StringUtil.getFirstNumber(userCmd);
+		String id = StringUtil.getFirstWord(userCmd);
 		if(id != null){
 			try{
 				Integer.parseInt(id);
 				return id;
 			} catch (NumberFormatException e){
-				return null;
+				return FIELD_INVALID;
 			}
 		}
 		return null;
@@ -121,6 +122,8 @@ public class LanguageProcessor{
 			return CmdParameters.PARAM_VALUE_LIST_DONE;
  		} else if (userCmd.contains(ParserConstants.TASK_SPECIFIER_PRIORITY)){
  			return CmdParameters.PARAM_VALUE_LIST_PRIORITY;
+ 		} else if (!userCmd.isEmpty()){
+ 			return FIELD_INVALID;
  		} else {
  			return null;
  		}
@@ -161,7 +164,7 @@ public class LanguageProcessor{
 		for (String requiredField : toExecute.getRequiredFields()) {
 			String paramValue = extractParameter(requiredField, param);
 			System.out.println(requiredField+": "+paramValue);
-			if(paramValue == null){ // Invalid command since required fields arent available
+			if(paramValue == null || paramValue.equals(FIELD_INVALID)){ // Invalid command since required fields arent available
 				return null;
 			}
 			toExecute.setParameter(requiredField, paramValue);
@@ -170,6 +173,9 @@ public class LanguageProcessor{
 			String paramValue = extractParameter(optionalField, param);
 			System.out.println(optionalField+": "+paramValue);
 			if(paramValue != null){
+				if(paramValue.equals(FIELD_INVALID)){// Invalid command since a field is misused
+					return null;
+				}
 				toExecute.setParameter(optionalField, paramValue);
 			}
 		}
@@ -227,15 +233,10 @@ public class LanguageProcessor{
 			return null;
 		}
 		long time = timeP.resolveTime(timeS);
+		if(time == TimeProcessor.TIME_INVALIDFORMAT){
+			return FIELD_INVALID;
+		}
 		return Long.toString(time);
 	}
-	/*
-	private boolean isID(String id){
-		try{
-			Integer.parseInt(id);
-			return true;
-		} catch (NumberFormatException e){
-			return false;
-		}
-	}*/
+
 }

@@ -1,7 +1,6 @@
 package ui;
 
 import java.io.IOException;
-import java.util.logging.Level;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -26,7 +25,6 @@ public class UI extends Application {
 	// Message String constants
 	private static final String ERR_LOADING_FILE = "Error loading UI: ";
 	private static final String APP_TITLE = "TaskBuddy";
-	private static final String METHOD_START = "start";
 
 	private static UIController uIController;
 	private static UIHelpOverlayController uIHelpOverlayController;
@@ -41,8 +39,7 @@ public class UI extends Application {
 	@Override
 	public void start(Stage uiMainstage) {
 
-		LogHandler.getLog().finer("ENTRY");
-		LogHandler.getLog().entering(getClass().toString(), METHOD_START);
+		LogHandler.getLog().finer(LogHandler.LOG_ENTRY);
 
 		uIHelpStage = new Stage();
 
@@ -69,7 +66,7 @@ public class UI extends Application {
 
 			isInitialised = true;
 
-			LogHandler.getLog().exiting(getClass().toString(), METHOD_START);
+			LogHandler.getLog().finer(LogHandler.LOG_EXIT);
 
 		} catch (IOException e) {
 			String msg = String.format(ERR_LOADING_FILE, e);

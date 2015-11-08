@@ -11,6 +11,7 @@ import taskCollections.Task.PRIORITY_TYPE;
 import taskCollections.comparators.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Provides methods for storing and manipulating {@code Task} via
@@ -46,7 +47,6 @@ public class TaskTree {
 	private final String TO_STRING_OPEN = "[";
 	private final String TO_STRING_CLOSE = "]";
 	private final String TO_STRING_DELIMETER = ",";
-	private final String CHECK_STRING_CONCATOR = " ";
 
 	// Prevent instantiation of this constructor
 	private TaskTree() {
@@ -206,6 +206,7 @@ public class TaskTree {
 	 *            to update this task
 	 * @return true if this {@code TaskTree} contained the task and can be
 	 *         modified
+	 * @deprecated Description field is deprecated.
 	 */
 	public void updateDescription(Task task, String newValue) {
 		task.setDescription(newValue);
@@ -378,14 +379,13 @@ public class TaskTree {
 		}
 
 		boolean isCaseInsensitive = checkLowercase(searchTerm);
-		String checkNameString, checkDescString;
+		String checkNameString;
 		String checkString;
 
 		for (Task task : _taskTrees.get(TASK_NAME_TREE)) {
 
 			checkNameString = task.getName();
-			checkDescString = task.getDescription();
-			checkString = checkNameString + CHECK_STRING_CONCATOR + checkDescString;
+			checkString = checkNameString;
 
 			if (isCaseInsensitive) {
 				checkString = checkString.toLowerCase();
@@ -579,7 +579,8 @@ public class TaskTree {
 	 *
 	 * @param id
 	 *            to get
-	 * @return a task from this {@code TaskTree} via its ID if found; otherwise null.
+	 * @return a task from this {@code TaskTree} via its ID if found; otherwise
+	 *         null.
 	 *
 	 * @see taskCollections.Task
 	 *
@@ -722,6 +723,22 @@ public class TaskTree {
 	 */
 	public int size() {
 		return _taskTreeSize;
+	}
+
+	public int getStartTimeRangeCount(long startTime, long endTime) {
+		return queryEndTime(startTime, endTime).size();
+	}
+
+	public int getEndTimeRangeCount(long startTime, long endTime) {
+		return queryEndTime(startTime, endTime).size();
+	}
+
+	public int getFlagCount(FLAG_TYPE flagType) {
+		return searchFlag(flagType).size();
+	}
+
+	public int getPriorityCount(PRIORITY_TYPE priortyType) {
+		return searchPriority(priortyType).size();
 	}
 
 	private void increaseTaskListSize() {

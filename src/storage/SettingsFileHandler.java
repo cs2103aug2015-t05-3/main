@@ -37,7 +37,7 @@ public class SettingsFileHandler {
 	}
 
 	/**
-	 * Retrieves location of tasks.xml if settings file is present.
+	 * Retrieves location of tasks file if settings file is present.
 	 * @return 
 	 * 		true if settings file is found and location is proper. 
 	 * 		false otherwise
