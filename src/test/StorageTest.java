@@ -80,19 +80,19 @@ public class StorageTest {
 		long t3Start = TimeUtil.getLongTime("Saturday: 31/10/15 12:00 GMT+0800");
 		long t3End = TimeUtil.getLongTime("Saturday: 31/10/15 20:05 GMT+0800");
 
-		checker.add(new Task(0, "Buy Milk from Supermarket", "", t0Start, t0End, FLAG_TYPE.DONE, PRIORITY_TYPE.NORMAL));
-		checker.add(new Task(1, "CS2103T Surprise Quiz", "", t1Start, t1End, FLAG_TYPE.NULL, PRIORITY_TYPE.HIGH));
+		checker.add(new Task(0, "Buy Milk from Supermarket", t0Start, t0End, FLAG_TYPE.DONE, PRIORITY_TYPE.NORMAL));
+		checker.add(new Task(1, "CS2103T Surprise Quiz", t1Start, t1End, FLAG_TYPE.NULL, PRIORITY_TYPE.HIGH));
 		checker.add(
-				new Task(2, "Delete the Task Program", "", t2Start, t2End, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL));
-		checker.add(new Task(3, "Run Around the Campus 10 Times", "", t3Start, t3End, FLAG_TYPE.NULL,
+				new Task(2, "Delete the Task Program", t2Start, t2End, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL));
+		checker.add(new Task(3, "Run Around the Campus 10 Times", t3Start, t3End, FLAG_TYPE.NULL,
 				PRIORITY_TYPE.LOW));
-		checker.add(new Task(4, "this task", "", 0, 0, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL));
+		checker.add(new Task(4, "this task", 0, 0, FLAG_TYPE.NULL, PRIORITY_TYPE.NORMAL));
 		assertEquals(checker, taskList);
 	}
 
 	@Test
 	public void testAtAdd() {
-		Task t = new Task(5, "New Task Added for JUnit Testing", "", 0, 0, FLAG_TYPE.DONE, PRIORITY_TYPE.NORMAL);
+		Task t = new Task(5, "New Task Added for JUnit Testing", 0, 0, FLAG_TYPE.DONE, PRIORITY_TYPE.NORMAL);
 		taskFH.add(t);
 		assertEquals(getCheckSum("tasksAdd.xml"), getCheckSum("tasks.xml"));
 	}
@@ -102,7 +102,7 @@ public class StorageTest {
 	public void testUpdateAndDelete() {
 		long t3Start = TimeUtil.getLongTime("Saturday: 31/10/15 12:00 GMT+0800");
 		long t3End = TimeUtil.getLongTime("Saturday: 31/10/15 20:05 GMT+0800");
-		Task t = new Task(3, "Run Around the Campus 100000 Times", "", t3Start, t3End, FLAG_TYPE.NULL,
+		Task t = new Task(3, "Run Around the Campus 100000 Times", t3Start, t3End, FLAG_TYPE.NULL,
 				PRIORITY_TYPE.LOW);
 		taskFH.update(t);
 		assertEquals(getCheckSum("tasksUpdate.xml"), getCheckSum("tasks.xml"));
