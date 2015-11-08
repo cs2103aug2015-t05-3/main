@@ -73,15 +73,15 @@ public class LogHandler {
 	}
 
 	private static void initLog() {
+		log = Logger.getLogger(LOG_TAG);
+		log.setLevel(LOGGING_LEVEL);
+
 		try {
 			FileHandler logFile = new FileHandler(LOG_FILE_NAME, IS_APPENDING);
 			LogFormatter formatter = new LogFormatter();
 			logFile.setFormatter(formatter);
-
-			log = Logger.getLogger(LOG_TAG);
 			log.addHandler(logFile);
-			log.setLevel(LOGGING_LEVEL);
-		} catch (SecurityException | IOException e) {
+		} catch (IOException | SecurityException e) {
 			log.severe(String.format(LOG_MESSAGE_FORMAT, APP_NAME, e));
 		}
 	}
