@@ -1,7 +1,4 @@
-/**
- * Attempts to retrieve the list of commands that will be utilized.
- * @author Zander Chai
- */
+//@@author A0076510M
 
 
 package storage;
@@ -105,6 +102,7 @@ public class CommandFileHandler {
 		return check;
 	}
 	
+	//@@author A0076510M-reused
 	private boolean fileCopyFromResource(String newFileStr) {
 		assert newFileStr != null;
 		assert !newFileStr.isEmpty();
@@ -134,7 +132,7 @@ public class CommandFileHandler {
 				return false;
 			}
 	}
-	
+	//@@author A0076510M
 	/**
 	 * Retrieves and returns the command mappings.
 	 * @return the mapping of commands in HashMap.
@@ -173,19 +171,4 @@ public class CommandFileHandler {
 			}
 		}
 	}
-	
-	/*
-	public static void main(String args[]) {
-		CommandFileHandler h = new CommandFileHandler();
-		
-		boolean isSuccess = h.loadCommandFile("commands.xml");
-		
-		while (!isSuccess) {
-			isSuccess = h.generateCommandFile("commands.xml");
-		}
-		
-		System.out.println("Done");
-		HashMap<String, String> cmdTable = h.getCmdTable();
-	}
-	*/
 }

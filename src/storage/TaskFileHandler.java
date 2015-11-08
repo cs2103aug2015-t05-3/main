@@ -1,3 +1,4 @@
+//@@author A0076510M
 package storage;
 
 import java.io.File;
@@ -379,7 +380,7 @@ public class TaskFileHandler {
 		}
 		genXML();
 	}
-
+	//@@author A0076510M-reused
 	/**
 	 * Remove text nodes that are used for indentation.
 	 * 
@@ -401,6 +402,7 @@ public class TaskFileHandler {
 		}
 	}
 
+	//@@author A0076510M
 	private String retrieveElement(Element e, String s) {
 		return e.getElementsByTagName(s).item(0).getTextContent();
 	}
@@ -431,17 +433,4 @@ public class TaskFileHandler {
 		}
 
 	}
-
-	/*
-	public static void main(String[] args) {
-		TaskFileHandler runT = new TaskFileHandler("tasks.xml");
-		//Task t = new Task("Delete the Task Program", 0L, 0L, FLAG_TYPE.NULL, PRIORITY_TYPE.VERY_HIGH);
-		//runT.update(t);
-		//runT.add();
-		//runT.genXML();
-		//runT.delete();
-		//runT.genXML();
-		//runT.display();
-	}
-	*/
 }

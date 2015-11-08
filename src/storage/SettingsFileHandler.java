@@ -1,3 +1,5 @@
+//@@author A0076510M
+
 package storage;
 
 import java.io.BufferedReader;
@@ -85,6 +87,7 @@ public class SettingsFileHandler {
 		try {
 			PrintWriter pw = new PrintWriter(_fileName);
 			_taskFileLocation = taskFileLocation;
+			pw.println(FILE_PATH_TEXT + _taskFileLocation);
 			pw.close();
 			return true;
 		} catch (FileNotFoundException e) {

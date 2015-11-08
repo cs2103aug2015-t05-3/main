@@ -1,3 +1,4 @@
+//@@author A0076510M
 package test;
 
 import static org.junit.Assert.assertEquals;
@@ -110,7 +111,7 @@ public class StorageTest {
 		taskFH.delete(4);
 		assertEquals(getCheckSum("tasksDelete.xml"), getCheckSum("tasks.xml"));
 	}	
-
+	//@@author A0076510M-reused
 	public String getCheckSum(String file) {
 		
 		StringBuffer sb1 = null;

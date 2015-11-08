@@ -96,21 +96,21 @@ public class UIController implements Initializable {
 	// UI Controller attributes
 	private static UI uI;
 	private static UIController uIController;
-	private List<Task> _floatingTaskList;
-	private List<Task> _nonFloatingTaskList;
+	private List<Task> floatingTaskList;
+	private List<Task> nonFloatingTaskList;
 	private ArrayList<String> inputBuffer = new ArrayList<>();
 	ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
 
 
-	private LinkedList<String> _leftList;
-	private LinkedList<String> _rightList;
-	private String _holyBuffer;
+	private LinkedList<String> leftList;
+	private LinkedList<String> rightList;
+	private String cmdHistoryBuffer;
 
 	public UIController() {
-		_holyBuffer = EMPTY_STRING;
-		_leftList = new LinkedList<String>();
-		_rightList = new LinkedList<String>();
+		cmdHistoryBuffer = EMPTY_STRING;
+		leftList = new LinkedList<String>();
+		rightList = new LinkedList<String>();
 	}
 
 	static UIController getUIController() {
@@ -134,10 +134,14 @@ public class UIController implements Initializable {
 		doneCount.setText(EMPTY_STRING);
 
 		// Table
-		idTimed.setCellValueFactory(new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
-		taskTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
-		sDate.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
-		tableTimed.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
+		idTimed.setCellValueFactory(
+				new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
+		taskTimed.setCellValueFactory(
+				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
+		sDate.setCellValueFactory(
+				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
+		tableTimed.setRowFactory(
+				new Callback<TableView<UITask>, TableRow<UITask>>() {
 			@Override
 			public TableRow<UITask> call(TableView<UITask> tableView) {
 				final TableRow<UITask> row = new TableRow<UITask>() {
@@ -152,9 +156,12 @@ public class UIController implements Initializable {
 			}
 		});
 
-		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
-		taskFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
-		tableFloat.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
+		idFloat.setCellValueFactory(
+				new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
+		taskFloat.setCellValueFactory(
+				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
+		tableFloat.setRowFactory(
+				new Callback<TableView<UITask>, TableRow<UITask>>() {
 
 			@Override
 			public TableRow<UITask> call(TableView<UITask> tableView) {
@@ -178,7 +185,8 @@ public class UIController implements Initializable {
 		// Command help tips listener
 		input.textProperty().addListener(new ChangeListener<String>() {
 			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+			public void changed(ObservableValue<? extends String> observable, 
+					String oldValue, String newValue) {
 				processSyntaxMessage(oldValue, newValue);
 			}
 		});
@@ -337,14 +345,14 @@ public class UIController implements Initializable {
 	}
 
 	private void separateTaskList(List<Task> taskList) {
-		_floatingTaskList = new ArrayList<Task>();
-		_nonFloatingTaskList = new ArrayList<Task>();
+		floatingTaskList = new ArrayList<Task>();
+		nonFloatingTaskList = new ArrayList<Task>();
 
 		for (Task task : taskList) {
 			if (isFloating(task)) {
-				_floatingTaskList.add(task);
+				floatingTaskList.add(task);
 			} else {
-				_nonFloatingTaskList.add(task);
+				nonFloatingTaskList.add(task);
 			}
 		}
 	}
@@ -354,16 +362,19 @@ public class UIController implements Initializable {
 	}
 
 	private void sortSeparatedList() {
-		Collections.sort(_floatingTaskList, new taskCollections.comparators.PriorityComparator());
-		Collections.sort(_nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
+		Collections.sort(floatingTaskList, 
+				new taskCollections.comparators.PriorityComparator());
+		Collections.sort(nonFloatingTaskList, 
+				new taskCollections.comparators.TimeComparator());
 	}
 
 	private void displayTables() {
-		displayTable(tableTimed, dataTimed, _nonFloatingTaskList);
-		displayTable(tableFloat, dataFloat, _floatingTaskList);
+		displayTable(tableTimed, dataTimed, nonFloatingTaskList);
+		displayTable(tableFloat, dataFloat, floatingTaskList);
 	}
 
-	private void displayTable(TableView<UITask> tableView, ObservableList<UITask> dataList, List<Task> taskList) {
+	private void displayTable(TableView<UITask> tableView, 
+			ObservableList<UITask> dataList, List<Task> taskList) {
 
 		dataList.clear();
 		for (Task t : taskList) {
@@ -389,15 +400,15 @@ public class UIController implements Initializable {
 	private void addToLists(String in) {
 
 		if (!in.isEmpty()) {
-			if (!_holyBuffer.equals(EMPTY_STRING)) {
-				_leftList.offerLast(_holyBuffer);
-				_holyBuffer = EMPTY_STRING;
+			if (!cmdHistoryBuffer.equals(EMPTY_STRING)) {
+				leftList.offerLast(cmdHistoryBuffer);
+				cmdHistoryBuffer = EMPTY_STRING;
 			}
 
-			while (!_rightList.isEmpty()) {
-				_leftList.offerLast(_rightList.removeFirst());
+			while (!rightList.isEmpty()) {
+				leftList.offerLast(rightList.removeFirst());
 			}
-			_leftList.offerLast(in);
+			leftList.offerLast(in);
 		}
 	}
 
@@ -405,30 +416,30 @@ public class UIController implements Initializable {
 
 		switch (keyEvent.getCode()) {
 			case UP:
-				if (!_holyBuffer.equals(EMPTY_STRING) && !_leftList.isEmpty()) {
-					_rightList.offerFirst(_holyBuffer);
-					_holyBuffer = EMPTY_STRING;
+				if (!cmdHistoryBuffer.equals(EMPTY_STRING) && !leftList.isEmpty()) {
+					rightList.offerFirst(cmdHistoryBuffer);
+					cmdHistoryBuffer = EMPTY_STRING;
 				}
 
-				if (!_leftList.isEmpty()) {
+				if (!leftList.isEmpty()) {
 					String history;
-					history = _leftList.pollLast();
-					_holyBuffer = history;
+					history = leftList.pollLast();
+					cmdHistoryBuffer = history;
 					//_rightList.offerFirst(history);
 					setInput(history);
 				}
 				keyEvent.consume();
 				break;
 			case DOWN:
-				if (!_holyBuffer.equals(EMPTY_STRING)) {
-					_leftList.offerLast(_holyBuffer);
-					_holyBuffer = EMPTY_STRING;
+				if (!cmdHistoryBuffer.equals(EMPTY_STRING)) {
+					leftList.offerLast(cmdHistoryBuffer);
+					cmdHistoryBuffer = EMPTY_STRING;
 				}
 
-				if (!_rightList.isEmpty()) {
+				if (!rightList.isEmpty()) {
 					String history;
-					history = _rightList.pollFirst();
-					_holyBuffer = history;
+					history = rightList.pollFirst();
+					cmdHistoryBuffer = history;
 					//_leftList.offerLast(history);
 					setInput(history);
 				} else {
@@ -471,7 +482,8 @@ public class UIController implements Initializable {
 	}
 
 	private boolean isValidCmd(String input) {
-		return CommandProcessor.getInstance().getEffectiveCmd(input) == null ? false : true;
+		return CommandProcessor.getInstance().
+				getEffectiveCmd(input) == null ? false : true;
 	}
 
 }
