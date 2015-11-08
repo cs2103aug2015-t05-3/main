@@ -117,7 +117,7 @@ public class CmdUpdate extends Command {
 	 * @return a {@code Task} of the specified ID
 	 */
 	private Task processTaskID(String paramTaskID) {
-		assert paramTaskID != null && paramTaskID.equals("");
+		assert paramTaskID != null && !paramTaskID.equals("");
 
 		try {
 			_taskID = Integer.parseInt(paramTaskID);
@@ -277,7 +277,7 @@ public class CmdUpdate extends Command {
 			return false;
 		}
 
-		if (TimeUtil.compareMinTime(newEndTime, newStartTime) > VALID_TIME_COMPARATOR) {
+		if (TimeUtil.compareMinTime(newEndTime, newStartTime) >= VALID_TIME_COMPARATOR) {
 			return false;
 		}
 
