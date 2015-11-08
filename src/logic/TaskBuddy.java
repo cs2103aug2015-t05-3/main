@@ -1,6 +1,6 @@
 /**
  * Start point of the entire program.
- * 
+ *
  * @author Yan Chan Min Oo
  */
 
@@ -8,7 +8,6 @@ package logic;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
@@ -18,12 +17,13 @@ import util.TimeUtil;
 import parser.LanguageProcessor;
 import storage.SettingsFileHandler;
 import taskCollections.Task;
+import taskCollections.Task.FLAG_TYPE;
 import taskCollections.TaskTree;
 
 public class TaskBuddy {
-	
+
 	/*
-	 * Constants 
+	 * Constants
 	 */
 	private static final String cmdFileName = "commands.xml";
 	private static final String logFileName = "log.log";
@@ -39,14 +39,14 @@ public class TaskBuddy {
 	private static TaskTree taskTree;
 
 	public static void main(String[] args) {
-		
+
 		// Initialise all the variables
 		init();
-		
+
 		// (Loop) Execute commands
 		runCommands();
 	}
-	
+
 	/**
 	 * Initialises all the necessary variables
 	 */
@@ -63,10 +63,10 @@ public class TaskBuddy {
 		Command.init();
 		initTasks();
 	}
-	
+
 	private static void initTasks(){
 		// Run list: TODO change implementation
-		
+
 		Command list = new CmdList();
 		resolveCmdAction(list.execute(), list);
 	}
@@ -83,11 +83,11 @@ public class TaskBuddy {
 		}
 		taskFileName = settings.getTaskFile();
 	}
-	
+
 	private static void initTaskTree(String filePath) {
 		taskTree = TaskTree.newTaskTree(filePath);
 	}
-	
+
 	private static void initLog(){
 		log = Logger.getLogger("log");
 		try {
@@ -98,7 +98,7 @@ public class TaskBuddy {
 			log.severe("TaskBuddy: " + e);
 		}
 	}
-	
+
 	private static void runCommands(){
 		do{
 			setUITasksCount();
@@ -108,22 +108,25 @@ public class TaskBuddy {
 				UIHelper.setOutputMsg(MSG_INVALIDCMD);
 				continue;
 			}
-			/*UIHelper.appendOutput(toExecute.execute().getOutput());
-			if(toExecute.isUndoable()){
-				Command.addHistory(toExecute);
-			}*/
+
 			resolveCmdAction(toExecute.execute(), toExecute);
 		} while (true);
 	}
-	
+
 	private static void setUITasksCount() {
-	  
+		int doneCount = taskTree.getFlagCount(FLAG_TYPE.DONE);
+		int pendingCount = taskTree.size() - doneCount;
+		int overdueCount = taskTree.getOverdueCount();
+
+		UIHelper.setDoneCount(doneCount);
+		UIHelper.setPendingCount(pendingCount);
+		UIHelper.setOverdueCount(overdueCount);
 	}
-	
+
 	private static void resolveCmdAction(CommandAction action, Command executed){
 		String outputMsg = action.getOutput();
 		List<Task> tasksToDisplay = action.getTaskList();
-		
+
 		if(outputMsg != null){
 			UIHelper.setOutputMsg(outputMsg);
 		}
@@ -134,7 +137,7 @@ public class TaskBuddy {
 			Command.addHistory(executed);
 		}
 	}
-	
+
 	private static String getInput(){
 		return UIHelper.getUserInput();
 	}

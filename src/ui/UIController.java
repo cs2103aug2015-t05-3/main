@@ -102,7 +102,6 @@ public class UIController implements Initializable {
 	ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
 
-
 	private LinkedList<String> leftList;
 	private LinkedList<String> rightList;
 	private String cmdHistoryBuffer;
@@ -134,14 +133,10 @@ public class UIController implements Initializable {
 		doneCount.setText(EMPTY_STRING);
 
 		// Table
-		idTimed.setCellValueFactory(
-				new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
-		taskTimed.setCellValueFactory(
-				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
-		sDate.setCellValueFactory(
-				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
-		tableTimed.setRowFactory(
-				new Callback<TableView<UITask>, TableRow<UITask>>() {
+		idTimed.setCellValueFactory(new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
+		taskTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
+		sDate.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
+		tableTimed.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
 			@Override
 			public TableRow<UITask> call(TableView<UITask> tableView) {
 				final TableRow<UITask> row = new TableRow<UITask>() {
@@ -156,12 +151,9 @@ public class UIController implements Initializable {
 			}
 		});
 
-		idFloat.setCellValueFactory(
-				new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
-		taskFloat.setCellValueFactory(
-				new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
-		tableFloat.setRowFactory(
-				new Callback<TableView<UITask>, TableRow<UITask>>() {
+		idFloat.setCellValueFactory(new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
+		taskFloat.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
+		tableFloat.setRowFactory(new Callback<TableView<UITask>, TableRow<UITask>>() {
 
 			@Override
 			public TableRow<UITask> call(TableView<UITask> tableView) {
@@ -185,8 +177,7 @@ public class UIController implements Initializable {
 		// Command help tips listener
 		input.textProperty().addListener(new ChangeListener<String>() {
 			@Override
-			public void changed(ObservableValue<? extends String> observable, 
-					String oldValue, String newValue) {
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				processSyntaxMessage(oldValue, newValue);
 			}
 		});
@@ -309,18 +300,33 @@ public class UIController implements Initializable {
 	}
 
 	void setDoneCount(int count) {
-		String str = String.format(MSG_COUNT_DONE, count);
-		doneCount.setText(str);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				String str = String.format(MSG_COUNT_DONE, count);
+				doneCount.setText(str);
+			}
+		});
 	}
 
 	void setPendingCount(int count) {
-		String str = String.format(MSG_COUNT_PENDING, count);
-		pendingCount.setText(str);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				String str = String.format(MSG_COUNT_PENDING, count);
+				pendingCount.setText(str);
+			}
+		});
 	}
 
 	void setOverdueCount(int count) {
-		String str = String.format(MSG_COUNT_OVERDUE, count);
-		overdueCount.setText(str);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				String str = String.format(MSG_COUNT_OVERDUE, count);
+				overdueCount.setText(str);
+			}
+		});
 	}
 
 	void showUIHelpOverlay() {
@@ -362,10 +368,8 @@ public class UIController implements Initializable {
 	}
 
 	private void sortSeparatedList() {
-		Collections.sort(floatingTaskList, 
-				new taskCollections.comparators.PriorityComparator());
-		Collections.sort(nonFloatingTaskList, 
-				new taskCollections.comparators.TimeComparator());
+		Collections.sort(floatingTaskList, new taskCollections.comparators.PriorityComparator());
+		Collections.sort(nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
 	}
 
 	private void displayTables() {
@@ -373,8 +377,7 @@ public class UIController implements Initializable {
 		displayTable(tableFloat, dataFloat, floatingTaskList);
 	}
 
-	private void displayTable(TableView<UITask> tableView, 
-			ObservableList<UITask> dataList, List<Task> taskList) {
+	private void displayTable(TableView<UITask> tableView, ObservableList<UITask> dataList, List<Task> taskList) {
 
 		dataList.clear();
 		for (Task t : taskList) {
@@ -415,40 +418,40 @@ public class UIController implements Initializable {
 	public void showHistory(KeyEvent keyEvent) {
 
 		switch (keyEvent.getCode()) {
-			case UP:
-				if (!cmdHistoryBuffer.equals(EMPTY_STRING) && !leftList.isEmpty()) {
-					rightList.offerFirst(cmdHistoryBuffer);
-					cmdHistoryBuffer = EMPTY_STRING;
-				}
+		case UP:
+			if (!cmdHistoryBuffer.equals(EMPTY_STRING) && !leftList.isEmpty()) {
+				rightList.offerFirst(cmdHistoryBuffer);
+				cmdHistoryBuffer = EMPTY_STRING;
+			}
 
-				if (!leftList.isEmpty()) {
-					String history;
-					history = leftList.pollLast();
-					cmdHistoryBuffer = history;
-					//_rightList.offerFirst(history);
-					setInput(history);
-				}
-				keyEvent.consume();
-				break;
-			case DOWN:
-				if (!cmdHistoryBuffer.equals(EMPTY_STRING)) {
-					leftList.offerLast(cmdHistoryBuffer);
-					cmdHistoryBuffer = EMPTY_STRING;
-				}
+			if (!leftList.isEmpty()) {
+				String history;
+				history = leftList.pollLast();
+				cmdHistoryBuffer = history;
+				// _rightList.offerFirst(history);
+				setInput(history);
+			}
+			keyEvent.consume();
+			break;
+		case DOWN:
+			if (!cmdHistoryBuffer.equals(EMPTY_STRING)) {
+				leftList.offerLast(cmdHistoryBuffer);
+				cmdHistoryBuffer = EMPTY_STRING;
+			}
 
-				if (!rightList.isEmpty()) {
-					String history;
-					history = rightList.pollFirst();
-					cmdHistoryBuffer = history;
-					//_leftList.offerLast(history);
-					setInput(history);
-				} else {
-					setInput(EMPTY_STRING);
-				}
-				keyEvent.consume();
-				break;
-			default:
-				break;
+			if (!rightList.isEmpty()) {
+				String history;
+				history = rightList.pollFirst();
+				cmdHistoryBuffer = history;
+				// _leftList.offerLast(history);
+				setInput(history);
+			} else {
+				setInput(EMPTY_STRING);
+			}
+			keyEvent.consume();
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -482,8 +485,7 @@ public class UIController implements Initializable {
 	}
 
 	private boolean isValidCmd(String input) {
-		return CommandProcessor.getInstance().
-				getEffectiveCmd(input) == null ? false : true;
+		return CommandProcessor.getInstance().getEffectiveCmd(input) == null ? false : true;
 	}
 
 }

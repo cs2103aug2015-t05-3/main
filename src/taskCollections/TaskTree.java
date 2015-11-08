@@ -11,7 +11,6 @@ import taskCollections.Task.PRIORITY_TYPE;
 import taskCollections.comparators.*;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Provides methods for storing and manipulating {@code Task} via
@@ -723,6 +722,21 @@ public class TaskTree {
 	 */
 	public int size() {
 		return _taskTreeSize;
+	}
+
+	public int getOverdueCount() {
+
+		long startTime = Task.DATE_START;
+		long endTime = System.currentTimeMillis();
+		ArrayList<Task> overdueTasks = new ArrayList<Task>(queryEndTime(startTime, endTime));
+
+		int overdueCount = 0;
+		for (Task task: overdueTasks) {
+			if (task.getFlag() == FLAG_TYPE.NULL) {
+				overdueCount++;
+			}
+		}
+		return overdueCount;
 	}
 
 	public int getStartTimeRangeCount(long startTime, long endTime) {
