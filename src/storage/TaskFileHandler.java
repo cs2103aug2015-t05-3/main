@@ -215,8 +215,10 @@ public class TaskFileHandler {
 	
 	/**
 	 * Returns an element of specified tag to the new task
-	 * @param s Type of Tag
-	 * @param t Task object
+	 * @param s 
+	 * 			Type of Tag
+	 * @param t 
+	 * 			Task object
 	 * @return Element
 	 */
 	private Element addElement(String s, Task t) {
@@ -335,7 +337,8 @@ public class TaskFileHandler {
 	/**
 	 * Locate and returns the element in the document list
 	 * @param 
-	 * 		id the id number of task entry
+	 * 		id
+	 * 			the id number of task entry
 	 * @return 
 	 * 		the task element with the corresponding id
 	 */

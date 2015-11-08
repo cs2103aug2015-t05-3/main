@@ -53,6 +53,7 @@ public class CommandFileHandler {
 	/**
 	 * Attempts to load XML file elements into Document object
 	 * @param fileName
+	 * 			The expected file location
 	 * @return 
 	 * 		true if successful, false otherwise
 	 */
@@ -90,6 +91,7 @@ public class CommandFileHandler {
 	/**
 	 * Copies commands.xml from resource package to program directory
 	 * @param newFile
+	 * 			The file location
 	 * @return 
 	 * 		true is successful, false if failed
 	 */
@@ -145,7 +147,7 @@ public class CommandFileHandler {
 	 * Stores each custom command into a category as laid out
 	 * in commands.xml.
 	 * 
-	 * The HashMap mappings are <word | category>
+	 * The HashMap mappings are (word | category)
 	 */
 	private void parseCmd() {
 		Element eElement;
