@@ -33,45 +33,6 @@ public class LogHandler {
 		return log;
 	}
 
-	/**
-	 * Provide consistent method to log across different classes and packages.
-	 *
-	 * @param level
-	 *            One of the message level identifiers, e.g., SEVERE
-	 * @param className
-	 *            Where this method is being called from
-	 * @param message
-	 *            The string message (or a key in the message catalog)
-	 * @deprecated Use {@code getLog()} to get log object and perform logging
-	 *             through the {@code log object}
-	 */
-	public static void log(Level level, String className, String message) {
-		if (log == null) {
-			initLog();
-		}
-		String logMsg = String.format(LOG_MESSAGE_FORMAT, className, message);
-		log.log(level, logMsg);
-	}
-
-	/**
-	 * Provide consistent method to log across different classes and packages.
-	 *
-	 * @param level
-	 *            One of the message level identifiers, e.g., SEVERE
-	 * @param Object
-	 *            Where this method is being called from. The object name will
-	 *            be generated based on its toString method.
-	 * @param message
-	 *            The string message (or a key in the message catalog)
-	 *
-	 * @deprecated Use {@code getLog()} to get log object and perform logging
-	 *             through the {@code log object}
-	 */
-	public static void log(Level level, Object classObj, String message) {
-		String className = classObj.toString();
-		log(level, className, message);
-	}
-
 	private static void initLog() {
 		log = Logger.getLogger(LOG_TAG);
 		log.setLevel(LOGGING_LEVEL);

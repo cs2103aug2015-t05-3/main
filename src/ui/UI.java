@@ -41,6 +41,7 @@ public class UI extends Application {
 	@Override
 	public void start(Stage uiMainstage) {
 
+		LogHandler.getLog().finer("ENTRY");
 		LogHandler.getLog().entering(getClass().toString(), METHOD_START);
 
 		uIHelpStage = new Stage();
@@ -72,10 +73,8 @@ public class UI extends Application {
 
 		} catch (IOException e) {
 			String msg = String.format(ERR_LOADING_FILE, e);
-			LogHandler.log(Level.SEVERE, getClass(), msg);
+			LogHandler.getLog().severe(msg);
 			System.err.println(msg);
-
-
 		}
 	}
 
