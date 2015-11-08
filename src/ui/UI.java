@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import logger.LogHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -71,8 +72,7 @@ public class UI extends Application {
 
 		} catch (IOException e) {
 			String msg = String.format(ERR_LOADING_FILE, e);
-			LogHandler.log(Level.SEVERE, getClass().toString(), msg);
-
+			LogHandler.log(Level.SEVERE, getClass(), msg);
 			System.err.println(msg);
 
 
@@ -97,18 +97,10 @@ public class UI extends Application {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-
 				uIHelpStage.show();
-
-				Point2D uICenterCoord = getScreenCenterCoor();
-
-				double width = uIHelpStage.getWidth();
-				double startX = uICenterCoord.getX() - width/2;
-				uIHelpStage.setX(startX);
-
-				double height = uIHelpStage.getHeight();
-				double startY = uICenterCoord.getY() - height/2;
-				uIHelpStage.setY(startY);
+				Point2D uICenterCoord = getWindowCenterCoor(uiMainScene.getWindow());
+				Point2D uIHelpStartCoord = getRelativeStartCoorFromCenter(uICenterCoord, uIHelpStage);
+				setStagePosition(uIHelpStartCoord, uIHelpStage);
 			}
 		});
 	}
@@ -124,18 +116,32 @@ public class UI extends Application {
 		});
 	}
 
-	private Point2D getScreenCenterCoor() {
+	private Point2D getWindowCenterCoor(Window uiWindow) {
 
-		double xStartPos = uiMainScene.getWindow().getX();
-		double yStartPos = uiMainScene.getWindow().getY();
-
-		double xMidLen = uiMainScene.getWindow().getWidth() / 2;
-		double yMidLen = uiMainScene.getWindow().getHeight() / 2;
-
+		double xStartPos = uiWindow.getX();
+		double xMidLen = uiWindow.getWidth() / 2;
 		double xPos = xStartPos + xMidLen;
+
+		double yStartPos = uiWindow.getY();
+		double yMidLen = uiWindow.getHeight() / 2;
 		double yPos = yStartPos + yMidLen;
 
 		return new Point2D(xPos, yPos);
+	}
+
+	private Point2D getRelativeStartCoorFromCenter(Point2D center, Stage stage) {
+		double width = stage.getWidth();
+		double xPos = center.getX() - width/2;
+
+		double height = stage.getHeight();
+		double yPos = center.getY() - height/2;
+
+		return new Point2D(xPos, yPos);
+	}
+
+	private void setStagePosition(Point2D coord, Stage stage) {
+		stage.setX(coord.getX());
+		stage.setY(coord.getY());
 	}
 
 	public void run() {
