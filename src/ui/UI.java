@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -8,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import logger.LogHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -22,8 +24,8 @@ public class UI extends Application {
 
 	// Message String constants
 	private static final String ERR_LOADING_FILE = "Error loading UI: ";
-
 	private static final String APP_TITLE = "TaskBuddy";
+	private static final String METHOD_START = "start";
 
 	private static UIController uIController;
 	private static UIHelpOverlayController uIHelpOverlayController;
@@ -37,6 +39,8 @@ public class UI extends Application {
 
 	@Override
 	public void start(Stage uiMainstage) {
+
+		LogHandler.getLog().entering(getClass().toString(), METHOD_START);
 
 		uIHelpStage = new Stage();
 
@@ -63,8 +67,15 @@ public class UI extends Application {
 
 			isInitialised = true;
 
+			LogHandler.getLog().exiting(getClass().toString(), METHOD_START);
+
 		} catch (IOException e) {
-			System.err.println(String.format(ERR_LOADING_FILE, e));
+			String msg = String.format(ERR_LOADING_FILE, e);
+			LogHandler.log(Level.SEVERE, getClass().toString(), msg);
+
+			System.err.println(msg);
+
+
 		}
 	}
 
