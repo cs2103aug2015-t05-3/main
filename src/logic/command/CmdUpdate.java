@@ -33,7 +33,7 @@ public class CmdUpdate extends Command {
 			+ "[%3$s <end_time>][%4$s <high/normal/low/h/n/l>]";
 
 	//Log Message
-	private static final String LOG_NUMBERFORMATEXCEPTIOM = "Warning: Task ID parameter is not an integer";
+	private static final String LOG_NUMBERFORMATEXCEPTION = "Warning: Task ID parameter is not an integer";
 	
 	// Variable constants
 	private static final int INVALID_TASKID = -1;
@@ -122,7 +122,7 @@ public class CmdUpdate extends Command {
 		try {
 			_taskID = Integer.parseInt(paramTaskID);
 		} catch (NumberFormatException e) {
-			LogHandler.getLog().log(Level.WARNING, LOG_NUMBERFORMATEXCEPTIOM, e);
+			LogHandler.getLog().log(Level.WARNING, LOG_NUMBERFORMATEXCEPTION, e);
 			_taskID = INVALID_TASKID;
 		}
 
