@@ -42,7 +42,6 @@ public class TimeProcessor {
 	private static final String FORMAT_TODAY = "Today %1$s";
 	private static final String FORMAT_YTD = "Ytd %1$s";
 	private static final String FORMAT_NEXTWEEK = "Next %1$s";
-	private static final String FORMAT_LASTWEEK = "Last %1$s";
 	private static final String FORMAT_ENDDATE = "By %1$s %2$s";
 	private static final String FORMAT_DUEIN = "(In %1$s day(s))";
 	private static final String FORMAT_OVERDUE = "(%1$s day(s) ago)";
@@ -60,8 +59,6 @@ public class TimeProcessor {
 		sdf.setLenient(false);
 		now = Calendar.getInstance(TimeZone.getDefault());
 		temp = Calendar.getInstance(TimeZone.getDefault());
-		now.setFirstDayOfWeek(Calendar.MONDAY);
-		temp.setFirstDayOfWeek(Calendar.MONDAY);
 	}
 	
 	public long resolveTime(String time){
@@ -121,6 +118,9 @@ public class TimeProcessor {
 				temp.set(Calendar.MINUTE, dtime.getMinutes());
 				temp.set(Calendar.SECOND, 0);
 				temp.set(Calendar.MILLISECOND, 0);
+				if(TimeUtil.isBeforeNow(temp.getTimeInMillis())){
+					temp.add(Calendar.DAY_OF_YEAR, 1);
+				}
 				System.out.println("time   "+pattern+"   "+time);
 				return temp.getTimeInMillis();
 			} catch (ParseException e){ }
@@ -180,8 +180,6 @@ public class TimeProcessor {
 			return sdf.format(temp.getTime());
 		} else if (weekDifference == 1){
 			return String.format(FORMAT_NEXTWEEK,sdf.format(temp.getTime()));
-		} else if (weekDifference == -1) {
-			return String.format(FORMAT_LASTWEEK, sdf.format(temp.getTime()));
 		}
 		
 		sdf.applyPattern(PATTERN_OUT_DATETIME);
