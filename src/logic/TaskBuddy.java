@@ -53,7 +53,7 @@ public class TaskBuddy {
 	private static void init(){
 		initLog();
 		UIHelper.createUI();
-		lp = new LanguageProcessor();
+		lp = LanguageProcessor.getInstance();
 		if(!lp.init(cmdFileName)){
 			log.severe("TaskBuddy: Cmd list init failed");
 		}
@@ -65,8 +65,6 @@ public class TaskBuddy {
 	}
 
 	private static void initTasks(){
-		// Run list: TODO change implementation
-
 		Command list = new CmdList();
 		resolveCmdAction(list.execute(), list);
 	}
