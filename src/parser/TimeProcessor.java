@@ -82,7 +82,7 @@ public class TimeProcessor {
 	 */
 	public long resolveTime(String time){
 		
-		if(time.equals(TIME_NOTSPECIFIED)){ // To allow users to remove/reset the time
+		if(time.equals(Long.toString(TIME_NOTSPECIFIED))){ // To allow users to remove/reset the time
 			return TIME_NOTSPECIFIED;
 		}
 		
