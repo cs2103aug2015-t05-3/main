@@ -163,8 +163,8 @@ public class Task implements Comparable<Task> {
 	 * @param priority
 	 *            the given priority field;
 	 *
-	 * @deprecated Description field is deprecated. Use the original
-	 *             constructor without description instead.
+	 * @deprecated Description field is deprecated. Use the original constructor
+	 *             without description instead.
 	 *
 	 */
 	public Task(int id, String name, String description, long startTime, long endTime, FLAG_TYPE flag,
@@ -585,6 +585,26 @@ public class Task implements Comparable<Task> {
 	}
 
 	/**
+	 * Allow Task class ID to be reset to a desired ID. This method is intended
+	 * for internal testing only.
+	 *
+	 * @param resetCountId
+	 *            ID to be reset to
+	 */
+	public static void resetTaskClassId(int resetCountId) {
+		taskNumber = resetCountId;
+	}
+
+	/**
+	 * Allow Task class ID to be reset to its starting value, 0. This method is
+	 * intended for internal testing only.
+	 *
+	 */
+	public static void resetTaskClassId() {
+		resetTaskClassId(0);
+	}
+
+	/**
 	 * Represent this {@code Task} into a {@code String} format
 	 *
 	 * @return a string representation of this task in the format such as:
@@ -595,9 +615,7 @@ public class Task implements Comparable<Task> {
 	 */
 	@Override
 	public String toString() {
-		return TO_STRING_START + id + TO_STRING_DELIMETER + name
-				+ TO_STRING_DELIMETER + startTime + TO_STRING_DELIMETER + endTime
-				+ TO_STRING_DELIMETER + flag
-				+ TO_STRING_DELIMETER + priority + TO_STRING_END;
+		return TO_STRING_START + id + TO_STRING_DELIMETER + name + TO_STRING_DELIMETER + startTime + TO_STRING_DELIMETER
+				+ endTime + TO_STRING_DELIMETER + flag + TO_STRING_DELIMETER + priority + TO_STRING_END;
 	}
 }
