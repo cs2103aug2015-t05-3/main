@@ -6,8 +6,6 @@
 
 package logic.command;
 
-import ui.UIHelper;
-
 public class CmdExit extends Command {
 
 	// Help Info
