@@ -134,7 +134,7 @@ public class UIController implements Initializable {
 
 		pendingMsg.setText(String.format(MSG_PENDING_HELLO, username));
 
-		// TODO unimplemented label field
+		// Initialize and reset UI Label fields
 		timeDateMsg.setText(EMPTY_TIME_DATE);
 		overdueCount.setText(EMPTY_STRING);
 		pendingCount.setText(EMPTY_STRING);
@@ -394,11 +394,16 @@ public class UIController implements Initializable {
 
 	private void displayTable(TableView<UITask> tableView, ObservableList<UITask> dataList, List<Task> taskList) {
 
-		dataList.clear();
-		for (Task t : taskList) {
-			dataList.add(new UITask(t));
-		}
-		tableView.setItems(dataList);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				dataList.clear();
+				for (Task t : taskList) {
+					dataList.add(new UITask(t));
+				}
+				tableView.setItems(dataList);
+			}
+		});
 	}
 
 	// Event methods
@@ -443,7 +448,6 @@ public class UIController implements Initializable {
 				String history;
 				history = leftList.pollLast();
 				cmdHistoryBuffer = history;
-				// _rightList.offerFirst(history);
 				setInput(history);
 			}
 			keyEvent.consume();
