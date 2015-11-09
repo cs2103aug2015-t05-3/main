@@ -31,6 +31,15 @@ public class StorageTest {
 
 	static CommandFileHandler cmd;
 	static TaskFileHandler taskFH;
+	
+	final static String COMMAND_FILE = "commands.xml";
+	
+	final static String ORIGINAL_TASK_FILE = "tasksTest.xml";
+	final static String BACKUP_TASK_FILE = "tasksOriginal.xml";
+	final static String ADD_TASK_FILE = "tasksAdd.xml";
+	final static String UPDATE_TASK_FILE = "tasksUpdate.xml";
+	final static String DELETE_TASK_FILE = "tasksDelete.xml";
+	
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
@@ -40,7 +49,7 @@ public class StorageTest {
 	
 	@Test
 	public void testCommandFileLoading() {
-		String fileName = "commands.xml";
+		String fileName = COMMAND_FILE;
 		assertEquals(cmd.loadCommandFile(fileName), true);
 	}
 
@@ -51,7 +60,7 @@ public class StorageTest {
 				+ "remove=delete, modify=edit, undo=undo, search=search, find=search]";
 
 		HashMap<String, String> hmMappings = cmd.getCmdTable();
-		String toCompare = hmMappings.entrySet() + "";
+		String toCompare = hmMappings.entrySet().toString();
 
 		assertEquals(toCompare, mappings);
 	}
@@ -59,8 +68,8 @@ public class StorageTest {
 	@Test
 	public void testAcceptTaskFile() {
 		
-		String backupFile = "tasksOriginal.xml";
-		String fileToUse = "tasks.xml";
+		String backupFile = BACKUP_TASK_FILE;
+		String fileToUse = ORIGINAL_TASK_FILE;
 		
 		fileCopy(backupFile, fileToUse);
 		assertEquals(taskFH.loadTaskFile(fileToUse), true);
@@ -95,7 +104,7 @@ public class StorageTest {
 	public void testAtAdd() {
 		Task t = new Task(5, "New Task Added for JUnit Testing", 0, 0, FLAG_TYPE.DONE, PRIORITY_TYPE.NORMAL);
 		taskFH.add(t);
-		assertEquals(getCheckSum("tasksAdd.xml"), getCheckSum("tasks.xml"));
+		assertEquals(getCheckSum(ADD_TASK_FILE), getCheckSum(ORIGINAL_TASK_FILE));
 	}
 
 
@@ -106,10 +115,10 @@ public class StorageTest {
 		Task t = new Task(3, "Run Around the Campus 100000 Times", t3Start, t3End, FLAG_TYPE.NULL,
 				PRIORITY_TYPE.LOW);
 		taskFH.update(t);
-		assertEquals(getCheckSum("tasksUpdate.xml"), getCheckSum("tasks.xml"));
+		assertEquals(getCheckSum(UPDATE_TASK_FILE), getCheckSum(ORIGINAL_TASK_FILE));
 		
 		taskFH.delete(4);
-		assertEquals(getCheckSum("tasksDelete.xml"), getCheckSum("tasks.xml"));
+		assertEquals(getCheckSum(DELETE_TASK_FILE), getCheckSum(ORIGINAL_TASK_FILE));
 	}	
 	//@@author A0076510M-reused
 	public String getCheckSum(String file) {
