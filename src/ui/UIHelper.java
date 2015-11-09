@@ -21,26 +21,9 @@ public class UIHelper {
 		return uiController.getInput();
 	}
 
-	public static void loadTask() {
-		//TODO unused
-	}
-
 	public static void createUI() {
 		UIController.createUI();
 		uiController = UI.getController();
-	}
-
-	/**
-	 * Destroys the UI
-	 */
-
-	public static void destroyUI() {
-		// frame.dispose();
-	}
-
-	public static void appendOutput(String appendString) {
-		// frame.setOutputText(frame.getOutputText() + appendString +
-		// System.lineSeparator());
 	}
 
 	// give the entire list for output generation
@@ -58,10 +41,6 @@ public class UIHelper {
 		uiController.showUIHelpOverlay();
 	}
 
-	public static void setUserInput(String in) {
-		// frame.setInputText(in);
-	}
-
 	public static void setDate(String date) {
 		uiController.setTimeDateMsg(date);
 	}
@@ -77,5 +56,4 @@ public class UIHelper {
 	public static void setDoneCount(int count) {
 		uiController.setDoneCount(count);
 	}
-
 }
