@@ -10,6 +10,8 @@ package logic;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.junit.experimental.theories.internal.EnumSupplier;
+
 import logger.LogHandler;
 import logic.command.*;
 import ui.UIHelper;
@@ -27,7 +29,7 @@ public class TaskBuddy {
 	 */
 	private static final String CMD_FILENAME = "commands.xml";
 	private static final String MSG_INVALIDCMD = "Please enter a valid command. For more info, enter help";
-	private static final String MSG_TASKFILE_NOTFOUND = "Please enter the name or location of file to open or create";
+	private static final String MSG_TASKFILE_NOTFOUND = "Please enter the name or location of file to open or create. File name should end with '.xml'";
 	private static final String MSG_TASKFILE_REPROMPT = "Please enter another file name";
 	/*
 	 * Global variables
@@ -85,14 +87,14 @@ public class TaskBuddy {
 		if (!settings.init()) { // Create the settings file if it's not found
 			UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);
 			// Write the task file path to settings
-			settings.alterSettingsFile(UIHelper.getUserInput());
+			settings.alterSettingsFile(ensureCorrectFileNameFormat(UIHelper.getUserInput()));
 		}
 		
 		// Create the task file path defined in settings
 		while (!settings.initializeTaskFile()) {
 			// Unable to initialise task file. Open/Create another file
 			UIHelper.setOutputMsg(MSG_TASKFILE_REPROMPT);
-			settings.alterSettingsFile(UIHelper.getUserInput());
+			settings.alterSettingsFile(ensureCorrectFileNameFormat(UIHelper.getUserInput()));
 		}
 		
 		_taskFileName = settings.getTaskFile(); // Get the final task file name
@@ -100,6 +102,13 @@ public class TaskBuddy {
 
 	private static void initTaskTree(String filePath) {
 		_taskTree = TaskTree.newTaskTree(filePath);
+	}
+	
+	private static String ensureCorrectFileNameFormat(String filePath){
+		if(!filePath.endsWith(".xml")){
+			filePath = filePath + ".xml";
+		}
+		return filePath;
 	}
 
 	/**
