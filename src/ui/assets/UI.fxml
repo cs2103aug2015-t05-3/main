@@ -1,4 +1,3 @@
-<!-- @@author A0076510M -->
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.paint.*?>
@@ -77,7 +76,6 @@
                         </TableView>
                      </children>
                   </VBox>
-<!-- @@author A0126394B -->
                   <VBox prefHeight="432.0" prefWidth="324.0" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets />
