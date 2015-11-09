@@ -128,7 +128,7 @@ public class CmdMark extends Command {
 	 * @return a {@code Task} of the specified ID.
 	 */
 	private Task proccessTaskID(String paramTaskID) {
-		assert paramTaskID != null && paramTaskID.equals("");
+		assert paramTaskID != null && !paramTaskID.equals("");
 
 		try {
 			_taskID = Integer.parseInt(paramTaskID);
