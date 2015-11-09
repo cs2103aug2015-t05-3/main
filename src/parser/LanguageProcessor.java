@@ -6,6 +6,7 @@ import util.StringUtil;
 import java.util.logging.Logger;
 
 import constants.CmdParameters;
+import logger.LogHandler;
 
 /**
  * Translates and breaks natural language down for computation
@@ -18,7 +19,7 @@ public class LanguageProcessor{
 	/*
 	 * Variables
 	 */
-	//private static LanguageProcessor langProcessor;
+	private static LanguageProcessor langP; // A copy of itself
 	private static CommandProcessor cmdP;
 	private static TimeProcessor timeP;
 	private static Logger parseLog;
@@ -29,8 +30,19 @@ public class LanguageProcessor{
 	private static final String LOG_FORMAT_RESULT = "%1$s: %2$s | %3$s"; // <User input>: <Parsed result/message> [Optional message]
 	private static final String LOG_MSG_INVALIDCMD = "Invalid command";
 	private static final String LOG_MSG_NOPARAM = "No parameters given";
-	private static final String REGEX_LIMIT = ParserConstants.DELIMITER_TOKEN + "\\w+";
-	private static final String FIELD_INVALID = "";
+	private static final String REGEX_LIMIT = ParserConstants.DELIMITER_TOKEN + "\\w+"; // 
+	private static final String FIELD_INVALID = ""; // Denotes a field is invalid
+	
+	private LanguageProcessor(){
+	}
+	
+	public static LanguageProcessor getInstance(){
+		if(langP == null){
+			langP = new LanguageProcessor();
+		}
+		
+		return langP;
+	}
 
 	private String getTaskName(String userCmd) {
 		String taskName = StringUtil.getStringAfter(userCmd,"",REGEX_LIMIT);
@@ -116,23 +128,25 @@ public class LanguageProcessor{
 	}
 
 	private String getListOption(String userCmd){
-		if(userCmd.contains(ParserConstants.TASK_FILTER_ALL)){
+		String flag = StringUtil.getFirstWord(userCmd);
+		
+		if(flag == null || flag.isEmpty()){
+			return null;
+		} else if (flag.equals(ParserConstants.TASK_FILTER_ALL)){
 			return CmdParameters.PARAM_VALUE_LIST_ALL;
-		} else if (userCmd.contains(ParserConstants.TASK_FILTER_DONE)){
+		} else if (flag.equals(ParserConstants.TASK_FILTER_DONE)){
 			return CmdParameters.PARAM_VALUE_LIST_DONE;
- 		} else if (userCmd.contains(ParserConstants.TASK_SPECIFIER_PRIORITY)){
+ 		} else if (flag.equals(ParserConstants.TASK_SPECIFIER_PRIORITY)){
  			return CmdParameters.PARAM_VALUE_LIST_PRIORITY;
- 		} else if (!userCmd.isEmpty()){
- 			return FIELD_INVALID;
  		} else {
- 			return null;
+ 			return FIELD_INVALID;
  		}
 	}
 
 	public boolean init(String cmdFileName){
 		cmdP = CommandProcessor.getInstance();
 		timeP = TimeProcessor.getInstance();
-		parseLog = Logger.getLogger("parselog");
+		parseLog = LogHandler.getLog();
 		return cmdP.initCmdList(cmdFileName);
 	}
 
