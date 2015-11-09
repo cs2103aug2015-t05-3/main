@@ -1,3 +1,4 @@
+//@@author A0125496X
 /**
  * Start point of the entire program.
  *
@@ -6,9 +7,7 @@
 
 package logic;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 import logger.LogHandler;
@@ -123,6 +122,7 @@ public class TaskBuddy {
 		} while (true);
 	}
 
+	//@@author A0126394B
 	/**
 	 * Displays the number of task counts for overdue, pending, and completed
 	 */

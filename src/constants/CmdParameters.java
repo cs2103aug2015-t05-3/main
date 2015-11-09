@@ -1,3 +1,4 @@
+//@@author A0125496X
 /**
  * Keeps a list of parameter constants to be resolved by both LanguageProcessor and Command
  * 

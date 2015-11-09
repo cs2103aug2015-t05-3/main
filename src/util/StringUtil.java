@@ -1,3 +1,4 @@
+//@@author A0125496X
 /**
  * Provides methods which allows String manipulation
  * 
@@ -17,6 +18,10 @@ public class StringUtil {
 
 	/**
 	 * Takes in a string, and returns the first word, delimited by a whitespace
+	 * @param input
+	 * 			The input to extract the word from
+	 * @return
+	 * 			The word if found, null otherwise
 	 */
 	public static String getFirstWord(String input) {
 		assert input != null;
@@ -31,6 +36,11 @@ public class StringUtil {
 
 	/**
 	 * Takes in a string, removes the first word and returns the rest
+	 * @param input
+	 * 			The input to remove the word from
+	 * @return
+	 * 			The remaining string after word is removed if word deletion is successful,
+	 * 			null otherwise
 	 */
 	public static String removeFirstWord(String input) {
 		String[] tokens = input.split(WHITESPACE, 2);
@@ -44,6 +54,12 @@ public class StringUtil {
 	/**
 	 * Takes in a search term (word), and look for it in a full string. Returns
 	 * true if that word is found, false if it isn't
+	 * @param searchIn
+	 * 			The string to search in
+	 * @param searchTerm
+	 * 			The string to look for
+	 * @return
+	 * 			True if search term is found, false otherwise
 	 */
 	public static boolean containsWord(String searchIn, String searchTerm) {
 		String regex = "\\b" + searchTerm + "\\b";
@@ -129,6 +145,13 @@ public class StringUtil {
 		return result.length() == 0 ? null : result.toString();
 	}
 	
+	/**
+	 * Removes leading and trailing white spaces
+	 * @param s
+	 * 		The string to trim
+	 * @return
+	 * 		The trimmed string
+	 */
 	public static String trim(String s){
 		if(s != null){
 			return s.trim();
@@ -137,15 +160,15 @@ public class StringUtil {
 		}
 	}
 	
-	public static String getFirstNumber(String searchTerm){
-		Matcher m = Pattern.compile("-?\\d+").matcher(searchTerm);
-		if(m.find()){
-			return m.group();
-		} else {
-			return null;
-		}
-	}
-	
+	/**
+	 * Gets all occurrences of regex matches on a string
+	 * @param fullString
+	 * 			The string to analyse
+	 * @param regex
+	 * 			The regex to use
+	 * @return
+	 * 			A list of occurrences found. Null if no results are found
+	 */
 	public static String[] getOccurrences(String fullString, String regex){
 		LinkedList<String> result = new LinkedList<>();
 		Matcher m = Pattern.compile(regex).matcher(fullString);

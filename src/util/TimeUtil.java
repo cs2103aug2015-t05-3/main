@@ -1,3 +1,4 @@
+//@@author A0125496X
 /**
  * Provides a list of methods to manipulate time for classes to use
  * 
@@ -30,61 +31,7 @@ public class TimeUtil {
 			return 0;
 		}
 	}
-
-	/**
-	 * 
-	 * Converts a long time to date format
-	 * 
-	 * @return date in sample format: Tuesday: 29/09/15 20:15 GMT+0800
-	 */
-	public static String getFormattedDate(long time) {
-
-		if (time == 0L) {
-			return "0";
-		}
-
-		Date date = new Date(time);
-		String dateText = _df1.format(date);
-		return dateText;
-	}
-
-	/**
-	 * Converts a date to long time
-	 * 
-	 * @return long time ToDo: Refactor this
-	 */
-	public static long getLongTime(String sDate) {
-
-		if (sDate.equals("0")) {
-			return 0L;
-		}
-
-		try {
-			Date date = (Date) _df1.parse(sDate);
-			return date.getTime();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			return -1;
-		}
-	}
-
-	/**
-	 * 
-	 * Converts a long time to date format for display.
-	 * 
-	 * @return date in sample format: Tuesday, 29/09/15
-	 */
-	public static String getUIFormattedDate(long time) {
-
-		if (time == 0L) {
-			return "0";
-		}
-
-		Date date = new Date(time);
-		String dateText = _uidf.format(date);
-		return dateText;
-	}
-
+	
 	public static int getWeekDifference(long time) {
 		now.setTimeInMillis(System.currentTimeMillis());
 		temp.setTimeInMillis(time);
@@ -126,5 +73,60 @@ public class TimeUtil {
 		t2 = temp.getTimeInMillis();
 		
 		return Long.compare(t1, t2);
+	}
+
+	//@@author A0076510M
+	/**
+	 * 
+	 * Converts a long time to date format
+	 * 
+	 * @return date in sample format: Tuesday: 29/09/15 20:15 GMT+0800
+	 */
+	public static String getFormattedDate(long time) {
+
+		if (time == 0L) {
+			return "0";
+		}
+
+		Date date = new Date(time);
+		String dateText = _df1.format(date);
+		return dateText;
+	}
+
+
+	/**
+	 * Converts a date to long time
+	 * 
+	 * @return long time
+	 */
+	public static long getLongTime(String sDate) {
+
+		if (sDate.equals("0")) {
+			return 0L;
+		}
+
+		try {
+			Date date = (Date) _df1.parse(sDate);
+			return date.getTime();
+		} catch (ParseException e) {
+			return -1;
+		}
+	}
+
+	/**
+	 * 
+	 * Converts a long time to date format for display.
+	 * 
+	 * @return date in sample format: Tuesday, 29 July 15
+	 */
+	public static String getUIFormattedDate(long time) {
+
+		if (time == 0L) {
+			return "0";
+		}
+
+		Date date = new Date(time);
+		String dateText = _uidf.format(date);
+		return dateText;
 	}
 }

@@ -1,3 +1,4 @@
+//@@author A0125496X
 /**
  * Resolves time from user input
  * 

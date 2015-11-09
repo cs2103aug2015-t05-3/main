@@ -1,3 +1,4 @@
+//@@author A0125496X
 /**
  * Specifies the format all supported commands should follow, as well as hold the data structure which
  * most supported commands will need.
