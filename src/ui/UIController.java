@@ -383,8 +383,10 @@ public class UIController implements Initializable {
 	}
 
 	private void sortSeparatedList() {
-		Collections.sort(floatingTaskList, new taskCollections.comparators.PriorityComparator());
-		Collections.sort(nonFloatingTaskList, new taskCollections.comparators.TimeComparator());
+		Collections.sort(floatingTaskList, 
+				new taskCollections.comparators.PriorityComparator());
+		Collections.sort(nonFloatingTaskList, 
+				new taskCollections.comparators.TimeComparator());
 	}
 
 	private void displayTables() {
@@ -462,7 +464,6 @@ public class UIController implements Initializable {
 				String history;
 				history = rightList.pollFirst();
 				cmdHistoryBuffer = history;
-				// _leftList.offerLast(history);
 				setInput(history);
 			} else {
 				setInput(EMPTY_STRING);
