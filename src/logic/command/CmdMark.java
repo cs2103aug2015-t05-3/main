@@ -30,7 +30,7 @@ public class CmdMark extends Command {
 	private static final String HELP_INFO_MARK = "<task_ID> [%1$s]";
 
 	// Log Message
-	private static final String LOG_NUMBERFORMATEXCEPTION = "Warning: Task ID parameter is not an integer";
+	private static final String LOG_NUMBERFORMATEXCEPTION = "\"%1$s\" is not an integer";
 
 	// Variable Constant
 	private static final int INVALID_TASKID = -1;
@@ -133,7 +133,7 @@ public class CmdMark extends Command {
 		try {
 			_taskID = Integer.parseInt(paramTaskID);
 		} catch (NumberFormatException e) {
-			LogHandler.getLog().log(Level.WARNING, LOG_NUMBERFORMATEXCEPTION, e);
+			LogHandler.getLog().log(Level.WARNING, String.format(LOG_NUMBERFORMATEXCEPTION, paramTaskID));
 			_taskID = INVALID_TASKID;
 		}
 

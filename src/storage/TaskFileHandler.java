@@ -31,6 +31,11 @@ import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
 import util.TimeUtil;
 
+/**
+ * Provides methods for retrieving and manipulating the tasks file.
+ * @author Zandercx
+ */
+
 public class TaskFileHandler {
 
 	private static final int XML_INDENTAMT = 4;
@@ -52,7 +57,12 @@ public class TaskFileHandler {
 	private static final String EXCEPTION_SAX = "SAX Exception: %1$s";
 	private static final String EXCEPTION_IO = "IO Exception: %1$s";
 	private static final String EXCEPTION_TRANSFORMER = "Transformer Exception: %1$s";
-	private static final String EXCEPTION_TRANSFORMERCFG = "Transformer Config Exception: %1$s";	
+	private static final String EXCEPTION_TRANSFORMERCFG = "Transformer Config Exception: %1$s";
+	
+	private static final String MSG_ADD = "Add Entry to XML File Success.";
+	private static final String MSG_IMPORT = "Successful Retrieval from XML File.";
+	private static final String MSG_REMOVE = "Remove Entry from XML File Success.";
+	private static final String MSG_UPDATE = "Updating Entry to XML File Success.";
 	
 	private ArrayList<Task> _tasks;
 	private Document _doc;
@@ -108,7 +118,7 @@ public class TaskFileHandler {
 	 * 		ArrayList<Task> : List of Tasks
 	 */
 	public ArrayList<Task> retrieveTaskList() {
-		LogHandler.getLog().log(Level.INFO, "Successful Retrieval from XML File.");
+		LogHandler.getLog().log(Level.INFO, MSG_IMPORT);
 		return _tasks;
 	}
 
@@ -138,7 +148,7 @@ public class TaskFileHandler {
 		boolean flag = genXML();
 		
 		if (flag) {
-			LogHandler.getLog().log(Level.INFO, "Add Entry to XML File Success.");
+			LogHandler.getLog().log(Level.INFO, MSG_ADD);
 		}
 		
 		return flag;
@@ -160,7 +170,7 @@ public class TaskFileHandler {
 		boolean flag = genXML();
 		
 		if (flag) {
-			LogHandler.getLog().log(Level.INFO, "Remove Entry from XML File Success.");
+			LogHandler.getLog().log(Level.INFO, MSG_REMOVE);
 		}
 		
 		return flag;
@@ -208,7 +218,7 @@ public class TaskFileHandler {
 		boolean flag = genXML();
 		
 		if (flag) {
-			LogHandler.getLog().log(Level.INFO, "Updating Entry to XML File Success.");
+			LogHandler.getLog().log(Level.INFO, MSG_UPDATE);
 		}
 		
 		return flag;
@@ -311,15 +321,22 @@ public class TaskFileHandler {
 					int id = Integer.parseInt(eElement.getAttribute(TAG_ID));
 				
 					String title = retrieveElement(eElement, TAG_TITLE);
-					long startTime = TimeUtil.getLongTime(retrieveElement(eElement, TAG_STARTTIME));
-					long endTime = TimeUtil.getLongTime(retrieveElement(eElement, TAG_ENDTIME));
+					
+					long startTime = TimeUtil.getLongTime(
+							retrieveElement(eElement, TAG_STARTTIME));
+					
+					long endTime = TimeUtil.getLongTime(
+							retrieveElement(eElement, TAG_ENDTIME));
 					
 					if (startTime == -1 || endTime == -1) {
 						return false;
 					}
 					
-					FLAG_TYPE flag = detFlag(retrieveElement(eElement, TAG_FLAG));
-					PRIORITY_TYPE priority = detPriority(retrieveElement(eElement, TAG_PRIORITY));
+					FLAG_TYPE flag = detFlag(retrieveElement(
+							eElement, TAG_FLAG));
+					
+					PRIORITY_TYPE priority = detPriority(retrieveElement(
+							eElement, TAG_PRIORITY));
 				
 					if (flag == null || priority == null) {
 						return false;

@@ -62,7 +62,7 @@ public class CmdSearch extends Command {
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME };
+		return new String[] {};
 	}
 
 	/**

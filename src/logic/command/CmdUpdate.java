@@ -35,7 +35,7 @@ public class CmdUpdate extends Command {
 			+ "[%3$s <end_time>][%4$s <high/normal/low/h/n/l>]";
 
 	// Log Message
-	private static final String LOG_NUMBERFORMATEXCEPTION = "Warning: Task ID parameter is not an integer";
+	private static final String LOG_NUMBERFORMATEXCEPTION = "\"%1$s\" is not an integer";
 
 	// Variable constants
 	private static final int INVALID_TASKID = -1;
@@ -139,7 +139,7 @@ public class CmdUpdate extends Command {
 		try {
 			_taskID = Integer.parseInt(paramTaskID);
 		} catch (NumberFormatException e) {
-			LogHandler.getLog().log(Level.WARNING, LOG_NUMBERFORMATEXCEPTION, e);
+			LogHandler.getLog().log(Level.WARNING, String.format(LOG_NUMBERFORMATEXCEPTION, paramTaskID));
 			_taskID = INVALID_TASKID;
 		}
 
@@ -195,7 +195,6 @@ public class CmdUpdate extends Command {
 		noOfOptionalParam += processStartTime();
 		noOfOptionalParam += processEndTime();
 		noOfOptionalParam += processPriority();
-
 		return noOfOptionalParam;
 
 	}
@@ -210,8 +209,7 @@ public class CmdUpdate extends Command {
 	private int processTaskName() {
 
 		String paramTaskName = getParameterValue(CmdParameters.PARAM_NAME_TASK_SNAME);
-
-		if (paramTaskName == null || paramTaskName.equals("")) {
+		if (paramTaskName == null || paramTaskName.equals("") || paramTaskName.equals(_task.getName())) {
 			_newTaskName = _task.getName();
 			return NOT_OPTIONAL_PARAM;
 		} else {
@@ -234,7 +232,11 @@ public class CmdUpdate extends Command {
 
 		try {
 			_newStartTime = Long.parseLong(paramStartTime);
-			return IS_OPTIONAL_PARAM;
+			if (_newStartTime == _task.getStartTime()) {
+				return NOT_OPTIONAL_PARAM;
+			} else {
+				return IS_OPTIONAL_PARAM;
+			}
 		} catch (Exception e) {
 			_newStartTime = _task.getStartTime();
 			return NOT_OPTIONAL_PARAM;
@@ -254,7 +256,11 @@ public class CmdUpdate extends Command {
 
 		try {
 			_newEndTime = Long.parseLong(paramEndTime);
-			return IS_OPTIONAL_PARAM;
+			if (_newEndTime == _task.getEndTime()) {
+				return NOT_OPTIONAL_PARAM;
+			} else {
+				return IS_OPTIONAL_PARAM;
+			}
 		} catch (Exception e) {
 			_newEndTime = _task.getEndTime();
 			return NOT_OPTIONAL_PARAM;
@@ -272,7 +278,8 @@ public class CmdUpdate extends Command {
 
 		String paramPriority = getParameterValue(CmdParameters.PARAM_NAME_TASK_PRIORITY);
 
-		if (paramPriority == null || paramPriority.equals("")) {
+		if (paramPriority == null || paramPriority.equals("")
+				|| getPriorityType(paramPriority) == _task.getPriority()) {
 			_newPriority = _task.getPriority();
 			return NOT_OPTIONAL_PARAM;
 		} else {
