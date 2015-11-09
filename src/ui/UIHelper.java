@@ -21,7 +21,7 @@ public class UIHelper {
 	}
 
 	public static void loadTask() {
-
+		//TODO unused
 	}
 
 	public static void createUI() {
@@ -48,6 +48,7 @@ public class UIHelper {
 	}
 
 	// set UI's output msg
+//@@A0126394B
 	public static void setOutputMsg(String s) {
 		uiController.setOutputMsg(s);
 	}

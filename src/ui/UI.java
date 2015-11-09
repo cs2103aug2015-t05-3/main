@@ -1,3 +1,4 @@
+//@@A0126394B
 package ui;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class UI extends Application {
 	FXMLLoader uIMainLoader;
 	FXMLLoader uIHelpLoader;
 
+//@@A0076510M
 	@Override
 	public void start(Stage uiMainstage) {
 
@@ -58,6 +60,7 @@ public class UI extends Application {
 			uiMainScene.getStylesheets().add(UI_STYLESHEET_FILEPATH);
 			uiMainstage.show();
 
+//@@A0126394B
 			AnchorPane uiHelpRoot = (AnchorPane) uIHelpLoader.load();
 			uIHelpOverlayController = uIHelpLoader.getController();
 			uIHelpScene = new Scene(uiHelpRoot);
@@ -140,6 +143,7 @@ public class UI extends Application {
 		stage.setY(coord.getY());
 	}
 
+//@@A0076510M
 	public void run() {
 		launch();
 	}
