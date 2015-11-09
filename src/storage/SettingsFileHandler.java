@@ -13,6 +13,11 @@ import java.util.logging.Level;
 
 import logger.LogHandler;
 
+/**
+ * Provides methods for retrieving and modifying the file path of tasks file.
+ * @author Zandercx
+ */
+
 public class SettingsFileHandler {
 
 	private static final String EMPTY_STRING = "";

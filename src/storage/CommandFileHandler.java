@@ -24,6 +24,11 @@ import org.xml.sax.SAXException;
 
 import logger.LogHandler;
 
+/**
+ * Provides methods for retrieving the commands.xml data.
+ * @author Zandercx
+ */
+
 public class CommandFileHandler {
 	
 	private static final int BYTE_ARRAY_NUMBER = 1024;

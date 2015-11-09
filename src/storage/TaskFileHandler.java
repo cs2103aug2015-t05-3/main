@@ -31,6 +31,11 @@ import taskCollections.Task.FLAG_TYPE;
 import taskCollections.Task.PRIORITY_TYPE;
 import util.TimeUtil;
 
+/**
+ * Provides methods for retrieving and manipulating the tasks file.
+ * @author Zandercx
+ */
+
 public class TaskFileHandler {
 
 	private static final int XML_INDENTAMT = 4;
