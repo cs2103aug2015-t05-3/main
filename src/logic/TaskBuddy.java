@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
+import logger.LogHandler;
 import logic.command.*;
 import ui.UIHelper;
 import util.TimeUtil;
@@ -25,8 +26,7 @@ public class TaskBuddy {
 	/*
 	 * Constants
 	 */
-	private static final String cmdFileName = "commands.xml";
-	private static final String logFileName = "log.log";
+	private static final String CMD_FILENAME = "commands.xml";
 	private static final String MSG_INVALIDCMD = "Please enter a valid command. For more info, enter help";
 	private static final String MSG_TASKFILE_NOTFOUND = "Please enter the name or location of file to open or create";
 	private static final String MSG_TASKFILE_REPROMPT = "Please enter another file name";
@@ -50,67 +50,82 @@ public class TaskBuddy {
 	/**
 	 * Initialises all the necessary variables
 	 */
-	private static void init(){
-		initLog();
+	private static void init() {
+		log = LogHandler.getLog(); // Init the log
+
+		// Set up the UI
 		UIHelper.createUI();
+		UIHelper.setDate(TimeUtil.getUIFormattedDate(System.currentTimeMillis()));
+
+		// Init the parser component
 		lp = LanguageProcessor.getInstance();
-		if(!lp.init(cmdFileName)){
+		if (!lp.init(CMD_FILENAME)) {
 			log.severe("TaskBuddy: Cmd list init failed");
 		}
-		UIHelper.setDate(TimeUtil.getUIFormattedDate(System.currentTimeMillis()));
-		initTaskFile();
-		initTaskTree(taskFileName);
-		Command.init();
-		initTasks();
+
+		initTaskFile(); // Init the storage component for tasks
+		initTaskTree(taskFileName); // Load the tasks to task collection
+		Command.init(); // Init the logic component
+		displayTaskList(); // Display the task list on the UI
 	}
 
-	private static void initTasks(){
+	/**
+	 * Displays the task list
+	 */
+	private static void displayTaskList() {
 		Command list = new CmdList();
 		resolveCmdAction(list.execute(), list);
 	}
 
-	private static void initTaskFile(){
+	/**
+	 * Creates / Open the task file
+	 */
+	private static void initTaskFile() {
 		SettingsFileHandler settings = SettingsFileHandler.getInstance();
-		if(!settings.init()){
+
+		if (!settings.init()) { // Create the settings file if it's not found
 			UIHelper.setOutputMsg(MSG_TASKFILE_NOTFOUND);
+			// Write the task file path to settings
 			settings.alterSettingsFile(UIHelper.getUserInput());
 		}
-		while(!settings.initializeTaskFile()){
+		
+		// Create the task file path defined in settings
+		while (!settings.initializeTaskFile()) {
+			// Unable to initialise task file. Open/Create another file
 			UIHelper.setOutputMsg(MSG_TASKFILE_REPROMPT);
 			settings.alterSettingsFile(UIHelper.getUserInput());
 		}
-		taskFileName = settings.getTaskFile();
+		
+		taskFileName = settings.getTaskFile(); // Get the final task file name
 	}
 
 	private static void initTaskTree(String filePath) {
 		taskTree = TaskTree.newTaskTree(filePath);
 	}
 
-	private static void initLog(){
-		log = Logger.getLogger("log");
-		try {
-			log.addHandler(new FileHandler(logFileName));
-		} catch (SecurityException e) {
-			log.severe("TaskBuddy: " + e);
-		} catch (IOException e) {
-			log.severe("TaskBuddy: " + e);
-		}
-	}
-
-	private static void runCommands(){
-		do{
-			setUITasksCount();
-			String in = getInput();
-			Command toExecute = lp.resolveCmd(in);
-			if(toExecute == null){
+	/**
+	 * Main routine of the program to execute commands
+	 */
+	private static void runCommands() {
+		do {
+			setUITasksCount(); // Display the list of statuses of tasks
+			String in = getInput(); // Get the input from user
+			Command toExecute = lp.resolveCmd(in); // Parse the command
+			
+			if (toExecute == null) {
+				// Unable to parse command
 				UIHelper.setOutputMsg(MSG_INVALIDCMD);
 				continue;
 			}
 
+			// Perform relevant actions from the executed command
 			resolveCmdAction(toExecute.execute(), toExecute);
 		} while (true);
 	}
 
+	/**
+	 * Displays the number of task counts for overdue, pending, and completed
+	 */
 	private static void setUITasksCount() {
 		int doneCount = taskTree.getFlagCount(FLAG_TYPE.DONE);
 		int pendingCount = taskTree.size() - doneCount;
@@ -121,22 +136,29 @@ public class TaskBuddy {
 		UIHelper.setOverdueCount(overdueCount);
 	}
 
-	private static void resolveCmdAction(CommandAction action, Command executed){
+	/**
+	 * Performs necessary actions from the command executed
+	 * @param action
+	 * 			The result after executing a command
+	 * @param executed
+	 * 			The command which was executed
+	 */
+	private static void resolveCmdAction(CommandAction action, Command executed) {
 		String outputMsg = action.getOutput();
 		List<Task> tasksToDisplay = action.getTaskList();
 
-		if(outputMsg != null){
+		if (outputMsg != null) { // Display the message to display after executing a cmd
 			UIHelper.setOutputMsg(outputMsg);
 		}
-		if(tasksToDisplay != null){
+		if (tasksToDisplay != null) { // The list of tasks after executing a cmd
 			UIHelper.setTableOutput(tasksToDisplay);
 		}
-		if(action.isUndoable()){
+		if (action.isUndoable()) { // Add to the list of history if it's undoable
 			Command.addHistory(executed);
 		}
 	}
 
-	private static String getInput(){
+	private static String getInput() {
 		return UIHelper.getUserInput();
 	}
 

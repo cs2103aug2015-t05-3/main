@@ -33,6 +33,13 @@ public class CmdAdd extends Command {
 	private String taskStartTime;
 	private String taskEndTime;
 	private String taskPriority;
+	
+	public CmdAdd(){
+	}
+	
+	public CmdAdd(String taskName){
+		this.taskName = taskName;
+	}
 
 	@Override
 	public CommandAction execute() {
