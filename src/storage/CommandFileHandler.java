@@ -42,10 +42,13 @@ public class CommandFileHandler {
 
 	private static final String EXCEPTION_FILENOTFOUND = "File Not Found Exception: %1$s";
 	private static final String EXCEPTION_CMDFILENOTFOUND = "commands.xml not found. "
-			+ "Attempting to create one";
+			+ "Attempting to copy from resource package.";
 	private static final String EXCEPTION_IO = "IO Exception: %1$s";
 	private static final String EXCEPTION_PARSER = "Parser Config Exception: %1$s";
 	private static final String EXCEPTION_SAX = "SAX Exception: %1$s";
+	
+	private static final String MSG_COPYCOMMANDFILE = "Successfully copied default "
+			+ "commands.xml file from resource to program directory.";
 	
 	private Document _doc;
 	private File _xmlFile;
@@ -135,6 +138,7 @@ public class CommandFileHandler {
 				}
 				inputStream.close();
 				outputStream.close();
+				LogHandler.getLog().log(Level.INFO, MSG_COPYCOMMANDFILE);
 				return true;
 			} catch (FileNotFoundException e) {
 				LogHandler.getLog().log(Level.SEVERE, 
