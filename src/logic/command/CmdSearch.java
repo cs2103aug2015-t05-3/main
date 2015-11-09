@@ -1,3 +1,9 @@
+//@@author A0125574A
+
+/**
+ * Command to search for all {@code Task} with task name containing a specified keyword
+ */
+
 package logic.command;
 
 import java.util.List;
@@ -29,6 +35,11 @@ public class CmdSearch extends Command {
 
 	}
 
+	/**
+	 * Search all {@code Task} with task name containing a specified keyword
+	 * 
+	 * @return a CommandAction
+	 */
 	@Override
 	public CommandAction execute() {
 		if (!hasKeywordToSearch()) {
@@ -54,11 +65,22 @@ public class CmdSearch extends Command {
 		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME };
 	}
 
+	/**
+	 * Returns a syntax message for search command
+	 * 
+	 * @return a syntax message for search command
+	 */
 	@Override
 	public String getHelpInfo() {
 		return HELP_INFO_SEARCH;
 	}
 
+	/**
+	 * Checks if there is a keyword to be searched.
+	 * 
+	 * @return true if there is a keyword to be searched. false if there is no
+	 *         keyword to be searched
+	 */
 	private boolean hasKeywordToSearch() {
 		_keyword = getParameterValue(CmdParameters.PARAM_NAME_CMD_SEARCH);
 		if (_keyword == null || _keyword.equals("")) {
@@ -69,21 +91,42 @@ public class CmdSearch extends Command {
 
 	}
 
+	/**
+	 * Checks if there is a keyword to be searched.
+	 * 
+	 * @return a CommandAction with results of searching a keyword
+	 */
 	private CommandAction searchKeyword() {
 		List<Task> taskList = getTaskList(_keyword);
 		String outputMsg = getOutputMsg(taskList);
 		return new CommandAction(outputMsg, false, taskList);
 	}
 
+	/**
+	 * Returns a List of {@code Task} with task name containing the keyword
+	 * 
+	 * @param keyword
+	 *            keyword to be searched
+	 * 
+	 * @return a List of {@code Task} with task name containing the keyword
+	 */
 	private List<Task> getTaskList(String keyword) {
 		assert keyword != null && !keyword.equals("");
 		return _taskTree.searchName(keyword);
 	}
 
+	/**
+	 * Returns an appropriate output message based on size of given taskList
+	 * 
+	 * @param taskList
+	 *            List of {@code Task} with task name containing the keyword
+	 * 
+	 * @return a String output message for CommandAction
+	 */
 	private String getOutputMsg(List<Task> taskList) {
 
 		assert taskList != null;
-		
+
 		// Case 1 : List isEmpty
 		if (taskList.isEmpty()) {
 			return String.format(MSG_KEYWORD_NOTFOUND, _keyword);

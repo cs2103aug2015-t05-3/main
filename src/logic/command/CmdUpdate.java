@@ -1,5 +1,7 @@
+//@@author A0125574A
+
 /**
- * Command to update the details (task_name, start_time, end_time, priority) of a task 
+ * Command to update the details (task_name, start_time, end_time, priority) of a {@code Task} 
  */
 
 package logic.command;
@@ -32,9 +34,9 @@ public class CmdUpdate extends Command {
 	private static final String HELP_INFO_UPDATE = "<task_ID> [%1$s <task_name>] [%2$s <start_time>] "
 			+ "[%3$s <end_time>][%4$s <high/normal/low/h/n/l>]";
 
-	//Log Message
+	// Log Message
 	private static final String LOG_NUMBERFORMATEXCEPTION = "Warning: Task ID parameter is not an integer";
-	
+
 	// Variable constants
 	private static final int INVALID_TASKID = -1;
 	private static final int OPTIONAL_PARAM_EMPTY = 0;
@@ -65,6 +67,11 @@ public class CmdUpdate extends Command {
 
 	}
 
+	/**
+	 * Updates new details to a specified {@code Task}
+	 * 
+	 * @return a CommandAction
+	 */
 	@Override
 	public CommandAction execute() {
 
@@ -85,6 +92,11 @@ public class CmdUpdate extends Command {
 		return updateTask(_task, _newTaskName, _newStartTime, _newEndTime, _newPriority);
 	}
 
+	/**
+	 * Undo the changes to a previously updated {@code Task}
+	 * 
+	 * @return a CommandAction
+	 */
 	@Override
 	public CommandAction undo() {
 		return updateTask(_task, _prevTaskName, _prevStartTime, _prevEndTime, _prevPriority);
@@ -101,6 +113,11 @@ public class CmdUpdate extends Command {
 				CmdParameters.PARAM_NAME_TASK_ENDTIME, CmdParameters.PARAM_NAME_TASK_PRIORITY };
 	}
 
+	/**
+	 * Returns a syntax message for update command
+	 * 
+	 * @return a syntax message for update command
+	 */
 	@Override
 	public String getHelpInfo() {
 		return String.format(HELP_INFO_UPDATE, ParserConstants.TASK_SPECIFIER_TASKNAME,
@@ -109,12 +126,12 @@ public class CmdUpdate extends Command {
 	}
 
 	/**
-	 * Process the task ID given by user and returns a Task of the specified ID
+	 * Process the given task ID and returns a Task of the specified ID.
 	 * 
 	 * @param paramTaskID
-	 *            a String parameter given by user
+	 *            a String parameter of task ID.
 	 * 
-	 * @return a {@code Task} of the specified ID
+	 * @return a {@code Task} of the specified ID.
 	 */
 	private Task processTaskID(String paramTaskID) {
 		assert paramTaskID != null && !paramTaskID.equals("");
@@ -130,7 +147,7 @@ public class CmdUpdate extends Command {
 	}
 
 	/**
-	 * Check if a {@code Task} exist to be updated
+	 * Check if a {@code Task} exist to be updated.
 	 * 
 	 * @return true if {@code Task} is not null. false if {@code Task} is null.
 	 */
@@ -148,7 +165,7 @@ public class CmdUpdate extends Command {
 	}
 
 	/**
-	 * Check if there is/are optional parameter(s) given
+	 * Check if there is/are optional parameter(s) given.
 	 * 
 	 * @return true if there is at least one optional parameter. false if there
 	 *         is no optional parameter.
@@ -166,11 +183,14 @@ public class CmdUpdate extends Command {
 	 * {@code _newEndTime}, {@code _newPriority}, with optional parameters
 	 * values.
 	 *
+	 * @return number of optional parameter(s) processed.
 	 */
 	private int proccessOptionalFields() {
 
 		int noOfOptionalParam = OPTIONAL_PARAM_EMPTY;
 
+		// Initializes each variable and calculate total number of optional
+		// parameter(s)
 		noOfOptionalParam += processTaskName();
 		noOfOptionalParam += processStartTime();
 		noOfOptionalParam += processEndTime();
@@ -181,10 +201,11 @@ public class CmdUpdate extends Command {
 	}
 
 	/**
-	 * Initializes {@code _newTaskName}, {@code _newStartTime},
-	 * {@code _newEndTime}, {@code _newPriority}, with optional parameters
-	 * values.
+	 * Initializes {@code _newTaskName} with task name optional parameters
+	 * value.
 	 *
+	 * @return {@code IS_OPTIONAL_PARAM} if task name optional parameter is
+	 *         processed. else return {@code NOT_OPTIONAL_PARAM}
 	 */
 	private int processTaskName() {
 
@@ -200,6 +221,13 @@ public class CmdUpdate extends Command {
 
 	}
 
+	/**
+	 * Initializes {@code _newStartTime} with start time optional parameters
+	 * value.
+	 *
+	 * @return {@code IS_OPTIONAL_PARAM} if start time optional parameter is
+	 *         processed. else return {@code NOT_OPTIONAL_PARAM}
+	 */
 	private int processStartTime() {
 
 		String paramStartTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_STARTTIME);
@@ -214,6 +242,12 @@ public class CmdUpdate extends Command {
 
 	}
 
+	/**
+	 * Initializes {@code _newEndTime} with end time optional parameters value.
+	 *
+	 * @return {@code IS_OPTIONAL_PARAM} if end time optional parameter is
+	 *         processed. else return {@code NOT_OPTIONAL_PARAM}
+	 */
 	private int processEndTime() {
 
 		String paramEndTime = getParameterValue(CmdParameters.PARAM_NAME_TASK_ENDTIME);
@@ -228,6 +262,12 @@ public class CmdUpdate extends Command {
 
 	}
 
+	/**
+	 * Initializes {@code _newPriority} with priority optional parameters value.
+	 *
+	 * @return {@code IS_OPTIONAL_PARAM} if priority optional parameter is
+	 *         processed. else return {@code NOT_OPTIONAL_PARAM}
+	 */
 	private int processPriority() {
 
 		String paramPriority = getParameterValue(CmdParameters.PARAM_NAME_TASK_PRIORITY);
@@ -242,41 +282,65 @@ public class CmdUpdate extends Command {
 
 	}
 
+	/**
+	 * Returns a {@code PRIORITY_TYPE} according to priority parameter
+	 *
+	 * @param priorityParam
+	 *            a String parameter of priority
+	 *
+	 * @return {@code IS_OPTIONAL_PARAM} if priority optional parameter is
+	 *         processed. else return {@code NOT_OPTIONAL_PARAM}
+	 */
 	private PRIORITY_TYPE getPriorityType(String priorityParam) {
 
 		PRIORITY_TYPE priorityType;
 
 		switch (priorityParam) {
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH:
-			priorityType = PRIORITY_TYPE.HIGH;
-			break;
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_NORM:
-			priorityType = PRIORITY_TYPE.NORMAL;
-			break;
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_LOW:
-			priorityType = PRIORITY_TYPE.LOW;
-			break;
-		default:
-			priorityType = PRIORITY_TYPE.NORMAL;
-			break;
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH:
+				priorityType = PRIORITY_TYPE.HIGH;
+				break;
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_NORM:
+				priorityType = PRIORITY_TYPE.NORMAL;
+				break;
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_LOW:
+				priorityType = PRIORITY_TYPE.LOW;
+				break;
+			default:
+				priorityType = PRIORITY_TYPE.NORMAL;
+				break;
 		}
 
 		return priorityType;
 
 	}
 
+	/**
+	 * Checks if either start time or end time is invalid
+	 *
+	 * @param newStartTime
+	 *            start time to be updated to Task
+	 * 
+	 * @param newEndTime
+	 *            end time to be updated to Task
+	 *
+	 * @return true if either start time or end time is invalid. false if both
+	 *         start time and end time are valid
+	 */
 	private boolean isInvalidTime(long newStartTime, long newEndTime) {
 
 		assert newStartTime >= 0 && newEndTime >= 0;
 
+		// Check if start time and end time is unchanged
 		if (newStartTime == _task.getStartTime() && newEndTime == _task.getEndTime()) {
 			return false;
 		}
 
+		// Check if start time and end time is to be removed
 		if (newStartTime == NO_TIME && newEndTime == NO_TIME) {
 			return false;
 		}
 
+		// Check if start time is earlier than end time
 		if (TimeUtil.compareMinTime(newEndTime, newStartTime) >= VALID_TIME_COMPARATOR) {
 			return false;
 		}
@@ -284,6 +348,27 @@ public class CmdUpdate extends Command {
 		return true;
 	}
 
+	/**
+	 * Update new details to a specified {@code Task}
+	 *
+	 * @param task
+	 *            {@code Task} to be updated
+	 * 
+	 * @param newTaskName
+	 *            new task name to be updated
+	 * 
+	 * @param newStartTime
+	 *            new start time to be updated
+	 * 
+	 * @param newEndTime
+	 *            new end time to be updated
+	 * 
+	 * @param newPriority
+	 *            new priority to be updated
+	 *
+	 * @return a CommandAction of updating a {@code Task} successfully
+	 * 
+	 */
 	private CommandAction updateTask(Task task, String newTaskName, long newStartTime, long newEndTime,
 			PRIORITY_TYPE newPriority) {
 		// Set previous task details

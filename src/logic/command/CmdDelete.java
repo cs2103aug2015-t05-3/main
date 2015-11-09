@@ -1,3 +1,9 @@
+//@@author A0125574A
+
+/**
+ * Command to delete a specified {@code Task} 
+ */
+
 package logic.command;
 
 import java.util.logging.Level;
@@ -19,13 +25,15 @@ public class CmdDelete extends Command {
 
 	// Help Info
 	private static final String HELP_INFO_DELETE = "<task_ID>";
-	
-	//Log Message
+
+	// Log Message
 	private static final String LOG_NUMBERFORMATEXCEPTION = "Warning: Task ID parameter is not an integer";
+	private static final String LOG_DELETE_SUCCESS = "Delete Task Success";
+	private static final String LOG_DELETE_FAIL = "Delete Task Fail";
 
 	// Variable constant
 	private static final int INVALID_TASKID = -1;
-	
+
 	/*
 	 * Variables for internal use
 	 */
@@ -38,6 +46,11 @@ public class CmdDelete extends Command {
 
 	}
 
+	/**
+	 * Deletes a specified {@code Task}
+	 * 
+	 * @return a CommandAction
+	 */
 	@Override
 	public CommandAction execute() {
 
@@ -55,6 +68,11 @@ public class CmdDelete extends Command {
 
 	}
 
+	/**
+	 * Undo the action of a previously deleted {@code Task}
+	 * 
+	 * @return a CommandAction
+	 */
 	@Override
 	public CommandAction undo() {
 		Command add = new CmdAdd(_task.getName());
@@ -72,11 +90,22 @@ public class CmdDelete extends Command {
 		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME };
 	}
 
+	/**
+	 * Returns a syntax message for delete command
+	 * 
+	 * @return a syntax message for delete command
+	 */
 	@Override
 	public String getHelpInfo() {
 		return HELP_INFO_DELETE;
 	}
 
+	/**
+	 * Determine delete action is called by undo command
+	 * 
+	 * @return true if delete action is called by undo. false if delete action
+	 *         is not called by undo.
+	 */
 	private boolean isUndo() {
 		if (_task == null) {
 			return false;
@@ -85,6 +114,11 @@ public class CmdDelete extends Command {
 		}
 	}
 
+	/**
+	 * Check if a {@code Task} exist to be deleted.
+	 * 
+	 * @return true if {@code Task} is not null. false if {@code Task} is null.
+	 */
 	private boolean hasTaskToDelete() {
 		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
 		_task = proccessTaskID(paramTaskID);
@@ -96,21 +130,44 @@ public class CmdDelete extends Command {
 
 	}
 
+	/**
+	 * Process the given task ID and returns a Task of the specified ID.
+	 * 
+	 * @param paramTaskID
+	 *            a String parameter of task ID.
+	 * 
+	 * @return a {@code Task} of the specified ID.
+	 */
 	private Task proccessTaskID(String paramTaskID) {
 		assert paramTaskID != null && !paramTaskID.equals("");
-		try{
+		try {
 			_taskID = Integer.parseInt(paramTaskID);
-		}catch(NumberFormatException e){
+		} catch (NumberFormatException e) {
 			LogHandler.getLog().log(Level.WARNING, LOG_NUMBERFORMATEXCEPTION, e);
 			_taskID = INVALID_TASKID;
 		}
 		return _taskTree.getTask(_taskID);
 	}
 
+	/**
+	 * Delete a specified {@code Task}
+	 *
+	 * @param task
+	 *            {@code Task} to be deleted
+	 *
+	 * @return a CommandAction of deleting a {@code Task} successfully
+	 * 
+	 */
 	private CommandAction deleteTask(Task task) {
 		assert task != null;
-		
-		_taskTree.remove(task);
+
+		try {
+			_taskTree.remove(task);
+			LogHandler.getLog().log(Level.INFO, LOG_DELETE_SUCCESS);
+		} catch (Exception e) {
+			LogHandler.getLog().log(Level.WARNING, LOG_DELETE_FAIL, e);
+		}
+
 		return new CommandAction(String.format(MSG_TASKDELETED, _task.getName()), true,
 				_taskTree.searchFlag(FLAG_TYPE.NULL));
 	}
