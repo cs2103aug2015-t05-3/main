@@ -45,6 +45,13 @@ public class CommandProcessor {
 		return cmdP;
 	}
 	
+	/**
+	 * Initialises the command xml file
+	 * @param cmdFileName
+	 * 			The command file to initialise
+	 * @return
+	 * 			Return true if initialisation is successful, false otherwise
+	 */
 	public boolean initCmdList(String cmdFileName) {
 		try {
 			CommandFileHandler cf = new CommandFileHandler();
@@ -79,26 +86,26 @@ public class CommandProcessor {
 		}
 
 		switch (actualCmd) {
-		case CONFIG_CMD_ADD:
-			return new CmdAdd();
-		case CONFIG_CMD_DELETE:
-			return new CmdDelete();
-		case CONFIG_CMD_EXIT:
-			return new CmdExit();
-		case CONFIG_CMD_HELP:
-			return new CmdHelp();
-		case CONFIG_CMD_LIST:
-			return new CmdList();
-		case CONFIG_CMD_MARK:
-			return new CmdMark();
-		case CONFIG_CMD_SEARCH:
-			return new CmdSearch();
-		case CONFIG_CMD_UNDO:
-			return new CmdUndo();
-		case CONFIG_CMD_UPDATE:
-			return new CmdUpdate();
-		default:
-			return null;
+			case CONFIG_CMD_ADD:
+				return new CmdAdd();
+			case CONFIG_CMD_DELETE:
+				return new CmdDelete();
+			case CONFIG_CMD_EXIT:
+				return new CmdExit();
+			case CONFIG_CMD_HELP:
+				return new CmdHelp();
+			case CONFIG_CMD_LIST:
+				return new CmdList();
+			case CONFIG_CMD_MARK:
+				return new CmdMark();
+			case CONFIG_CMD_SEARCH:
+				return new CmdSearch();
+			case CONFIG_CMD_UNDO:
+				return new CmdUndo();
+			case CONFIG_CMD_UPDATE:
+				return new CmdUpdate();
+			default:
+				return null;
 		}
 	}
 	
