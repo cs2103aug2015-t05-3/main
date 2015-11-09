@@ -1,3 +1,9 @@
+//@@author A0125574A
+
+/**
+ * Command to exit TaskBuddy 
+ */
+
 package logic.command;
 
 import ui.UIHelper;
@@ -7,6 +13,11 @@ public class CmdExit extends Command {
 	// Help Info
 	private static final String HELP_INFO_EXIT = "Just exit...";
 
+	/**
+	 * Exits TaskBuddy
+	 * 
+	 * @return a CommandAction
+	 */
 	@Override
 	public CommandAction execute() {
 		UIHelper.destroyUI();
@@ -30,6 +41,11 @@ public class CmdExit extends Command {
 		return new String[] {};
 	}
 
+	/**
+	 * Returns a syntax message for exit command
+	 * 
+	 * @return a syntax message for exit command
+	 */
 	@Override
 	public String getHelpInfo() {
 		return HELP_INFO_EXIT;

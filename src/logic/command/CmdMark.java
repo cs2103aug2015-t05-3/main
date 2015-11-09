@@ -1,3 +1,9 @@
+//@@author A0125574A
+
+/**
+ * Command to mark/unmark a specified task 
+ */
+
 package logic.command;
 
 import java.util.logging.Level;
@@ -22,13 +28,13 @@ public class CmdMark extends Command {
 
 	// Help Info
 	private static final String HELP_INFO_MARK = "<task_ID> [%1$s]";
-	
+
 	// Log Message
 	private static final String LOG_NUMBERFORMATEXCEPTION = "Warning: Task ID parameter is not an integer";
 
 	// Variable Constant
 	private static final int INVALID_TASKID = -1;
-	
+
 	/*
 	 * Variables for internal use
 	 */
@@ -40,6 +46,11 @@ public class CmdMark extends Command {
 
 	}
 
+	/**
+	 * Mark/Unmark a specified {@code Task}
+	 * 
+	 * @return a CommandAction
+	 */
 	@Override
 	public CommandAction execute() {
 
@@ -56,6 +67,11 @@ public class CmdMark extends Command {
 
 	}
 
+	/**
+	 * Undo the action to a previously marked/unmarked {@code Task}
+	 * 
+	 * @return a CommandAction
+	 */
 	@Override
 	public CommandAction undo() {
 
@@ -78,11 +94,21 @@ public class CmdMark extends Command {
 		return new String[] { CmdParameters.PARAM_NAME_MARK_FLAG };
 	}
 
+	/**
+	 * Returns a syntax message for mark command
+	 * 
+	 * @return a syntax message for mark command
+	 */
 	@Override
 	public String getHelpInfo() {
 		return String.format(HELP_INFO_MARK, ParserConstants.TASK_MARK_UNMARK);
 	}
 
+	/**
+	 * Check if a {@code Task} exist to be marked/unmarked.
+	 * 
+	 * @return true if {@code Task} is not null. false if {@code Task} is null.
+	 */
 	private boolean hasTaskToMark() {
 		String paramTaskID = getParameterValue(CmdParameters.PARAM_NAME_TASK_ID);
 		_task = proccessTaskID(paramTaskID);
@@ -93,6 +119,14 @@ public class CmdMark extends Command {
 		}
 	}
 
+	/**
+	 * Process the given task ID and returns a Task of the specified ID.
+	 * 
+	 * @param paramTaskID
+	 *            a String parameter of task ID.
+	 * 
+	 * @return a {@code Task} of the specified ID.
+	 */
 	private Task proccessTaskID(String paramTaskID) {
 		assert paramTaskID != null && paramTaskID.equals("");
 
@@ -106,6 +140,10 @@ public class CmdMark extends Command {
 		return _taskTree.getTask(_taskID);
 	}
 
+	/**
+	 * Process optional parameter and determine if {@code Task} is to be marked
+	 * or unmarked
+	 */
 	private void proccessOptionalParam() {
 		String optionalParam = getParameterValue(CmdParameters.PARAM_NAME_MARK_FLAG);
 		if (optionalParam != CmdParameters.PARAM_VALUE_MARK_UNMARK) {
@@ -115,9 +153,17 @@ public class CmdMark extends Command {
 		}
 	}
 
+	/**
+	 * Check if a {@code Task} has been marked
+	 * 
+	 * @param task
+	 *            a {@code Task}
+	 * 
+	 * @return true if task is marked. false if task is unmarked.
+	 */
 	private boolean isMarked(Task task) {
 		assert task != null;
-		
+
 		if (task.getFlag() == FLAG_TYPE.NULL) {
 			return false;
 		} else {
@@ -125,6 +171,14 @@ public class CmdMark extends Command {
 		}
 	}
 
+	/**
+	 * Mark a specified {@code Task}
+	 * 
+	 * @param task
+	 *            a {@code Task} to be marked
+	 * 
+	 * @return a CommandAction of marking a {@code Task}
+	 */
 	private CommandAction markTask(Task task) {
 		assert task != null;
 
@@ -138,6 +192,14 @@ public class CmdMark extends Command {
 		}
 	}
 
+	/**
+	 * Unmark a specified {@code Task}
+	 * 
+	 * @param task
+	 *            a {@code Task} to be marked
+	 * 
+	 * @return a CommandAction of unmarking a {@code Task}
+	 */
 	private CommandAction unmarkTask(Task task) {
 		assert task != null;
 
