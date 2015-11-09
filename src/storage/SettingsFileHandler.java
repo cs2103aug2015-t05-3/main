@@ -67,10 +67,12 @@ public class SettingsFileHandler {
 					return false;
 				}
 			} catch (FileNotFoundException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_FILENOTFOUND, e));
 				return false;
 			} catch (IOException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_IO, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_IO, e));
 				return false;
 			}
 		} else {
@@ -96,7 +98,8 @@ public class SettingsFileHandler {
 			pw.close();
 			return true;
 		} catch (FileNotFoundException e) {
-			LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
+			LogHandler.getLog().log(Level.SEVERE, 
+					String.format(EXCEPTION_FILENOTFOUND, e));
 			return false;
 		}
 	}
@@ -120,10 +123,12 @@ public class SettingsFileHandler {
 				pw.close();
 				return true;
 			} catch (FileNotFoundException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_FILENOTFOUND, e));
 				return false;
 			} catch (UnsupportedEncodingException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_UNSUPPORTEDENCODING, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_UNSUPPORTEDENCODING, e));
 				return false;
 			}
 		}

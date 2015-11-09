@@ -50,6 +50,7 @@ public class CommandFileHandler {
 	private HashMap<String, String> _cmdTable;
 	
 	public CommandFileHandler() {
+		
 	}
 	
 	/**
@@ -130,10 +131,12 @@ public class CommandFileHandler {
 				outputStream.close();
 				return true;
 			} catch (FileNotFoundException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_FILENOTFOUND, e));
 				return false;
 			} catch (IOException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_IO, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_IO, e));
 				return false;
 			}
 	}
