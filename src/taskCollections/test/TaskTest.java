@@ -1,5 +1,5 @@
 //@@A0126394B
-package taskCollections.junit;
+package taskCollections.test;
 import org.junit.Test;
 
 import taskCollections.Task;
@@ -15,7 +15,7 @@ import java.util.Date;
  *
  * @author amoshydra
  */
-public class JUnitTaskTest {
+public class TaskTest {
 
 	@SuppressWarnings("unused")
 	private static final int MINUTE = 60;

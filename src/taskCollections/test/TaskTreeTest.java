@@ -1,5 +1,5 @@
 //@@A0126394B
-package taskCollections.junit;
+package taskCollections.test;
 
 import taskCollections.Task;
 import taskCollections.Task.FLAG_TYPE;
@@ -27,7 +27,7 @@ import org.junit.Test;
  *
  * @author amoshydra
  */
-public class JUnitTaskTreeTest {
+public class TaskTreeTest {
 	private static TaskTree _taskTree;
 	private static final String testTaskFilePath = "test_taskTreeJUnitFile.xml";
 	private static final int FIRST_ELEMENT = 0;
