@@ -27,7 +27,7 @@ public class CmdDelete extends Command {
 	private static final String HELP_INFO_DELETE = "<task_ID>";
 
 	// Log Message
-	private static final String LOG_NUMBERFORMATEXCEPTION = "Warning: Task ID parameter is not an integer";
+	private static final String LOG_NUMBERFORMATEXCEPTION = "\"%1$s\" is not an integer";
 	private static final String LOG_DELETE_SUCCESS = "Delete Task Success";
 	private static final String LOG_DELETE_FAIL = "Delete Task Fail";
 
@@ -87,7 +87,7 @@ public class CmdDelete extends Command {
 
 	@Override
 	public String[] getOptionalFields() {
-		return new String[] { CmdParameters.PARAM_NAME_TASK_STARTTIME, CmdParameters.PARAM_NAME_TASK_ENDTIME };
+		return new String[] {};
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class CmdDelete extends Command {
 		try {
 			_taskID = Integer.parseInt(paramTaskID);
 		} catch (NumberFormatException e) {
-			LogHandler.getLog().log(Level.WARNING, LOG_NUMBERFORMATEXCEPTION, e);
+			LogHandler.getLog().log(Level.WARNING, String.format(LOG_NUMBERFORMATEXCEPTION, paramTaskID));
 			_taskID = INVALID_TASKID;
 		}
 		return _taskTree.getTask(_taskID);
