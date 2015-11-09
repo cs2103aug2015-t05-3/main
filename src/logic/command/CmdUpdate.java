@@ -303,18 +303,18 @@ public class CmdUpdate extends Command {
 		PRIORITY_TYPE priorityType;
 
 		switch (priorityParam) {
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH:
-			priorityType = PRIORITY_TYPE.HIGH;
-			break;
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_NORM:
-			priorityType = PRIORITY_TYPE.NORMAL;
-			break;
-		case CmdParameters.PARAM_VALUE_TASK_PRIORITY_LOW:
-			priorityType = PRIORITY_TYPE.LOW;
-			break;
-		default:
-			priorityType = PRIORITY_TYPE.NORMAL;
-			break;
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_HIGH:
+				priorityType = PRIORITY_TYPE.HIGH;
+				break;
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_NORM:
+				priorityType = PRIORITY_TYPE.NORMAL;
+				break;
+			case CmdParameters.PARAM_VALUE_TASK_PRIORITY_LOW:
+				priorityType = PRIORITY_TYPE.LOW;
+				break;
+			default:
+				priorityType = PRIORITY_TYPE.NORMAL;
+				break;
 		}
 
 		return priorityType;
