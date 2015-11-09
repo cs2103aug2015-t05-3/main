@@ -46,6 +46,7 @@ public class TaskTest {
 	@SuppressWarnings("unused")
 	private static final int TASK_ARRAY_SIZE = 7;
 
+	@SuppressWarnings("deprecation")
 	Task[] tasks = {
 			new Task(taskName, description, startTime, endTime, flag, priority),
 			new Task(taskName, description, startTime, endTime, flag, priority),

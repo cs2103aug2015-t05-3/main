@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
-import javax.management.monitor.MonitorSettingException;
-
 import constants.CmdParameters;
 import logger.LogHandler;
 

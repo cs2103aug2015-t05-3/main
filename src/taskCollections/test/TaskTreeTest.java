@@ -130,6 +130,7 @@ public class TaskTreeTest {
 	}
 
 	private Task generateSampleTask(int index) {
+		@SuppressWarnings("deprecation")
 		Task sampleTask = new Task(names[index],
 								   descriptions[index],
 								   startTimes[index],
@@ -324,6 +325,7 @@ public class TaskTreeTest {
 		assertEquals(_taskTree.size(), listSize -= 1);
 
 		// Remove non-existing element
+		@SuppressWarnings("deprecation")
 		Task extraTask = new Task("Name", "Description", 0, 0, Task.FLAG_TYPE.NULL, Task.PRIORITY_TYPE.HIGH);
 		assertFalse(_taskTree.remove(extraTask));
 		assertEquals(_taskTree.size(), listSize);

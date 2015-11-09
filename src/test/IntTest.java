@@ -54,12 +54,6 @@ public class IntTest {
 	private static String MSG_TASKADDED;
 	private static String MSG_STARTAFTEREND;
 
-	// UPDATE
-	private static String MSG_TASKIDNOTFOUND = "Specified taskID \"%1$s\" not found";
-	private static String MSG_TASKNOUPDATE = "No update was made";
-	private static String MSG_TASKUPDATED = "Updated ID: \"%1$s\"";
-	private static String MSG_INVALIDTIME = "Invalid start/end time given";
-
 	@Test
 	public void test() throws Exception {
 		init();
