@@ -128,7 +128,7 @@ public class TimeProcessor {
 	 * @return The converted date
 	 */
 	private String reformatDate(String date) {
-		String dateDelimit = "\\s|,|/|:|."; // Tokens to delimit fields and remove
+		String dateDelimit = "\\s|,|/|:|\\."; // Tokens to delimit fields and remove
 		String fields[] = date.split(dateDelimit); // The fields to pad zeros with if necessary
 		StringBuilder newField = new StringBuilder(); // The result
 
