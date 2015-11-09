@@ -5,4 +5,4 @@
  * @author amoshydra
  *
  */
-package taskCollections.junit;
+package taskCollections.test;
