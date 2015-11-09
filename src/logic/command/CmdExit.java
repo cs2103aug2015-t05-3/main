@@ -20,7 +20,6 @@ public class CmdExit extends Command {
 	 */
 	@Override
 	public CommandAction execute() {
-		UIHelper.destroyUI();
 		System.exit(0);
 		return new CommandAction("", false, null);
 	}
