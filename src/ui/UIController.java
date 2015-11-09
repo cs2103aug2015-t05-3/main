@@ -96,7 +96,7 @@ public class UIController implements Initializable {
 	@FXML
 	private TextField input;
 	@FXML
-	private AnchorPane anchor;
+	private AnchorPane anchorPane;
 
 	// UI Controller attributes
 //@@author A0126394B
