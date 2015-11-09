@@ -13,6 +13,11 @@ import java.util.logging.Level;
 
 import logger.LogHandler;
 
+/**
+ * Provides methods for retrieving and modifying the file path of tasks file.
+ * @author Zandercx
+ */
+
 public class SettingsFileHandler {
 
 	private static final String EMPTY_STRING = "";
@@ -62,10 +67,12 @@ public class SettingsFileHandler {
 					return false;
 				}
 			} catch (FileNotFoundException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_FILENOTFOUND, e));
 				return false;
 			} catch (IOException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_IO, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_IO, e));
 				return false;
 			}
 		} else {
@@ -91,7 +98,8 @@ public class SettingsFileHandler {
 			pw.close();
 			return true;
 		} catch (FileNotFoundException e) {
-			LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
+			LogHandler.getLog().log(Level.SEVERE, 
+					String.format(EXCEPTION_FILENOTFOUND, e));
 			return false;
 		}
 	}
@@ -115,10 +123,12 @@ public class SettingsFileHandler {
 				pw.close();
 				return true;
 			} catch (FileNotFoundException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_FILENOTFOUND, e));
 				return false;
 			} catch (UnsupportedEncodingException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_UNSUPPORTEDENCODING, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_UNSUPPORTEDENCODING, e));
 				return false;
 			}
 		}

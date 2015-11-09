@@ -24,6 +24,11 @@ import org.xml.sax.SAXException;
 
 import logger.LogHandler;
 
+/**
+ * Provides methods for retrieving the commands.xml data.
+ * @author Zandercx
+ */
+
 public class CommandFileHandler {
 	
 	private static final int BYTE_ARRAY_NUMBER = 1024;
@@ -36,15 +41,21 @@ public class CommandFileHandler {
 	private static final String _commandResource = "resources/commands.xml";
 
 	private static final String EXCEPTION_FILENOTFOUND = "File Not Found Exception: %1$s";
+	private static final String EXCEPTION_CMDFILENOTFOUND = "commands.xml not found. "
+			+ "Attempting to copy from resource package.";
 	private static final String EXCEPTION_IO = "IO Exception: %1$s";
 	private static final String EXCEPTION_PARSER = "Parser Config Exception: %1$s";
 	private static final String EXCEPTION_SAX = "SAX Exception: %1$s";
+	
+	private static final String MSG_COPYCOMMANDFILE = "Successfully copied default "
+			+ "commands.xml file from resource to program directory.";
 	
 	private Document _doc;
 	private File _xmlFile;
 	private HashMap<String, String> _cmdTable;
 	
 	public CommandFileHandler() {
+		
 	}
 	
 	/**
@@ -77,6 +88,10 @@ public class CommandFileHandler {
 		} catch (SAXException e) {
 			LogHandler.getLog().log(Level.SEVERE, 
 					(String.format(EXCEPTION_SAX, e)));
+			return false;
+		} catch (FileNotFoundException e) {
+			LogHandler.getLog().log(Level.INFO, 
+					(String.format(EXCEPTION_CMDFILENOTFOUND)));
 			return false;
 		} catch (IOException e) {
 			LogHandler.getLog().log(Level.SEVERE, 
@@ -123,12 +138,15 @@ public class CommandFileHandler {
 				}
 				inputStream.close();
 				outputStream.close();
+				LogHandler.getLog().log(Level.INFO, MSG_COPYCOMMANDFILE);
 				return true;
 			} catch (FileNotFoundException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_FILENOTFOUND, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_FILENOTFOUND, e));
 				return false;
 			} catch (IOException e) {
-				LogHandler.getLog().log(Level.SEVERE, String.format(EXCEPTION_IO, e));
+				LogHandler.getLog().log(Level.SEVERE, 
+						String.format(EXCEPTION_IO, e));
 				return false;
 			}
 	}

@@ -7,12 +7,13 @@
 
 package util;
 
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtil {
 
-	private static final String tokenDelim = " ";
+	private static final String WHITESPACE = " ";
 
 	/**
 	 * Takes in a string, and returns the first word, delimited by a whitespace
@@ -20,19 +21,19 @@ public class StringUtil {
 	public static String getFirstWord(String input) {
 		assert input != null;
 		assert !input.isEmpty();
-		String[] tokens = input.split(tokenDelim);
+		String[] tokens = input.split(WHITESPACE);
 		
 		if(tokens.length < 1){
 			return null;
 		}
-		return input.split(tokenDelim)[0];
+		return input.split(WHITESPACE)[0];
 	}
 
 	/**
 	 * Takes in a string, removes the first word and returns the rest
 	 */
 	public static String removeFirstWord(String input) {
-		String[] tokens = input.split(tokenDelim, 2);
+		String[] tokens = input.split(WHITESPACE, 2);
 		if (tokens.length < 2) {
 			return null;
 		} else {
@@ -65,7 +66,7 @@ public class StringUtil {
 	public static String getWordAfter(String fullString, String searchTerm) {
 		Matcher m = Pattern.compile("\\b" + Pattern.quote(searchTerm) + "\\b\\s\\b(.*){1}\\b").matcher(fullString);
 		if (m.find()) {
-			String tokens[] = m.group(1).split(" ");
+			String tokens[] = m.group(1).split(WHITESPACE);
 			return tokens[0];
 		} else {
 			return null;
@@ -143,6 +144,17 @@ public class StringUtil {
 		} else {
 			return null;
 		}
+	}
+	
+	public static String[] getOccurrences(String fullString, String regex){
+		LinkedList<String> result = new LinkedList<>();
+		Matcher m = Pattern.compile(regex).matcher(fullString);
+		
+		while(m.find()){
+			result.add(m.group().trim());
+		}
+		
+		return result.isEmpty() ? null : result.toArray(new String[result.size()]);
 	}
 
 }
