@@ -32,11 +32,12 @@ public class LanguageProcessor {
 	 * Constant
 	 */
 	// <User input>: <Parsed parameters> [Optional message]
-	private static final String LOG_FORMAT_RESULT = "%1$s: %2$s | %3$s"; 
+	private static final String LOG_FORMAT_RESULT = "%1$s -> %2$s | %3$s"; 
 	private static final String LOG_MSG_INVALIDCMD = "Invalid command";
 	private static final String LOG_MSG_NOPARAM = "No parameters given";
 	private static final String LOG_MSG_REQUIRED_NOTFOUND = "Required field not found";
 	private static final String LOG_MSG_OPTIONAL_INVALID = "Invalid optional field";
+	private static final String LOG_MSG_SUCCESSCMD = "Cmd parsed successfully";
 	
 	private static final String REGEX_LIMIT = ParserConstants.DELIMITER_TOKEN + "\\w+"; // The pattern to determine a flag
 	private static final String FIELD_INVALID = ""; // Denotes a field is invalid
@@ -283,7 +284,7 @@ public class LanguageProcessor {
 		for (String requiredField : toExecute.getRequiredFields()) {
 			
 			String paramValue = extractParameter(requiredField, param);
-			parameters.append(requiredField + ": " + paramValue + "\\t");
+			parameters.append(requiredField + ": " + paramValue + "    ");
 			
 			// Invalid command since the required fields aren't there
 			if (paramValue == null || paramValue.equals(FIELD_INVALID)) {
@@ -298,7 +299,7 @@ public class LanguageProcessor {
 		for (String optionalField : toExecute.getOptionalFields()) {
 			
 			String paramValue = extractParameter(optionalField, param);
-			parameters.append(optionalField + ": " + paramValue + "\\t");
+			parameters.append(optionalField + ": " + paramValue + "    ");
 			
 			if (paramValue != null) { // User entered something for this field
 				
@@ -312,6 +313,8 @@ public class LanguageProcessor {
 				toExecute.setParameter(optionalField, paramValue);
 			}
 		}
+		
+		parseLog.info(String.format(LOG_FORMAT_RESULT, userCmd,parameters,LOG_MSG_SUCCESSCMD));
 		return toExecute;
 	}
 
@@ -420,6 +423,12 @@ public class LanguageProcessor {
 	 */
 	private boolean hasValidFlags(String[] fields, String userCmd) {
 		String[] userFlags = StringUtil.getOccurrences(userCmd, "(-\\S+)\\s?"); // Get all the flags
+		
+		// Return true since no user flag is specified
+		if(userFlags == null || userFlags.length == 0){
+			return true;
+		}
+		
 		HashSet<String> cmdFlags = new HashSet<>();
 
 		// Compile the list of supported flags for that command
