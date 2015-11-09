@@ -7,7 +7,10 @@ import taskCollections.Task.PRIORITY_TYPE;
 import taskCollections.TaskTree;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -76,6 +79,8 @@ public class TaskTreeTest {
 			deleteFile(testTaskFilePath);
 		}
 
+		createTaskFile(testTaskFilePath);
+
 		_taskTree = TaskTree.getTaskTree();
 		_taskTree = null;
 		_taskTree = TaskTree.newTaskTree(testTaskFilePath);
@@ -141,6 +146,24 @@ public class TaskTreeTest {
 		}
 	}
 
+	private void createTaskFile(String fileName) {
+		PrintWriter pw;
+		try {
+			pw = new PrintWriter(fileName, "UTF-8");
+			pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
+			pw.println("<tasklist>");
+			pw.println("</tasklist>");
+			pw.close();
+			return;
+		} catch (FileNotFoundException e) {
+			System.err.println("File Not Found");
+			return;
+		} catch (UnsupportedEncodingException e) {
+			System.err.println("Unsupported Encoding");
+			return;
+		}
+	}
+
 	/*
 	 * Testing methods
 	 * 1. add method will increase the size of task tree
@@ -151,6 +174,7 @@ public class TaskTreeTest {
 	 */
 	@Test
 	public void testInitialiseTaskTree() {
+		createTaskFile(testTaskFilePath);
 		_taskTree = TaskTree.newTaskTree(testTaskFilePath);
 		populateSampleTasks();
 		ArrayList<Task> initialList = new ArrayList<Task>(_taskTree.getList());
