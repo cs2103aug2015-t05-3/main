@@ -32,10 +32,10 @@ public class TaskBuddy {
 	/*
 	 * Global variables
 	 */
-	private static Logger log;
-	private static LanguageProcessor lp;
-	private static String taskFileName;
-	private static TaskTree taskTree;
+	private static Logger _log;
+	private static LanguageProcessor _lp;
+	private static String _taskFileName;
+	private static TaskTree _taskTree;
 
 	public static void main(String[] args) {
 
@@ -50,20 +50,20 @@ public class TaskBuddy {
 	 * Initialises all the necessary variables
 	 */
 	private static void init() {
-		log = LogHandler.getLog(); // Init the log
+		_log = LogHandler.getLog(); // Init the log
 
 		// Set up the UI
 		UIHelper.createUI();
 		UIHelper.setDate(TimeUtil.getUIFormattedDate(System.currentTimeMillis()));
 
 		// Init the parser component
-		lp = LanguageProcessor.getInstance();
-		if (!lp.init(CMD_FILENAME)) {
-			log.severe("TaskBuddy: Cmd list init failed");
+		_lp = LanguageProcessor.getInstance();
+		if (!_lp.init(CMD_FILENAME)) {
+			_log.severe("TaskBuddy: Cmd list init failed");
 		}
 
 		initTaskFile(); // Init the storage component for tasks
-		initTaskTree(taskFileName); // Load the tasks to task collection
+		initTaskTree(_taskFileName); // Load the tasks to task collection
 		Command.init(); // Init the logic component
 		displayTaskList(); // Display the task list on the UI
 	}
@@ -95,11 +95,11 @@ public class TaskBuddy {
 			settings.alterSettingsFile(UIHelper.getUserInput());
 		}
 		
-		taskFileName = settings.getTaskFile(); // Get the final task file name
+		_taskFileName = settings.getTaskFile(); // Get the final task file name
 	}
 
 	private static void initTaskTree(String filePath) {
-		taskTree = TaskTree.newTaskTree(filePath);
+		_taskTree = TaskTree.newTaskTree(filePath);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class TaskBuddy {
 		do {
 			setUITasksCount(); // Display the list of statuses of tasks
 			String in = getInput(); // Get the input from user
-			Command toExecute = lp.resolveCmd(in); // Parse the command
+			Command toExecute = _lp.resolveCmd(in); // Parse the command
 			
 			if (toExecute == null) {
 				// Unable to parse command
@@ -127,9 +127,9 @@ public class TaskBuddy {
 	 * Displays the number of task counts for overdue, pending, and completed
 	 */
 	private static void setUITasksCount() {
-		int doneCount = taskTree.getFlagCount(FLAG_TYPE.DONE);
-		int pendingCount = taskTree.size() - doneCount;
-		int overdueCount = taskTree.getOverdueCount();
+		int doneCount = _taskTree.getFlagCount(FLAG_TYPE.DONE);
+		int pendingCount = _taskTree.size() - doneCount;
+		int overdueCount = _taskTree.getOverdueCount();
 
 		UIHelper.setDoneCount(doneCount);
 		UIHelper.setPendingCount(pendingCount);
