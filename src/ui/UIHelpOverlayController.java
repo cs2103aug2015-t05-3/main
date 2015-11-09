@@ -1,4 +1,4 @@
-//@@A0126394B
+//@@author A0126394B
 package ui;
 
 import java.net.URL;

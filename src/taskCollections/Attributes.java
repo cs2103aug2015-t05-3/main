@@ -1,4 +1,4 @@
-//@@A0126394B
+//@@author A0126394B
 package taskCollections;
 
 import java.util.EnumSet;

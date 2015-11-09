@@ -1,5 +1,6 @@
+//@@author A0125496X
 /**
- * Provides methods for classes to interact with UIFrame
+ * Provides methods for classes to interact with UIController
  *
  * @author Yan Chan Min Oo
  */
@@ -48,7 +49,7 @@ public class UIHelper {
 	}
 
 	// set UI's output msg
-//@@A0126394B
+//@@author A0126394B
 	public static void setOutputMsg(String s) {
 		uiController.setOutputMsg(s);
 	}

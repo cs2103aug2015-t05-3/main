@@ -1,4 +1,4 @@
-//@@A0076510M
+//@@author A0076510M
 package ui;
 
 import parser.TimeProcessor;
@@ -40,7 +40,7 @@ public class UITask {
 		return taskObj.getName();
 	}
 
-//@@A0126394B
+//@@author A0126394B
 	public String getSDate() {
 		return getSDateString(taskObj);
 	}

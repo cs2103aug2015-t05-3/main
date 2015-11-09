@@ -1,4 +1,4 @@
-//@@A0076510M
+//@@author A0076510M
 package ui;
 
 import java.net.URL;
@@ -32,7 +32,7 @@ import taskCollections.Task.PRIORITY_TYPE;
 import util.StringUtil;
 import util.TimeUtil;
 
-//@@A0126394B
+//@@author A0126394B
 public class UIController implements Initializable {
 
 	// Message string constants
@@ -45,14 +45,14 @@ public class UIController implements Initializable {
 	private static final String MSG_COUNT_DONE = "Done [ %s ]";
 	private static final String EMPTY_TIME_DATE = "Getting time...";
 
-//@@A0076510M
+//@@author A0076510M
 	// Utility string constants
 	private static final String EMPTY_STRING = "";
 	private static final String VAR_TABLE_STRING_ID = "id";
 	private static final String VAR_TABLE_STRING_TASK = "task";
 	private static final String VAR_TABLE_STRING_SDATE = "sDate";
 
-//@@A0126394B
+//@@author A0126394B
 	// CSS node constants
 	private static final String CSS_PRIORITY_HIGH = "highPriority";
 	private static final String CSS_PRIORITY_LOW = "lowPriority";
@@ -78,7 +78,7 @@ public class UIController implements Initializable {
 	private Label pendingCount;
 	@FXML
 	private Label doneCount;
-//@@A0076510M
+//@@author A0076510M
 	@FXML
 	private TableColumn<UITask, Integer> idTimed;
 	@FXML
@@ -99,7 +99,7 @@ public class UIController implements Initializable {
 	private AnchorPane anchor;
 
 	// UI Controller attributes
-//@@A0126394B
+//@@author A0126394B
 	private static UI uI;
 	private static UIController uIController;
 	private List<Task> floatingTaskList;
@@ -108,7 +108,7 @@ public class UIController implements Initializable {
 	ObservableList<UITask> dataTimed = FXCollections.observableArrayList();
 	ObservableList<UITask> dataFloat = FXCollections.observableArrayList();
 
-//@@A0076510M
+//@@author A0076510M
 	private LinkedList<String> leftList;
 	private LinkedList<String> rightList;
 	private String cmdHistoryBuffer;
@@ -119,7 +119,7 @@ public class UIController implements Initializable {
 		rightList = new LinkedList<String>();
 	}
 
-//@@A0126394B
+//@@author A0126394B
 	static UIController getUIController() {
 		uIController = UI.getController();
 		return uIController;
@@ -141,7 +141,7 @@ public class UIController implements Initializable {
 		doneCount.setText(EMPTY_STRING);
 
 		// Table
-//@@A0076510M
+//@@author A0076510M
 		idTimed.setCellValueFactory(new PropertyValueFactory<UITask, Integer>(VAR_TABLE_STRING_ID));
 		taskTimed.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_TASK));
 		sDate.setCellValueFactory(new PropertyValueFactory<UITask, String>(VAR_TABLE_STRING_SDATE));
@@ -177,7 +177,7 @@ public class UIController implements Initializable {
 			}
 		});
 
-//@@A0126394B
+//@@author A0126394B
 		tableTimed.setPlaceholder(new Label(MSG_EMPTY_TABLE));
 		tableFloat.setPlaceholder(new Label(MSG_EMPTY_TABLE));
 
@@ -193,7 +193,7 @@ public class UIController implements Initializable {
 		});
 	}
 
-//@@A0076510M
+//@@author A0076510M
 	private void manageTableRows(TableRow<UITask> tableRow) {
 		updateRowsColor(tableRow);
 	}
@@ -255,7 +255,7 @@ public class UIController implements Initializable {
 				}
 			}.start();
 
-//@@A0126394B
+//@@author A0126394B
 			while (!uI.isInitialised()) {
 				try {
 					Thread.sleep(0);
@@ -266,7 +266,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-//@@A0076510M
+//@@author A0076510M
 	String getInput() {
 		synchronized (inputBuffer) {
 			// wait for input from field
@@ -281,7 +281,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-//@@A0126394B
+//@@author A0126394B
 	void setInput(String str) {
 		input.setText(str);
 		input.positionCaret(str.length());
@@ -351,7 +351,7 @@ public class UIController implements Initializable {
 		uI.hideUIHelpOverlayStage();
 	}
 
-//@@A0076510M
+//@@author A0076510M
 	/**
 	 * Receive a list of task and display them on the UI Tables. Floating and
 	 * non-floating task will be separated and sorted in its respective table.
@@ -470,7 +470,7 @@ public class UIController implements Initializable {
 		}
 	}
 
-//@@A0126394B
+//@@author A0126394B
 	private void processSyntaxMessage(String oldValue, String newValue) {
 		String oldCommand = EMPTY_STRING;
 		String newCommand = EMPTY_STRING;
