@@ -584,6 +584,14 @@ public class Task implements Comparable<Task> {
 		}
 	}
 
+	public static void resetTaskClassId(int resetCountId) {
+		taskNumber = resetCountId;
+	}
+
+	public static void resetTaskClassId() {
+		resetTaskClassId(0);
+	}
+
 	/**
 	 * Represent this {@code Task} into a {@code String} format
 	 *
