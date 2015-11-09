@@ -7,7 +7,6 @@
 package logic.command;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import constants.CmdParameters;
 import logger.LogHandler;
@@ -40,8 +39,6 @@ public class CmdDelete extends Command {
 	private Task _task;
 	private int _taskID;
 
-	private static Logger log = Logger.getLogger("log_CmdDelete");
-
 	public CmdDelete() {
 
 	}
@@ -65,7 +62,6 @@ public class CmdDelete extends Command {
 		}
 
 		return deleteTask(_task);
-
 	}
 
 	/**

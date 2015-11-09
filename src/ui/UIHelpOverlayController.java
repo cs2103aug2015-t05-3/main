@@ -30,10 +30,6 @@ public class UIHelpOverlayController implements Initializable {
 	}
 
 	public void onKeyPressed() {
-
-		//TODO user may need to press CTRL+C to copy the help file
-		//TODO 						  ALT+Tab
-
 		UIController uIController = UIController.getUIController();
 		uIController.hideUIHelpOverlay();
 	}

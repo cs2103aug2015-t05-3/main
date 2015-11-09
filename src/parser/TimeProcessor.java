@@ -270,6 +270,7 @@ public class TimeProcessor {
 	 *            The time to parse
 	 * @return System time in long if date is parsed, -1 if it isn't
 	 */
+	@SuppressWarnings("deprecation")
 	private long parseTime(String time) {
 
 		// Try to parse with each pattern
